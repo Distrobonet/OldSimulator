@@ -1,0 +1,16 @@
+<package>
+  <description brief="Simulator">
+
+     Simulator
+
+  </description>
+  <author>Isaac</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/Simulator</url>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+
