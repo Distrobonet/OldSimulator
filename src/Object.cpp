@@ -105,7 +105,7 @@ Object::~Object()
 bool Object::setRadius(const GLfloat r)
 {
     if (!Circle::setRadius(r)) return false;
-    return behavior.setMaxSpeed(maxSpeed());
+    return behavior.setMaxSpeed(const maxSpeed());
 }   // setRadius(const GLfloat)
 
 
@@ -207,10 +207,10 @@ bool Object::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
                  const GLfloat theta, const Color   colorIndex)
 {
     Circle::init(dx, dy, dz, DEFAULT_OBJECT_RADIUS, colorIndex);
-    setHeading(theta);
-    behavior         = DEFAULT_OBJECT_BEHAVIOR;
-    behavior.setMaxSpeed(maxSpeed());
-    showFilled       = DEFAULT_OBJECT_SHOW_FILLED;
+    setHeading(const theta);
+    Robot::behavior = DEFAULT_OBJECT_BEHAVIOR;
+    behavior.setMaxSpeed(const maxSpeed());
+    showFilled = DEFAULT_OBJECT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
 }   // init(const GLfloat..<4>, const Color)
