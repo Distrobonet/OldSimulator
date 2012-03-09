@@ -28,7 +28,7 @@ static const Color DEFAULT_ENV_COLOR = BLACK;
 
 
 // type redefinition
-typedef Circle Object;
+//typedef Circle Object;
 
 
 

@@ -21,7 +21,6 @@ static const GLfloat  DEFAULT_OBJECT_RADIUS       = 0.03f;
 static const bool     DEFAULT_OBJECT_SHOW_FILLED  = false;
 
 
-
 // forward declaration of an object environment
 class Environment;
 
@@ -63,7 +62,7 @@ class Object: public Circle
         Environment  *env;    // the environment of the object
 
         // <protected static data members>
-        static int  nObjects;    // number of total objects
+        static GLint  nObjects;    // number of total objects
 
         // <virtual protected utility functions>
         virtual bool init(const GLfloat dx         = 0.0f,
