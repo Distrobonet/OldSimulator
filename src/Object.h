@@ -19,6 +19,7 @@ using namespace std;
 static const Color    DEFAULT_OBJECT_COLOR        = DEFAULT_CIRCLE_COLOR;
 static const GLfloat  DEFAULT_OBJECT_RADIUS       = 0.03f;
 static const bool     DEFAULT_OBJECT_SHOW_FILLED  = false;
+static const Behavior DEFAULT_OBJECT_BEHAVIOR = Behavior();
 
 
 // forward declaration of an object environment
