@@ -157,7 +157,7 @@ void displayMenu()
 		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
 		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
 		<< "Use the mouse to select a robot."                << endl
-		<< "Use ESC to exit."                                << endl << endl
+		<< "Use ctrl+C to exit."                                << endl << endl
 		<< "Please enter your selection: ";
 
 }
