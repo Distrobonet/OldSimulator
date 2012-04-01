@@ -1,12 +1,10 @@
-<package><author>Kevin Bernard, Isaac Hatton, Glenn Howard</author>
-  <description brief="Simulator">
-
-     Simulator
-
-  </description>
+<package>
+<author>Kevin Bernard, Isaac Hatton, Glenn Howard</author>
+  	<description brief="Simulator"> 
+	A simulator running with ROS 
+	</description>
   <license>BSD</license>
-  <review status="unreviewed" notes="Use pr2_teleop"/>
-  <url>http://ros.org/wiki/Simulator</url>
+  <review status="deprecated" notes="Use pr2_teleop"/>
 	<depend package="joy"/>
 	<depend package="roscpp"/>
 	<depend package="rospy"/>
@@ -16,4 +14,6 @@
 	<depend package="tf"/>
 <platform os="ubuntu" version="9.04"/>
 <platform os="ubuntu" version="9.10"/>
-<platform os="ubuntu" version="10.04"/></package>
+<platform os="ubuntu" version="10.04"/>
+<platform os="ubuntu" version="11.10"/>
+</package>

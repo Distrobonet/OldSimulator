@@ -580,6 +580,7 @@ bool changeFormationSim(const GLint index, const Vector gradient)
     g_selectedIndex = index;
     return changeFormation(g_fIndex,gradient);
   }
+  else return false;
 }
 
 bool sendNCellRequest()
