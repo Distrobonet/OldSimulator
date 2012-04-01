@@ -129,60 +129,60 @@ bool         g_prop_toggle   = false;
 //      argc    in      an argument counter
 //      argv    in      initialization arguments
 //
-int main(GLint argc, char **argv)
-{
-  // parse command line arguments
-  if (!parseArguments(argc, argv,
-        g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
-  {
-    cerr << ">> ERROR: Unable to parse arguments...\n\n";
-    return 1;
-  }
-
-  // validate parameters
-  if (!validateParameters(g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
-  {
-    cerr << ">> ERROR: Unable to validate parameters...\n\n";
-    return 1;
-  }
-
-  // create handler for interrupts (i.e., ^C)
-  if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
-  signal(SIGPIPE, SIG_IGN);
-
-  // use the GLUT utility to initialize the window, to handle
-  // the input and to interact with the windows system
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-  glutInitWindowSize(g_windowSize[0], g_windowSize[1]);
-  glutInitWindowPosition(INIT_WINDOW_POSITION[0], INIT_WINDOW_POSITION[1]);
-  glutCreateWindow("Simulator");
-
-  // specify the resizing, refreshing, and interactive routines
-  glutDisplayFunc(display);
-  glutIdleFunc(display);
-  glutKeyboardFunc(keyboardPress);
-  glutMouseFunc(mouseClick);
-  glutMotionFunc(mouseDrag );
-  glutReshapeFunc(resizeWindow);
-  glutSpecialFunc(keyboardPressSpecial);
-  glutSpecialUpFunc(keyboardReleaseSpecial);
-  glutTimerFunc(50, timerFunction, 1);
-
-  // initialize and execute the robot cell environment
-  if (!initEnv(g_nRobots, g_fIndex))
-  {
-    cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
-    return 1;
-  }
-  initWindow();
-  displayMenu();
-  glutMainLoop();
-
-  deinitEnv();
-
-  return 0;
-}   // main(GLint, char **)
+//int main(GLint argc, char **argv)
+//{
+//  // parse command line arguments
+//  if (!parseArguments(argc, argv,
+//        g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
+//  {
+//    cerr << ">> ERROR: Unable to parse arguments...\n\n";
+//    return 1;
+//  }
+//
+//  // validate parameters
+//  if (!validateParameters(g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
+//  {
+//    cerr << ">> ERROR: Unable to validate parameters...\n\n";
+//    return 1;
+//  }
+//
+//  // create handler for interrupts (i.e., ^C)
+//  if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
+//  signal(SIGPIPE, SIG_IGN);
+//
+//  // use the GLUT utility to initialize the window, to handle
+//  // the input and to interact with the windows system
+//  glutInit(&argc, argv);
+//  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+//  glutInitWindowSize(g_windowSize[0], g_windowSize[1]);
+//  glutInitWindowPosition(INIT_WINDOW_POSITION[0], INIT_WINDOW_POSITION[1]);
+//  glutCreateWindow("Simulator");
+//
+//  // specify the resizing, refreshing, and interactive routines
+//  glutDisplayFunc(display);
+//  glutIdleFunc(display);
+//  glutKeyboardFunc(keyboardPress);
+//  glutMouseFunc(mouseClick);
+//  glutMotionFunc(mouseDrag );
+//  glutReshapeFunc(resizeWindow);
+//  glutSpecialFunc(keyboardPressSpecial);
+//  glutSpecialUpFunc(keyboardReleaseSpecial);
+//  glutTimerFunc(50, timerFunction, 1);
+//
+//  // initialize and execute the robot cell environment
+//  if (!initEnv(g_nRobots, g_fIndex))
+//  {
+//    cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
+//    return 1;
+//  }
+//  initWindow();
+//  displayMenu();
+//  glutMainLoop();
+//
+//  deinitEnv();
+//
+//  return 0;
+//}   // main(GLint, char **)
 
 
 
