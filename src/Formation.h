@@ -11,6 +11,7 @@
 #ifndef FORMATION_H
 #define FORMATION_H
 #include <vector>
+#include "Vector.h"//ADDED BY KEVIN
 #include "Relationship.h"
 using namespace std;
 
@@ -49,6 +50,7 @@ class Formation: protected vector<Function>
                   const GLint      fID   = -1,
                   const GLfloat    theta = 0.0f);
         Formation(const Formation &f);
+        //virtual ~Formation(){};//ADDED BY KEVIN
 
         // <public mutator functions>
         bool setFunction(const Function f = DEFAULT_FORMATION_FUNCTION);

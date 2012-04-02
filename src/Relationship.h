@@ -94,7 +94,7 @@ struct Relationship
     friend Relationship* relWithID(vector<Relationship> &rels,
                                    const GLint           id)
     {
-        for (GLint i = 0; i < rels.size(); ++i)
+        for (GLint i = 0; i < (GLint)rels.size(); ++i)
             if (rels[i].ID == id) return &rels[i];
         return NULL;
     }   // relWithID(const LinkedList<Relationship> &, const GLint)

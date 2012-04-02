@@ -19,6 +19,7 @@
 #include <boost/thread/thread.hpp>
 
 #include "RobotDriver.h"
+//#include "Simulator.cpp"
 
 using namespace std;
 

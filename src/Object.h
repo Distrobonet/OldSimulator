@@ -11,6 +11,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 #include "Circle.h"
+
+#include "Behavior.cpp"//ADDED BY KEVIN
 using namespace std;
 
 
