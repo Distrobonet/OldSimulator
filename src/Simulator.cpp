@@ -95,11 +95,11 @@ GLfloat g_windowHeight  = 2.0f;         // resized window height
 const GLfloat   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
 const GLint     N_CELLS           = 0;
 const GLint     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
-//const Formation DEFAULT_FORMATION = Formation(formations[0],
-//    DEFAULT_ROBOT_RADIUS *
-//    FACTOR_COLLISION_RADIUS,
-//    Vector(), MIDDLE_CELL, 0,
-//    90.0f);
+const Formation DEFAULT_FORMATION = Formation(formations[0],
+    DEFAULT_ROBOT_RADIUS *
+    FACTOR_COLLISION_RADIUS,
+    Vector(), MIDDLE_CELL, 0,
+    90.0f);
 
 
 

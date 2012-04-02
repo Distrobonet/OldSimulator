@@ -11,7 +11,7 @@
 #ifndef FORMATION_H
 #define FORMATION_H
 #include <vector>
-#include "Vector.h"//ADDED BY KEVIN
+//#include "Vector.h"//ADDED BY KEVIN
 #include "Relationship.h"
 using namespace std;
 

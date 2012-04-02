@@ -12,7 +12,7 @@
 #define OBJECT_H
 #include "Circle.h"
 
-#include "Behavior.cpp"//ADDED BY KEVIN
+//#include "Behavior.cpp"//ADDED BY KEVIN
 using namespace std;
 
 
