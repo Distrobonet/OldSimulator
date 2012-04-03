@@ -23,9 +23,10 @@ using namespace std;
 
 
 // math pi definition
-#ifndef PI
-#define PI (M_PI)
-#endif
+//#ifndef PI
+//#define PI (M_PI)
+//#endif
+const double PI = 3.14159;//ADDED BY KEVIN
 
 
 

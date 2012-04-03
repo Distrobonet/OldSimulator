@@ -34,10 +34,9 @@ GLint Object::nObjects = 0;   // initializes the number of objects to 0
 //      dz          in      the initial z-coordinate of the object (default 0)
 //      colorIndex  in      the initial array index of the color of the object
 //
-Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-               const Color   colorIndex)
+Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz)
 {
-    init(dx, dy, dz, colorIndex);
+    init(dx, dy, dz);
     ID = ++nObjects;
 }   // Object(const GLfloat, const GLfloat, const GLfloat, const Color)
 
@@ -56,8 +55,7 @@ Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz,
 //
 Object::Object(const Object &obj)
 {
-    init(obj.x, obj.y, obj.z, DEFAULT_OBJECT_COLOR);
-    setColor(obj.color);
+    init(obj.x, obj.y, obj.z);
     for (GLint i = 0; i < 3; ++i)
     {
         translate[i] = obj.translate[i];
@@ -178,9 +176,9 @@ GLint Object::getID() const
 //
 void Object::draw()
 {
-    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
+//    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
+//        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
+//        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
 
     Circle::draw();   // draw a circle representing the object
 }   // draw()
@@ -190,7 +188,7 @@ void Object::draw()
 // <virtual protected utility functions>
 
 //
-// bool init(dx, dy, dz, theta, colorIndex)
+// bool init(dx, dy, dz, theta)
 // Last modified: 06Nov2009
 //
 // Initializes the object to the parameterized values,
@@ -204,14 +202,14 @@ void Object::draw()
 //      colorIndex  in      the initial array index of the color of the object
 //
 bool Object::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-                 const GLfloat theta, const Color   colorIndex)
+                 const GLfloat theta)
 {
-    Circle::init(dx, dy, dz, DEFAULT_OBJECT_RADIUS, colorIndex);
+    Circle::init(dx, dy, dz, DEFAULT_OBJECT_RADIUS);
     setHeading(const theta);
     Robot::behavior = DEFAULT_OBJECT_BEHAVIOR;
     behavior.setMaxSpeed(const maxSpeed());
     showFilled = DEFAULT_OBJECT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
-}   // init(const GLfloat..<4>, const Color)
+}   // init(const GLfloat..<4>)
 

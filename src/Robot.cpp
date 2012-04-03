@@ -8,10 +8,13 @@
 //
 
 // preprocessor directives
-#include "Environment.h"
+//#include "Environment.h"
 #include "Robot.h"
+#include <stdio.h>//ADDED BY KEVIN for NULL use
 
+#include "math.h"//ADDED BY KEVIN
 
+#define E         (1.0f)//ADDED BY KEVIN
 
 // <protected static data members>
 GLint Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
@@ -36,9 +39,9 @@ GLint Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
 //      colorIndex  in      the initial array index of the color of the robot
 //
 Robot::Robot(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-             const GLfloat theta, const Color   colorIndex)
+             const GLfloat theta)
 {
-    init(dx, dy, dz, theta, colorIndex);
+    init(dx, dy, dz, theta);
     ID = --nRobots;
 }   // Robot(const GLfloat..<4>, const Color)
 
@@ -57,8 +60,7 @@ Robot::Robot(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
 //
 Robot::Robot(const Robot &r)
 {
-    init(r.x, r.y, r.z, r.getHeading(), DEFAULT_ROBOT_COLOR);
-    setColor(r.color);
+    init(r.x, r.y, r.z, r.getHeading());
     for (GLint i = 0; i < 3; ++i)
     {
         translate[i] = r.translate[i];
@@ -355,9 +357,9 @@ GLfloat Robot::getArcRadius() const
 //
 void Robot::draw()
 {
-    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
+//    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
+//        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
+//        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
 
     vector<Vector> rels = getObjectRelationships(2.0f * collisionRadius());
 	for (GLint i = 0, n = rels.size(); i < n; ++i)
@@ -382,7 +384,6 @@ void Robot::draw()
                                y + translate[1],
                                z + translate[2]);
             heading.scaled(radius / DEFAULT_ROBOT_RADIUS);
-            heading.setColor(color);
             heading.draw();
         glPopMatrix();
     }
@@ -563,6 +564,7 @@ GLfloat Robot::collisionRadius() const
 {
     return FACTOR_COLLISION_RADIUS * radius;
 }   // collisionRadius() const
+
 
 
 
@@ -1120,7 +1122,7 @@ Behavior Robot::orbitBehavior(const Vector &target, const GLfloat dist)
 // <virtual protected utility functions>
 
 //
-// bool init(dx, dy, dz, theta, colorIndex)
+// bool init(dx, dy, dz, theta)
 // Last modified: 06Nov2009
 //
 // Initializes the robot to the parameterized values,
@@ -1134,10 +1136,9 @@ Behavior Robot::orbitBehavior(const Vector &target, const GLfloat dist)
 //      theta       in      the initial heading of the robot (default 0)
 //      colorIndex  in      the initial array index of the color of the robot
 //
-bool Robot::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-                 const GLfloat theta, const Color   colorIndex)
+bool Robot::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz, const GLfloat theta)
 {
-    Circle::init(dx, dy, dz, DEFAULT_ROBOT_RADIUS, colorIndex);
+    Circle::init(dx, dy, dz, DEFAULT_ROBOT_RADIUS);
     setHeading(theta);
     behavior         = DEFAULT_ROBOT_BEHAVIOR;
     behavior.setMaxSpeed(maxSpeed());
@@ -1147,7 +1148,7 @@ bool Robot::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
     showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
-}   // init(const GLfloat..<4>, const Color)
+}   // init(const GLfloat..<4>)
 
 
 

@@ -18,7 +18,6 @@ using namespace std;
 
 
 // global constants
-static const Color    DEFAULT_OBJECT_COLOR        = DEFAULT_CIRCLE_COLOR;
 static const GLfloat  DEFAULT_OBJECT_RADIUS       = 0.03f;
 static const bool     DEFAULT_OBJECT_SHOW_FILLED  = false;
 static const Behavior DEFAULT_OBJECT_BEHAVIOR = Behavior();
@@ -38,8 +37,7 @@ class Object: public Circle
         // <constructors>
         Object(const GLfloat dx         = 0.0f,
                const GLfloat dy         = 0.0f,
-               const GLfloat dz         = 0.0f,
-               const Color   colorIndex = DEFAULT_OBJECT_COLOR);
+               const GLfloat dz         = 0.0f);
         Object(const Object &obj);
 
         // <destructors>
@@ -71,8 +69,7 @@ class Object: public Circle
         virtual bool init(const GLfloat dx         = 0.0f,
                           const GLfloat dy         = 0.0f,
                           const GLfloat dz         = 0.0f,
-                          const GLfloat theta      = 0.0f,
-                          const Color   colorIndex = DEFAULT_OBJECT_COLOR);
+                          const GLfloat theta      = 0.0f);
 };  // Object
 
 #endif

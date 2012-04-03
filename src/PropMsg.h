@@ -26,7 +26,7 @@ struct PropMsg
   Vector distance; //distance of the cell who is currently closest to the FCNTR
   GLfloat radius;
   GLint count;
-  bool response; //boolean of wheather or not the msg has been received.
+  bool response; //boolean of whether or not the msg has been received.
   //msgID as a (long)timestampto ensure that the message you send out for
   //a request is the same you're getting back on a response
 

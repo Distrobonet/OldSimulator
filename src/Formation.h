@@ -30,25 +30,30 @@ static const GLint    X_N_ITERATIONS             = 100;
 
 
 
-// describes a formation
+// describes a formation as a vector of functions
 class Formation: protected vector<Function>
 {
 
     public:
 
         // <constructors>
-        Formation(Function      f     = DEFAULT_FORMATION_FUNCTION,
+        Formation(const Function f     = DEFAULT_FORMATION_FUNCTION,
                   const GLfloat r     = DEFAULT_FORMATION_RADIUS,
                   const Vector  sGrad = Vector(),
                   const GLint   sID   = ID_BROADCAST,
                   const GLint   fID   = -1,
                   const GLfloat theta = 0.0f);
+//		Formation(const Function f, const GLfloat r, const Vector sGrad, const GLint sID,
+//	                  const GLint fID, const GLfloat theta)
+//				{};
         Formation(vector<Function> f,
                   const GLfloat    r     = DEFAULT_FORMATION_RADIUS,
                   const Vector     sGrad = Vector(),
                   const GLint      sID   = ID_BROADCAST,
                   const GLint      fID   = -1,
                   const GLfloat    theta = 0.0f);
+
+        //Formation(){};//ADDED BY KEVIN
         Formation(const Formation &f);
         //virtual ~Formation(){};//ADDED BY KEVIN
 

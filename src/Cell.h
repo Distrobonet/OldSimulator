@@ -11,19 +11,15 @@
 #ifndef CELL_H
 #define CELL_H
 #include <vector>
-#include "Auctioning.h"
-#include "Neighborhood.h"
-#include "Robot.h"
+//#include "Auctioning.h"
+//#include "Neighborhood.h"
+//#include "Robot.h"
 using namespace std;
 
 
 
 //
-#define VERBOSE            (0)
-#define AUTONOMOUS_INIT    (1)
-#define ALLOW_CELL_BIDS    (0)
-#define CELL_INFO_VIEW     (0)
-#define AUCTION_STEP_COUNT (3)
+
 
 
 
@@ -50,7 +46,7 @@ enum MessageType
 
 
 // global constants
-static const Color   DEFAULT_CELL_COLOR       = WHITE;
+//static const Color   DEFAULT_CELL_COLOR       = WHITE;
 static const bool    DEFAULT_CELL_SHOW_FILLED = true;
 static const GLint   LEFT_NBR_INDEX           = 0;
 static const GLint   RIGHT_NBR_INDEX          = 1;
@@ -70,8 +66,7 @@ class Cell: public State, public Neighborhood, public Robot
         Cell(const GLfloat dx         = 0.0f,
              const GLfloat dy         = 0.0f,
              const GLfloat dz         = 0.0f,
-             const GLfloat theta      = 0.0f,
-             const Color   colorIndex = DEFAULT_CELL_COLOR);
+             const GLfloat theta      = 0.0f);
         Cell(const Cell &r);
 
         // <destructors>
@@ -140,8 +135,7 @@ class Cell: public State, public Neighborhood, public Robot
         virtual bool init(const GLfloat dx         = 0.0f,
                           const GLfloat dy         = 0.0f,
                           const GLfloat dz         = 0.0f,
-                          const GLfloat theta      = 0.0f,
-                          const Color   colorIndex = DEFAULT_CELL_COLOR);
+                          const GLfloat theta      = 0.0f);
 };  // Cell
 
 #endif

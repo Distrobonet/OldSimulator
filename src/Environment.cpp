@@ -14,7 +14,7 @@
 #include <ctime>
 #include <stdlib.h>
 
-
+#define AUCTION_STEP_COUNT (3)
 
 // <constructors>
 
@@ -32,10 +32,9 @@
 //      colorIndex  in      the initial array index of the color of the cells
 //
 Environment::Environment(const GLint     n,
-    const Formation f,
-    const Color     colorIndex)
+    const Formation f)
 {
-  if (!init(n, f, colorIndex)) clear();
+  if (!init(n, f)) clear();
 }   // Environment(const GLint, const Formation, const Color)
 
 
@@ -74,68 +73,6 @@ Environment::~Environment()
 {
   clear();
 }   // ~Environment()
-
-
-
-// <virtual public mutator functions>
-
-//
-// bool setColor(r, g, b)
-// Last modified: 03Sep2006
-//
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      r       in/out  the red in the color to be set to
-//      g       in/out  the green in the color to be set to
-//      b       in/out  the blue in the color to be set to
-//
-bool Environment::setColor(const GLfloat r, const GLfloat g, const GLfloat b)
-{
-  color[GLUT_RED]   = r;
-  color[GLUT_GREEN] = g;
-  color[GLUT_BLUE]  = b;
-  return true;
-}   // setColor(const GLfloat, const GLfloat, const GLfloat)
-
-
-
-//
-// bool setColor(clr)
-// Last modified: 03Sep2006
-//
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      clr     in/out  the color to be set to
-//
-bool Environment::setColor(const GLfloat clr[3])
-{
-  return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
-}   // setColor(const GLfloat [])
-
-
-
-//
-// bool setColor(colorIndex)
-// Last modified: 27Aug2006
-//
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      colorIndex  in/out  the index of the color to be set to
-//
-bool Environment::setColor(const Color colorIndex)
-{
-  return setColor(COLOR[(GLint)colorIndex]);
-}   // setColor(const Color)
-
 
 
 // <public mutator functions>
@@ -260,7 +197,6 @@ bool Environment::addObject(Object *o)
 {
    if ((o == NULL) && ((o = new Object()) == NULL)) return false;
    o->setRadius(DEFAULT_ROBOT_RADIUS);
-   o->setColor(BLUE);
    o->showFilled = true;
    objects.push_back(o);   // attempt to add this object to the object list
    return true;
@@ -497,7 +433,6 @@ void Environment::draw()
     Cell* seedCell = getCell(formation.getSeedID());
     if (seedCell != NULL)
     {
-      seedCell->setColor(GREEN);
       // cout << "centroid = " << centroid << endl;
       Vector centroidCopy = centroid;
       centroidCopy.translated(*seedCell);
@@ -505,7 +440,6 @@ void Environment::draw()
         seedCell->getHeading() -
         formation.getHeading();
       centroidCopy.setAngle(rotateCentroid);
-      centroidCopy.setColor(MAGENTA);
       centroidCopy.draw();
       if(radius > 0.0f)
       {
@@ -517,7 +451,6 @@ void Environment::draw()
         Vector distanceCopy = distance;
         distanceCopy.translated(*seedCell);
         distanceCopy.setAngle(rotateCentroid);
-        distanceCopy.setColor(CYAN);
         distanceCopy.draw();
       }
       //draw the vector to the cell that should now become seed.
@@ -961,8 +894,7 @@ bool Environment::showHeading(const bool show)
 //      colorIndex  in      the initial array index of the color of the cells
 //
 bool Environment::init(const GLint     n,
-    const Formation f,
-    const Color     colorIndex)
+    const Formation f)
 {
   srand(time(NULL));
 
@@ -970,7 +902,6 @@ bool Environment::init(const GLint     n,
   formation    = f;
   formation.setFormationID(0);
   formationID  = 0;
-  defaultColor = colorIndex;
 
   bool result = true;
   startFormation = false;
@@ -979,8 +910,8 @@ bool Environment::init(const GLint     n,
   initRobots();
 
   if (VERBOSE) string printf("finished initCells()\n");
-  return result && setColor(colorIndex);
-}   // init(const GLint, const Formation, const Color)
+  return result;
+}   // init(const GLint, const Formation)
 
 bool Environment::initRobots()
 {
@@ -996,7 +927,7 @@ bool Environment::addRobot(GLfloat x, GLfloat y, GLfloat z, GLfloat theta)
 {
   if (VERBOSE)
 	  string printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
-  Robot *r = new Robot(x, y, z, theta, DEFAULT_ROBOT_COLOR);
+  Robot *r = new Robot(x, y, z, theta);
   r->setEnvironment(this);
   robots.push_back(r);
   return true;

@@ -7,10 +7,23 @@
 // Description:     This class implements a robot cell.
 //
 
+
+#define VERBOSE            (0)
+#define AUTONOMOUS_INIT    (1)
+#define ALLOW_CELL_BIDS    (0)
+#define CELL_INFO_VIEW     (0)
+#define AUCTION_STEP_COUNT (3)
+
+
+
+#include<iostream>
 // preprocessor directives
 #include <stdio.h>
 #include "Cell.h"
 #include "Environment.h"
+
+using namespace std;
+
 
 
 
@@ -36,11 +49,10 @@ GLint Cell::nCells = 0;
 //      theta       in      the initial heading of the cell (default 0)
 //      colorIndex  in      the initial array index of the color of the cell
 //
-Cell::Cell(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-    const GLfloat theta, const Color   colorIndex)
-: State(), Neighborhood(), Robot(dx, dy, dz, theta, colorIndex)
+Cell::Cell(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLfloat theta)
+: State(), Neighborhood(), Robot(dx, dy, dz, theta)
 {
-  init(dx, dy, dz, theta, colorIndex);
+  init(dx, dy, dz, theta);
   ID      = nCells++;
   numBids = 0;
 }   // Cell(const GLfloat..<4>, const Color)
@@ -817,7 +829,15 @@ bool Cell::processNCell(Packet &p)
         //send msg on to this nbr.
         //make copy of p.msg, push it onto props, fwd on the message to this nbr
         //
-        PropMsg *propm = new PropMsg(nbr.ID, 0, false);//why do i have params
+        //PropMsg *propm = new PropMsg(nbr.ID, 0, false);//why do i have params
+
+    	  //ADDED BY KEVIN
+    	 PropMsg *propm = new PropMsg();
+    	 propm->toID = nbr.ID;
+    	 propm->count = 0;
+    	 propm->response = false;
+    	 //END ADDED
+
         props.push_back(*propm);                       //here and not elsewhere
         env->sendMsg(p.msg, nbr.ID,ID,NCELL_REQUEST); 
         is_ref_nbr =true;
@@ -921,7 +941,15 @@ bool Cell::processFcntr(Packet &p)
         //send msg on to this nbr.
         //make copy of p.msg, push it onto props, fwd on the message to this nbr
         //
-        PropMsg *propm = new PropMsg(nbr.ID,0, 0, false);
+        //PropMsg *propm = new PropMsg(nbr.ID,0, 0, false);
+
+    	  //ADDED BY KEVIN
+		 PropMsg *propm = new PropMsg();
+		 propm->toID = nbr.ID;
+		 propm->count = 0;
+		 propm->response = false;
+    	  //END ADDED
+
         props.push_back(*propm); // a pointer? shouldnt it be a copy?
         env->sendMsg(p.msg, nbr.ID,ID,FCNTR_REQUEST); 
         is_ref_nbr =true;
@@ -1040,7 +1068,15 @@ bool Cell::processFRad(Packet &p)
         //send msg on to this nbr.
         //make copy of p.msg, push it onto props, fwd on the message to this nbr
         //
-        PropMsg *propm = new PropMsg(nbr.ID,0, 0.0f, 0, false); //needed for FRAD?
+        //PropMsg *propm = new PropMsg(nbr.ID, 0,0, 0.0f, 0, false); //needed for FRAD?
+
+    	  //ADDED BY KEVIN
+		 PropMsg *propm = new PropMsg();
+		 propm->toID = nbr.ID;
+		 propm->count = 0;
+		 propm->response = false;
+		 //END ADDED
+
         props.push_back(*propm); // a pointer? shouldnt it be a copy?
         env->sendMsg(p.msg, nbr.ID,ID,FRAD_REQUEST); 
         is_ref_nbr =true;
@@ -1140,7 +1176,15 @@ bool Cell::processFSeed(Packet &p)
         //send msg on to this nbr.
         //make copy of p.msg, push it onto props, fwd on the message to this nbr
         //
-        PropMsg *propm = new PropMsg(nbr.ID,0, 0, 0.0f, 0, false); 
+        //PropMsg *propm = new PropMsg(nbr.ID,0, 0, 0.0f, 0, false);
+
+    	 //ADDED BY KEVIN
+		 PropMsg *propm = new PropMsg();
+		 propm->toID = nbr.ID;
+		 propm->count = 0;
+		 propm->response = false;
+		 //END ADDED
+
         props.push_back(*propm); // a pointer? shouldnt it be a copy?
         env->sendMsg(p.msg, nbr.ID,ID,FSEED_REQUEST); 
         is_ref_nbr =true;
@@ -1348,7 +1392,7 @@ Cell& Cell::operator =(const Robot &r)
 // <virtual protected utility functions>
 
 //
-// bool init(dx, dy, dz, theta, colorIndex)
+// bool init(dx, dy, dz, theta)
 // Last modified: 30Nov2009
 //
 // Initializes the cell to the parameterized values,
@@ -1362,14 +1406,13 @@ Cell& Cell::operator =(const Robot &r)
 //      theta       in      the initial heading of the cell (default 0)
 //      colorIndex  in      the initial array index of the color of the cell
 //
-bool Cell::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-    const GLfloat theta, const Color   colorIndex)
+bool Cell::init(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLfloat theta)
 {
   showFilled = DEFAULT_CELL_SHOW_FILLED;
   leftNbr    = rightNbr = NULL;
   auctionStepCount = 0;
   return true;
-}   // init(const GLfloat..<4>, const Color)
+}   // init(const GLfloat..<4>)
 
 
 void Cell::settleAuction()

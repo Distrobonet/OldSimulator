@@ -11,9 +11,11 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 #include <queue>
-#include "Behavior.h"
-#include "Circle.h"
-#include "Packet.h"
+//#include "Behavior.h"
+//#include "Circle.h"
+//#include "Packet.h"
+
+#include <stdio.h>//ADDED BY KEVIN for NULL use
 using namespace std;
 
 
@@ -24,7 +26,6 @@ using namespace std;
 
 
 // global constants
-static const Color    DEFAULT_ROBOT_COLOR        = DEFAULT_CIRCLE_COLOR;
 static const GLfloat  DEFAULT_ROBOT_RADIUS       = 0.03f;
 static const Behavior DEFAULT_ROBOT_BEHAVIOR     = Behavior();
 static const bool     DEFAULT_ROBOT_SHOW_HEADING = true;
@@ -58,8 +59,7 @@ class Robot: public Circle
         Robot(const GLfloat dx         = 0.0f,
               const GLfloat dy         = 0.0f,
               const GLfloat dz         = 0.0f,
-              const GLfloat theta      = 0.0f,
-              const Color   colorIndex = DEFAULT_ROBOT_COLOR);
+              const GLfloat theta      = 0.0f);
         Robot(const Robot &r);
 
         // <destructors>
@@ -166,8 +166,7 @@ class Robot: public Circle
         virtual bool init(const GLfloat dx         = 0.0f,
                           const GLfloat dy         = 0.0f,
                           const GLfloat dz         = 0.0f,
-                          const GLfloat theta      = 0.0f,
-                          const Color   colorIndex = DEFAULT_ROBOT_COLOR);
+                          const GLfloat theta      = 0.0f);
 };  // Robot
 
 #endif

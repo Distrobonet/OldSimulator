@@ -11,9 +11,37 @@
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+
+// Needed by Vector.h
+#include "Utils.h"//ADDED BY KEVIN
+
+#include "Behavior.cpp"//ADDED BY KEVIN
+
+// Needed by Environment
+#include "Object.h"//ADDED BY KEVIN
+
+// Needed by Cell
+#include "Auctioning.h"//ADDED BY KEVIN
+#include "Neighborhood.h"//ADDED BY KEVIN
+#include "Robot.h"//ADDED BY KEVIN
+
+// Needed by Environment
+#include "Cell.h"//ADDED BY KEVIN
+
 #include "Environment.h"
-//#include "Vector.h"//ADDED BY KEVIN
-//#include "Formation.h"//ADDED BY KEVIN
+
+// Needed by Formation.h
+//#include "Relationship.h"//ADDED BY KEVIN
+
+// Needed by Formation.h
+#include "Vector.h"//ADDED BY KEVIN
+
+// Needed by Simulator.cpp
+#include "Formation.h"//ADDED BY KEVIN
+
+
+
 using namespace std;
 
 
@@ -89,21 +117,18 @@ GLint   g_windowSize[2] = {800, 800};   // window size in pixels
 GLfloat g_windowWidth   = 2.0f;         // resized window width
 GLfloat g_windowHeight  = 2.0f;         // resized window height
 
-
+typedef GLfloat (*Function)(const GLfloat);//ADDED BY KEVIN
 
 // simulation global constants
 const GLfloat   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
 const GLint     N_CELLS           = 0;
 const GLint     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
-const Formation DEFAULT_FORMATION = Formation(formations[0],
-    DEFAULT_ROBOT_RADIUS *
-    FACTOR_COLLISION_RADIUS,
-    Vector(), MIDDLE_CELL, 0,
-    90.0f);
+//const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
+//const Formation DEFAULT_FORMATION = Formation(line, 0.0f, Vector(), 0, 0,  90.0f);
 
 
 
-// simulation global variables
+//// simulation global variables
 //Environment *g_env           = NULL;
 //GLint        g_nRobots       = 0;
 //GLfloat      g_fRadius       = DEFAULT_FORMATION.getRadius();

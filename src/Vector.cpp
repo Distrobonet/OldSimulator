@@ -28,10 +28,9 @@
 //      dz          in      the initial z-coordinate of the vector (default 0)
 //      colorIndex  in      the initial array index of the color of the vector
 //
-Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-               const Color   colorIndex)
+Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz)
 {
-    init(dx, dy, dz, colorIndex);
+    init(dx, dy, dz);
 }   // Vector(const GLfloat, const GLfloat, const GLfloat, const Color)
 
 
@@ -49,7 +48,7 @@ Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz,
 //
 Vector::Vector(const Vector &v)
 {
-    init(v.x, v.y, v.z, DEFAULT_VECTOR_COLOR);
+    init(v.x, v.y, v.z);
     *this = v;
 /*
     setColor(v.color);
@@ -123,67 +122,6 @@ bool Vector::set(const Vector &v)
 {
     return set(v.x, v.y, v.z);
 }   // set(const Vector &v)
-
-
-
-//
-// bool setColor(r, g, b)
-// Last modified: 04Sep2006
-//
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      r       in/out  the red in the color to be set to
-//      g       in/out  the green in the color to be set to
-//      b       in/out  the blue in the color to be set to
-//
-bool Vector::setColor(const GLfloat r, const GLfloat g, const GLfloat b)
-{
-    color[GLUT_RED]   = r;
-    color[GLUT_GREEN] = g;
-    color[GLUT_BLUE]  = b;
-    return true;
-}   // setColor(const GLfloat, const GLfloat, const GLfloat)
-
-
-
-//
-// bool setColor(clr)
-// Last modified: 04Sep2006
-//
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      clr     in/out  the color to be set to
-//
-bool Vector::setColor(const GLfloat clr[3])
-{
-    return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
-}   // setColor(const GLfloat [])
-
-
-
-//
-// bool setColor(colorIndex)
-// Last modified: 04Sep2006
-//
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      colorIndex  in/out  the index of the color to be set to
-//
-bool Vector::setColor(const Color colorIndex)
-{
-    return setColor(COLOR[(GLint)colorIndex]);
-}   // setColor(const Color)
-
-
 
 //
 // void translated(dx, dy, dz)
@@ -457,9 +395,9 @@ bool Vector::normalize()
 //
 void Vector::draw()
 {
-    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
+//    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
+//        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
+//        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
     glColor3fv(color);
     glLineWidth(VECTOR_LINE_WIDTH);
 
@@ -519,7 +457,7 @@ void Vector::drawX(Vector location)
    glColor3f (0.0, 0.0, 1.0);
    glPushMatrix();
    glRotatef(rotAngle, 0.0, 0.0, 0.1);
-   glBegin (GL_LINES);
+  // glBegin (GL_LINES);
       glVertex2f (0.025, 0.025);
       glVertex2f (-0.025, -0.025);
    glEnd ();
@@ -631,7 +569,6 @@ GLfloat Vector::perpDot(const Vector &v) const
 Vector& Vector::operator =(const Vector &v)
 {
     set(v.x, v.y, v.z);
-    setColor(v.color);
     for (GLint i = 0; i < 3; ++i)
     {
         translate[i] = v.translate[i];
@@ -935,7 +872,7 @@ GLfloat angle(const Vector &v1, const Vector &v2)
 // <virtual protected utility functions>
 
 //
-// bool init(dx, dy, dz, colorIndex)
+// bool init(dx, dy, dz)
 // Last modified: 05Sep2006
 //
 // Initializes the vector to the parameterized values,
@@ -948,11 +885,9 @@ GLfloat angle(const Vector &v1, const Vector &v2)
 //      dz          in      the initial z-coordinate of the vector (default 0)
 //      colorIndex  in      the initial array index of the color of the vector
 //
-bool Vector::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-                  const Color   colorIndex)
+bool Vector::init(const GLfloat dx, const GLfloat dy, const GLfloat dz)
 {
     set(dx, dy, dz);
-    setColor(colorIndex);
     for (GLint i = 0; i < 3; ++i)
     {
         translate[i] = DEFAULT_VECTOR_TRANSLATE[i];
@@ -962,4 +897,4 @@ bool Vector::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
     showLine         = DEFAULT_VECTOR_SHOW_LINE;
     showHead         = DEFAULT_VECTOR_SHOW_HEAD;
     return true;
-}   // init(const GLfloat, const GLfloat, const GLfloat, const Color)
+}   // init(const GLfloat, const GLfloat, const GLfloat)

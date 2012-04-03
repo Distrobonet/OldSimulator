@@ -12,7 +12,7 @@
 #define ENVIRONMENT_H
 #include <queue>
 #include <vector>
-#include "Cell.h"
+//#include "Cell.h"
 
 
 //#include "Object.h"//ADDED BY KEVIN
@@ -22,13 +22,6 @@ using namespace std;
 
 //
 #define VERBOSE (0)
-
-
-
-// global constants
-static const Color DEFAULT_ENV_COLOR = BLACK;
-
-
 
 // type redefinition
 //typedef Circle Object;
@@ -51,19 +44,18 @@ class Environment
 
         // <constructors>
         Environment(const GLint     n          = 0,
-                    const Formation f          = Formation(),
-                    const Color     colorIndex = DEFAULT_ENV_COLOR);
+                    const Formation f          = Formation());
         Environment(const Environment &e);
 
         // <destructors>
         virtual ~Environment();
 
         // <virtual public mutator functions>
-        virtual bool setColor(const GLfloat r,
-                              const GLfloat g,
-                              const GLfloat b);
-        virtual bool setColor(const GLfloat clr[3]);
-        virtual bool setColor(const Color colorIndex = DEFAULT_VECTOR_COLOR);
+//        virtual bool setColor(const GLfloat r,
+//                              const GLfloat g,
+//                              const GLfloat b);
+//        virtual bool setColor(const GLfloat clr[3]);
+//        virtual bool setColor(const Color colorIndex = DEFAULT_VECTOR_COLOR);
 
         // <public mutator functions>
         bool addCell(Cell *c = NULL);
@@ -156,12 +148,10 @@ class Environment
         Cell               *newestCell;
         Formation           formation;
         GLint               nRobots;
-        Color               defaultColor;
 
         // <virtual protected utility functions>
         virtual bool init(const GLint     n          = 0,
-                          const Formation f          = Formation(),
-                          const Color     colorIndex = DEFAULT_ENV_COLOR);
+                          const Formation f          = Formation());
         //virtual bool initCells(const GLint     n = 0,
         //                       const Formation f = Formation());
         //virtual bool initNbrs(const GLint nNbrs = 0);

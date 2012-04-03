@@ -29,11 +29,10 @@
 //      r           in      the initial radius of the circle (default 0)
 //      colorIndex  in      the initial array index of the color of the circle
 //
-Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-               const GLfloat r,  const Color   colorIndex)
+Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLfloat r)
 {
-    init(dx, dy, dz, r, colorIndex);
-}   // Circle(const GLfloat..<4>, const Color)
+    init(dx, dy, dz, r);
+}   // Circle(const GLfloat..<4>)
 
 
 
@@ -52,7 +51,6 @@ Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz,
 Circle::Circle(const Vector &v, const GLfloat r)
 {
     init(v.x, v.y, v.z, r);
-    setColor(v.color);
 }   // Circle(const Vector, const GLfloat)
 
 
@@ -70,8 +68,7 @@ Circle::Circle(const Vector &v, const GLfloat r)
 //
 Circle::Circle(const Circle &c)
 {
-    init(c.x, c.y, c.z, c.radius, DEFAULT_CIRCLE_COLOR);
-    setColor(c.color);
+    init(c.x, c.y, c.z, c.radius);
     for (GLint i = 0; i < 3; ++i)
     {
         translate[i] = c.translate[i];
@@ -258,9 +255,9 @@ GLfloat Circle::getArea() const
 //
 void Circle::draw()
 {
-    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
+//    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
+//        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
+//        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
     glColor3fv(color);
     glLineWidth(VECTOR_LINE_WIDTH);
 
@@ -333,7 +330,7 @@ Circle Circle::operator = (const Circle &c)
 // <virtual protected utility functions>
 
 //
-// bool init(dx, dy, dz, r, colorIndex)
+// bool init(dx, dy, dz, r)
 // Last modified: 06Nov2009
 //
 // Initializes the circle to the parameterized values,
@@ -348,11 +345,11 @@ Circle Circle::operator = (const Circle &c)
 //      colorIndex  in      the initial array index of the color of the circle
 //
 bool Circle::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-                  const GLfloat r,  const Color   colorIndex)
+                  const GLfloat r)
 {
-    Vector::init(dx, dy, dz, colorIndex);
+    Vector::init(dx, dy, dz);
     if (!setRadius(r)) return false;
     showPos    = DEFAULT_CIRCLE_SHOW_POS;
     showFilled = DEFAULT_CIRCLE_SHOW_FILLED;
     return true;
-}   // init(const GLfloat..<4>, const Color)
+}   // init(const GLfloat..<4>)
