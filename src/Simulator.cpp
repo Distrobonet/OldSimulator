@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+//#include "glut.h"//ADDED BY KEVIN
 
 // Needed by Vector.h
 #include "Utils.h"//ADDED BY KEVIN
@@ -101,8 +102,8 @@ GLfloat  sine(const GLfloat x);
 GLfloat  xRoot3(const GLfloat x);
 GLfloat  negXRoot3(const GLfloat x);
 Function formations[] = {line,        x,       absX,     negHalfX,
-  negAbsHalfX, negAbsX, parabola, cubic,
-  condSqrt,    sine,    xRoot3,   negXRoot3};
+						negAbsHalfX, negAbsX, parabola, cubic,
+						condSqrt,    sine,    xRoot3,   negXRoot3};
 
 
 
@@ -117,28 +118,29 @@ GLint   g_windowSize[2] = {800, 800};   // window size in pixels
 GLfloat g_windowWidth   = 2.0f;         // resized window width
 GLfloat g_windowHeight  = 2.0f;         // resized window height
 
-typedef GLfloat (*Function)(const GLfloat);//ADDED BY KEVIN
+//typedef GLfloat (*Function)(const GLfloat);//ADDED BY KEVIN
 
 // simulation global constants
 const GLfloat   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
 const GLint     N_CELLS           = 0;
 const GLint     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
+// A formation is a vector of Functions, which are functions that take GLfloats and return GLfloats
 //const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
 //const Formation DEFAULT_FORMATION = Formation(line, 0.0f, Vector(), 0, 0,  90.0f);
+//Formation blah(line, 0.0f, Vector(), 0, 0, 0.0f);
 
 
-
-//// simulation global variables
-//Environment *g_env           = NULL;
-//GLint        g_nRobots       = 0;
+// simulation global variables
+Environment *g_env           = NULL;
+GLint        g_nRobots       = 0;
 //GLfloat      g_fRadius       = DEFAULT_FORMATION.getRadius();
 //GLint        g_sID           = DEFAULT_FORMATION.getSeedID();
 //GLint        g_fID           = DEFAULT_FORMATION.getFormationID();
 //GLfloat      g_fHeading      = DEFAULT_FORMATION.getHeading();
-//GLint        g_fIndex        = 0;
+GLint        g_fIndex        = 0;
 //GLint        g_selectedIndex = g_sID;
-//GLint        g_dt            = 50;    // time interval (in milliseconds)
-//bool         g_prop_toggle   = false;
+GLint        g_dt            = 50;    // time interval (in milliseconds)
+bool         g_prop_toggle   = false;
 
 
 
@@ -534,27 +536,27 @@ bool validateParameters(const GLint   nRobots,
 //}   // initEnv(const GLint, const GLint)
 //
 //
+
 //
-////
-//// bool deinitEnv()
-//// Last modified: 08Nov2009
-////
-//// Attempts to deinitialize the environment,
-//// returning true if successful, false otherwise.
-////
-//// Returns:     true if successful, false otherwise
-//// Parameters:  <none>
-////
-//bool deinitEnv()
-//{
-//  if (g_env != NULL)
-//  {
-//    delete g_env;
-//    g_env = NULL;
-//  }
-//  return g_env == NULL;
-//}   // deinitEnv()
+// bool deinitEnv()
+// Last modified: 08Nov2009
 //
+// Attempts to deinitialize the environment,
+// returning true if successful, false otherwise.
+//
+// Returns:     true if successful, false otherwise
+// Parameters:  <none>
+//
+bool deinitEnv()
+{
+  if (g_env != NULL)
+  {
+    delete g_env;
+    g_env = NULL;
+  }
+  return g_env == NULL;
+}   // deinitEnv()
+
 //
 //
 ////
@@ -1061,19 +1063,19 @@ bool validateParameters(const GLint   nRobots,
 //
 //
 //
-////
-//// void resizeWindow(w, h)
-//// Last modified:   08Nov2009
-////
-//// Scales the rendered scene according to the window dimensions,
-//// setting the global variables so the mouse operations will
-//// correspond to mouse pointer positions.
-////
-//// Returns:     <none>
-//// Parameters:
-////      w       in      the new screen width
-////      h       in      the new screen height
-////
+//
+// void resizeWindow(w, h)
+// Last modified:   08Nov2009
+//
+// Scales the rendered scene according to the window dimensions,
+// setting the global variables so the mouse operations will
+// correspond to mouse pointer positions.
+//
+// Returns:     <none>
+// Parameters:
+//      w       in      the new screen width
+//      h       in      the new screen height
+//
 //void resizeWindow(GLsizei w, GLsizei h)
 //{
 //  g_windowSize[0] = w;            // obtain new screen width
@@ -1105,16 +1107,15 @@ bool validateParameters(const GLint   nRobots,
 
 
 
-//
-// void timerFunction(value)
-// Last modified:   08Nov2009
-//
-// Updates the environment and redraws.
-//
-// Returns:     <none>
-// Parameters:
-//      value   in      the value of the timer
-//
+//// void timerFunction(value)
+//// Last modified:   08Nov2009
+////
+//// Updates the environment and redraws.
+////
+//// Returns:     <none>
+//// Parameters:
+////      value   in      the value of the timer
+////
 //void timerFunction(GLint value)
 //{
 //  //sendFcntrRequest();

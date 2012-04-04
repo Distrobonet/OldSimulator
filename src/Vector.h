@@ -37,7 +37,7 @@ class Vector
 
         // <public data members>
         GLfloat x,        y,            z;
-        GLfloat color[3], translate[3], rotate[3], scale[3];
+        GLfloat translate[3], rotate[3], scale[3];
         bool    showLine, showHead;
         
         // <constructors>

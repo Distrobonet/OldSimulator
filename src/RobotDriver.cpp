@@ -16,7 +16,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_listener.h>
 
-#include <boost/thread/thread.hpp>
+//#include <boost/thread/thread.hpp>
 
 #include "RobotDriver.h"
 //#include "Simulator.cpp"
@@ -36,7 +36,6 @@ double yValue = 0.0l;
 
 int main(int argc, char** argv)
 {
-
 	ros::init(argc, argv, "robot_driver");
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);

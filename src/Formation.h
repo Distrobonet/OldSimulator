@@ -17,7 +17,7 @@ using namespace std;
 
 
 
-// mathematical functional type redefinition
+// mathematical functional type redefinition -  A Function is a function that takes a GLfloat and returns a GLfloat
 typedef GLfloat (*Function)(const GLfloat);
 
 
@@ -80,15 +80,15 @@ class Formation: protected vector<Function>
         GLfloat          getHeading()                     const;
 
         // <public utility functions>
-        vector<Vector> getRelationships(const Vector c = Vector());
-        Vector getRelationship(const Function f = DEFAULT_FORMATION_FUNCTION,
-                               const GLfloat  r = DEFAULT_FORMATION_RADIUS,
-                               const Vector   c = Vector(),
-                               const GLfloat  theta = 0.0f);
-        Vector getRelationship(const GLint   pos   = 0,
-                               const GLfloat r     = DEFAULT_FORMATION_RADIUS,
-                               const Vector  c     = Vector(),
-                               const GLfloat theta = 0.0f);
+//        vector<Vector> getRelationships(const Vector c = Vector());
+//        Vector getRelationship(const Function f = DEFAULT_FORMATION_FUNCTION,
+//                               const GLfloat  r = DEFAULT_FORMATION_RADIUS,
+//                               const Vector   c = Vector(),
+//                               const GLfloat  theta = 0.0f);
+//        Vector getRelationship(const GLint   pos   = 0,
+//                               const GLfloat r     = DEFAULT_FORMATION_RADIUS,
+//                               const Vector  c     = Vector(),
+//                               const GLfloat theta = 0.0f);
 
         // <virtual overloaded operators>
         virtual Formation& operator =(const Formation &f);
