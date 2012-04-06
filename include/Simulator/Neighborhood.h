@@ -40,7 +40,7 @@ class Neighborhood: public vector<Neighbor>
         Neighborhood(const vector<State> &s);
 
         // <destructors>
-        ~Neighborhood();
+        virtual ~Neighborhood();
 
         // <public mutator functions>
         bool addNbr(const Neighbor n);

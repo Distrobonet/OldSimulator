@@ -64,7 +64,7 @@ Neighborhood::Neighborhood(const Neighborhood &nh)
 //
 Neighborhood::Neighborhood(const vector<Relationship> &r)
 {
-    for (int i = 0; i < r.size(); ++i) addNbr(r[i], State());
+    for (unsigned i = 0; i < r.size(); ++i) addNbr(r[i], State());
 }   // Neighborhood(const vector<Relationship> &)
 
 
@@ -82,7 +82,7 @@ Neighborhood::Neighborhood(const vector<Relationship> &r)
 //
 Neighborhood::Neighborhood(const vector<State> &s)
 {
-    for (int i = 0; i < s.size(); ++i) addNbr(Relationship(), s[i]);
+    for (unsigned i = 0; i < s.size(); ++i) addNbr(Relationship(), s[i]);
 }   // Neighborhood(const vector<State> &)
 
 
@@ -204,7 +204,7 @@ bool Neighborhood::removeNbr(const Neighbor n)
 bool Neighborhood::removeNbr(const int id)
 {
     Neighbor nbr;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         nbr = at(i);
         if (nbr.ID == id)
@@ -233,7 +233,7 @@ vector<Relationship> Neighborhood::getRelationships()
 {
     vector<Relationship> rels;
     Neighbor currNbr;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         rels.push_back(currNbr);
@@ -256,7 +256,7 @@ vector<State> Neighborhood::getStates()
 {
     vector<State> states;
     Neighbor currNbr;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         states.push_back(currNbr);
@@ -280,7 +280,8 @@ vector<State> Neighborhood::getStates()
 //
 Neighbor* Neighborhood::getNbr(const int pos)
 {
-    if ((pos < 0) || (pos >= size())) return NULL;
+    if ((pos < 0) || (pos >= size()))
+    	return NULL;
     return &at(pos);
 }   // getNbr(const int) const
 
@@ -355,7 +356,8 @@ bool Neighborhood::updateNbr(Neighbor &n, const State &s)
 bool Neighborhood::updateNbr(const int id, const State &s)
 {
     Neighbor *nbr = nbrWithID(id);
-    if (nbr == NULL) return false;
+    if (nbr == NULL)
+    	return false;
     return updateNbr(*nbr, s);
 }   // updateNbr(const int, const State &)
 
@@ -393,7 +395,7 @@ bool Neighborhood::isNbr(const Neighbor n)
 bool Neighborhood::isNbr(const int id)
 {
     Neighbor nbr;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         nbr = at(i);
         if (nbr.ID == id) return true;
@@ -431,7 +433,8 @@ void Neighborhood::clearNbrs()
 Neighbor* Neighborhood::anyNbr()
 {
     srand(time(NULL));
-    if (!empty()) return &at(irand(0, size()));
+    if (!empty())
+    	return &at(irand(0, size()));
     return NULL;
 }   // anyNbr()
 
@@ -448,7 +451,8 @@ Neighbor* Neighborhood::anyNbr()
 //
 Neighbor* Neighborhood::firstNbr()
 {
-    if (empty()) return NULL;
+    if (empty())
+    	return NULL;
     return &at(0);
 }   // firstNbr(Neighborhood &nh)
 
@@ -465,7 +469,8 @@ Neighbor* Neighborhood::firstNbr()
 //
 Neighbor* Neighborhood::secondNbr()
 {
-    if (size() < 2) return NULL;
+    if (size() < 2)
+    	return NULL;
     return &at(1);
 }   // secondNbr()
 
@@ -482,7 +487,8 @@ Neighbor* Neighborhood::secondNbr()
 //
 Neighbor* Neighborhood::lastNbr()
 {
-    if (empty()) return NULL;
+    if (empty())
+    	return NULL;
     return &at(size() - 1);
 }   // lastNbr()
 
@@ -504,7 +510,8 @@ Neighbor* Neighborhood::closestNbr(const Vector v)
     Neighbor currNbr;
     float  minDist  = 0.0f, currDist = 0.0f;
     int    minIndex = ID_NO_NBR;
-    for (int i = 0; i < size(); ++i)
+
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -537,7 +544,7 @@ Neighbor* Neighborhood::furthestNbr(const Vector v)
     Neighbor currNbr;
     float  maxDist  = 0.0f, currDist = 0.0f;
     int    maxIndex = ID_NO_NBR;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -569,7 +576,7 @@ Neighbor* Neighborhood::furthestNbr(const Vector v)
 Neighbor* Neighborhood::nbrWithID(const int id)
 {
     Neighbor currNbr;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if (currNbr.ID == id) return &at(i);
@@ -592,7 +599,7 @@ Neighbor* Neighborhood::nbrWithID(const int id)
 Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
 {
     Neighbor currNbr;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if (currNbr.gradient == grad) return &at(i);
@@ -618,7 +625,7 @@ Neighbor* Neighborhood::nbrWithMinGradient(const Vector v)
     Neighbor currNbr;
     float  minGrad  = 0.0f, currGrad = 0.0f;
     int    minIndex = ID_NO_NBR;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -651,7 +658,7 @@ Neighbor* Neighborhood::nbrWithMaxGradient(const Vector v)
     Neighbor currNbr;
     float  maxGrad  = 0.0f, currGrad = 0.0f;
     int    maxIndex = ID_NO_NBR;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -682,7 +689,7 @@ Neighbor* Neighborhood::nbrWithMinStep()
     Neighbor currNbr;
     int    minStep  = 0, currStep = 0;
     int    minIndex = ID_NO_NBR;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -713,7 +720,7 @@ Neighbor* Neighborhood::nbrWithMaxStep()
     Neighbor currNbr;
     int    maxStep  = 0, currStep = 0;
     int    maxIndex = ID_NO_NBR;
-    for (int i = 0; i < size(); ++i)
+    for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -743,9 +750,10 @@ Neighbor* Neighborhood::nbrWithMaxStep()
 //
 void Neighborhood::sortByID()
 {
-    for (int i = 0; i < size() - 1; ++i)
-        for (int j = i; j < size(); ++j)
-            if (getNbr(i)->ID > getNbr(j)->ID) swapNbrs(i, j);
+    for (unsigned i = 0; i < size() - 1; ++i)
+        for (unsigned j = i; j < size(); ++j)
+            if (getNbr(i)->ID > getNbr(j)->ID)
+            	swapNbrs(i, j);
 }   // sortByID()
 
 
@@ -763,10 +771,11 @@ void Neighborhood::sortByID()
 //
 void Neighborhood::sortByGradient(const Vector v)
 {
-    for (int i = 0; i < size() - 1; ++i)
-        for (int j = i; j < size(); ++j)
+    for (unsigned i = 0; i < size() - 1; ++i)
+        for (unsigned j = i; j < size(); ++j)
             if ((getNbr(i)->gradient - v).magnitude() >
-                (getNbr(j)->gradient - v).magnitude()) swapNbrs(i, j);
+                (getNbr(j)->gradient - v).magnitude())
+            	swapNbrs(i, j);
 }   // sortByGradient(const Vector)
 
 
@@ -784,10 +793,11 @@ void Neighborhood::sortByGradient(const Vector v)
 //
 void Neighborhood::sortByDistance(const Vector v)
 {
-    for (int i = 0; i < size() - 1; ++i)
-        for (int j = i; j < size(); ++j)
+    for (unsigned i = 0; i < size() - 1; ++i)
+        for (unsigned j = i; j < size(); ++j)
             if ((getNbr(i)->relActual - v).magnitude() >
-                (getNbr(j)->relActual - v).magnitude()) swapNbrs(i, j);
+                (getNbr(j)->relActual - v).magnitude())
+            	swapNbrs(i, j);
 }   // sortByDistance(const Vector)
 
 
@@ -805,10 +815,11 @@ void Neighborhood::sortByDistance(const Vector v)
 //
 void Neighborhood::sortByAngle(const Vector v)
 {
-    for (int i = 0; i < size() - 1; ++i)
-        for (int j = i; j < size(); ++j)
+    for (unsigned i = 0; i < size() - 1; ++i)
+        for (unsigned j = i; j < size(); ++j)
             if ((getNbr(i)->relActual - v).angle() >
-                (getNbr(j)->relActual - v).angle()) swapNbrs(i, j);
+                (getNbr(j)->relActual - v).angle())
+            	swapNbrs(i, j);
 }   // sortByAngle(const Vector)
 
 
@@ -826,10 +837,11 @@ void Neighborhood::sortByAngle(const Vector v)
 //
 void Neighborhood::sortByAbsAngle(const Vector v)
 {
-    for (int i = 0; i < size() - 1; ++i)
-        for (int j = i; j < size(); ++j)
+    for (unsigned i = 0; i < size() - 1; ++i)
+        for (unsigned j = i; j < size(); ++j)
             if (abs((getNbr(i)->relActual - v).angle()) >
-                abs((getNbr(j)->relActual - v).angle())) swapNbrs(i, j);
+                abs((getNbr(j)->relActual - v).angle()))
+            	swapNbrs(i, j);
 }   // sortByAbsAngle(const Vector)
 
 
@@ -847,7 +859,8 @@ void Neighborhood::sortByAbsAngle(const Vector v)
 //
 bool Neighborhood::swapNbrs(const int i, const int j)
 {
-    if ((i < 0) || (i >= size()) || (j < 0) || (j >= size())) return false;
+    if ((i < 0) || (i >= size()) || (j < 0) || (j >= size()))
+    	return false;
     Neighbor tempNbr = at(i);
     at(i)            = at(j);
     at(j)            = tempNbr;
