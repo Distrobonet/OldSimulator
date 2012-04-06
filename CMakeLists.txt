@@ -27,7 +27,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 rosbuild_add_boost_directories()
 rosbuild_add_gtest(test/utest test/robotDriverTest.cpp)
 
-rosbuild_add_executable(robotDriver src/RobotDriver.cpp src/Simulator.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
+rosbuild_add_executable(robotDriver src/RobotDriver.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
 
 #target_link_libraries(robotDriver GL GLU glut)
 

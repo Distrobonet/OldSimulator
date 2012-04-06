@@ -130,37 +130,37 @@ double getYValue(double xValue)
 	return yValue;
 }
 
-// A simple and basic way to clear the screen for the menu refresh
-void clearScreen()
-{
-	std::cout << "\n\n\n\n\n";
-}
-
-// Displays the selection menu to the screen
-void displayMenu()
-{
-	clearScreen();
-
-
-	cout << endl << endl << "Use the '0-9' keys to "
-		<< "change to a formation seeded at the selected robot."
-		<< endl << endl
-		<< "PRESET FORMATIONS\n-----------------"            << endl
-		<< "0) f(x) = 0"                                     << endl
-		<< "1) f(x) = x"                                     << endl
-		<< "2) f(x) = |x|"                                   << endl
-		<< "3) f(x) = -0.5 x"                                << endl
-		<< "4) f(x) = -|0.5 x|"                              << endl
-		<< "5) f(x) = -|x|"                                  << endl
-		<< "6) f(x) = x^2"                                   << endl
-		<< "7) f(x) = x^3"                                   << endl
-		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
-		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
-		<< "Use the mouse to select a robot."                << endl
-		<< "Use ctrl+C to exit."                                << endl << endl
-		<< "Please enter your selection: ";
-
-}
+//// A simple and basic way to clear the screen for the menu refresh
+//void clearScreen()
+//{
+//	std::cout << "\n\n\n\n\n";
+//}
+//
+//// Displays the selection menu to the screen
+//void displayMenu()
+//{
+//	clearScreen();
+//
+//
+//	cout << endl << endl << "Use the '0-9' keys to "
+//		<< "change to a formation seeded at the selected robot."
+//		<< endl << endl
+//		<< "PRESET FORMATIONS\n-----------------"            << endl
+//		<< "0) f(x) = 0"                                     << endl
+//		<< "1) f(x) = x"                                     << endl
+//		<< "2) f(x) = |x|"                                   << endl
+//		<< "3) f(x) = -0.5 x"                                << endl
+//		<< "4) f(x) = -|0.5 x|"                              << endl
+//		<< "5) f(x) = -|x|"                                  << endl
+//		<< "6) f(x) = x^2"                                   << endl
+//		<< "7) f(x) = x^3"                                   << endl
+//		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
+//		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
+//		<< "Use the mouse to select a robot."                << endl
+//		<< "Use ctrl+C to exit."                                << endl << endl
+//		<< "Please enter your selection: ";
+//
+//}
 
 // Used by keyboardInput() to catch keystrokes without blocking
 int kbhit(void)
@@ -190,30 +190,7 @@ int kbhit(void)
         return 0;
 }
 
-// Catches keyboard input and sets currentSelection based on user input, redisplays the menu
-// TODO: This should probably clear the terminal window each time the user changes the selection
-void keyboardInput()
-{
-	char keyPressed;
 
-	if(kbhit())
-	{
-		keyPressed=getchar();
-
-		cout << "\nKey pressed: " << keyPressed;
-
-		if(keyPressed >= '0' && keyPressed <= '9')
-		{
-			cout << " - Setting to " << keyPressed;
-			currentSelection = keyPressed;
-		}
-		else
-			cout << " - Not a valid input.";
-
-		displayMenu();
-	}
-
-}
 
 
 
