@@ -10,6 +10,13 @@
 // preprocessor directives
 #ifndef CELL_H
 #define CELL_H
+
+#include <ros/ros.h>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
+#include <angles/angles.h>
+#include <tf/transform_listener.h>
+
 #include <vector>
 #include <Simulator/Auctioning.h>
 #include <Simulator/Neighborhood.h>
@@ -83,7 +90,7 @@ class Cell: public State, public Neighborhood, public Robot
         State        getState() const;
         Neighborhood getNbrs()  const;
         Robot        getRobot() const;
-        int        getNBids() const;
+        int          getNBids() const;
         int          getAuctionStepCount() const;
 
 

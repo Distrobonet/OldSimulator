@@ -10,24 +10,18 @@
 // preprocessor directives
 #ifndef ROBOT_H
 #define ROBOT_H
+
+#include <ros/ros.h>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
+#include <angles/angles.h>
+#include <tf/transform_listener.h>
+
+
 #include <queue>
 #include <Simulator/Behavior.h>
 #include <Simulator/Circle.h>
 #include <Simulator/Packet.h>
-
-
-//#include <ros/ros.h>
-//#include <nav_msgs/Odometry.h>
-//#include <geometry_msgs/Twist.h>
-//#include <angles/angles.h>
-//#include <tf/transform_listener.h>
-//
-//#include <LinearMath/btQuaternion.h>
-//#include <LinearMath/btMatrix3x3.h>
-//
-//#include <sensor_msgs/LaserScan.h>
-//#include <sensor_msgs/PointCloud2.h>
-//#include <tf/transform_listener.h>
 
 
 
@@ -37,6 +31,7 @@ using namespace std;
 
 //
 #define SENSOR_RANGE (2.0f)
+
 
 
 
@@ -69,6 +64,14 @@ class Robot: public Circle
         Behavior behavior;         // behavior of robot
         bool     showHeading;      // shows the vector heading of the robot
         queue<Packet> msgQueue;    // message packet queue for communication
+
+        ros::NodeHandle aNode;
+        ros::Subscriber subRobot;
+        ros::Publisher pub_cmd_vel;
+
+
+
+        string generateUniqueMessage(bool subOrPub);
 
         // <constructors>
         Robot(const float dx         = 0.0f,

@@ -7,31 +7,18 @@
 // Description:     This class implements a 2-dimensional robot.
 //
 
-#include <ros/ros.h>
-#include <nav_msgs/Odometry.h>
-#include <geometry_msgs/Twist.h>
-#include <angles/angles.h>
-#include <tf/transform_listener.h>
-//
-//#include <LinearMath/btQuaternion.h>
-//#include <LinearMath/btMatrix3x3.h>
-//
-//#include <sensor_msgs/LaserScan.h>
-//#include <sensor_msgs/PointCloud2.h>
-//#include <tf/transform_listener.h>
+
 
 // preprocessor directives
 #include <Simulator/Environment.h>
 #include <Simulator/Robot.h>
-#include <stdio.h>//ADDED BY KEVIN for NULL use
-
-#include <math.h>//ADDED BY KEVIN
-
-#define E         (1.0f)//ADDED BY KEVIN
+#define SUBSCRIBER 0
+#define PUBLISHER 1
 
 // <protected static data members>
 int Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
-   ros::NodeHandle aNode;
+
+
 
 
 // <constructors>
@@ -72,20 +59,48 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	ros::spinOnce();
 }
 
+
+
+
+
 Robot::Robot(const float dx,    const float dy, const float dz,
              const float theta)
 {
-	ros::Subscriber subRobot = aNode.subscribe("/robot_1/base_pose_ground_truth", 1000, callBackRobot);
+	subRobot = aNode.subscribe(generateUniqueMessage(SUBSCRIBER), 1000, callBackRobot);
 
-	ros::Publisher pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
+	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateUniqueMessage(PUBLISHER), 1);
 
     init(dx, dy, dz, theta);
     ID = --nRobots;
 
-
-
 }   // Robot(const float..<4>, const Color)
 
+
+
+string Robot::generateUniqueMessage(bool subOrPub)
+{
+	stringstream ss;//create a stringstream
+	ss << nRobots;//add number to the stream
+	string numRobots = ss.str();
+
+
+	// Subscriber
+	if(subOrPub == SUBSCRIBER)
+	{
+		string subString = "/robot_/base_pose_ground_truth";
+
+		subString.insert(7, numRobots);
+		return subString;
+
+	}
+	// Publisher
+	else
+	{
+		string pubString = "/robot_/cmd_vel";
+		pubString.insert(7, numRobots);
+		return pubString;
+	}
+}
 
 
 //
