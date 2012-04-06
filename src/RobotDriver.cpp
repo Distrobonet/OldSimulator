@@ -40,7 +40,7 @@ double xValue = 0.0l;
 double yValue = 0.0l;
 
 
-int main(int argc, char** argv)
+int junkmain(int argc, char** argv)
 {
 
 	ros::init(argc, argv, "robot_driver");

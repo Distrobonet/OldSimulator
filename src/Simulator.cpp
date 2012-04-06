@@ -138,7 +138,7 @@ float      g_fHeading      = DEFAULT_FORMATION.getHeading();
 int        g_fIndex        = 0;
 int        g_selectedIndex = g_sID;
 int        g_dt            = 50;    // time interval (in milliseconds)
-bool         g_prop_toggle   = false;
+bool       g_prop_toggle   = false;
 
 
 
@@ -154,29 +154,29 @@ bool         g_prop_toggle   = false;
 //      argc    in      an argument counter
 //      argv    in      initialization arguments
 //
-//int main(int argc, char **argv)
-//{
-//  // parse command line arguments
-//  if (!parseArguments(argc, argv,
-//        g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
-//  {
-//    cerr << ">> ERROR: Unable to parse arguments...\n\n";
-//    return 1;
-//  }
-//
-//  // validate parameters
-//  if (!validateParameters(g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
-//  {
-//    cerr << ">> ERROR: Unable to validate parameters...\n\n";
-//    return 1;
-//  }
-//
-//  // create handler for interrupts (i.e., ^C)
-//  if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
-//  signal(SIGPIPE, SIG_IGN);
-//
-//  // use the GLUT utility to initialize the window, to handle
-//  // the input and to interact with the windows system
+int main(int argc, char **argv)
+{
+  // parse command line arguments
+  if (!parseArguments(argc, argv,
+        g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
+  {
+    cerr << ">> ERROR: Unable to parse arguments...\n\n";
+    return 1;
+  }
+
+  // validate parameters
+  if (!validateParameters(g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
+  {
+    cerr << ">> ERROR: Unable to validate parameters...\n\n";
+    return 1;
+  }
+
+  // create handler for interrupts (i.e., ^C)
+  if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
+  signal(SIGPIPE, SIG_IGN);
+
+  // use the GLUT utility to initialize the window, to handle
+  // the input and to interact with the windows system
 //  glutInit(&argc, argv);
 //  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 //  glutInitWindowSize(g_windowSize[0], g_windowSize[1]);
@@ -193,21 +193,21 @@ bool         g_prop_toggle   = false;
 //  glutSpecialFunc(keyboardPressSpecial);
 //  glutSpecialUpFunc(keyboardReleaseSpecial);
 //  glutTimerFunc(50, timerFunction, 1);
-//
-//  // initialize and execute the robot cell environment
-//  if (!initEnv(g_nRobots, g_fIndex))
-//  {
-//    cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
-//    return 1;
-//  }
-//  initWindow();
-//  displayMenu();
-//  glutMainLoop();
-//
-//  deinitEnv();
-//
-//  return 0;
-//}   // main(int, char **)
+
+  // initialize and execute the robot cell environment
+  if (!initEnv(g_nRobots, g_fIndex))
+  {
+    cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
+    return 1;
+  }
+  initWindow();
+  //displayMenu();
+  //glutMainLoop();
+
+  deinitEnv();
+
+  return 0;
+}   // main(int, char **)
 
 
 
@@ -643,14 +643,14 @@ bool sendFSeedRequest()
 void initWindow()
 {
 
-  // clear background color
-  glClearColor(g_env->color[0], g_env->color[1], g_env->color[2], 0.0f);
-
-  // viewport transformation
-  glViewport(0, 0, g_windowSize[0], g_windowSize[1]);
-
-  glMatrixMode(GL_PROJECTION);    // projection transformation
-  glLoadIdentity();               // initialize projection identity matrix
+//  // clear background color
+//  glClearColor(g_env->color[0], g_env->color[1], g_env->color[2], 0.0f);
+//
+//  // viewport transformation
+//  glViewport(0, 0, g_windowSize[0], g_windowSize[1]);
+//
+//  glMatrixMode(GL_PROJECTION);    // projection transformation
+//  glLoadIdentity();               // initialize projection identity matrix
 }   // initWindow()
 
 
@@ -666,8 +666,8 @@ void initWindow()
 //
 void display()
 {
-  glClear(GL_COLOR_BUFFER_BIT);   // clear background color
-  glMatrixMode(GL_MODELVIEW);     // modeling transformation
+//  glClear(GL_COLOR_BUFFER_BIT);   // clear background color
+//  glMatrixMode(GL_MODELVIEW);     // modeling transformation
 
   // draws environment robot cells
   if (g_env->getCells().size() > 0)
@@ -690,8 +690,8 @@ void display()
   }
   g_env->draw();
 
-  glFlush();                      // force the execution of OpenGL commands
-  glutSwapBuffers();              // swap visible buffer and writing buffer
+//  glFlush();                      // force the execution of OpenGL commands
+//  glutSwapBuffers();              // swap visible buffer and writing buffer
 }   // display()
 
 
@@ -946,89 +946,89 @@ void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
 void mouseClick(int mouseButton,    int mouseState,
     int mouseX, int mouseY)
 {
-  int mod = glutGetModifiers();
-  if (mouseState == GLUT_DOWN)
-  {
-    if(mod == GLUT_ACTIVE_CTRL)
-    {
-      if(g_env->getCells().size() > 0)
-      {
-        for (int i = 0; i < g_env->getNCells(); ++i)
-        {
-          float x     = g_windowWidth * mouseX / g_windowSize[0] -
-            0.5 * g_windowWidth;
-          float y     = 0.5 * g_windowHeight -
-            (g_windowHeight * mouseY / g_windowSize[1]);
-          g_selectedIndex = g_sID;
-          float dx = g_env->getCell(i)->x - x,
-                  dy = g_env->getCell(i)->y - y;
-          if ((g_selectedIndex == g_sID) &&
-              (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
-          {
-            g_env->removeCell(g_env->getCell(g_selectedIndex = i));
-
-          }else if (i != g_sID){
-            g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-          }
-        }
-      }
-      if(g_env->getRobots().size()>0)
-      {
-        int ii=-1;
-        for (int i = 0; i < g_env->getNFreeRobots(); ++i)
-        {
-          float x     = g_windowWidth * mouseX / g_windowSize[0] -
-            0.5 * g_windowWidth;
-          float y     = 0.5 * g_windowHeight -
-            (g_windowHeight * mouseY / g_windowSize[1]);
-          g_selectedIndex = -1;
-          float dx = g_env->getRobot(ii)->x - x,
-                  dy = g_env->getRobot(ii)->y - y;
-          float distance = sqrt(dx * dx  + dy * dy);
-          cout << "Distance between click and robotID " << ii << " is " << distance << endl;
-          if (distance < SELECT_RADIUS)
-          {
-            string printf("IS WITHIN RADIUS");
-            cout << "Remove robotID = " << ii << endl;
-            g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
-            //g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-            //cout << "Remove robotID = " << ii << endl;
-            //g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
-          }
-          ii--;
-        }
-      }
-    }
-    if(g_env->getCells().size()>0)
-    {
-      float x     = g_windowWidth * mouseX / g_windowSize[0] -
-        0.5 * g_windowWidth;
-      float y     = 0.5 * g_windowHeight -
-        (g_windowHeight * mouseY / g_windowSize[1]);
-      g_selectedIndex = g_sID;
-      for (int i = 0; i < g_env->getNCells(); ++i)
-      {
-        float dx = g_env->getCell(i)->x - x,
-                dy = g_env->getCell(i)->y - y;
-        if ((g_selectedIndex == g_sID) &&
-            (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
-        {
-         g_env->getCell(g_selectedIndex = i)->setColor(RED);
-        }
-        else if (i != g_sID)
-        {
-          g_env->getCell(i)->setColor(RED);
-        }
-      }
-    }else{
-      float x     = g_windowWidth * mouseX / g_windowSize[0] -
-        0.5 * g_windowWidth;
-      float y     = 0.5 * g_windowHeight -
-        (g_windowHeight * mouseY / g_windowSize[1]);
-      g_env->formFromClick(x,y);
-    }
-  }
-  glutPostRedisplay();            // redraw the scene
+//  int mod = glutGetModifiers();
+//  if (mouseState == GLUT_DOWN)
+//  {
+//    if(mod == GLUT_ACTIVE_CTRL)
+//    {
+//      if(g_env->getCells().size() > 0)
+//      {
+//        for (int i = 0; i < g_env->getNCells(); ++i)
+//        {
+//          float x     = g_windowWidth * mouseX / g_windowSize[0] -
+//            0.5 * g_windowWidth;
+//          float y     = 0.5 * g_windowHeight -
+//            (g_windowHeight * mouseY / g_windowSize[1]);
+//          g_selectedIndex = g_sID;
+//          float dx = g_env->getCell(i)->x - x,
+//                  dy = g_env->getCell(i)->y - y;
+//          if ((g_selectedIndex == g_sID) &&
+//              (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
+//          {
+//            g_env->removeCell(g_env->getCell(g_selectedIndex = i));
+//
+//          }else if (i != g_sID){
+//            g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
+//          }
+//        }
+//      }
+//      if(g_env->getRobots().size()>0)
+//      {
+//        int ii=-1;
+//        for (int i = 0; i < g_env->getNFreeRobots(); ++i)
+//        {
+//          float x     = g_windowWidth * mouseX / g_windowSize[0] -
+//            0.5 * g_windowWidth;
+//          float y     = 0.5 * g_windowHeight -
+//            (g_windowHeight * mouseY / g_windowSize[1]);
+//          g_selectedIndex = -1;
+//          float dx = g_env->getRobot(ii)->x - x,
+//                  dy = g_env->getRobot(ii)->y - y;
+//          float distance = sqrt(dx * dx  + dy * dy);
+//          cout << "Distance between click and robotID " << ii << " is " << distance << endl;
+//          if (distance < SELECT_RADIUS)
+//          {
+//            string printf("IS WITHIN RADIUS");
+//            cout << "Remove robotID = " << ii << endl;
+//            g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
+//            //g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
+//            //cout << "Remove robotID = " << ii << endl;
+//            //g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
+//          }
+//          ii--;
+//        }
+//      }
+//    }
+//    if(g_env->getCells().size()>0)
+//    {
+//      float x     = g_windowWidth * mouseX / g_windowSize[0] -
+//        0.5 * g_windowWidth;
+//      float y     = 0.5 * g_windowHeight -
+//        (g_windowHeight * mouseY / g_windowSize[1]);
+//      g_selectedIndex = g_sID;
+//      for (int i = 0; i < g_env->getNCells(); ++i)
+//      {
+//        float dx = g_env->getCell(i)->x - x,
+//                dy = g_env->getCell(i)->y - y;
+//        if ((g_selectedIndex == g_sID) &&
+//            (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
+//        {
+//         g_env->getCell(g_selectedIndex = i)->setColor(RED);
+//        }
+//        else if (i != g_sID)
+//        {
+//          g_env->getCell(i)->setColor(RED);
+//        }
+//      }
+//    }else{
+//      float x     = g_windowWidth * mouseX / g_windowSize[0] -
+//        0.5 * g_windowWidth;
+//      float y     = 0.5 * g_windowHeight -
+//        (g_windowHeight * mouseY / g_windowSize[1]);
+//      g_env->formFromClick(x,y);
+//    }
+//  }
+//  glutPostRedisplay();            // redraw the scene
 }   // mouseClick(int, int, int, int)
 
 
@@ -1058,7 +1058,7 @@ void mouseDrag(int mouseX, int mouseY)
               mouseY / g_windowSize[1]));
     }
   }
-  glutPostRedisplay();    // redraw the scene
+  //glutPostRedisplay();    // redraw the scene
 }   // mouseDrag(int, int)
 
 
@@ -1081,28 +1081,28 @@ void resizeWindow(GLsizei w, GLsizei h)
   g_windowSize[0] = w;            // obtain new screen width
   g_windowSize[1] = h;            // obtain new screen height
 
-  glClear(GL_COLOR_BUFFER_BIT);   // clear color buffer to draw next frame
-  glViewport(0, 0, w, h);         // viewport transformation
-
-  glMatrixMode(GL_PROJECTION);    // projection transformation
-  glLoadIdentity();               // initialize projection identity matrix
-
-  if (w <= h)
-  {
-    g_windowWidth  = 2.0f;
-    g_windowHeight = 2.0f * (float)h / (float)w;
-    glOrtho(-1.0f, 1.0f, -1.0f * (float)h / (float)w,
-        (float)h / (float)w, -10.0f, 10.0f);
-  }
-  else
-  {
-    g_windowWidth  = 2.0f * (float)w / (float)h;
-    g_windowHeight = 2.0f;
-    glOrtho(-1.0f * (float)w / (float)h,
-        (float)w / (float)h,
-        -1.0f, 1.0f, -10.0f, 10.0f);
-  }
-  glutPostRedisplay();            // redraw the scene
+//  glClear(GL_COLOR_BUFFER_BIT);   // clear color buffer to draw next frame
+//  glViewport(0, 0, w, h);         // viewport transformation
+//
+//  glMatrixMode(GL_PROJECTION);    // projection transformation
+//  glLoadIdentity();               // initialize projection identity matrix
+//
+//  if (w <= h)
+//  {
+//    g_windowWidth  = 2.0f;
+//    g_windowHeight = 2.0f * (float)h / (float)w;
+//    glOrtho(-1.0f, 1.0f, -1.0f * (float)h / (float)w,
+//        (float)h / (float)w, -10.0f, 10.0f);
+//  }
+//  else
+//  {
+//    g_windowWidth  = 2.0f * (float)w / (float)h;
+//    g_windowHeight = 2.0f;
+//    glOrtho(-1.0f * (float)w / (float)h,
+//        (float)w / (float)h,
+//        -1.0f, 1.0f, -10.0f, 10.0f);
+//  }
+//  glutPostRedisplay();            // redraw the scene
 }   // resizeWindow(GLsizei, GLsizei)
 
 
@@ -1125,8 +1125,8 @@ void timerFunction(int value)
   g_env->step();          // update the robot cell environment
 
   // force a redraw after a number of milliseconds
-  glutPostRedisplay();    // redraw the scene
-  glutTimerFunc(g_dt, timerFunction, 1);
+//  glutPostRedisplay();    // redraw the scene
+//  glutTimerFunc(g_dt, timerFunction, 1);
 }   // timerFunction(int)
 
 

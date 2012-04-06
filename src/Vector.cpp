@@ -461,43 +461,43 @@ void Vector::draw()
     if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
         (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
         (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
-    glColor3fv(color);
-    glLineWidth(VECTOR_LINE_WIDTH);
-
-    glPushMatrix();
-        glRotated(rotate[0], 1, 0, 0);
-        glRotated(rotate[1], 0, 1, 0);
-        glRotated(rotate[2], 0, 0, 1);
-        glTranslated(translate[0], translate[1], translate[2]);
-        glRotated(angle(),   0, 0, 1);
-        glScaled(scale[0], scale[1], scale[2]);
-
-        // draw vector head
-        float mag = magnitude();
-        if ((showHead) && (mag >= VECTOR_HEAD_HEIGHT))
-        {
-            glColor3fv(color);
-            glBegin(GL_TRIANGLES);
-                glVertex3f(mag, 0.0f, 0.0f);
-                glVertex3f(mag - VECTOR_HEAD_HEIGHT,
-                           VECTOR_HEAD_WIDTH,
-                           0.0f);
-                glVertex3f(mag - VECTOR_HEAD_HEIGHT,
-                           -VECTOR_HEAD_WIDTH,
-                           0.0f);
-            glEnd();
-        }
-
-        // draw vector line
-        if (showLine)
-        {
-            glBegin(GL_LINES);
-                glVertex3f(0.0f,      0.0f, 0.0f);
-                glVertex3f(mag, 0.0f, 0.0f);
-            glEnd();
-        }
-    glPopMatrix();
-    glFlush();
+//    glColor3fv(color);
+//    glLineWidth(VECTOR_LINE_WIDTH);
+//
+//    glPushMatrix();
+//        glRotated(rotate[0], 1, 0, 0);
+//        glRotated(rotate[1], 0, 1, 0);
+//        glRotated(rotate[2], 0, 0, 1);
+//        glTranslated(translate[0], translate[1], translate[2]);
+//        glRotated(angle(),   0, 0, 1);
+//        glScaled(scale[0], scale[1], scale[2]);
+//
+//        // draw vector head
+//        float mag = magnitude();
+//        if ((showHead) && (mag >= VECTOR_HEAD_HEIGHT))
+//        {
+//            glColor3fv(color);
+//            glBegin(GL_TRIANGLES);
+//                glVertex3f(mag, 0.0f, 0.0f);
+//                glVertex3f(mag - VECTOR_HEAD_HEIGHT,
+//                           VECTOR_HEAD_WIDTH,
+//                           0.0f);
+//                glVertex3f(mag - VECTOR_HEAD_HEIGHT,
+//                           -VECTOR_HEAD_WIDTH,
+//                           0.0f);
+//            glEnd();
+//        }
+//
+//        // draw vector line
+//        if (showLine)
+//        {
+//            glBegin(GL_LINES);
+//                glVertex3f(0.0f,      0.0f, 0.0f);
+//                glVertex3f(mag, 0.0f, 0.0f);
+//            glEnd();
+//        }
+//    glPopMatrix();
+//    glFlush();
 } // draw()
 
 //may not be needed
@@ -507,26 +507,26 @@ void Vector::drawX(Vector location)
 {
    float rotAngle = 2.;
 
-   glColor3f (0.0, 0.0, 1.0);
-   glPushMatrix();
-   glRotatef(-rotAngle, 0.0, 0.0, 0.1);
-   glTranslatef(location.x, location.y, location.z);
-   glBegin (GL_LINES);
-      glVertex2f (-0.025, 0.025);
-      glVertex2f (0.025, -0.025);
-   glEnd ();
-   glPopMatrix();
-
-   glColor3f (0.0, 0.0, 1.0);
-   glPushMatrix();
-   glRotatef(rotAngle, 0.0, 0.0, 0.1);
-   glBegin (GL_LINES);
-      glVertex2f (0.025, 0.025);
-      glVertex2f (-0.025, -0.025);
-   glEnd ();
-   glPopMatrix();
-
-   glFlush();
+//   glColor3f (0.0, 0.0, 1.0);
+//   glPushMatrix();
+//   glRotatef(-rotAngle, 0.0, 0.0, 0.1);
+//   glTranslatef(location.x, location.y, location.z);
+//   glBegin (GL_LINES);
+//      glVertex2f (-0.025, 0.025);
+//      glVertex2f (0.025, -0.025);
+//   glEnd ();
+//   glPopMatrix();
+//
+//   glColor3f (0.0, 0.0, 1.0);
+//   glPushMatrix();
+//   glRotatef(rotAngle, 0.0, 0.0, 0.1);
+//   glBegin (GL_LINES);
+//      glVertex2f (0.025, 0.025);
+//      glVertex2f (-0.025, -0.025);
+//   glEnd ();
+//   glPopMatrix();
+//
+//   glFlush();
 }   // draw()
 
 

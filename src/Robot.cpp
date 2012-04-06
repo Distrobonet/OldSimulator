@@ -376,16 +376,16 @@ void Robot::draw()
     // draw a vector representing the robot heading
     if (showHeading)
     {
-        glPushMatrix();
-            glRotated(rotate[0], 0, 0, 1);
-            glRotated(rotate[1], 0, 0, 1);
-            glRotated(rotate[2], 0, 0, 1);
-            heading.translated(x + translate[0],
-                               y + translate[1],
-                               z + translate[2]);
-            heading.scaled(radius / DEFAULT_ROBOT_RADIUS);
-            heading.draw();
-        glPopMatrix();
+//        glPushMatrix();
+//            glRotated(rotate[0], 0, 0, 1);
+//            glRotated(rotate[1], 0, 0, 1);
+//            glRotated(rotate[2], 0, 0, 1);
+//            heading.translated(x + translate[0],
+//                               y + translate[1],
+//                               z + translate[2]);
+//            heading.scaled(radius / DEFAULT_ROBOT_RADIUS);
+//            heading.draw();
+//        glPopMatrix();
     }
 }   // draw()
 
