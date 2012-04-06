@@ -46,7 +46,7 @@ enum MessageType
 
 
 // global constants
-//static const Color   DEFAULT_CELL_COLOR       = WHITE;
+static const Color   DEFAULT_CELL_COLOR       = WHITE;
 static const bool    DEFAULT_CELL_SHOW_FILLED = true;
 static const GLint   LEFT_NBR_INDEX           = 0;
 static const GLint   RIGHT_NBR_INDEX          = 1;

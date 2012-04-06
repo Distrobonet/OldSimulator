@@ -23,6 +23,10 @@
 
 using namespace std;
 
+//#include "Simulator/Formation.h"
+//Function aFunction;
+//Formation asdf(aFunction, 1,Vector(),1,1,1);
+
 // Global variables
 double distanceToTarget = 0.0l;
 double angleChange = 0.0l;

@@ -125,20 +125,21 @@ const GLfloat   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
 const GLint     N_CELLS           = 0;
 const GLint     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
 // A formation is a vector of Functions, which are functions that take GLfloats and return GLfloats
-//const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
+const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
 //const Formation DEFAULT_FORMATION = Formation(line, 0.0f, Vector(), 0, 0,  90.0f);
 //Formation blah(line, 0.0f, Vector(), 0, 0, 0.0f);
+Vector aVector;
 
 
 // simulation global variables
 Environment *g_env           = NULL;
 GLint        g_nRobots       = 0;
-//GLfloat      g_fRadius       = DEFAULT_FORMATION.getRadius();
-//GLint        g_sID           = DEFAULT_FORMATION.getSeedID();
-//GLint        g_fID           = DEFAULT_FORMATION.getFormationID();
-//GLfloat      g_fHeading      = DEFAULT_FORMATION.getHeading();
+GLfloat      g_fRadius       = DEFAULT_FORMATION.getRadius();
+GLint        g_sID           = DEFAULT_FORMATION.getSeedID();
+GLint        g_fID           = DEFAULT_FORMATION.getFormationID();
+GLfloat      g_fHeading      = DEFAULT_FORMATION.getHeading();
 GLint        g_fIndex        = 0;
-//GLint        g_selectedIndex = g_sID;
+GLint        g_selectedIndex = g_sID;
 GLint        g_dt            = 50;    // time interval (in milliseconds)
 bool         g_prop_toggle   = false;
 
@@ -404,23 +405,23 @@ bool validateParameters(const GLint   nRobots,
 
 
 
+
+// void terminate(retVal)
+// Last modified: 08Nov2009
 //
-//// void terminate(retVal)
-//// Last modified: 08Nov2009
-////
-//// Terminates the program on interrupt (i.e., ^C).
-////
-//// Returns:     <none>
-//// Parameters:
-////      retVal  in      the exit return code
-////
-//void terminate(int retVal)
-//{
-//  signal(SIGINT, SIG_IGN);
-//  deinitEnv();
-//  signal(SIGINT, SIG_DFL);
-//  exit(retVal);
-//}   // terminate(int)
+// Terminates the program on interrupt (i.e., ^C).
+//
+// Returns:     <none>
+// Parameters:
+//      retVal  in      the exit return code
+//
+void terminate(int retVal)
+{
+  signal(SIGINT, SIG_IGN);
+  deinitEnv();
+  signal(SIGINT, SIG_DFL);
+  exit(retVal);
+}   // terminate(int)
 
 
 
@@ -505,39 +506,39 @@ bool validateParameters(const GLint   nRobots,
 ////    << "Use 'h|l|p|t' to toggle robot display settings." << endl << endl
 ////    << "Use ESC to exit."                                << endl << endl;
 ////}   // displayMenu()
-//
-//
-//
-////
-//// bool initEnv(const GLint, const GLint)
-//// Last modified: 08Nov2009
-////
-//// Attempts to initialize the environment based on
-//// the parameterized values, returning true if successful,
-//// false otherwise.
-////
-//// Returns:     true if successful, false otherwise
-//// Parameters:
-////      nRobots       in      the number of robots
-////      fIndex        in      the index of the initial formation
-////
-//bool initEnv(const GLint nRobots, const GLint fIndex)
-//{
-//  if (g_env != NULL)
-//  {
-//    delete g_env;
-//    g_env = NULL;
-//  }
-//
-//  Formation f(formations[fIndex], g_fRadius, Vector(),
-//      g_sID,            ++g_fID,     g_fHeading);
-//  if ((g_env = new Environment(nRobots, f)) == NULL) return false;
-//  return true;
-//}   // initEnv(const GLint, const GLint)
-//
-//
+
+
 
 //
+// bool initEnv(const GLint, const GLint)
+// Last modified: 08Nov2009
+//
+// Attempts to initialize the environment based on
+// the parameterized values, returning true if successful,
+// false otherwise.
+//
+// Returns:     true if successful, false otherwise
+// Parameters:
+//      nRobots       in      the number of robots
+//      fIndex        in      the index of the initial formation
+//
+bool initEnv(const GLint nRobots, const GLint fIndex)
+{
+  if (g_env != NULL)
+  {
+    delete g_env;
+    g_env = NULL;
+  }
+
+  Formation f(formations[fIndex], g_fRadius, Vector(),
+      g_sID,            ++g_fID,     g_fHeading);
+  if ((g_env = new Environment(nRobots, f)) == NULL) return false;
+  return true;
+}   // initEnv(const GLint, const GLint)
+
+
+
+
 // bool deinitEnv()
 // Last modified: 08Nov2009
 //
@@ -546,7 +547,7 @@ bool validateParameters(const GLint   nRobots,
 //
 // Returns:     true if successful, false otherwise
 // Parameters:  <none>
-//
+
 bool deinitEnv()
 {
   if (g_env != NULL)
@@ -557,513 +558,515 @@ bool deinitEnv()
   return g_env == NULL;
 }   // deinitEnv()
 
+
+
 //
+// bool changeFormation(index)
+// Last modified: 08Nov2009
 //
-////
-//// bool changeFormation(index)
-//// Last modified: 08Nov2009
-////
-//// Attempts to change the current formation,
-//// returning true if successful, false otherwise.
-////
-//// Returns:     true if successful, false otherwise
-//// Parameters:
-////      index   in      the index of the formation to change to
-////
-//bool changeFormation(const GLint index, const Vector gradient)
-//{
-//  g_fIndex = index;
-//  if (!g_env->startFormation)
-//  {
-//    g_env->startFormation = true;
-//  }
-//  // determine if a new seed has been selected
-//  if (g_selectedIndex != -1)
-//  {
-//    g_env->getCell(g_sID)->setColor(DEFAULT_CELL_COLOR);
-//    g_sID = g_selectedIndex;
-//  }
-//  Formation f(formations[index], g_fRadius,     gradient,
-//      g_sID,           ++g_env->formationID, g_fHeading);
+// Attempts to change the current formation,
+// returning true if successful, false otherwise.
 //
-//  return g_env->changeFormation(f);
-//}   // changeFormation(const GLint, const Vector)
+// Returns:     true if successful, false otherwise
+// Parameters:
+//      index   in      the index of the formation to change to
 //
-//// bool changeFormationSim(index)
-//// last modified: april 18, 2010
-////
-//// called by environment, passes the location of a new calculated cell
-//// index.
-//// returns: true if successful, false if not
-//// parameters:
-////         index in the index of the formation to change to
+bool changeFormation(const GLint index, const Vector gradient)
+{
+  g_fIndex = index;
+  if (!g_env->startFormation)
+  {
+    g_env->startFormation = true;
+  }
+  // determine if a new seed has been selected
+  if (g_selectedIndex != -1)
+  {
+    g_env->getCell(g_sID)->setColor(DEFAULT_CELL_COLOR);
+    g_sID = g_selectedIndex;
+  }
+  Formation f(formations[index], g_fRadius,     gradient,
+      g_sID,           ++g_env->formationID, g_fHeading);
+
+  return g_env->changeFormation(f);
+}   // changeFormation(const GLint, const Vector)
+
+// bool changeFormationSim(index)
+// last modified: april 18, 2010
 //
-//bool changeFormationSim(const GLint index, const Vector gradient)
-//{
-//  if(g_selectedIndex > -1)
-//  {
-//    g_env->getCell(g_sID)->setColor(DEFAULT_CELL_COLOR);
-//    g_selectedIndex = index;
-//    return changeFormation(g_fIndex,gradient);
-//  }
-//  else return false;
-//}
+// called by environment, passes the location of a new calculated cell
+// index.
+// returns: true if successful, false if not
+// parameters:
+//         index in the index of the formation to change to
+
+bool changeFormationSim(const GLint index, const Vector gradient)
+{
+  if(g_selectedIndex > -1)
+  {
+    g_env->getCell(g_sID)->setColor(DEFAULT_CELL_COLOR);
+    g_selectedIndex = index;
+    return changeFormation(g_fIndex,gradient);
+  }
+  else return false;
+}
+
+bool sendNCellRequest()
+{
+  PropMsg *ncell = new PropMsg();
+  return g_env->sendMsg(ncell, g_sID,ID_OPERATOR, NCELL_REQUEST);
+}  //sendNCellRequest()
+
+
+bool sendFcntrRequest()
+{
+  PropMsg *fcntr = new PropMsg();
+  return g_env->sendMsg(fcntr, g_sID,ID_OPERATOR, FCNTR_REQUEST);
+}  //sendFcntrRequest()
+
+bool sendFRadRequest()
+{
+  PropMsg *frad = new PropMsg();
+  return g_env->sendMsg(frad, g_sID,ID_OPERATOR, FRAD_REQUEST);
+}  //sendFRadRequest()
+bool sendFSeedRequest()
+{
+  PropMsg *fseed = new PropMsg();
+  return g_env->sendMsg(fseed, g_sID,ID_OPERATOR, FSEED_REQUEST);
+}// sendFSeedRequest();
+
 //
-//bool sendNCellRequest()
-//{
-//  PropMsg *ncell = new PropMsg();
-//  return g_env->sendMsg(ncell, g_sID,ID_OPERATOR, NCELL_REQUEST);
-//}  //sendNCellRequest()
+// void initWindow()
+// Last modified:   08Nov2009
 //
+// Initializes the simulator window.
 //
-//bool sendFcntrRequest()
-//{
-//  PropMsg *fcntr = new PropMsg();
-//  return g_env->sendMsg(fcntr, g_sID,ID_OPERATOR, FCNTR_REQUEST);
-//}  //sendFcntrRequest()
+// Returns:     <none>
+// Parameters:  <none>
 //
-//bool sendFRadRequest()
-//{
-//  PropMsg *frad = new PropMsg();
-//  return g_env->sendMsg(frad, g_sID,ID_OPERATOR, FRAD_REQUEST);
-//}  //sendFRadRequest()
-//bool sendFSeedRequest()
-//{
-//  PropMsg *fseed = new PropMsg();
-//  return g_env->sendMsg(fseed, g_sID,ID_OPERATOR, FSEED_REQUEST);
-//}// sendFSeedRequest();
+void initWindow()
+{
+
+  // clear background color
+  glClearColor(g_env->color[0], g_env->color[1], g_env->color[2], 0.0f);
+
+  // viewport transformation
+  glViewport(0, 0, g_windowSize[0], g_windowSize[1]);
+
+  glMatrixMode(GL_PROJECTION);    // projection transformation
+  glLoadIdentity();               // initialize projection identity matrix
+}   // initWindow()
+
+
+
 //
-////
-//// void initWindow()
-//// Last modified:   08Nov2009
-////
-//// Initializes the simulator window.
-////
-//// Returns:     <none>
-//// Parameters:  <none>
-////
-//void initWindow()
-//{
+// void display()
+// Last modified:   08Nov2009
 //
-//  // clear background color
-//  glClearColor(g_env->color[0], g_env->color[1], g_env->color[2], 0.0f);
+// Clears the frame buffer and draws the simulated cells within the window.
 //
-//  // viewport transformation
-//  glViewport(0, 0, g_windowSize[0], g_windowSize[1]);
+// Returns:     <none>
+// Parameters:  <none>
 //
-//  glMatrixMode(GL_PROJECTION);    // projection transformation
-//  glLoadIdentity();               // initialize projection identity matrix
-//}   // initWindow()
+void display()
+{
+  glClear(GL_COLOR_BUFFER_BIT);   // clear background color
+  glMatrixMode(GL_MODELVIEW);     // modeling transformation
+
+  // draws environment robot cells
+  if (g_env->getCells().size() > 0)
+  {
+    g_env->getCell(g_sID)->setColor(GREEN);
+    for(GLint i = 0; i < g_env->getNCells(); ++i)
+    {
+      if(g_env->getCell(i) != g_env->getCell(g_sID))
+      {
+        if(g_env->getCell(i) == g_env->getCell(g_selectedIndex))
+        {
+          g_env->getCell(i)->setColor(RED);
+        }
+        else
+        {
+          g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
+        }
+      }
+    }
+  }
+  g_env->draw();
+
+  glFlush();                      // force the execution of OpenGL commands
+  glutSwapBuffers();              // swap visible buffer and writing buffer
+}   // display()
+
+
+
 //
+// void keyboardPress(keyPressed, mouseX, mouseY)
+// Last modified:   08Nov2009
 //
+// Handles the keyboard input (ASCII Characters).
 //
-////
-//// void display()
-//// Last modified:   08Nov2009
-////
-//// Clears the frame buffer and draws the simulated cells within the window.
-////
-//// Returns:     <none>
-//// Parameters:  <none>
-////
-//void display()
-//{
-//  glClear(GL_COLOR_BUFFER_BIT);   // clear background color
-//  glMatrixMode(GL_MODELVIEW);     // modeling transformation
+// Returns:     <none>
+// Parameters:
+//      keyPressed  in      the ASCII key that was pressed
+//      mouseX      in      the x-coordinate of the mouse position
+//      mouseY      in      the y-coordinate of the mouse position
 //
-//  // draws environment robot cells
-//  if (g_env->getCells().size() > 0)
-//  {
-//    g_env->getCell(g_sID)->setColor(GREEN);
-//    for(GLint i = 0; i < g_env->getNCells(); ++i)
-//    {
-//      if(g_env->getCell(i) != g_env->getCell(g_sID))
-//      {
-//        if(g_env->getCell(i) == g_env->getCell(g_selectedIndex))
-//        {
-//          g_env->getCell(i)->setColor(RED);
-//        }
-//        else
-//        {
-//          g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-//        }
-//      }
-//    }
-//  }
-//  g_env->draw();
+void keyboardPress(unsigned char keyPressed, GLint mouseX, GLint mouseY)
+{
+  if ((keyPressed >= '0') && (keyPressed <= '9'))
+  {
+    if (g_env->getNCells() > 0)
+    {
+      char cIndex = keyPressed;
+      changeFormation(atoi(&cIndex));
+    }
+  }
+  else switch (keyPressed)
+  {
+
+    // change formation heading
+    case '<': case ',':
+      if (g_env->getNCells() > 0)
+      {
+        g_fHeading += g_env->getCell(g_sID)->maxAngSpeed();
+        changeFormation(g_fIndex);
+        g_env->getCell(g_sID)->rotateRelative(
+            g_env->getCell(g_sID)->maxAngSpeed());
+        //min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
+      }
+      break;
+    case '>': case '.':
+      if (g_env->getNCells() > 0)
+      {
+        g_fHeading -= g_env->getCell(g_sID)->maxAngSpeed();
+        changeFormation(g_fIndex);
+        g_env->getCell(g_sID)->rotateRelative(
+            -g_env->getCell(g_sID)->maxAngSpeed());
+        //-min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
+      }
+      break;
+
+      // change formation scale
+    case '+': case '=':
+      if (g_env->getNCells() > 0)
+      {
+        g_fRadius += 0.01f;
+        changeFormation(g_fIndex);
+      }
+      break;
+    case '-': case '_':
+      if (g_env->getNCells() > 0)
+      {
+        g_fRadius -= 0.01f;
+        g_fRadius  = max(g_fRadius,
+            g_env->getCell(g_sID)->collisionRadius());
+        changeFormation(g_fIndex);
+      }
+      break;
+
+    case 'h': case 'H':
+      if (g_env->getNCells() > 0)
+      {
+        g_env->showHeading(!g_env->getCell(g_sID)->showHeading);
+      }
+      break;
+    case 'l': case 'L':
+      if (g_env->getNCells() > 0)
+      {
+        g_env->showLine(!g_env->getCell(g_sID)->heading.showLine);
+      }
+      break;
+    case 'p': case 'P':
+      if (g_env->getNCells() > 0)
+      {
+        g_env->showPos(!g_env->getCell(g_sID)->showPos);
+      }
+      break;
+    case 't': case 'T':
+      if (g_env->getNCells() > 0)
+      {
+        g_env->showHead(!g_env->getCell(g_sID)->heading.showHead);
+      }
+      break;
+    case 'n': case 'N':
+      if (g_env->getNCells() > 0)
+      {
+        //g_prop_toggle = !g_prop_toggle;
+        sendNCellRequest();
+      }
+      break;
+    case 'c': case 'C':
+      if (g_env->getNCells() > 0)
+      {
+        sendFcntrRequest();
+      }
+      break;
+    case 'r': case 'R':
+      if (g_env->getNCells() > 0)
+      {
+        sendFRadRequest();
+      }
+      break;
+    case 's': case 'S':
+      if (g_env->getNCells()> 0)
+      {
+        sendFSeedRequest();
+      }
+      break;
+    case 'a': case 'A':
+      g_env->addObject(randSign() * frand(),
+                       randSign() * frand(),
+                       0.0f);
+/*
+      g_env->addRobot(randSign() * frand(),
+                      randSign() * frand(),
+                      0.0f,
+                      randSign() * frand(0.0f, 180.0f));
+*/
+      break;
+    case 'd': case 'D':
+      g_env->removeObject();
+/*
+      if ((g_selectedIndex >= 0) && (g_selectedIndex < g_env->getNCells()))
+      {
+        g_env->removeCell(g_env->getCell(g_selectedIndex));
+		g_selectedIndex = g_sID;
+        //g_env->removeRobot();
+      }
+*/
+      break;
+    case CHAR_ESCAPE: deinitEnv(); exit(0);
+  }
+}   // keyboardPress(unsigned char, GLint, GLint)
+
+
+
 //
-//  glFlush();                      // force the execution of OpenGL commands
-//  glutSwapBuffers();              // swap visible buffer and writing buffer
-//}   // display()
+// void keyboardPressSpecial(keyPressed, mouseX, mouseY)
+// Last modified:   08Nov2009
 //
+// Handles the keyboard input (non-ASCII Characters).
 //
+// Returns:     <none>
+// Parameters:
+//      keyPressed  in      the non-ASCII key that was pressed
+//      mouseX      in      the x-coordinate of the mouse position
+//      mouseY      in      the y-coordinate of the mouse position
 //
-////
-//// void keyboardPress(keyPressed, mouseX, mouseY)
-//// Last modified:   08Nov2009
-////
-//// Handles the keyboard input (ASCII Characters).
-////
-//// Returns:     <none>
-//// Parameters:
-////      keyPressed  in      the ASCII key that was pressed
-////      mouseX      in      the x-coordinate of the mouse position
-////      mouseY      in      the y-coordinate of the mouse position
-////
-//void keyboardPress(unsigned char keyPressed, GLint mouseX, GLint mouseY)
-//{
-//  if ((keyPressed >= '0') && (keyPressed <= '9'))
-//  {
-//    if (g_env->getNCells() > 0)
-//    {
-//      char cIndex = keyPressed;
-//      changeFormation(atoi(&cIndex));
-//    }
-//  }
-//  else switch (keyPressed)
-//  {
+void keyboardPressSpecial(GLint keyPressed, GLint mouseX, GLint mouseY)
+{
+  switch (keyPressed)
+  {
+    case GLUT_KEY_LEFT:
+      if (g_env->getNCells() > 0)
+      {
+        g_env->getCell(g_sID)->rotError =
+          -(1.0001f * g_env->getCell(g_sID)->angThreshold());
+        //g_env->getCell(g_sID)->rotateRelative(
+        //    min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
+      }
+      break;
+    case GLUT_KEY_UP:
+      if (g_env->getNCells() > 0)
+      {
+        g_env->getCell(g_sID)->transError.x =
+          1.0001f * g_env->getCell(g_sID)->threshold();
+        //g_env->getCell(g_sID)->translateRelative(
+        //    min(0.001f, g_env->getCell(g_sID)->maxSpeed()));
+      }
+      break;
+    case GLUT_KEY_RIGHT:
+      if (g_env->getNCells() > 0)
+      {
+        g_env->getCell(g_sID)->rotError =
+          1.0001f * g_env->getCell(g_sID)->angThreshold();
+        //g_env->getCell(g_sID)->rotateRelative(
+        //    -min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
+      }
+      break;
+    case GLUT_KEY_DOWN:
+      if (g_env->getNCells() > 0)
+      {
+        g_env->getCell(g_sID)->transError.x =
+          -(1.0001f * g_env->getCell(g_sID)->threshold());
+        //g_env->getCell(g_sID)->translateRelative(
+        //    -min(0.001f, g_env->getCell(g_sID)->maxSpeed()));
+      }
+      break;
+    default: break;
+  }
+}   // keyboardPressSpecial(GLint, GLint, GLint)
+
+
+
 //
-//    // change formation heading
-//    case '<': case ',':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_fHeading += g_env->getCell(g_sID)->maxAngSpeed();
-//        changeFormation(g_fIndex);
-//        g_env->getCell(g_sID)->rotateRelative(
-//            g_env->getCell(g_sID)->maxAngSpeed());
-//        //min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
-//      }
-//      break;
-//    case '>': case '.':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_fHeading -= g_env->getCell(g_sID)->maxAngSpeed();
-//        changeFormation(g_fIndex);
-//        g_env->getCell(g_sID)->rotateRelative(
-//            -g_env->getCell(g_sID)->maxAngSpeed());
-//        //-min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
-//      }
-//      break;
+// void keyboardReleaseSpecial(keyPressed, mouseX, mouseY)
+// Last modified:   06Nov2009
 //
-//      // change formation scale
-//    case '+': case '=':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_fRadius += 0.01f;
-//        changeFormation(g_fIndex);
-//      }
-//      break;
-//    case '-': case '_':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_fRadius -= 0.01f;
-//        g_fRadius  = max(g_fRadius,
-//            g_env->getCell(g_sID)->collisionRadius());
-//        changeFormation(g_fIndex);
-//      }
-//      break;
+// Handles the keyboard input (non-ASCII Characters).
 //
-//    case 'h': case 'H':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->showHeading(!g_env->getCell(g_sID)->showHeading);
-//      }
-//      break;
-//    case 'l': case 'L':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->showLine(!g_env->getCell(g_sID)->heading.showLine);
-//      }
-//      break;
-//    case 'p': case 'P':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->showPos(!g_env->getCell(g_sID)->showPos);
-//      }
-//      break;
-//    case 't': case 'T':
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->showHead(!g_env->getCell(g_sID)->heading.showHead);
-//      }
-//      break;
-//    case 'n': case 'N':
-//      if (g_env->getNCells() > 0)
-//      {
-//        //g_prop_toggle = !g_prop_toggle;
-//        sendNCellRequest();
-//      }
-//      break;
-//    case 'c': case 'C':
-//      if (g_env->getNCells() > 0)
-//      {
-//        sendFcntrRequest();
-//      }
-//      break;
-//    case 'r': case 'R':
-//      if (g_env->getNCells() > 0)
-//      {
-//        sendFRadRequest();
-//      }
-//      break;
-//    case 's': case 'S':
-//      if (g_env->getNCells()> 0)
-//      {
-//        sendFSeedRequest();
-//      }
-//      break;
-//    case 'a': case 'A':
-//      g_env->addObject(randSign() * frand(),
-//                       randSign() * frand(),
-//                       0.0f);
-///*
-//      g_env->addRobot(randSign() * frand(),
-//                      randSign() * frand(),
-//                      0.0f,
-//                      randSign() * frand(0.0f, 180.0f));
-//*/
-//      break;
-//    case 'd': case 'D':
-//      g_env->removeObject();
-///*
-//      if ((g_selectedIndex >= 0) && (g_selectedIndex < g_env->getNCells()))
-//      {
-//        g_env->removeCell(g_env->getCell(g_selectedIndex));
-//		g_selectedIndex = g_sID;
-//        //g_env->removeRobot();
-//      }
-//*/
-//      break;
-//    case CHAR_ESCAPE: deinitEnv(); exit(0);
-//  }
-//}   // keyboardPress(unsigned char, GLint, GLint)
+// Returns:     <none>
+// Parameters:
+//      keyReleased  in      the non-ASCII key that was released
+//      mouseX       in      the x-coordinate of the mouse position
+//      mouseY       in      the y-coordinate of the mouse position
 //
+void keyboardReleaseSpecial(GLint keyReleased, GLint mouseX, GLint mouseY)
+{
+  switch (keyReleased)
+  {
+    case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
+      if (g_env->getNCells() > 0)
+      {
+        g_env->getCell(g_sID)->rotError = 0.0f;
+      }
+      break;
+    case GLUT_KEY_UP: case GLUT_KEY_DOWN:
+      if (g_env->getNCells() > 0)
+      {
+        g_env->getCell(g_sID)->transError.x = 0.0f;
+      }
+      break;
+    default: break;
+  }
+}   // keyboardReleaseSpecial(GLint, GLint, GLint)
+
+
+
 //
+// void mouseClick(mouseButton, mouseState, mouseX, mouseY)
+// Last modified:   08Nov2009
 //
-////
-//// void keyboardPressSpecial(keyPressed, mouseX, mouseY)
-//// Last modified:   08Nov2009
-////
-//// Handles the keyboard input (non-ASCII Characters).
-////
-//// Returns:     <none>
-//// Parameters:
-////      keyPressed  in      the non-ASCII key that was pressed
-////      mouseX      in      the x-coordinate of the mouse position
-////      mouseY      in      the y-coordinate of the mouse position
-////
-//void keyboardPressSpecial(GLint keyPressed, GLint mouseX, GLint mouseY)
-//{
-//  switch (keyPressed)
-//  {
-//    case GLUT_KEY_LEFT:
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->getCell(g_sID)->rotError =
-//          -(1.0001f * g_env->getCell(g_sID)->angThreshold());
-//        //g_env->getCell(g_sID)->rotateRelative(
-//        //    min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
-//      }
-//      break;
-//    case GLUT_KEY_UP:
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->getCell(g_sID)->transError.x =
-//          1.0001f * g_env->getCell(g_sID)->threshold();
-//        //g_env->getCell(g_sID)->translateRelative(
-//        //    min(0.001f, g_env->getCell(g_sID)->maxSpeed()));
-//      }
-//      break;
-//    case GLUT_KEY_RIGHT:
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->getCell(g_sID)->rotError =
-//          1.0001f * g_env->getCell(g_sID)->angThreshold();
-//        //g_env->getCell(g_sID)->rotateRelative(
-//        //    -min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
-//      }
-//      break;
-//    case GLUT_KEY_DOWN:
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->getCell(g_sID)->transError.x =
-//          -(1.0001f * g_env->getCell(g_sID)->threshold());
-//        //g_env->getCell(g_sID)->translateRelative(
-//        //    -min(0.001f, g_env->getCell(g_sID)->maxSpeed()));
-//      }
-//      break;
-//    default: break;
-//  }
-//}   // keyboardPressSpecial(GLint, GLint, GLint)
+// Reacts to mouse clicks.
 //
+// Returns:     <none>
+// Parameters:
+//      mouseButton     in      the mouse button that was pressed
+//      mouseState      in      the state of the mouse
+//      mouseX          in      the x-coordinate of the mouse position
+//      mouseY          in      the y-coordinate of the mouse position
 //
+void mouseClick(GLint mouseButton,    GLint mouseState,
+    GLint mouseX, GLint mouseY)
+{
+  GLint mod = glutGetModifiers();
+  if (mouseState == GLUT_DOWN)
+  {
+    if(mod == GLUT_ACTIVE_CTRL)
+    {
+      if(g_env->getCells().size() > 0)
+      {
+        for (GLint i = 0; i < g_env->getNCells(); ++i)
+        {
+          GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+            0.5 * g_windowWidth;
+          GLfloat y     = 0.5 * g_windowHeight -
+            (g_windowHeight * mouseY / g_windowSize[1]);
+          g_selectedIndex = g_sID;
+          GLfloat dx = g_env->getCell(i)->x - x,
+                  dy = g_env->getCell(i)->y - y;
+          if ((g_selectedIndex == g_sID) &&
+              (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
+          {
+            g_env->removeCell(g_env->getCell(g_selectedIndex = i));
+
+          }else if (i != g_sID){
+            g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
+          }
+        }
+      }
+      if(g_env->getRobots().size()>0)
+      {
+        GLint ii=-1;
+        for (GLint i = 0; i < g_env->getNFreeRobots(); ++i)
+        {
+          GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+            0.5 * g_windowWidth;
+          GLfloat y     = 0.5 * g_windowHeight -
+            (g_windowHeight * mouseY / g_windowSize[1]);
+          g_selectedIndex = -1;
+          GLfloat dx = g_env->getRobot(ii)->x - x,
+                  dy = g_env->getRobot(ii)->y - y;
+          GLfloat distance = sqrt(dx * dx  + dy * dy);
+          cout << "Distance between click and robotID " << ii << " is " << distance << endl;
+          if (distance < SELECT_RADIUS)
+          {
+            string printf("IS WITHIN RADIUS");
+            cout << "Remove robotID = " << ii << endl;
+            g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
+            //g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
+            //cout << "Remove robotID = " << ii << endl;
+            //g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
+          }
+          ii--;
+        }
+      }
+    }
+    if(g_env->getCells().size()>0)
+    {
+      GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+        0.5 * g_windowWidth;
+      GLfloat y     = 0.5 * g_windowHeight -
+        (g_windowHeight * mouseY / g_windowSize[1]);
+      g_selectedIndex = g_sID;
+      for (GLint i = 0; i < g_env->getNCells(); ++i)
+      {
+        GLfloat dx = g_env->getCell(i)->x - x,
+                dy = g_env->getCell(i)->y - y;
+        if ((g_selectedIndex == g_sID) &&
+            (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
+        {
+         g_env->getCell(g_selectedIndex = i)->setColor(RED);
+        }
+        else if (i != g_sID)
+        {
+          g_env->getCell(i)->setColor(RED);
+        }
+      }
+    }else{
+      GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+        0.5 * g_windowWidth;
+      GLfloat y     = 0.5 * g_windowHeight -
+        (g_windowHeight * mouseY / g_windowSize[1]);
+      g_env->formFromClick(x,y);
+    }
+  }
+  glutPostRedisplay();            // redraw the scene
+}   // mouseClick(GLint, GLint, GLint, GLint)
+
+
+
 //
-////
-//// void keyboardReleaseSpecial(keyPressed, mouseX, mouseY)
-//// Last modified:   06Nov2009
-////
-//// Handles the keyboard input (non-ASCII Characters).
-////
-//// Returns:     <none>
-//// Parameters:
-////      keyReleased  in      the non-ASCII key that was released
-////      mouseX       in      the x-coordinate of the mouse position
-////      mouseY       in      the y-coordinate of the mouse position
-////
-//void keyboardReleaseSpecial(GLint keyReleased, GLint mouseX, GLint mouseY)
-//{
-//  switch (keyReleased)
-//  {
-//    case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->getCell(g_sID)->rotError = 0.0f;
-//      }
-//      break;
-//    case GLUT_KEY_UP: case GLUT_KEY_DOWN:
-//      if (g_env->getNCells() > 0)
-//      {
-//        g_env->getCell(g_sID)->transError.x = 0.0f;
-//      }
-//      break;
-//    default: break;
-//  }
-//}   // keyboardReleaseSpecial(GLint, GLint, GLint)
+// void mouseDrag(mouseX, mouseY)
+// Last modified:   08Nov2009
 //
+// Moves the position of a nearby cell to the
+// current mouse pointer position if the mouse
+// button is pressed and the pointer is in motion.
 //
+// Returns:     <none>
+// Parameters:
+//      mouseX  in      the x-coordinate of the mouse position
+//      mouseY  in      the y-coordinate of the mouse position
 //
-////
-//// void mouseClick(mouseButton, mouseState, mouseX, mouseY)
-//// Last modified:   08Nov2009
-////
-//// Reacts to mouse clicks.
-////
-//// Returns:     <none>
-//// Parameters:
-////      mouseButton     in      the mouse button that was pressed
-////      mouseState      in      the state of the mouse
-////      mouseX          in      the x-coordinate of the mouse position
-////      mouseY          in      the y-coordinate of the mouse position
-////
-//void mouseClick(GLint mouseButton,    GLint mouseState,
-//    GLint mouseX, GLint mouseY)
-//{
-//  GLint mod = glutGetModifiers();
-//  if (mouseState == GLUT_DOWN)
-//  {
-//    if(mod == GLUT_ACTIVE_CTRL)
-//    {
-//      if(g_env->getCells().size() > 0)
-//      {
-//        for (GLint i = 0; i < g_env->getNCells(); ++i)
-//        {
-//          GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
-//            0.5 * g_windowWidth;
-//          GLfloat y     = 0.5 * g_windowHeight -
-//            (g_windowHeight * mouseY / g_windowSize[1]);
-//          g_selectedIndex = g_sID;
-//          GLfloat dx = g_env->getCell(i)->x - x,
-//                  dy = g_env->getCell(i)->y - y;
-//          if ((g_selectedIndex == g_sID) &&
-//              (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
-//          {
-//            g_env->removeCell(g_env->getCell(g_selectedIndex = i));
-//
-//          }else if (i != g_sID){
-//            g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-//          }
-//        }
-//      }
-//      if(g_env->getRobots().size()>0)
-//      {
-//        GLint ii=-1;
-//        for (GLint i = 0; i < g_env->getNFreeRobots(); ++i)
-//        {
-//          GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
-//            0.5 * g_windowWidth;
-//          GLfloat y     = 0.5 * g_windowHeight -
-//            (g_windowHeight * mouseY / g_windowSize[1]);
-//          g_selectedIndex = -1;
-//          GLfloat dx = g_env->getRobot(ii)->x - x,
-//                  dy = g_env->getRobot(ii)->y - y;
-//          GLfloat distance = sqrt(dx * dx  + dy * dy);
-//          cout << "Distance between click and robotID " << ii << " is " << distance << endl;
-//          if (distance < SELECT_RADIUS)
-//          {
-//            string printf("IS WITHIN RADIUS");
-//            cout << "Remove robotID = " << ii << endl;
-//            g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
-//            //g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-//            //cout << "Remove robotID = " << ii << endl;
-//            //g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
-//          }
-//          ii--;
-//        }
-//      }
-//    }
-//    if(g_env->getCells().size()>0)
-//    {
-//      GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
-//        0.5 * g_windowWidth;
-//      GLfloat y     = 0.5 * g_windowHeight -
-//        (g_windowHeight * mouseY / g_windowSize[1]);
-//      g_selectedIndex = g_sID;
-//      for (GLint i = 0; i < g_env->getNCells(); ++i)
-//      {
-//        GLfloat dx = g_env->getCell(i)->x - x,
-//                dy = g_env->getCell(i)->y - y;
-//        if ((g_selectedIndex == g_sID) &&
-//            (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
-//        {
-//         g_env->getCell(g_selectedIndex = i)->setColor(RED);
-//        }
-//        else if (i != g_sID)
-//        {
-//          g_env->getCell(i)->setColor(RED);
-//        }
-//      }
-//    }else{
-//      GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
-//        0.5 * g_windowWidth;
-//      GLfloat y     = 0.5 * g_windowHeight -
-//        (g_windowHeight * mouseY / g_windowSize[1]);
-//      g_env->formFromClick(x,y);
-//    }
-//  }
-//  glutPostRedisplay();            // redraw the scene
-//}   // mouseClick(GLint, GLint, GLint, GLint)
-//
-////
-//// void mouseDrag(mouseX, mouseY)
-//// Last modified:   08Nov2009
-////
-//// Moves the position of a nearby cell to the
-//// current mouse pointer position if the mouse
-//// button is pressed and the pointer is in motion.
-////
-//// Returns:     <none>
-//// Parameters:
-////      mouseX  in      the x-coordinate of the mouse position
-////      mouseY  in      the y-coordinate of the mouse position
-////
-//void mouseDrag(GLint mouseX, GLint mouseY)
-//{
-//  if (g_env->getNCells() > 0)
-//  {
-//    if (g_selectedIndex != ID_NO_NBR)
-//    {
-//      g_env->getCell(g_selectedIndex)->
-//        set(g_windowWidth * mouseX / g_windowSize[0] - 0.5 *
-//            g_windowWidth, 0.5 * g_windowHeight - (g_windowHeight *
-//              mouseY / g_windowSize[1]));
-//    }
-//  }
-//  glutPostRedisplay();    // redraw the scene
-//}   // mouseDrag(GLint, GLint)
-//
-//
-//
-//
+void mouseDrag(GLint mouseX, GLint mouseY)
+{
+  if (g_env->getNCells() > 0)
+  {
+    if (g_selectedIndex != ID_NO_NBR)
+    {
+      g_env->getCell(g_selectedIndex)->
+        set(g_windowWidth * mouseX / g_windowSize[0] - 0.5 *
+            g_windowWidth, 0.5 * g_windowHeight - (g_windowHeight *
+              mouseY / g_windowSize[1]));
+    }
+  }
+  glutPostRedisplay();    // redraw the scene
+}   // mouseDrag(GLint, GLint)
+
+
+
+
 // void resizeWindow(w, h)
 // Last modified:   08Nov2009
 //
@@ -1075,59 +1078,59 @@ bool deinitEnv()
 // Parameters:
 //      w       in      the new screen width
 //      h       in      the new screen height
-//
-//void resizeWindow(GLsizei w, GLsizei h)
-//{
-//  g_windowSize[0] = w;            // obtain new screen width
-//  g_windowSize[1] = h;            // obtain new screen height
-//
-//  glClear(GL_COLOR_BUFFER_BIT);   // clear color buffer to draw next frame
-//  glViewport(0, 0, w, h);         // viewport transformation
-//
-//  glMatrixMode(GL_PROJECTION);    // projection transformation
-//  glLoadIdentity();               // initialize projection identity matrix
-//
-//  if (w <= h)
-//  {
-//    g_windowWidth  = 2.0f;
-//    g_windowHeight = 2.0f * (GLfloat)h / (GLfloat)w;
-//    glOrtho(-1.0f, 1.0f, -1.0f * (GLfloat)h / (GLfloat)w,
-//        (GLfloat)h / (GLfloat)w, -10.0f, 10.0f);
-//  }
-//  else
-//  {
-//    g_windowWidth  = 2.0f * (GLfloat)w / (GLfloat)h;
-//    g_windowHeight = 2.0f;
-//    glOrtho(-1.0f * (GLfloat)w / (GLfloat)h,
-//        (GLfloat)w / (GLfloat)h,
-//        -1.0f, 1.0f, -10.0f, 10.0f);
-//  }
-//  glutPostRedisplay();            // redraw the scene
-//}   // resizeWindow(GLsizei, GLsizei)
+
+void resizeWindow(GLsizei w, GLsizei h)
+{
+  g_windowSize[0] = w;            // obtain new screen width
+  g_windowSize[1] = h;            // obtain new screen height
+
+  glClear(GL_COLOR_BUFFER_BIT);   // clear color buffer to draw next frame
+  glViewport(0, 0, w, h);         // viewport transformation
+
+  glMatrixMode(GL_PROJECTION);    // projection transformation
+  glLoadIdentity();               // initialize projection identity matrix
+
+  if (w <= h)
+  {
+    g_windowWidth  = 2.0f;
+    g_windowHeight = 2.0f * (GLfloat)h / (GLfloat)w;
+    glOrtho(-1.0f, 1.0f, -1.0f * (GLfloat)h / (GLfloat)w,
+        (GLfloat)h / (GLfloat)w, -10.0f, 10.0f);
+  }
+  else
+  {
+    g_windowWidth  = 2.0f * (GLfloat)w / (GLfloat)h;
+    g_windowHeight = 2.0f;
+    glOrtho(-1.0f * (GLfloat)w / (GLfloat)h,
+        (GLfloat)w / (GLfloat)h,
+        -1.0f, 1.0f, -10.0f, 10.0f);
+  }
+  glutPostRedisplay();            // redraw the scene
+}   // resizeWindow(GLsizei, GLsizei)
 
 
 
-//// void timerFunction(value)
-//// Last modified:   08Nov2009
-////
-//// Updates the environment and redraws.
-////
-//// Returns:     <none>
-//// Parameters:
-////      value   in      the value of the timer
-////
-//void timerFunction(GLint value)
-//{
-//  //sendFcntrRequest();
-//  //sendFRadRequest();
-//  //if(g_prop_toggle)
-//    //sendNCellRequest();
-//  g_env->step();          // update the robot cell environment
+// void timerFunction(value)
+// Last modified:   08Nov2009
 //
-//  // force a redraw after a number of milliseconds
-//  glutPostRedisplay();    // redraw the scene
-//  glutTimerFunc(g_dt, timerFunction, 1);
-//}   // timerFunction(GLint)
+// Updates the environment and redraws.
+//
+// Returns:     <none>
+// Parameters:
+//      value   in      the value of the timer
+//
+void timerFunction(GLint value)
+{
+  //sendFcntrRequest();
+  //sendFRadRequest();
+  //if(g_prop_toggle)
+    //sendNCellRequest();
+  g_env->step();          // update the robot cell environment
+
+  // force a redraw after a number of milliseconds
+  glutPostRedisplay();    // redraw the scene
+  glutTimerFunc(g_dt, timerFunction, 1);
+}   // timerFunction(GLint)
 
 
 
