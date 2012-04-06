@@ -79,7 +79,9 @@ struct Neighbor: Relationship, State
     {
     }   // Neighbor(const Neighbor &)
 
-
+    // TODO adding virtual method below fixes warning, creates "no vtable" error
+    // <destructor>
+    // virtual ~Neighbor();
 
     // <accessor functions>
 

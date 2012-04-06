@@ -17,16 +17,16 @@ using namespace std;
 
 // global constants
 static const Color   DEFAULT_CIRCLE_COLOR       = DEFAULT_VECTOR_COLOR;
-static const float DEFAULT_CIRCLE_RADIUS      = 1.0f;
+static const float   DEFAULT_CIRCLE_RADIUS      = 1.0f;
 static const bool    DEFAULT_CIRCLE_SHOW_POS    = false;
 static const bool    DEFAULT_CIRCLE_SHOW_FILLED = false;
-static const int   CIRCLE_N_LINKS             = 24;  // polygonal circle
-static const float CIRCLE_THETA               = 360.0f / CIRCLE_N_LINKS;
-static const float CIRCLE_COS_THETA           = cos(degreesToRadians(
+static const int     CIRCLE_N_LINKS             = 24;  // polygonal circle
+static const float   CIRCLE_THETA               = 360.0f / CIRCLE_N_LINKS;
+static const float   CIRCLE_COS_THETA           = cos(degreesToRadians(
                                                            CIRCLE_THETA));
-static const float CIRCLE_SIN_THETA           = sin(degreesToRadians(
+static const float   CIRCLE_SIN_THETA           = sin(degreesToRadians(
                                                            CIRCLE_THETA));
-static const float CIRCLE_TAN_THETA           = tan(degreesToRadians(
+static const float   CIRCLE_TAN_THETA           = tan(degreesToRadians(
                                                            CIRCLE_THETA));
 
 
