@@ -28,8 +28,7 @@
 //      dz          in      the initial z-coordinate of the vector (default 0)
 //      colorIndex  in      the initial array index of the color of the vector
 //
-Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-               const Color colorIndex)
+Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz, const Color colorIndex)
 {
     init(dx, dy, dz, colorIndex);
 }   // Vector(const GLfloat, const GLfloat, const GLfloat, const Color)
@@ -45,7 +44,7 @@ Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz,
 //
 // Returns:     <none>
 // Parameters:
-//      c       in/out      the circle being copied
+//      c       in      the vector being copied
 //
 Vector::Vector(const Vector &v)
 {

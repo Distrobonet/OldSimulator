@@ -12,34 +12,34 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-#include <Simulator/GLIncludes.h>//ADDED BY KEVIN
-
-// Needed by Vector.h
-#include <Simulator/Utils.h>//ADDED BY KEVIN
-
-#include <Simulator/Behavior.h>//ADDED BY KEVIN
-
-// Needed by Environment
-#include <Simulator/Object.h>//ADDED BY KEVIN
-
-// Needed by Cell
-#include <Simulator/Auctioning.h>//ADDED BY KEVIN
-#include <Simulator/Neighborhood.h>//ADDED BY KEVIN
-#include <Simulator/Robot.h>//ADDED BY KEVIN
-
-// Needed by Environment
-#include <Simulator/Cell.h>//ADDED BY KEVIN
+//#include <Simulator/GLIncludes.h>//ADDED BY KEVIN
+//
+//// Needed by Vector.h
+//#include <Simulator/Utils.h>//ADDED BY KEVIN
+//
+//#include <Simulator/Behavior.h>//ADDED BY KEVIN
+//
+//// Needed by Environment
+//#include <Simulator/Object.h>//ADDED BY KEVIN
+//
+//// Needed by Cell
+//#include <Simulator/Auctioning.h>//ADDED BY KEVIN
+//#include <Simulator/Neighborhood.h>//ADDED BY KEVIN
+//#include <Simulator/Robot.h>//ADDED BY KEVIN
+//
+//// Needed by Environment
+//#include <Simulator/Cell.h>//ADDED BY KEVIN
 
 #include <Simulator/Environment.h>
 
-// Needed by Formation.h
-#include <Simulator/Relationship.h>//ADDED BY KEVIN
-
-// Needed by Formation.h
-#include <Simulator/Vector.h>//ADDED BY KEVIN
-
-// Needed by Simulator.cpp
-#include <Simulator/Formation.h>//ADDED BY KEVIN
+//// Needed by Formation.h
+//#include <Simulator/Relationship.h>//ADDED BY KEVIN
+//
+//// Needed by Formation.h
+//#include <Simulator/Vector.h>//ADDED BY KEVIN
+//
+//// Needed by Simulator.cpp
+//#include <Simulator/Formation.h>//ADDED BY KEVIN
 
 
 
@@ -67,7 +67,7 @@ bool validateParameters(const GLint   nRobots,
     const GLfloat fHeading,
     const GLint   dt);
 void terminate(int retVal);
-void displayMenu();
+//void displayMenu();
 bool initEnv(const GLint nRobots, const GLint fIndex);
 bool deinitEnv();
 bool changeFormation(const GLint index, const Vector gradient = Vector());
@@ -126,9 +126,6 @@ const GLint     N_CELLS           = 0;
 const GLint     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
 // A formation is a vector of Functions, which are functions that take GLfloats and return GLfloats
 const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
-//const Formation DEFAULT_FORMATION = Formation(line, 0.0f, Vector(), 0, 0,  90.0f);
-//Formation blah(line, 0.0f, Vector(), 0, 0, 0.0f);
-Vector aVector;
 
 
 // simulation global variables
