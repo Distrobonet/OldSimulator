@@ -1,5 +1,5 @@
 //
-// Filename:        "Simulator.cpp"
+// Filename:        "RobotDriver.cpp"
 //
 // Programmer:      Ross Mead
 // Last modified:   30Nov2009
@@ -32,36 +32,7 @@
 
 #include "Simulator/RobotDriver.h"
 
-//#include <Simulator/GLIncludes.h>//ADDED BY KEVIN
-//
-//// Needed by Vector.h
-//#include <Simulator/Utils.h>//ADDED BY KEVIN
-//
-//#include <Simulator/Behavior.h>//ADDED BY KEVIN
-//
-//// Needed by Environment
-//#include <Simulator/Object.h>//ADDED BY KEVIN
-//
-//// Needed by Cell
-//#include <Simulator/Auctioning.h>//ADDED BY KEVIN
-//#include <Simulator/Neighborhood.h>//ADDED BY KEVIN
-//#include <Simulator/Robot.h>//ADDED BY KEVIN
-//
-//// Needed by Environment
-//#include <Simulator/Cell.h>//ADDED BY KEVIN
-
 #include <Simulator/Environment.h>
-
-//// Needed by Formation.h
-//#include <Simulator/Relationship.h>//ADDED BY KEVIN
-//
-//// Needed by Formation.h
-//#include <Simulator/Vector.h>//ADDED BY KEVIN
-//
-//// Needed by Simulator.cpp
-//#include <Simulator/Formation.h>//ADDED BY KEVIN
-
-
 
 using namespace std;
 
@@ -70,7 +41,6 @@ using namespace std;
 #ifndef SIGPIPE
 #define SIGPIPE 13
 #endif
-
 
 // simulation environment function prototypes
 void printUsage(int argc, char **argv);
@@ -140,8 +110,6 @@ int   g_windowSize[2] = {800, 800};   // window size in pixels
 float g_windowWidth   = 2.0f;         // resized window width
 float g_windowHeight  = 2.0f;         // resized window height
 
-//typedef float (*Function)(const float);//ADDED BY KEVIN
-
 // simulation global constants
 const float   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
 const int     N_CELLS           = 0;
@@ -178,42 +146,6 @@ bool       g_prop_toggle   = false;
 //
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "robot_driver");
-	ros::NodeHandle aNode;
-	ros::Publisher chatter_pub = aNode.advertise<std_msgs::String>("chatter", 1000);
-
-	ros::Rate loop_rate(10);
-
-	ros::Subscriber subRobot0 = aNode.subscribe("/robot_0/base_pose_ground_truth", 1000, callBackRobot0);
-
-	ros::Publisher pub_cmd_vel1 = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
-
-	geometry_msgs::Twist commandVelocity;
-
-	displayMenu();
-
-	int count = 0;
-
-	//keyboardInput();
-
-	while (ros::ok())
-	{
-		cout << "basdgf";
-		std_msgs::String msg;
-		std::stringstream ss;
-		  ss << "hello world " << count;
-		  msg.data = ss.str();
-		  ROS_INFO("%s", msg.data.c_str());
-
-		  chatter_pub.publish(msg);
-
-		 ros::spinOnce();
-		 loop_rate.sleep();
-		 ++count;
-
-	}
-
-
   // parse command line arguments
   if (!parseArguments(argc, argv,
         g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
@@ -261,6 +193,71 @@ int main(int argc, char **argv)
   initWindow();
   //displayMenu();
   //glutMainLoop();
+
+
+
+
+
+
+
+
+
+
+
+  // BEGIN DISTROBONET CODE
+
+//	ros::init(argc, argv, "robot_driver");
+//	ros::NodeHandle aNode;
+//	ros::Publisher chatter_pub = aNode.advertise<std_msgs::String>("chatter", 1000);
+//
+//	ros::Rate loop_rate(10);
+//
+//	ros::Subscriber subRobot0 = aNode.subscribe("/robot_0/base_pose_ground_truth", 1000, callBackRobot0);
+//
+//	ros::Publisher pub_cmd_vel1 = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
+
+	geometry_msgs::Twist commandVelocity;
+
+	displayMenu();
+
+
+	keyboardInput();
+
+//	while (ros::ok())
+//	{
+//		cout << "basdgf";
+//		std_msgs::String msg;
+//		std::stringstream ss;
+//		  ss << "hello world " << count;
+//		  msg.data = ss.str();
+//		  ROS_INFO("%s", msg.data.c_str());
+//
+//		  chatter_pub.publish(msg);
+//
+//		 ros::spinOnce();
+//		 loop_rate.sleep();
+//		 ++count;
+//
+//	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // END DISTROBONET CODE
 
   deinitEnv();
 

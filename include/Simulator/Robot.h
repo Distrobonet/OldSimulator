@@ -15,7 +15,22 @@
 #include <Simulator/Circle.h>
 #include <Simulator/Packet.h>
 
-#include <stdio.h>//ADDED BY KEVIN for NULL use
+
+//#include <ros/ros.h>
+//#include <nav_msgs/Odometry.h>
+//#include <geometry_msgs/Twist.h>
+//#include <angles/angles.h>
+//#include <tf/transform_listener.h>
+//
+//#include <LinearMath/btQuaternion.h>
+//#include <LinearMath/btMatrix3x3.h>
+//
+//#include <sensor_msgs/LaserScan.h>
+//#include <sensor_msgs/PointCloud2.h>
+//#include <tf/transform_listener.h>
+
+
+
 using namespace std;
 
 
@@ -26,15 +41,15 @@ using namespace std;
 
 
 // global constants
-static const float  DEFAULT_ROBOT_RADIUS       = 0.03f;
+static const float    DEFAULT_ROBOT_RADIUS       = 0.03f;
 static const Behavior DEFAULT_ROBOT_BEHAVIOR     = Behavior();
 static const bool     DEFAULT_ROBOT_SHOW_HEADING = true;
 static const bool     DEFAULT_ROBOT_SHOW_LINE    = false;
 static const bool     DEFAULT_ROBOT_SHOW_HEAD    = true;
 static const bool     DEFAULT_ROBOT_SHOW_FILLED  = false;
-static const float  FACTOR_MAX_SPEED           = 0.3f;
-static const float  FACTOR_THRESHOLD           = 1.0f;
-static const float  FACTOR_COLLISION_RADIUS    = 3.0f;
+static const float    FACTOR_MAX_SPEED           = 0.3f;
+static const float    FACTOR_THRESHOLD           = 1.0f;
+static const float    FACTOR_COLLISION_RADIUS    = 3.0f;
 
 
 
@@ -152,7 +167,7 @@ class Robot: public Circle
     protected:
 
         // <protected data members>
-        int         ID;     // identification number of robot
+        int          ID;     // identification number of robot
         Environment  *env;    // the environment of the robot
 
         // <protected static data members>

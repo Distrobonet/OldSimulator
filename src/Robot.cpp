@@ -7,6 +7,19 @@
 // Description:     This class implements a 2-dimensional robot.
 //
 
+#include <ros/ros.h>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
+#include <angles/angles.h>
+#include <tf/transform_listener.h>
+//
+//#include <LinearMath/btQuaternion.h>
+//#include <LinearMath/btMatrix3x3.h>
+//
+//#include <sensor_msgs/LaserScan.h>
+//#include <sensor_msgs/PointCloud2.h>
+//#include <tf/transform_listener.h>
+
 // preprocessor directives
 #include <Simulator/Environment.h>
 #include <Simulator/Robot.h>
@@ -18,7 +31,7 @@
 
 // <protected static data members>
 int Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
-
+   ros::NodeHandle aNode;
 
 
 // <constructors>
@@ -38,11 +51,39 @@ int Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
 //      theta       in      the initial heading of the robot (default 0)
 //      colorIndex  in      the initial array index of the color of the robot
 //
+
+   double velocityX, velocityY, theta;
+
+static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
+{
+	velocityY = odom-> pose.pose.position.x;
+	velocityX = -odom-> pose.pose.position.y;
+
+	btScalar roll = 0.0l;
+	btScalar pitch = 0.0l;
+	btScalar yaw = 0.0l;
+	btQuaternion q(odom-> pose.pose.orientation.x,
+	odom-> pose.pose.orientation.y,
+	odom-> pose.pose.orientation.z,
+	odom-> pose.pose.orientation.w);
+
+	btMatrix3x3(q).getRPY(roll, pitch, yaw);
+	theta = angles::normalize_angle(yaw + M_PI / 2.0l);
+	ros::spinOnce();
+}
+
 Robot::Robot(const float dx,    const float dy, const float dz,
              const float theta)
 {
+	ros::Subscriber subRobot = aNode.subscribe("/robot_1/base_pose_ground_truth", 1000, callBackRobot);
+
+	ros::Publisher pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
+
     init(dx, dy, dz, theta);
     ID = --nRobots;
+
+
+
 }   // Robot(const float..<4>, const Color)
 
 
