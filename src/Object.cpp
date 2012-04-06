@@ -8,8 +8,8 @@
 //
 
 // preprocessor directives
-#include "Environment.h"
-#include "Object.h"
+#include <Simulator/Environment.h>
+#include <Simulator/Object.h>
 
 
 
@@ -32,11 +32,14 @@ GLint Object::nObjects = 0;   // initializes the number of objects to 0
 //      dx          in      the initial x-coordinate of the object (default 0)
 //      dy          in      the initial y-coordinate of the object (default 0)
 //      dz          in      the initial z-coordinate of the object (default 0)
+//      r           in      the initial radius of the object
 //      colorIndex  in      the initial array index of the color of the object
 //
-Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz)
+Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz,
+               const GLfloat r,
+               const Color   colorIndex)
 {
-    init(dx, dy, dz);
+    init(dx, dy, dz, r, colorIndex);
     ID = ++nObjects;
 }   // Object(const GLfloat, const GLfloat, const GLfloat, const Color)
 
@@ -55,14 +58,15 @@ Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz)
 //
 Object::Object(const Object &obj)
 {
-    init(obj.x, obj.y, obj.z);
+    init(obj.x, obj.y, obj.z, DEFAULT_OBJECT_COLOR);
+    setColor(obj.color);
     for (GLint i = 0; i < 3; ++i)
     {
         translate[i] = obj.translate[i];
         rotate[i]    = obj.rotate[i];
         scale[i]     = obj.scale[i];
     }
-	showFilled  = obj.showFilled;
+    showFilled  = obj.showFilled;
     showPos     = obj.showPos;
     ID          = obj.ID;
     env         = obj.env;
@@ -102,8 +106,7 @@ Object::~Object()
 //
 bool Object::setRadius(const GLfloat r)
 {
-    if (!Circle::setRadius(r)) return false;
-    return behavior.setMaxSpeed(const maxSpeed());
+  return Circle::setRadius(r);
 }   // setRadius(const GLfloat)
 
 
@@ -188,7 +191,7 @@ void Object::draw()
 // <virtual protected utility functions>
 
 //
-// bool init(dx, dy, dz, theta)
+// bool init(dx, dy, dz, r, colorIndex)
 // Last modified: 06Nov2009
 //
 // Initializes the object to the parameterized values,
@@ -199,17 +202,15 @@ void Object::draw()
 //      dx          in      the initial x-coordinate of the object (default 0)
 //      dy          in      the initial y-coordinate of the object (default 0)
 //      dz          in      the initial z-coordinate of the object (default 0)
+//      r           in      the initial radius of the object
 //      colorIndex  in      the initial array index of the color of the object
 //
-bool Object::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-                 const GLfloat theta)
+bool Object::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
+                  const GLfloat r,
+                  const Color   colorIndex)
 {
-    Circle::init(dx, dy, dz, DEFAULT_OBJECT_RADIUS);
-    setHeading(const theta);
-    Robot::behavior = DEFAULT_OBJECT_BEHAVIOR;
-    behavior.setMaxSpeed(const maxSpeed());
+    Circle::init(dx, dy, dz, r, colorIndex);
     showFilled = DEFAULT_OBJECT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
-}   // init(const GLfloat..<4>)
-
+}   // init(const GLfloat..<4>, const Color)

@@ -12,8 +12,8 @@
 #ifndef PROPMSG_H
 #define PROPMSG_H
 #include <vector>
-#include "Vector.h"
-#include "GLIncludes.h"
+#include <Simulator/Vector.h>
+#include <Simulator/GLIncludes.h>
 
 using namespace std;
 

@@ -1,8 +1,17 @@
+//
+// Filename:        "Auctioning.h"
+//
+// Programmer:      Rob Long
+// Last modified:   05Apr2012
+//
+// Description:     This file contains structures for auctioning.
+//
+
 // preprocessor directives
 #ifndef AUCTIONING_H
 #define AUCTIONING_H
-#include "Vector.h"
-#include "State.h"
+#include <Simulator/Vector.h>
+#include <Simulator/State.h>
 
 
 

@@ -10,12 +10,13 @@
 // preprocessor directives
 #ifndef CIRCLE_H
 #define CIRCLE_H
-#include "Vector.h"
+#include <Simulator/Vector.h>
 using namespace std;
 
 
 
 // global constants
+static const Color   DEFAULT_CIRCLE_COLOR       = DEFAULT_VECTOR_COLOR;
 static const GLfloat DEFAULT_CIRCLE_RADIUS      = 1.0f;
 static const bool    DEFAULT_CIRCLE_SHOW_POS    = false;
 static const bool    DEFAULT_CIRCLE_SHOW_FILLED = false;
@@ -43,7 +44,8 @@ class Circle: public Vector
         Circle(const GLfloat dx         = 0.0f,
                const GLfloat dy         = 0.0f,
                const GLfloat dz         = 0.0f,
-               const GLfloat r          = DEFAULT_CIRCLE_RADIUS);
+               const GLfloat r          = DEFAULT_CIRCLE_RADIUS,
+               const Color   colorIndex = DEFAULT_CIRCLE_COLOR);
         Circle(const Vector &c, const GLfloat r = DEFAULT_CIRCLE_RADIUS);
         Circle(const Circle &c);
 
@@ -77,6 +79,7 @@ class Circle: public Vector
         virtual bool init(const GLfloat dx         = 0.0f,
                           const GLfloat dy         = 0.0f,
                           const GLfloat dz         = 0.0f,
-                          const GLfloat r          = DEFAULT_CIRCLE_RADIUS);
+                          const GLfloat r          = DEFAULT_CIRCLE_RADIUS,
+                          const Color   colorIndex = DEFAULT_CIRCLE_COLOR);
 };  // Circle
 #endif

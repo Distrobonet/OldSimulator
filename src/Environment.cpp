@@ -9,8 +9,8 @@
 
 // preprocessor directives
 #include <stdio.h>
-#include "Environment.h"
-#include "time.h"
+#include <Simulator/Environment.h>
+#include <time.h>
 #include <ctime>
 #include <stdlib.h>
 
@@ -926,7 +926,7 @@ bool Environment::initRobots()
 bool Environment::addRobot(GLfloat x, GLfloat y, GLfloat z, GLfloat theta)
 {
   if (VERBOSE)
-	  string printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
+  printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
   Robot *r = new Robot(x, y, z, theta);
   r->setEnvironment(this);
   robots.push_back(r);

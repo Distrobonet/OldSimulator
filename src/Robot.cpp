@@ -8,11 +8,11 @@
 //
 
 // preprocessor directives
-//#include "Environment.h"
-#include "Robot.h"
+#include <Simulator/Environment.h>
+#include <Simulator/Robot.h>
 #include <stdio.h>//ADDED BY KEVIN for NULL use
 
-#include "math.h"//ADDED BY KEVIN
+#include <math.h>//ADDED BY KEVIN
 
 #define E         (1.0f)//ADDED BY KEVIN
 
@@ -357,18 +357,18 @@ GLfloat Robot::getArcRadius() const
 //
 void Robot::draw()
 {
-//    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-//        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-//        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
+    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
+        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
+        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
 
     vector<Vector> rels = getObjectRelationships(2.0f * collisionRadius());
-	for (GLint i = 0, n = rels.size(); i < n; ++i)
-	{
-		rels[i].rotated(rotate[2]);
-		rels[i].translated(x, y, z);
-		rels[i].scaled(scale[0]);
-		rels[i].draw();
-	}
+    for (GLint i = 0, n = rels.size(); i < n; ++i)
+    {
+        rels[i].rotated(rotate[2]);
+        rels[i].translated(x, y, z);
+        rels[i].scaled(scale[0]);
+        rels[i].draw();
+    }
 
     // draw a circle representing the robot
     Circle::draw();
@@ -402,7 +402,7 @@ void Robot::draw()
 //
 void Robot::step()
 {
-	GLfloat collDist = collisionRadius();
+    GLfloat collDist = collisionRadius();
     vector<Vector> rels = getObjectRelationships(collDist);
     if (rels.size() > 0)
     {

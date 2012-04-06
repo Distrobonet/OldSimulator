@@ -11,8 +11,7 @@
 #ifndef FORMATION_H
 #define FORMATION_H
 #include <vector>
-//#include "Vector.h"//ADDED BY KEVIN
-#include "Relationship.h"
+#include <Simulator/Relationship.h>
 using namespace std;
 
 
@@ -38,15 +37,12 @@ class Formation: protected vector<Function>
 
         // <constructors>
         Formation(const Function f     = DEFAULT_FORMATION_FUNCTION,
-                  const GLfloat r     = DEFAULT_FORMATION_RADIUS,
-                  const Vector  sGrad = Vector(),
-                  const GLint   sID   = ID_BROADCAST,
-                  const GLint   fID   = -1,
-                  const GLfloat theta = 0.0f);
-//		Formation(const Function f, const GLfloat r, const Vector sGrad, const GLint sID,
-//	                  const GLint fID, const GLfloat theta)
-//				{};
-        Formation(vector<Function> f,
+                  const GLfloat  r     = DEFAULT_FORMATION_RADIUS,
+                  const Vector   sGrad = Vector(),
+                  const GLint    sID   = ID_BROADCAST,
+                  const GLint    fID   = -1,
+                  const GLfloat  theta = 0.0f);
+	Formation(vector<Function> f,
                   const GLfloat    r     = DEFAULT_FORMATION_RADIUS,
                   const Vector     sGrad = Vector(),
                   const GLint      sID   = ID_BROADCAST,
@@ -55,7 +51,7 @@ class Formation: protected vector<Function>
 
         //Formation(){};//ADDED BY KEVIN
         Formation(const Formation &f);
-        //virtual ~Formation(){};//ADDED BY KEVIN
+        virtual ~Formation(){};//ADDED BY KEVIN
 
         // <public mutator functions>
         bool setFunction(const Function f = DEFAULT_FORMATION_FUNCTION);
@@ -80,15 +76,15 @@ class Formation: protected vector<Function>
         GLfloat          getHeading()                     const;
 
         // <public utility functions>
-//        vector<Vector> getRelationships(const Vector c = Vector());
-//        Vector getRelationship(const Function f = DEFAULT_FORMATION_FUNCTION,
-//                               const GLfloat  r = DEFAULT_FORMATION_RADIUS,
-//                               const Vector   c = Vector(),
-//                               const GLfloat  theta = 0.0f);
-//        Vector getRelationship(const GLint   pos   = 0,
-//                               const GLfloat r     = DEFAULT_FORMATION_RADIUS,
-//                               const Vector  c     = Vector(),
-//                               const GLfloat theta = 0.0f);
+        vector<Vector> getRelationships(const Vector c = Vector());
+        Vector getRelationship(const Function f = DEFAULT_FORMATION_FUNCTION,
+                               const GLfloat  r = DEFAULT_FORMATION_RADIUS,
+                               const Vector   c = Vector(),
+                               const GLfloat  theta = 0.0f);
+        Vector getRelationship(const GLint   pos   = 0,
+                               const GLfloat r     = DEFAULT_FORMATION_RADIUS,
+                               const Vector  c     = Vector(),
+                               const GLfloat theta = 0.0f);
 
         // <virtual overloaded operators>
         virtual Formation& operator =(const Formation &f);

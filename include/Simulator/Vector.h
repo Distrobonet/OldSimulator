@@ -12,13 +12,14 @@
 #define VECTOR_H
 #include <cmath>
 #include <iostream>
-//#include "Color.h"
-//#include "Utils.h"
+#include <Simulator/Color.h>
+#include <Simulator/Utils.h>
 using namespace std;
 
 
 
 // global constants
+static const Color   DEFAULT_VECTOR_COLOR        = WHITE;
 static const GLfloat DEFAULT_VECTOR_TRANSLATE[3] = {0.0f, 0.0f, 0.0f};
 static const GLfloat DEFAULT_VECTOR_ROTATE[3]    = {0.0f, 0.0f, 0.0f};
 static const GLfloat DEFAULT_VECTOR_SCALE[3]     = {1.0f, 1.0f, 1.0f};
@@ -37,13 +38,14 @@ class Vector
 
         // <public data members>
         GLfloat x,        y,            z;
-        GLfloat translate[3], rotate[3], scale[3];
+        GLfloat color[3], translate[3], rotate[3], scale[3];
         bool    showLine, showHead;
         
         // <constructors>
         Vector(const GLfloat dx         = 0.0f,
                const GLfloat dy         = 0.0f,
-               const GLfloat dz         = 0.0f);
+               const GLfloat dz         = 0.0f,
+               const Color   colorIndex = DEFAULT_VECTOR_COLOR);
         Vector(const Vector &v);
 
         // <destructors>
@@ -54,11 +56,11 @@ class Vector
                          const GLfloat dy = 0.0f,
                          const GLfloat dz = 0.0f);
         virtual bool set(const Vector &v);
-//        virtual bool setColor(const GLfloat r,
-//                              const GLfloat g,
-//                              const GLfloat b);
-//        virtual bool setColor(const GLfloat clr[3]);
-//        virtual bool setColor(const Color colorIndex = DEFAULT_VECTOR_COLOR);
+        virtual bool setColor(const GLfloat r,
+                              const GLfloat g,
+                              const GLfloat b);
+        virtual bool setColor(const GLfloat clr[3]);
+        virtual bool setColor(const Color colorIndex = DEFAULT_VECTOR_COLOR);
         virtual void translated(const GLfloat dx,
                                 const GLfloat dy,
                                 const GLfloat dz);
@@ -117,7 +119,8 @@ class Vector
         // <virtual protected utility functions>
         virtual bool init(const GLfloat dx         = 0.0f,
                           const GLfloat dy         = 0.0f,
-                          const GLfloat dz         = 0.0f);
+                          const GLfloat dz         = 0.0f,
+                          const Color   colorIndex = DEFAULT_VECTOR_COLOR);
 };  // Vector
 
 #endif

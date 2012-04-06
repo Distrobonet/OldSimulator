@@ -18,8 +18,8 @@
 
 //#include <boost/thread/thread.hpp>
 
-#include "RobotDriver.h"
-//#include "Simulator.cpp"
+#include <Simulator/RobotDriver.h>
+//#include <Simulator/Simulator.h>
 
 using namespace std;
 

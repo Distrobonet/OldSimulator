@@ -12,34 +12,34 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-//#include "glut.h"//ADDED BY KEVIN
+#include <Simulator/GLIncludes.h>//ADDED BY KEVIN
 
 // Needed by Vector.h
-#include "Utils.h"//ADDED BY KEVIN
+#include <Simulator/Utils.h>//ADDED BY KEVIN
 
-#include "Behavior.cpp"//ADDED BY KEVIN
+#include <Simulator/Behavior.h>//ADDED BY KEVIN
 
 // Needed by Environment
-#include "Object.h"//ADDED BY KEVIN
+#include <Simulator/Object.h>//ADDED BY KEVIN
 
 // Needed by Cell
-#include "Auctioning.h"//ADDED BY KEVIN
-#include "Neighborhood.h"//ADDED BY KEVIN
-#include "Robot.h"//ADDED BY KEVIN
+#include <Simulator/Auctioning.h>//ADDED BY KEVIN
+#include <Simulator/Neighborhood.h>//ADDED BY KEVIN
+#include <Simulator/Robot.h>//ADDED BY KEVIN
 
 // Needed by Environment
-#include "Cell.h"//ADDED BY KEVIN
+#include <Simulator/Cell.h>//ADDED BY KEVIN
 
-#include "Environment.h"
-
-// Needed by Formation.h
-//#include "Relationship.h"//ADDED BY KEVIN
+#include <Simulator/Environment.h>
 
 // Needed by Formation.h
-#include "Vector.h"//ADDED BY KEVIN
+#include <Simulator/Relationship.h>//ADDED BY KEVIN
+
+// Needed by Formation.h
+#include <Simulator/Vector.h>//ADDED BY KEVIN
 
 // Needed by Simulator.cpp
-#include "Formation.h"//ADDED BY KEVIN
+#include <Simulator/Formation.h>//ADDED BY KEVIN
 
 
 
@@ -319,7 +319,7 @@ bool parseArguments(GLint    argc,
         return false;
       }
     }
-    else if (!strncmp(argv[i], "-h", 2))
+    else if (!strncmp(argv[i], ".h", 2))
     {
       if (++i < argc) fHeading = scaleDegrees(atof(argv[i]));
       else

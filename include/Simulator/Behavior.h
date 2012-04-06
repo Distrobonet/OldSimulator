@@ -11,7 +11,7 @@
 #define BEHAVIOR_H
 #include <cmath>
 #include <iostream>
-#include "GLIncludes.h"
+#include <Simulator/GLIncludes.h>
 using namespace std;
 
 

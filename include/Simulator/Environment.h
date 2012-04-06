@@ -12,10 +12,10 @@
 #define ENVIRONMENT_H
 #include <queue>
 #include <vector>
-//#include "Cell.h"
+#include <Simulator/Cell.h>
 
 
-//#include "Object.h"//ADDED BY KEVIN
+#include <Simulator/Object.h>//ADDED BY KEVIN
 using namespace std;
 
 

@@ -11,9 +11,9 @@
 #ifndef CELL_H
 #define CELL_H
 #include <vector>
-//#include "Auctioning.h"
-//#include "Neighborhood.h"
-//#include "Robot.h"
+#include <Simulator/Auctioning.h>
+#include <Simulator/Neighborhood.h>
+#include <Simulator/Robot.h>
 using namespace std;
 
 

@@ -19,8 +19,8 @@
 #include<iostream>
 // preprocessor directives
 #include <stdio.h>
-#include "Cell.h"
-#include "Environment.h"
+#include <Simulator/Cell.h>
+#include <Simulator/Environment.h>
 
 using namespace std;
 

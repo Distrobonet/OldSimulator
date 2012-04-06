@@ -12,7 +12,7 @@
 #define NEIGHBORHOOD_H
 #include <time.h>
 #include <vector>
-#include "Neighbor.h"
+#include <Simulator/Neighbor.h>
 using namespace std;
 
 

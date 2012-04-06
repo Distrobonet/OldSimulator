@@ -12,7 +12,7 @@
 #define UTILS_H
 #include <cstdlib>
 #include <iostream>
-#include "GLIncludes.h"
+#include <Simulator/GLIncludes.h>
 using namespace std;
 
 

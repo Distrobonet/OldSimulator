@@ -10,10 +10,10 @@
 // preprocessor directives
 #ifndef STATE_H
 #define STATE_H
-#include "PropMsg.h"
+#include <Simulator/PropMsg.h>
 #include <vector>
-#include "Formation.h"
-#include "Vector.h"
+#include <Simulator/Formation.h>
+#include <Simulator/Vector.h>
 using namespace std;
 
 

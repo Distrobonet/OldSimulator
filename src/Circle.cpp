@@ -8,7 +8,7 @@
 //
 
 // preprocessor directives
-#include "Circle.h"
+#include <Simulator/Circle.h>
 
 
 
@@ -29,10 +29,12 @@
 //      r           in      the initial radius of the circle (default 0)
 //      colorIndex  in      the initial array index of the color of the circle
 //
-Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLfloat r)
+Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz,
+               const GLfloat r,
+               const Color   colorIndex)
 {
-    init(dx, dy, dz, r);
-}   // Circle(const GLfloat..<4>)
+    init(dx, dy, dz, r, colorIndex);
+}   // Circle(const GLfloat..<4>, const Color)
 
 
 
@@ -51,6 +53,7 @@ Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLflo
 Circle::Circle(const Vector &v, const GLfloat r)
 {
     init(v.x, v.y, v.z, r);
+    setColor(v.color);
 }   // Circle(const Vector, const GLfloat)
 
 
@@ -345,9 +348,10 @@ Circle Circle::operator = (const Circle &c)
 //      colorIndex  in      the initial array index of the color of the circle
 //
 bool Circle::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-                  const GLfloat r)
+                  const GLfloat r,
+                  const Color   colorIndex)
 {
-    Vector::init(dx, dy, dz);
+    Vector::init(dx, dy, dz, colorIndex);
     if (!setRadius(r)) return false;
     showPos    = DEFAULT_CIRCLE_SHOW_POS;
     showFilled = DEFAULT_CIRCLE_SHOW_FILLED;

@@ -12,9 +12,9 @@
 #ifndef RELATIONSHIP_H
 #define RELATIONSHIP_H
 #include <vector>
-#include "GLIncludes.h"
-#include "Packet.h"
-#include "Vector.h"
+#include <Simulator/GLIncludes.h>
+#include <Simulator/Packet.h>
+#include <Simulator/Vector.h>
 using namespace std;
 
 

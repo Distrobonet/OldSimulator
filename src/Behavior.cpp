@@ -8,7 +8,7 @@
 //
 
 // preprocessor directives
-#include "Behavior.h"
+#include <Simulator/Behavior.h>
 
 
 

@@ -11,9 +11,9 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 #include <queue>
-//#include "Behavior.h"
-//#include "Circle.h"
-//#include "Packet.h"
+#include <Simulator/Behavior.h>
+#include <Simulator/Circle.h>
+#include <Simulator/Packet.h>
 
 #include <stdio.h>//ADDED BY KEVIN for NULL use
 using namespace std;

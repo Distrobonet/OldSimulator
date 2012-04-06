@@ -10,7 +10,7 @@
 // preprocessor directives
 #ifndef NEIGHBOR_H
 #define NEIGHBOR_H
-#include "State.h"
+#include <Simulator/State.h>
 using namespace std;
 
 

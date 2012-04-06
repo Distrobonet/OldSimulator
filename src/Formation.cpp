@@ -8,7 +8,7 @@
 //
 
 // preprocessor directives
-#include "Formation.h"
+#include <Simulator/Formation.h>
 
 
 
@@ -448,19 +448,19 @@ GLfloat Formation::getHeading() const
 // Parameters:
 //      c       in      the position to be centered at
 //
-//vector<Vector> Formation::getRelationships(const Vector c)
-//{
-//    if (empty()) return vector<Vector>();
-//    vector<Vector> rels;
-//    Function       curr = NULL;
-//    for (GLint i = 0; i < size(); ++i)
-//    {
-//        curr = at(i);
-//        rels.push_back(getRelationship(curr, -radius, c, heading));
-//        rels.push_back(getRelationship(curr,  radius, c, heading));
-//    }
-//    return rels;
-//}   // getRelationships(const Vector)
+vector<Vector> Formation::getRelationships(const Vector c)
+{
+    if (empty()) return vector<Vector>();
+    vector<Vector> rels;
+    Function       curr = NULL;
+    for (GLint i = 0; i < size(); ++i)
+    {
+        curr = at(i);
+        rels.push_back(getRelationship(curr, -radius, c, heading));
+        rels.push_back(getRelationship(curr,  radius, c, heading));
+    }
+    return rels;
+}   // getRelationships(const Vector)
 
 //
 // Vector getRelationship(f, r, c, theta)
@@ -482,28 +482,28 @@ GLfloat Formation::getHeading() const
 //      c           in      the position to be centered at
 //      theta       in      the rotation of the relationship (default 0)
 //
-//Vector Formation::getRelationship(const Function f,
-//                                  const GLfloat  r,
-//                                  const Vector   c,
-//                                  const GLfloat  theta)
-//{
-//    if (f == NULL) return Vector();
-//    GLfloat xn        = c.x + r + X_ROOT_THRESHOLD,
-//            xn_1      = c.x + r - X_ROOT_THRESHOLD,
-//            intersect = 0.0f, error = 0.0f;
-//    for (int i = 0; i < X_N_ITERATIONS; ++i)
-//    {
-//        intersect     = fIntersect(f, r, c, xn);
-//        error         = intersect * (xn - xn_1) /
-//                       (intersect - fIntersect(f, r, c, xn_1));
-//        if (abs(error) <= X_ROOT_THRESHOLD) break;
-//        xn_1          = xn;
-//        xn           -= error;
-//    }
-//    Vector rel        = Vector(xn, f(xn)) - c;
-//    rel.rotateRelative(-theta);
-//    return rel;
-//}   // getRelationship(const..{Function, GLfloat, Vector, GLfloat})
+Vector Formation::getRelationship(const Function f,
+                                  const GLfloat  r,
+                                  const Vector   c,
+                                  const GLfloat  theta)
+{
+    if (f == NULL) return Vector();
+    GLfloat xn        = c.x + r + X_ROOT_THRESHOLD,
+            xn_1      = c.x + r - X_ROOT_THRESHOLD,
+            intersect = 0.0f, error = 0.0f;
+    for (int i = 0; i < X_N_ITERATIONS; ++i)
+    {
+        intersect     = fIntersect(f, r, c, xn);
+        error         = intersect * (xn - xn_1) /
+                       (intersect - fIntersect(f, r, c, xn_1));
+        if (abs(error) <= X_ROOT_THRESHOLD) break;
+        xn_1          = xn;
+        xn           -= error;
+    }
+    Vector rel        = Vector(xn, f(xn)) - c;
+    rel.rotateRelative(-theta);
+    return rel;
+}   // getRelationship(const..{Function, GLfloat, Vector, GLfloat})
 
 
 
@@ -523,13 +523,13 @@ GLfloat Formation::getHeading() const
 //      c       in      the position to be centered at
 //      theta   in      the rotation of the relationship (default 0)
 //
-//Vector Formation::getRelationship(const GLint   pos,
-//                                  const GLfloat r,
-//                                  const Vector  c,
-//                                  const GLfloat theta)
-//{
-//    return getRelationship(getFunction(pos), r, c, theta);
-//}   // getRelationship(const GLint, const GLfloat, const Vector, const GLfloat)
+Vector Formation::getRelationship(const GLint   pos,
+                                  const GLfloat r,
+                                  const Vector  c,
+                                  const GLfloat theta)
+{
+    return getRelationship(getFunction(pos), r, c, theta);
+}   // getRelationship(const GLint, const GLfloat, const Vector, const GLfloat)
 
 
 

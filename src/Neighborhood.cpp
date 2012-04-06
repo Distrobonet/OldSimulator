@@ -8,7 +8,7 @@
 //
 
 // preprocessor directives
-#include "Neighborhood.h"
+#include <Simulator/Neighborhood.h>
 #include <ctime>
 #include <stdio.h>
 
