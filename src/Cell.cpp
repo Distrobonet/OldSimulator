@@ -717,9 +717,10 @@ bool Cell::processPackets()
     if (!processPacket(p)) success = false;
     msgQueue.pop();
   }
-  return success;
   msgQueue.pop();
+  return success;
 }   // processPackets()
+
 
 
 
