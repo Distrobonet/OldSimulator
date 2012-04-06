@@ -169,7 +169,7 @@ bool Environment::removeCell(Cell* c)
 //      dy      in      the y-coordinate of the object (default 0)
 //      dz      in      the z-coordinate of the object (default 0)
 //
-bool Environment::addObject(GLfloat dx, GLfloat dy, GLfloat dz)
+bool Environment::addObject(float dx, float dy, float dz)
 {
    Object* o = new Object(dx, dy, dz);
    if (!addObject(o))
@@ -178,7 +178,7 @@ bool Environment::addObject(GLfloat dx, GLfloat dy, GLfloat dz)
       return false;
    }
    return true;
-}  // addObject(GLfloat, GLfloat, GLfloat)
+}  // addObject(float, float, float)
 
 
 
@@ -578,7 +578,7 @@ void Environment::getCentroid(Vector v)
 // void getRadius(int rad)
 // last modified: 07-01-10
 
-void Environment::getRadius(GLfloat rad)
+void Environment::getRadius(float rad)
 {
   radius = rad;
 }
@@ -765,7 +765,7 @@ bool Environment::forwardPackets()
 //      maxDist in      the maximum distance to be considered
 //
 vector<Vector> Environment::getObjectRelationships(const int   fromID,
-                                                   const GLfloat maxDist)
+                                                   const float maxDist)
 {
   Cell *fromCell = getCell(fromID);
   int nObjects = getNObjects();
@@ -779,7 +779,7 @@ vector<Vector> Environment::getObjectRelationships(const int   fromID,
 		rels.push_back(rel);
   }
   return rels;
-}   // getObjectRelationships(const int, const GLfloat)
+}   // getObjectRelationships(const int, const float)
 
 
 
@@ -913,7 +913,7 @@ bool Environment::initRobots()
   return true;
 }
 
-bool Environment::addRobot(GLfloat x, GLfloat y, GLfloat z, GLfloat theta)
+bool Environment::addRobot(float x, float y, float z, float theta)
 {
   if (VERBOSE)
 	  printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
@@ -950,7 +950,7 @@ for (int i = 0; i < getNCells(); ++i)
 {
 if (!cells.getHead(c)) return false;
 c->x = formation.getRadius() *
-((GLfloat)i - (GLfloat)(getNCells() - 1) / 2.0f);
+((float)i - (float)(getNCells() - 1) / 2.0f);
 c->y = 0.0f;
 c->setColor(DEFAULT_ROBOT_COLOR);
 c->setHeading(formation.getHeading());
@@ -997,7 +997,7 @@ ID_OPERATOR,      CHANGE_FORMATION);
 Robot * Environment::getNearestRobot(Cell *c)
 {
 	Robot *r = robots[0];
-	GLfloat minDistance = distanceToRobot(c,robots[0]), distance;
+	float minDistance = distanceToRobot(c,robots[0]), distance;
 
 	for (int i = 1; i < getNFreeRobots(); ++i)
 	{
@@ -1012,10 +1012,10 @@ Robot * Environment::getNearestRobot(Cell *c)
 	return r;
 }
 
-Robot * Environment::getNearestRobot(GLfloat x, GLfloat y)
+Robot * Environment::getNearestRobot(float x, float y)
 {
 	Robot *r = robots[0];
-	GLfloat minDistance = distanceToRobot(x,y,robots[0]), distance;
+	float minDistance = distanceToRobot(x,y,robots[0]), distance;
 	distance = minDistance;
 
 	for (int i = 0; i < getNFreeRobots(); ++i)
@@ -1032,17 +1032,17 @@ Robot * Environment::getNearestRobot(GLfloat x, GLfloat y)
 }
 
 
-GLfloat Environment::distanceToRobot(Cell *c,Robot *r)
+float Environment::distanceToRobot(Cell *c,Robot *r)
 {
-  GLfloat x = 0, y = 0;
+  float x = 0, y = 0;
   x = fabs(r->x - c->x);
   y = fabs(r->y - c->y);
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
-GLfloat Environment::distanceToRobot(GLfloat xx,GLfloat yy, Robot* r)
+float Environment::distanceToRobot(float xx,float yy, Robot* r)
 {
-  GLfloat x = 0, y = 0;
+  float x = 0, y = 0;
   x = fabs(r->x - xx);
   y = fabs(r->y - yy);
   return sqrt(pow(x, 2) + pow(y, 2));
@@ -1102,7 +1102,7 @@ void Environment::formUp()
 }
 
 //get the nearest robot, turn it into a cell, and start the formation
-void Environment::formFromClick(GLfloat x, GLfloat y)
+void Environment::formFromClick(float x, float y)
 {
   addCell();
   Cell *c  = cells[0];

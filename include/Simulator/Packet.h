@@ -16,9 +16,9 @@ using namespace std;
 
 
 // global constants
-static const GLint ID_OPERATOR  = -1;
-static const GLint ID_BROADCAST = -2;
-static const GLint ID_ROBOT     = -3;
+static const int ID_OPERATOR  = -1;
+static const int ID_BROADCAST = -2;
+static const int ID_ROBOT     = -3;
 
 
 
@@ -33,7 +33,7 @@ struct Packet
 
     // <data members>
     Message msg;
-    GLint   toID, fromID, type;
+    int   toID, fromID, type;
 
 
 
@@ -54,12 +54,12 @@ struct Packet
     //      t       in      the default message type
     //
     Packet(const Message m    = NULL,
-           const GLint   to   = ID_BROADCAST,
-           const GLint   from = ID_OPERATOR,
-           const GLint   t    = 0)
+           const int   to   = ID_BROADCAST,
+           const int   from = ID_OPERATOR,
+           const int   t    = 0)
         : msg(m), toID(to), fromID(from), type(t)
     {
-    }   // Packet(const Message, const GLint, const GLint, const GLint)
+    }   // Packet(const Message, const int, const int, const int)
 
 
 

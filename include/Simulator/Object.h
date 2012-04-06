@@ -18,7 +18,7 @@ using namespace std;
 
 // global constants
 static const Color    DEFAULT_OBJECT_COLOR        = DEFAULT_CIRCLE_COLOR;
-static const GLfloat  DEFAULT_OBJECT_RADIUS       = 0.03f;
+static const float  DEFAULT_OBJECT_RADIUS       = 0.03f;
 static const bool     DEFAULT_OBJECT_SHOW_FILLED  = false;
 static const Behavior DEFAULT_OBJECT_BEHAVIOR = Behavior();
 
@@ -35,10 +35,10 @@ class Object: public Circle
     public:
 
         // <constructors>
-        Object(const GLfloat dx         = 0.0f,
-               const GLfloat dy         = 0.0f,
-               const GLfloat dz         = 0.0f,
-               const GLfloat r          = DEFAULT_OBJECT_RADIUS,
+        Object(const float dx         = 0.0f,
+               const float dy         = 0.0f,
+               const float dz         = 0.0f,
+               const float r          = DEFAULT_OBJECT_RADIUS,
                const Color   colorIndex = DEFAULT_OBJECT_COLOR);
         Object(const Object &obj);
 
@@ -46,14 +46,14 @@ class Object: public Circle
         virtual ~Object();
 
         // <virtual public mutator functions>
-        virtual bool setRadius(const GLfloat r = DEFAULT_OBJECT_RADIUS);
+        virtual bool setRadius(const float r = DEFAULT_OBJECT_RADIUS);
         virtual bool setEnvironment(Environment *e);
 
         // <virtual public accessor functions>
         virtual Environment* getEnvironment() const;
 
         // <public accessor functions>
-        GLint getID() const;
+        int getID() const;
 
         // <virtual public utility functions>
         virtual void draw();
@@ -61,17 +61,17 @@ class Object: public Circle
     protected:
 
         // <protected data members>
-        GLint         ID;     // identification number of object
+        int         ID;     // identification number of object
         Environment  *env;    // the environment of the object
 
         // <protected static data members>
-        static GLint  nObjects;    // number of total objects
+        static int  nObjects;    // number of total objects
 
         // <virtual protected utility functions>
-        virtual bool init(const GLfloat dx         = 0.0f,
-                          const GLfloat dy         = 0.0f,
-                          const GLfloat dz         = 0.0f,
-                          const GLfloat r          = DEFAULT_OBJECT_RADIUS,
+        virtual bool init(const float dx         = 0.0f,
+                          const float dy         = 0.0f,
+                          const float dz         = 0.0f,
+                          const float r          = DEFAULT_OBJECT_RADIUS,
                           const Color   colorIndex = DEFAULT_OBJECT_COLOR);
 };  // Object
 

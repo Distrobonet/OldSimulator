@@ -17,16 +17,16 @@ using namespace std;
 
 // global constants
 static const Color   DEFAULT_CIRCLE_COLOR       = DEFAULT_VECTOR_COLOR;
-static const GLfloat DEFAULT_CIRCLE_RADIUS      = 1.0f;
+static const float DEFAULT_CIRCLE_RADIUS      = 1.0f;
 static const bool    DEFAULT_CIRCLE_SHOW_POS    = false;
 static const bool    DEFAULT_CIRCLE_SHOW_FILLED = false;
-static const GLint   CIRCLE_N_LINKS             = 24;  // polygonal circle
-static const GLfloat CIRCLE_THETA               = 360.0f / CIRCLE_N_LINKS;
-static const GLfloat CIRCLE_COS_THETA           = cos(degreesToRadians(
+static const int   CIRCLE_N_LINKS             = 24;  // polygonal circle
+static const float CIRCLE_THETA               = 360.0f / CIRCLE_N_LINKS;
+static const float CIRCLE_COS_THETA           = cos(degreesToRadians(
                                                            CIRCLE_THETA));
-static const GLfloat CIRCLE_SIN_THETA           = sin(degreesToRadians(
+static const float CIRCLE_SIN_THETA           = sin(degreesToRadians(
                                                            CIRCLE_THETA));
-static const GLfloat CIRCLE_TAN_THETA           = tan(degreesToRadians(
+static const float CIRCLE_TAN_THETA           = tan(degreesToRadians(
                                                            CIRCLE_THETA));
 
 
@@ -41,28 +41,28 @@ class Circle: public Vector
         bool    showFilled;    // shows the circle filled
 
         // <constructors>
-        Circle(const GLfloat dx         = 0.0f,
-               const GLfloat dy         = 0.0f,
-               const GLfloat dz         = 0.0f,
-               const GLfloat r          = DEFAULT_CIRCLE_RADIUS,
+        Circle(const float dx         = 0.0f,
+               const float dy         = 0.0f,
+               const float dz         = 0.0f,
+               const float r          = DEFAULT_CIRCLE_RADIUS,
                const Color   colorIndex = DEFAULT_CIRCLE_COLOR);
-        Circle(const Vector &c, const GLfloat r = DEFAULT_CIRCLE_RADIUS);
+        Circle(const Vector &c, const float r = DEFAULT_CIRCLE_RADIUS);
         Circle(const Circle &c);
 
         // <destructors>
         virtual ~Circle();
 
         // <public mutator functions>
-        bool setRadius(const GLfloat r = DEFAULT_CIRCLE_RADIUS);
-        bool setDiameter(const GLfloat d);
-        bool setCircumference(const GLfloat c);
-        bool setArea(const GLfloat a);
+        bool setRadius(const float r = DEFAULT_CIRCLE_RADIUS);
+        bool setDiameter(const float d);
+        bool setCircumference(const float c);
+        bool setArea(const float a);
 
         // <public accessor functions>
-        GLfloat getRadius()        const;
-        GLfloat getDiameter()      const;
-        GLfloat getCircumference() const;
-        GLfloat getArea()          const;
+        float getRadius()        const;
+        float getDiameter()      const;
+        float getCircumference() const;
+        float getArea()          const;
 
         // <virtual public utility functions>
         virtual void draw();
@@ -73,13 +73,13 @@ class Circle: public Vector
     protected:
 
         // <protected data members>
-        GLfloat radius;     // radius of circle
+        float radius;     // radius of circle
 
         // <virtual protected utility functions>
-        virtual bool init(const GLfloat dx         = 0.0f,
-                          const GLfloat dy         = 0.0f,
-                          const GLfloat dz         = 0.0f,
-                          const GLfloat r          = DEFAULT_CIRCLE_RADIUS,
+        virtual bool init(const float dx         = 0.0f,
+                          const float dy         = 0.0f,
+                          const float dz         = 0.0f,
+                          const float r          = DEFAULT_CIRCLE_RADIUS,
                           const Color   colorIndex = DEFAULT_CIRCLE_COLOR);
 };  // Circle
 #endif

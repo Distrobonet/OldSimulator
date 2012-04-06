@@ -53,54 +53,54 @@ using namespace std;
 
 
 // simulation environment function prototypes
-void printUsage(GLint argc, char **argv);
-bool parseArguments(GLint   argc,
+void printUsage(int argc, char **argv);
+bool parseArguments(int   argc,
     char  **argv,
-    GLint   &nRobots,
-    GLint   &fIndex,
-    GLfloat &fRadius,
-    GLfloat &fHeading,
-    GLint   &dt);
-bool validateParameters(const GLint   nRobots,
-    const GLint   fIndex,
-    const GLfloat fRadius,
-    const GLfloat fHeading,
-    const GLint   dt);
+    int   &nRobots,
+    int   &fIndex,
+    float &fRadius,
+    float &fHeading,
+    int   &dt);
+bool validateParameters(const int   nRobots,
+    const int   fIndex,
+    const float fRadius,
+    const float fHeading,
+    const int   dt);
 void terminate(int retVal);
 //void displayMenu();
-bool initEnv(const GLint nRobots, const GLint fIndex);
+bool initEnv(const int nRobots, const int fIndex);
 bool deinitEnv();
-bool changeFormation(const GLint index, const Vector gradient = Vector());
-bool changeFormationSim(const GLint index, const Vector gradient = Vector());
+bool changeFormation(const int index, const Vector gradient = Vector());
+bool changeFormationSim(const int index, const Vector gradient = Vector());
 
 
 // OpenGL function prototypes
 void initWindow();
 void display();
-void keyboardPress(unsigned char keyPressed, GLint mouseX, GLint mouseY);
-void keyboardPressSpecial(GLint keyPressed, GLint mouseX, GLint mouseY);
-void keyboardReleaseSpecial(GLint keyReleased, GLint mouseX, GLint mouseY);
-void mouseClick(GLint mouseButton, GLint mouseState,
-    GLint mouseX,      GLint mouseY);
-void mouseDrag(GLint mouseX, GLint mouseY);
+void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY);
+void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
+void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
+void mouseClick(int mouseButton, int mouseState,
+    int mouseX,      int mouseY);
+void mouseDrag(int mouseX, int mouseY);
 void resizeWindow(GLsizei w, GLsizei h);
-void timerFunction(GLint value);
+void timerFunction(int value);
 
 
 
 // formation-testing function prototypes
-GLfloat  line(const GLfloat x);
-GLfloat  x(const GLfloat x);
-GLfloat  absX(const GLfloat x);
-GLfloat  negHalfX(const GLfloat x);
-GLfloat  negAbsHalfX(const GLfloat x);
-GLfloat  negAbsX(const GLfloat x);
-GLfloat  parabola(const GLfloat x);
-GLfloat  cubic(const GLfloat x);
-GLfloat  condSqrt(const GLfloat x);
-GLfloat  sine(const GLfloat x);
-GLfloat  xRoot3(const GLfloat x);
-GLfloat  negXRoot3(const GLfloat x);
+float  line(const float x);
+float  x(const float x);
+float  absX(const float x);
+float  negHalfX(const float x);
+float  negAbsHalfX(const float x);
+float  negAbsX(const float x);
+float  parabola(const float x);
+float  cubic(const float x);
+float  condSqrt(const float x);
+float  sine(const float x);
+float  xRoot3(const float x);
+float  negXRoot3(const float x);
 Function formations[] = {line,        x,       absX,     negHalfX,
 						negAbsHalfX, negAbsX, parabola, cubic,
 						condSqrt,    sine,    xRoot3,   negXRoot3};
@@ -108,42 +108,42 @@ Function formations[] = {line,        x,       absX,     negHalfX,
 
 
 // OpenGL global constants
-const GLint INIT_WINDOW_POSITION[2] = {0, 0};      // window offset
+const int INIT_WINDOW_POSITION[2] = {0, 0};      // window offset
 const char  CHAR_ESCAPE             = char(27);    // 'ESCAPE' character key
 
 
 
 // OpenGL global variables
-GLint   g_windowSize[2] = {800, 800};   // window size in pixels
-GLfloat g_windowWidth   = 2.0f;         // resized window width
-GLfloat g_windowHeight  = 2.0f;         // resized window height
+int   g_windowSize[2] = {800, 800};   // window size in pixels
+float g_windowWidth   = 2.0f;         // resized window width
+float g_windowHeight  = 2.0f;         // resized window height
 
-//typedef GLfloat (*Function)(const GLfloat);//ADDED BY KEVIN
+//typedef float (*Function)(const float);//ADDED BY KEVIN
 
 // simulation global constants
-const GLfloat   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
-const GLint     N_CELLS           = 0;
-const GLint     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
-// A formation is a vector of Functions, which are functions that take GLfloats and return GLfloats
+const float   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
+const int     N_CELLS           = 0;
+const int     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
+// A formation is a vector of Functions, which are functions that take floats and return floats
 const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
 
 
 // simulation global variables
 Environment *g_env           = NULL;
-GLint        g_nRobots       = 0;
-GLfloat      g_fRadius       = DEFAULT_FORMATION.getRadius();
-GLint        g_sID           = DEFAULT_FORMATION.getSeedID();
-GLint        g_fID           = DEFAULT_FORMATION.getFormationID();
-GLfloat      g_fHeading      = DEFAULT_FORMATION.getHeading();
-GLint        g_fIndex        = 0;
-GLint        g_selectedIndex = g_sID;
-GLint        g_dt            = 50;    // time interval (in milliseconds)
+int        g_nRobots       = 0;
+float      g_fRadius       = DEFAULT_FORMATION.getRadius();
+int        g_sID           = DEFAULT_FORMATION.getSeedID();
+int        g_fID           = DEFAULT_FORMATION.getFormationID();
+float      g_fHeading      = DEFAULT_FORMATION.getHeading();
+int        g_fIndex        = 0;
+int        g_selectedIndex = g_sID;
+int        g_dt            = 50;    // time interval (in milliseconds)
 bool         g_prop_toggle   = false;
 
 
 
 
-// GLint main(argc, argv)
+// int main(argc, argv)
 // Last modified:   04Sep2006
 //
 // Uses the OpenGL Utility Toolkit to set the
@@ -154,7 +154,7 @@ bool         g_prop_toggle   = false;
 //      argc    in      an argument counter
 //      argv    in      initialization arguments
 //
-//int main(GLint argc, char **argv)
+//int main(int argc, char **argv)
 //{
 //  // parse command line arguments
 //  if (!parseArguments(argc, argv,
@@ -207,7 +207,7 @@ bool         g_prop_toggle   = false;
 //  deinitEnv();
 //
 //  return 0;
-//}   // main(GLint, char **)
+//}   // main(int, char **)
 
 
 
@@ -222,7 +222,7 @@ bool         g_prop_toggle   = false;
 //      argc    in      an argument counter
 //      argv    in      initialization arguments
 //
-void printUsage(GLint argc, char **argv)
+void printUsage(int argc, char **argv)
 {
   cout << "USAGE: " << argv[0]
     << " [-n <nRobots>]"
@@ -253,7 +253,7 @@ void printUsage(GLint argc, char **argv)
                                                      << "      -t <dt>: update time interval"
                                                      << " [1, ??] (in milliseconds; default=50)"
                                                      << endl;
-}   // printUsage(GLint, char **)
+}   // printUsage(int, char **)
 
 
 
@@ -274,13 +274,13 @@ void printUsage(GLint argc, char **argv)
 //      fHeading      in/out  the initial heading of robots in the formation
 //      dt            in/out  the time interval (in ms) between OpenGL updates
 //
-bool parseArguments(GLint    argc,
+bool parseArguments(int    argc,
     char   **argv,
-    GLint   &nRobots,
-    GLint   &fIndex,
-    GLfloat &fRadius,
-    GLfloat &fHeading,
-    GLint   &dt)
+    int   &nRobots,
+    int   &fIndex,
+    float &fRadius,
+    float &fHeading,
+    int   &dt)
 {
   int i = 0;
   while (++i < argc)
@@ -338,7 +338,7 @@ bool parseArguments(GLint    argc,
   }
 
   return true;
-}   // parseArguments(GLint, char **, GLint &, GLint &, GLfloat &, GLfloat &)
+}   // parseArguments(int, char **, int &, int &, float &, float &)
 
 
 
@@ -357,11 +357,11 @@ bool parseArguments(GLint    argc,
 //      fHeading      in/out  the initial heading of robots in the formation
 //      dt            in/out  the time interval (in ms) between OpenGL updates
 //
-bool validateParameters(const GLint   nRobots,
-    const GLint   fIndex,
-    const GLfloat fRadius,
-    const GLfloat fHeading,
-    const GLint   dt)
+bool validateParameters(const int   nRobots,
+    const int   fIndex,
+    const float fRadius,
+    const float fHeading,
+    const int   dt)
 {
   bool valid = true;
 
@@ -398,7 +398,7 @@ bool validateParameters(const GLint   nRobots,
   }
 
   return valid;
-}   // validateParameters(GLint, GLint, GLfloat, GLfloat)
+}   // validateParameters(int, int, float, float)
 
 
 
@@ -507,7 +507,7 @@ void terminate(int retVal)
 
 
 //
-// bool initEnv(const GLint, const GLint)
+// bool initEnv(const int, const int)
 // Last modified: 08Nov2009
 //
 // Attempts to initialize the environment based on
@@ -519,7 +519,7 @@ void terminate(int retVal)
 //      nRobots       in      the number of robots
 //      fIndex        in      the index of the initial formation
 //
-bool initEnv(const GLint nRobots, const GLint fIndex)
+bool initEnv(const int nRobots, const int fIndex)
 {
   if (g_env != NULL)
   {
@@ -531,7 +531,7 @@ bool initEnv(const GLint nRobots, const GLint fIndex)
       g_sID,            ++g_fID,     g_fHeading);
   if ((g_env = new Environment(nRobots, f)) == NULL) return false;
   return true;
-}   // initEnv(const GLint, const GLint)
+}   // initEnv(const int, const int)
 
 
 
@@ -568,7 +568,7 @@ bool deinitEnv()
 // Parameters:
 //      index   in      the index of the formation to change to
 //
-bool changeFormation(const GLint index, const Vector gradient)
+bool changeFormation(const int index, const Vector gradient)
 {
   g_fIndex = index;
   if (!g_env->startFormation)
@@ -585,7 +585,7 @@ bool changeFormation(const GLint index, const Vector gradient)
       g_sID,           ++g_env->formationID, g_fHeading);
 
   return g_env->changeFormation(f);
-}   // changeFormation(const GLint, const Vector)
+}   // changeFormation(const int, const Vector)
 
 // bool changeFormationSim(index)
 // last modified: april 18, 2010
@@ -596,7 +596,7 @@ bool changeFormation(const GLint index, const Vector gradient)
 // parameters:
 //         index in the index of the formation to change to
 
-bool changeFormationSim(const GLint index, const Vector gradient)
+bool changeFormationSim(const int index, const Vector gradient)
 {
   if(g_selectedIndex > -1)
   {
@@ -673,7 +673,7 @@ void display()
   if (g_env->getCells().size() > 0)
   {
     g_env->getCell(g_sID)->setColor(GREEN);
-    for(GLint i = 0; i < g_env->getNCells(); ++i)
+    for(int i = 0; i < g_env->getNCells(); ++i)
     {
       if(g_env->getCell(i) != g_env->getCell(g_sID))
       {
@@ -708,7 +708,7 @@ void display()
 //      mouseX      in      the x-coordinate of the mouse position
 //      mouseY      in      the y-coordinate of the mouse position
 //
-void keyboardPress(unsigned char keyPressed, GLint mouseX, GLint mouseY)
+void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 {
   if ((keyPressed >= '0') && (keyPressed <= '9'))
   {
@@ -834,7 +834,7 @@ void keyboardPress(unsigned char keyPressed, GLint mouseX, GLint mouseY)
       break;
     case CHAR_ESCAPE: deinitEnv(); exit(0);
   }
-}   // keyboardPress(unsigned char, GLint, GLint)
+}   // keyboardPress(unsigned char, int, int)
 
 
 
@@ -850,7 +850,7 @@ void keyboardPress(unsigned char keyPressed, GLint mouseX, GLint mouseY)
 //      mouseX      in      the x-coordinate of the mouse position
 //      mouseY      in      the y-coordinate of the mouse position
 //
-void keyboardPressSpecial(GLint keyPressed, GLint mouseX, GLint mouseY)
+void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
 {
   switch (keyPressed)
   {
@@ -892,7 +892,7 @@ void keyboardPressSpecial(GLint keyPressed, GLint mouseX, GLint mouseY)
       break;
     default: break;
   }
-}   // keyboardPressSpecial(GLint, GLint, GLint)
+}   // keyboardPressSpecial(int, int, int)
 
 
 
@@ -908,7 +908,7 @@ void keyboardPressSpecial(GLint keyPressed, GLint mouseX, GLint mouseY)
 //      mouseX       in      the x-coordinate of the mouse position
 //      mouseY       in      the y-coordinate of the mouse position
 //
-void keyboardReleaseSpecial(GLint keyReleased, GLint mouseX, GLint mouseY)
+void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
 {
   switch (keyReleased)
   {
@@ -926,7 +926,7 @@ void keyboardReleaseSpecial(GLint keyReleased, GLint mouseX, GLint mouseY)
       break;
     default: break;
   }
-}   // keyboardReleaseSpecial(GLint, GLint, GLint)
+}   // keyboardReleaseSpecial(int, int, int)
 
 
 
@@ -943,24 +943,24 @@ void keyboardReleaseSpecial(GLint keyReleased, GLint mouseX, GLint mouseY)
 //      mouseX          in      the x-coordinate of the mouse position
 //      mouseY          in      the y-coordinate of the mouse position
 //
-void mouseClick(GLint mouseButton,    GLint mouseState,
-    GLint mouseX, GLint mouseY)
+void mouseClick(int mouseButton,    int mouseState,
+    int mouseX, int mouseY)
 {
-  GLint mod = glutGetModifiers();
+  int mod = glutGetModifiers();
   if (mouseState == GLUT_DOWN)
   {
     if(mod == GLUT_ACTIVE_CTRL)
     {
       if(g_env->getCells().size() > 0)
       {
-        for (GLint i = 0; i < g_env->getNCells(); ++i)
+        for (int i = 0; i < g_env->getNCells(); ++i)
         {
-          GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+          float x     = g_windowWidth * mouseX / g_windowSize[0] -
             0.5 * g_windowWidth;
-          GLfloat y     = 0.5 * g_windowHeight -
+          float y     = 0.5 * g_windowHeight -
             (g_windowHeight * mouseY / g_windowSize[1]);
           g_selectedIndex = g_sID;
-          GLfloat dx = g_env->getCell(i)->x - x,
+          float dx = g_env->getCell(i)->x - x,
                   dy = g_env->getCell(i)->y - y;
           if ((g_selectedIndex == g_sID) &&
               (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
@@ -974,17 +974,17 @@ void mouseClick(GLint mouseButton,    GLint mouseState,
       }
       if(g_env->getRobots().size()>0)
       {
-        GLint ii=-1;
-        for (GLint i = 0; i < g_env->getNFreeRobots(); ++i)
+        int ii=-1;
+        for (int i = 0; i < g_env->getNFreeRobots(); ++i)
         {
-          GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+          float x     = g_windowWidth * mouseX / g_windowSize[0] -
             0.5 * g_windowWidth;
-          GLfloat y     = 0.5 * g_windowHeight -
+          float y     = 0.5 * g_windowHeight -
             (g_windowHeight * mouseY / g_windowSize[1]);
           g_selectedIndex = -1;
-          GLfloat dx = g_env->getRobot(ii)->x - x,
+          float dx = g_env->getRobot(ii)->x - x,
                   dy = g_env->getRobot(ii)->y - y;
-          GLfloat distance = sqrt(dx * dx  + dy * dy);
+          float distance = sqrt(dx * dx  + dy * dy);
           cout << "Distance between click and robotID " << ii << " is " << distance << endl;
           if (distance < SELECT_RADIUS)
           {
@@ -1001,14 +1001,14 @@ void mouseClick(GLint mouseButton,    GLint mouseState,
     }
     if(g_env->getCells().size()>0)
     {
-      GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+      float x     = g_windowWidth * mouseX / g_windowSize[0] -
         0.5 * g_windowWidth;
-      GLfloat y     = 0.5 * g_windowHeight -
+      float y     = 0.5 * g_windowHeight -
         (g_windowHeight * mouseY / g_windowSize[1]);
       g_selectedIndex = g_sID;
-      for (GLint i = 0; i < g_env->getNCells(); ++i)
+      for (int i = 0; i < g_env->getNCells(); ++i)
       {
-        GLfloat dx = g_env->getCell(i)->x - x,
+        float dx = g_env->getCell(i)->x - x,
                 dy = g_env->getCell(i)->y - y;
         if ((g_selectedIndex == g_sID) &&
             (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
@@ -1021,15 +1021,15 @@ void mouseClick(GLint mouseButton,    GLint mouseState,
         }
       }
     }else{
-      GLfloat x     = g_windowWidth * mouseX / g_windowSize[0] -
+      float x     = g_windowWidth * mouseX / g_windowSize[0] -
         0.5 * g_windowWidth;
-      GLfloat y     = 0.5 * g_windowHeight -
+      float y     = 0.5 * g_windowHeight -
         (g_windowHeight * mouseY / g_windowSize[1]);
       g_env->formFromClick(x,y);
     }
   }
   glutPostRedisplay();            // redraw the scene
-}   // mouseClick(GLint, GLint, GLint, GLint)
+}   // mouseClick(int, int, int, int)
 
 
 
@@ -1046,7 +1046,7 @@ void mouseClick(GLint mouseButton,    GLint mouseState,
 //      mouseX  in      the x-coordinate of the mouse position
 //      mouseY  in      the y-coordinate of the mouse position
 //
-void mouseDrag(GLint mouseX, GLint mouseY)
+void mouseDrag(int mouseX, int mouseY)
 {
   if (g_env->getNCells() > 0)
   {
@@ -1059,7 +1059,7 @@ void mouseDrag(GLint mouseX, GLint mouseY)
     }
   }
   glutPostRedisplay();    // redraw the scene
-}   // mouseDrag(GLint, GLint)
+}   // mouseDrag(int, int)
 
 
 
@@ -1090,16 +1090,16 @@ void resizeWindow(GLsizei w, GLsizei h)
   if (w <= h)
   {
     g_windowWidth  = 2.0f;
-    g_windowHeight = 2.0f * (GLfloat)h / (GLfloat)w;
-    glOrtho(-1.0f, 1.0f, -1.0f * (GLfloat)h / (GLfloat)w,
-        (GLfloat)h / (GLfloat)w, -10.0f, 10.0f);
+    g_windowHeight = 2.0f * (float)h / (float)w;
+    glOrtho(-1.0f, 1.0f, -1.0f * (float)h / (float)w,
+        (float)h / (float)w, -10.0f, 10.0f);
   }
   else
   {
-    g_windowWidth  = 2.0f * (GLfloat)w / (GLfloat)h;
+    g_windowWidth  = 2.0f * (float)w / (float)h;
     g_windowHeight = 2.0f;
-    glOrtho(-1.0f * (GLfloat)w / (GLfloat)h,
-        (GLfloat)w / (GLfloat)h,
+    glOrtho(-1.0f * (float)w / (float)h,
+        (float)w / (float)h,
         -1.0f, 1.0f, -10.0f, 10.0f);
   }
   glutPostRedisplay();            // redraw the scene
@@ -1116,7 +1116,7 @@ void resizeWindow(GLsizei w, GLsizei h)
 // Parameters:
 //      value   in      the value of the timer
 //
-void timerFunction(GLint value)
+void timerFunction(int value)
 {
   //sendFcntrRequest();
   //sendFRadRequest();
@@ -1127,14 +1127,14 @@ void timerFunction(GLint value)
   // force a redraw after a number of milliseconds
   glutPostRedisplay();    // redraw the scene
   glutTimerFunc(g_dt, timerFunction, 1);
-}   // timerFunction(GLint)
+}   // timerFunction(int)
 
 
 
 // <test formation functions>
 
 //
-// GLfloat line(x)
+// float line(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = 0.
@@ -1143,15 +1143,15 @@ void timerFunction(GLint value)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat line(const GLfloat x)
+float line(const float x)
 {
   return 0.0f;
-}   // line(const GLfloat)
+}   // line(const float)
 
 
 
 //
-// GLfloat x(x)
+// float x(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = x.
@@ -1160,15 +1160,15 @@ GLfloat line(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat x(const GLfloat x)
+float x(const float x)
 {
   return x;
-}   // x(const GLfloat)
+}   // x(const float)
 
 
 
 //
-// GLfloat absX(x)
+// float absX(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = |x|.
@@ -1177,15 +1177,15 @@ GLfloat x(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat absX(const GLfloat x)
+float absX(const float x)
 {
   return abs(x);
-}   // absX(const GLfloat)
+}   // absX(const float)
 
 
 
 //
-// GLfloat negHalfX(x)
+// float negHalfX(x)
 // Last modified:   07Jan2007
 //
 // Returns formation function definition f(x) = -0.5 x.
@@ -1194,15 +1194,15 @@ GLfloat absX(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat negHalfX(const GLfloat x)
+float negHalfX(const float x)
 {
   return -0.5f * x;
-}   // negHalfX(const GLfloat)
+}   // negHalfX(const float)
 
 
 
 //
-// GLfloat negAbsHalfX(x)
+// float negAbsHalfX(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = -|0.5 x|.
@@ -1211,15 +1211,15 @@ GLfloat negHalfX(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat negAbsHalfX(const GLfloat x)
+float negAbsHalfX(const float x)
 {
   return -abs(0.5f * x);
-}   // negAbsHalfX(const GLfloat)
+}   // negAbsHalfX(const float)
 
 
 
 //
-// GLfloat negAbsX(x)
+// float negAbsX(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = -|x|.
@@ -1228,15 +1228,15 @@ GLfloat negAbsHalfX(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat negAbsX(const GLfloat x)
+float negAbsX(const float x)
 {
   return -abs(x);
-}   // negAbsX(const GLfloat)
+}   // negAbsX(const float)
 
 
 
 //
-// GLfloat parabola(x)
+// float parabola(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = x^2.
@@ -1245,16 +1245,16 @@ GLfloat negAbsX(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat parabola(const GLfloat x)
+float parabola(const float x)
 {
   return x * x;
   //return pow(x, 2.0f);
-}   // parabola(const GLfloat)
+}   // parabola(const float)
 
 
 
 //
-// GLfloat cubic(x)
+// float cubic(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = x^3.
@@ -1263,16 +1263,16 @@ GLfloat parabola(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat cubic(const GLfloat x)
+float cubic(const float x)
 {
   return x * x * x;
   //return pow(x, 3.0f);
-}   // cubic(const GLfloat)
+}   // cubic(const float)
 
 
 
 //
-// GLfloat condSqrt(x)
+// float condSqrt(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition
@@ -1282,15 +1282,15 @@ GLfloat cubic(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat condSqrt(const GLfloat x)
+float condSqrt(const float x)
 {
   return sqrt(abs(0.5f * x)) * ((x >= 0) ? 1.0f : -1.0f);
-}   // condSqrt(const GLfloat)
+}   // condSqrt(const float)
 
 
 
 //
-// GLfloat sine(x)
+// float sine(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = 0.05 sin(10 x).
@@ -1299,15 +1299,15 @@ GLfloat condSqrt(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat sine(const GLfloat x)
+float sine(const float x)
 {
   return 0.2f * sin(10.0f * x);
-}   // sine(const GLfloat)
+}   // sine(const float)
 
 
 
 //
-// GLfloat xRoot3(x)
+// float xRoot3(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = x sqrt(3).
@@ -1316,15 +1316,15 @@ GLfloat sine(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat xRoot3(const GLfloat x)
+float xRoot3(const float x)
 {
   return x * sqrt(3.0f);
-}   // xRoot3(const GLfloat)
+}   // xRoot3(const float)
 
 
 
 //
-// GLfloat negXRoot3(x)
+// float negXRoot3(x)
 // Last modified:   04Sep2006
 //
 // Returns formation function definition f(x) = -x sqrt(3).
@@ -1333,7 +1333,7 @@ GLfloat xRoot3(const GLfloat x)
 // Parameters:
 //      x       in      used to evaluate the function
 //
-GLfloat negXRoot3(const GLfloat x)
+float negXRoot3(const float x)
 {
   return -x * sqrt(3.0f);
-}   // negXRoot3(const GLfloat)
+}   // negXRoot3(const float)

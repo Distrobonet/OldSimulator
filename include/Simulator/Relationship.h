@@ -20,7 +20,7 @@ using namespace std;
 
 
 // global constants
-static const GLint ID_NO_NBR = ID_BROADCAST;
+static const int ID_NO_NBR = ID_BROADCAST;
 
 
 
@@ -31,7 +31,7 @@ struct Relationship
 
     // <data members>
     Vector relDesired, relActual;
-    GLint  ID;
+    int  ID;
 
 
 
@@ -52,10 +52,10 @@ struct Relationship
     //
     Relationship(const Vector desired  = Vector(),
                  const Vector actual   = Vector(),
-                 const GLint  id       = ID_NO_NBR)
+                 const int  id       = ID_NO_NBR)
         : relDesired(desired), relActual(actual), ID(id)
     {
-    }   // Relationship(const Vector, const Vector, const GLint)
+    }   // Relationship(const Vector, const Vector, const int)
 
 
 
@@ -92,12 +92,12 @@ struct Relationship
     //      id      in      the ID of the relationship to be found
     //
     friend Relationship* relWithID(vector<Relationship> &rels,
-                                   const GLint           id)
+                                   const int           id)
     {
-        for (GLint i = 0; i < (GLint)rels.size(); ++i)
+        for (int i = 0; i < (int)rels.size(); ++i)
             if (rels[i].ID == id) return &rels[i];
         return NULL;
-    }   // relWithID(const LinkedList<Relationship> &, const GLint)
+    }   // relWithID(const LinkedList<Relationship> &, const int)
 };  // Relationship
 
 #endif

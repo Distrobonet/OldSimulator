@@ -54,13 +54,13 @@ struct Neighbor: Relationship, State
     //      desired in      the default desired relationship
     //      actual  in      the default actual relationship
     //
-    Neighbor(const GLint  id,
+    Neighbor(const int  id,
              const State  s       = State(),
              const Vector desired = Vector(),
              const Vector actual  = Vector())
         : Relationship(desired, actual, id), State(s)
     {
-    }   // Neighbor(const GLint, const State, const Vector, const Vector)
+    }   // Neighbor(const int, const State, const Vector, const Vector)
 
 
 

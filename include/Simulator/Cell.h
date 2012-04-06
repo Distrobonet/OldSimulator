@@ -48,10 +48,10 @@ enum MessageType
 // global constants
 static const Color   DEFAULT_CELL_COLOR       = WHITE;
 static const bool    DEFAULT_CELL_SHOW_FILLED = true;
-static const GLint   LEFT_NBR_INDEX           = 0;
-static const GLint   RIGHT_NBR_INDEX          = 1;
-static const GLint   NEIGHBORHOOD_SIZE        = 2;
-static const GLfloat MAX_TRANSLATIONAL_ERROR  = 0.02f;
+static const int   LEFT_NBR_INDEX           = 0;
+static const int   RIGHT_NBR_INDEX          = 1;
+static const int   NEIGHBORHOOD_SIZE        = 2;
+static const float MAX_TRANSLATIONAL_ERROR  = 0.02f;
 
 
 
@@ -63,10 +63,10 @@ class Cell: public State, public Neighborhood, public Robot
     public:
 
         // <constructors>
-        Cell(const GLfloat dx         = 0.0f,
-             const GLfloat dy         = 0.0f,
-             const GLfloat dz         = 0.0f,
-             const GLfloat theta      = 0.0f);
+        Cell(const float dx         = 0.0f,
+             const float dy         = 0.0f,
+             const float dz         = 0.0f,
+             const float theta      = 0.0f);
         Cell(const Cell &r);
 
         // <destructors>
@@ -83,7 +83,7 @@ class Cell: public State, public Neighborhood, public Robot
         State        getState() const;
         Neighborhood getNbrs()  const;
         Robot        getRobot() const;
-        GLint        getNBids() const;
+        int        getNBids() const;
         int          getAuctionStepCount() const;
 
 
@@ -98,7 +98,7 @@ class Cell: public State, public Neighborhood, public Robot
         virtual bool changeFormation(const Formation &f,
                                      Neighbor         n = Neighbor());
         virtual bool sendStateToNbrs();
-        virtual bool sendState(const GLint);
+        virtual bool sendState(const int);
         virtual bool processPackets();
         virtual bool processPacket(Packet &p);
         virtual bool processNCell(Packet &p);
@@ -108,8 +108,8 @@ class Cell: public State, public Neighborhood, public Robot
 
         // <public primitive behaviors>
         Behavior moveError();
-        Behavior moveError(const Vector tError, const GLfloat rError);
-        Behavior moveErrorBehavior(const Vector tError, const GLfloat rError);
+        Behavior moveError(const Vector tError, const float rError);
+        Behavior moveErrorBehavior(const Vector tError, const float rError);
 
         // <virtual overloaded operators>
         virtual Cell& operator =(const State &s);
@@ -121,21 +121,21 @@ class Cell: public State, public Neighborhood, public Robot
         // <protected data members>
         vector<Bid *> bids;
         Neighbor     *leftNbr, *rightNbr;
-        GLint         index;
-        GLint         numBids;
+        int         index;
+        int         numBids;
         int           auctionStepCount;
 
         // <protected static data members>
-        static GLint nCells;
+        static int nCells;
 
         // <protected utility functions>
         void settleAuction();
 
         // <virtual protected utility functions>
-        virtual bool init(const GLfloat dx         = 0.0f,
-                          const GLfloat dy         = 0.0f,
-                          const GLfloat dz         = 0.0f,
-                          const GLfloat theta      = 0.0f);
+        virtual bool init(const float dx         = 0.0f,
+                          const float dy         = 0.0f,
+                          const float dz         = 0.0f,
+                          const float theta      = 0.0f);
 };  // Cell
 
 #endif

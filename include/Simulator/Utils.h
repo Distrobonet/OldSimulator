@@ -31,13 +31,13 @@ const double PI = 3.14159;//ADDED BY KEVIN
 
 
 // global constants
-static const GLfloat TWO_PI      = 2.0f * PI;
-static const GLfloat PI_OVER_180 = PI / 180.0f;
+static const float TWO_PI      = 2.0f * PI;
+static const float PI_OVER_180 = PI / 180.0f;
 
 
 
 //
-// GLfloat scaleDegrees(theta)
+// float scaleDegrees(theta)
 // Last modified: 26Aug2006
 //
 // Scales the parameterized angle (in degrees) to an angle [-180, 180].
@@ -46,19 +46,19 @@ static const GLfloat PI_OVER_180 = PI / 180.0f;
 // Parameters:
 //      theta   in      the angle (in degrees) to be scaled
 //
-inline GLfloat scaleDegrees(GLfloat theta)
+inline float scaleDegrees(float theta)
 {
     if         (theta >   0.0f)
         while ((theta >=  360.0f) || (theta >  180.0f)) theta -= 360.0f;
     else if    (theta <   0.0f)
         while ((theta <= -360.0f) || (theta < -180.0f)) theta += 360.0f;
     return theta;
-}   // scaleDegrees(GLfloat)
+}   // scaleDegrees(float)
 
 
 
 //
-// GLfloat scaleRadians(theta)
+// float scaleRadians(theta)
 // Last modified: 26Aug2006
 //
 // Scales the parameterized angle (in radians) to an angle [-2 * PI, 2 * PI].
@@ -67,19 +67,19 @@ inline GLfloat scaleDegrees(GLfloat theta)
 // Parameters:
 //      theta   in      the angle (in radians) to be scaled
 //
-inline GLfloat scaleRadians(GLfloat theta)
+inline float scaleRadians(float theta)
 {
     if         (theta >   0.0f)
         while ((theta >=  TWO_PI) || (theta >  PI)) theta -= TWO_PI;
     else if    (theta <   0.0f)
         while ((theta <= -TWO_PI) || (theta < -PI)) theta += TWO_PI;
     return theta;
-}   // scaleRadians(GLfloat)
+}   // scaleRadians(float)
 
 
 
 //
-// GLfloat degreesToRadians(theta)
+// float degreesToRadians(theta)
 // Last modified: 26Aug2006
 //
 // Converts the parameterized angle (in degrees) to an angle in radians.
@@ -88,15 +88,15 @@ inline GLfloat scaleRadians(GLfloat theta)
 // Parameters:
 //      theta   in      the angle (in degrees) to converted to radians
 //
-inline GLfloat degreesToRadians(GLfloat theta)
+inline float degreesToRadians(float theta)
 {
     return scaleDegrees(theta) * PI_OVER_180;
-}   // degreesToRadians(GLfloat)
+}   // degreesToRadians(float)
 
 
 
 //
-// GLfloat radiansToDegrees(theta)
+// float radiansToDegrees(theta)
 // Last modified: 26Aug2006
 //
 // Converts the parameterized angle (in radians) to an angle in degrees.
@@ -105,15 +105,15 @@ inline GLfloat degreesToRadians(GLfloat theta)
 // Parameters:
 //      theta   in      the angle (in radians) to converted to degrees
 //
-inline GLfloat radiansToDegrees(GLfloat theta)
+inline float radiansToDegrees(float theta)
 {
     return scaleRadians(theta) / PI_OVER_180;
-}   // radiansToDegrees(GLfloat)
+}   // radiansToDegrees(float)
 
 
 
 //
-// GLfloat frand(min, max)
+// float frand(min, max)
 // Last modified: 08Nov2009
 //
 // Returns a floating-point number [min, max].
@@ -123,15 +123,15 @@ inline GLfloat radiansToDegrees(GLfloat theta)
 //      min     in      the minimum of the number being returned
 //      max     in      the maximum of the number being returned
 //
-inline GLfloat frand(const GLfloat min = 0.0f, const GLfloat max = 1.0f)
+inline float frand(const float min = 0.0f, const float max = 1.0f)
 {
-    return min + (max - min) * GLfloat(rand()) / GLfloat(RAND_MAX);
+    return min + (max - min) * float(rand()) / float(RAND_MAX);
 }   // frand()
 
 
 
 //
-// GLint irand(min, max)
+// int irand(min, max)
 // Last modified: 08Nov2009
 //
 // Returns an integer number [min, max].
@@ -141,7 +141,7 @@ inline GLfloat frand(const GLfloat min = 0.0f, const GLfloat max = 1.0f)
 //      min     in      the minimum of the number being returned
 //      max     in      the maximum of the number being returned
 //
-inline GLint irand(const GLint min = 0, const GLint max = 1)
+inline int irand(const int min = 0, const int max = 1)
 {
     return min + rand() % (max + 1);
 }   // irand()
@@ -149,7 +149,7 @@ inline GLint irand(const GLint min = 0, const GLint max = 1)
 
 
 //
-// GLfloat randSign()
+// float randSign()
 // Last modified: 26Aug2006
 //
 // Returns -1 or 1.
@@ -157,7 +157,7 @@ inline GLint irand(const GLint min = 0, const GLint max = 1)
 // Returns:     -1 or 1
 // Parameters:  <none>
 //
-inline GLfloat randSign()
+inline float randSign()
 {
     return (rand() % 2) ? -1.0f : 1.0f;
 }   // randSign()
@@ -165,7 +165,7 @@ inline GLfloat randSign()
 
 
 //
-// GLfloat sign()
+// float sign()
 // Last modified: 26Aug2006
 //
 // Returns the sign of the parameterized number.
@@ -174,9 +174,9 @@ inline GLfloat randSign()
 // Parameters:
 //      f       in      the number to determine the sign of
 //
-inline GLfloat sign(const GLfloat f)
+inline float sign(const float f)
 {
     return (f < 0.0f) ? -1.0f : 1.0f;
-}   // sign(const GLfloat)
+}   // sign(const float)
 
 #endif

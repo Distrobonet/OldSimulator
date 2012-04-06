@@ -29,14 +29,14 @@
 //      speed   in      the maximum speed of the behavior (default 1)
 //
 Behavior::Behavior(const Status  s,
-                   const GLfloat t,
-                   const GLfloat r,
-                   const GLfloat speed)
+                   const float t,
+                   const float r,
+                   const float speed)
 {
     setMaxSpeed(speed);
     setVelocity(t, r);
     setStatus(s);
-}   // Behavior(const Status, const GLfloat, const GLfloat, const GLfloat)
+}   // Behavior(const Status, const float, const float, const float)
 
 
 
@@ -95,12 +95,12 @@ bool Behavior::setStatus(const Status s)
 // Parameters:
 //      t       in      the translational velocity to be set to
 //
-bool Behavior::setTransVel(const GLfloat t)
+bool Behavior::setTransVel(const float t)
 {
     transVel = t;
     scaleVel();
     return true;
-}   // setTransVel(const GLfloat)
+}   // setTransVel(const float)
 
 
 
@@ -116,12 +116,12 @@ bool Behavior::setTransVel(const GLfloat t)
 // Parameters:
 //      r       in      the rotational velocity to be set to
 //
-bool Behavior::setRotVel(const GLfloat r)
+bool Behavior::setRotVel(const float r)
 {
     rotVel = r;
     scaleVel();
     return true;
-}   // setRotVel(const GLfloat)
+}   // setRotVel(const float)
 
 
 
@@ -138,10 +138,10 @@ bool Behavior::setRotVel(const GLfloat r)
 //      right   in      the right velocity to be set to
 //      left    in      the left velocity to be set to
 //
-bool Behavior::setDiffVel(GLfloat right, GLfloat left)
+bool Behavior::setDiffVel(float right, float left)
 {
     return setVelocity(0.5f * (right + left), 1.0f * (right - left));
-}   // setDiffVel(GLfloat, GLfloat)
+}   // setDiffVel(float, float)
 
 
 
@@ -158,13 +158,13 @@ bool Behavior::setDiffVel(GLfloat right, GLfloat left)
 //      t       in      the translational velocity to be set to
 //      r       in      the rotational velocity to be set to
 //
-bool Behavior::setVelocity(const GLfloat t, const GLfloat r)
+bool Behavior::setVelocity(const float t, const float r)
 {
     transVel = t;
     rotVel   = r;
     scaleVel();
     return true;
-}   // setVelocity(const GLfloat, const GLfloat)
+}   // setVelocity(const float, const float)
 
 
 
@@ -179,12 +179,12 @@ bool Behavior::setVelocity(const GLfloat t, const GLfloat r)
 // Parameters:
 //      speed   in      the max speed to be set to
 //
-bool Behavior::setMaxSpeed(const GLfloat speed)
+bool Behavior::setMaxSpeed(const float speed)
 {
     maxSpeed = speed;
     scaleVel();
     return true;
-}   // setMaxSpeed(const GLfloat)
+}   // setMaxSpeed(const float)
 
 
 
@@ -255,7 +255,7 @@ bool Behavior::isInactive() const
 
 
 //
-// GLfloat getTransVel() const
+// float getTransVel() const
 // Last modified: 26Aug2006
 //
 // Returns the translational velocity of this behavior.
@@ -263,7 +263,7 @@ bool Behavior::isInactive() const
 // Returns:     the translational velocity of this behavior
 // Parameters:  <none>
 //
-GLfloat Behavior::getTransVel() const
+float Behavior::getTransVel() const
 {
     return transVel;
 }   // getTransVel() const
@@ -271,7 +271,7 @@ GLfloat Behavior::getTransVel() const
 
 
 //
-// GLfloat getRotVel() const
+// float getRotVel() const
 // Last modified: 26Aug2006
 //
 // Returns the rotational velocity of this behavior.
@@ -279,7 +279,7 @@ GLfloat Behavior::getTransVel() const
 // Returns:     the rotational velocity of this behavior
 // Parameters:  <none>
 //
-GLfloat Behavior::getRotVel() const
+float Behavior::getRotVel() const
 {
     return rotVel;
 }   // getRotVel() const
@@ -287,7 +287,7 @@ GLfloat Behavior::getRotVel() const
 
 
 //
-// GLfloat getVelocity() const
+// float getVelocity() const
 // Last modified: 26Aug2006
 //
 // Returns the velocity of this behavior.
@@ -295,7 +295,7 @@ GLfloat Behavior::getRotVel() const
 // Returns:     the velocity of this behavior
 // Parameters:  <none>
 //
-GLfloat Behavior::getVelocity() const
+float Behavior::getVelocity() const
 {
     return transVel + rotVel;
 }   // getVelocity() const
@@ -303,7 +303,7 @@ GLfloat Behavior::getVelocity() const
 
 
 //
-// GLfloat getSpeed() const
+// float getSpeed() const
 // Last modified: 26Aug2006
 //
 // Returns the speed of this behavior.
@@ -311,7 +311,7 @@ GLfloat Behavior::getVelocity() const
 // Returns:     the speed of this behavior
 // Parameters:  <none>
 //
-GLfloat Behavior::getSpeed() const
+float Behavior::getSpeed() const
 {
     return abs(getVelocity());
 }   // getSpeed() const
@@ -319,7 +319,7 @@ GLfloat Behavior::getSpeed() const
 
 
 //
-// GLfloat getMaxSpeed() const
+// float getMaxSpeed() const
 // Last modified: 26Aug2006
 //
 // Returns the max speed of this behavior.
@@ -327,7 +327,7 @@ GLfloat Behavior::getSpeed() const
 // Returns:     the max speed of this behavior
 // Parameters:  <none>
 //
-GLfloat Behavior::getMaxSpeed() const
+float Behavior::getMaxSpeed() const
 {
     return maxSpeed;
 }   // getMaxSpeed() const
@@ -400,7 +400,7 @@ Behavior sumBehaviors(const Behavior beh1, const Behavior beh2)
 // <protected utility functions>
 
 //
-// GLfloat scaleVel()
+// float scaleVel()
 // Last modified: 26Aug2006
 //
 // Scales the velocity of this behavior based on the max speed.
@@ -408,10 +408,10 @@ Behavior sumBehaviors(const Behavior beh1, const Behavior beh2)
 // Returns:     the scaled angle (in degrees)
 // Parameters:  <none>
 //
-GLfloat Behavior::scaleVel()
+float Behavior::scaleVel()
 {
     if (getSpeed() == 0.0f) return 0.0f;
-    GLfloat scale = maxSpeed / getSpeed();
+    float scale = maxSpeed / getSpeed();
     if (scale < 1.0f)
     {
         transVel *= scale;

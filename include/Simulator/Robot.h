@@ -26,15 +26,15 @@ using namespace std;
 
 
 // global constants
-static const GLfloat  DEFAULT_ROBOT_RADIUS       = 0.03f;
+static const float  DEFAULT_ROBOT_RADIUS       = 0.03f;
 static const Behavior DEFAULT_ROBOT_BEHAVIOR     = Behavior();
 static const bool     DEFAULT_ROBOT_SHOW_HEADING = true;
 static const bool     DEFAULT_ROBOT_SHOW_LINE    = false;
 static const bool     DEFAULT_ROBOT_SHOW_HEAD    = true;
 static const bool     DEFAULT_ROBOT_SHOW_FILLED  = false;
-static const GLfloat  FACTOR_MAX_SPEED           = 0.3f;
-static const GLfloat  FACTOR_THRESHOLD           = 1.0f;
-static const GLfloat  FACTOR_COLLISION_RADIUS    = 3.0f;
+static const float  FACTOR_MAX_SPEED           = 0.3f;
+static const float  FACTOR_THRESHOLD           = 1.0f;
+static const float  FACTOR_COLLISION_RADIUS    = 3.0f;
 
 
 
@@ -56,35 +56,35 @@ class Robot: public Circle
         queue<Packet> msgQueue;    // message packet queue for communication
 
         // <constructors>
-        Robot(const GLfloat dx         = 0.0f,
-              const GLfloat dy         = 0.0f,
-              const GLfloat dz         = 0.0f,
-              const GLfloat theta      = 0.0f);
+        Robot(const float dx         = 0.0f,
+              const float dy         = 0.0f,
+              const float dz         = 0.0f,
+              const float theta      = 0.0f);
         Robot(const Robot &r);
 
         // <destructors>
         virtual ~Robot();
 
         // <virtual public mutator functions>
-        virtual bool setRadius(const GLfloat r = DEFAULT_ROBOT_RADIUS);
-        virtual bool setHeading(const GLfloat theta);
+        virtual bool setRadius(const float r = DEFAULT_ROBOT_RADIUS);
+        virtual bool setHeading(const float theta);
         virtual bool setEnvironment(Environment *e);
         virtual void translateRelative(Vector v);
-        virtual void translateRelative(const GLfloat dx = 0.0f,
-                                       const GLfloat dy = 0.0f);
-        virtual void rotateRelative(GLfloat theta);
+        virtual void translateRelative(const float dx = 0.0f,
+                                       const float dy = 0.0f);
+        virtual void rotateRelative(float theta);
 
         // <virtual public accessor functions>
         virtual Environment* getEnvironment() const;
 
         // <public accessor functions>
-        GLint   getID()        const;
-        GLfloat getHeading()   const;
-        GLfloat getTransVel()  const;
-        GLfloat getRotVel()    const;
-        GLfloat getAngVel()    const;
-        GLfloat getVelocity()  const;
-        GLfloat getArcRadius() const;
+        int   getID()        const;
+        float getHeading()   const;
+        float getTransVel()  const;
+        float getRotVel()    const;
+        float getAngVel()    const;
+        float getVelocity()  const;
+        float getArcRadius() const;
 
         // <virtual public utility functions>
         virtual void draw();
@@ -92,81 +92,81 @@ class Robot: public Circle
 
         // <public utility functions>
         Vector  getRelationship(Vector &target) const;
-        GLfloat getDistanceTo(Vector &target)   const;
-        GLfloat getAngleTo(Vector &target)      const;
-        GLfloat maxSpeed()                      const;
-        GLfloat maxAngSpeed()                   const;
-        GLfloat threshold()                     const;
-        GLfloat angThreshold()                  const;
-        GLfloat collisionRadius()               const;
+        float getDistanceTo(Vector &target)   const;
+        float getAngleTo(Vector &target)      const;
+        float maxSpeed()                      const;
+        float maxAngSpeed()                   const;
+        float threshold()                     const;
+        float angThreshold()                  const;
+        float collisionRadius()               const;
 
 
 
         // <public sensor functions>
 		vector<Vector> getObjectRelationships(
-		   GLfloat maxDist = SENSOR_RANGE) const;
+		   float maxDist = SENSOR_RANGE) const;
 
         // <public environment functions>
-        Vector  getRelationship(const GLint toID) const;
-        GLfloat getDistanceTo(const GLint toID)   const;
-        GLfloat getAngleTo(const GLint toID)      const;
+        Vector  getRelationship(const int toID) const;
+        float getDistanceTo(const int toID)   const;
+        float getAngleTo(const int toID)      const;
 
         // <virtual public environment functions>
         virtual bool sendMsg(const Message &msg  = NULL,
-                             const GLint    toID = ID_BROADCAST,
-                             const GLint    type = 0);
+                             const int    toID = ID_BROADCAST,
+                             const int    type = 0);
         virtual bool sendPacket(const Packet &p = Packet());
 
         // <public primitive behaviors>
         Behavior moveArc(const Vector &target);
         Behavior moveArcBehavior(const Vector &target);
-        Behavior moveArc(const GLfloat t = 0.0f,
-                         const GLfloat r = 0.0f,
+        Behavior moveArc(const float t = 0.0f,
+                         const float r = 0.0f,
                          const Status  s = ACTIVE);
-        Behavior moveArcBehavior(const GLfloat t = 0.0f,
-                                 const GLfloat r = 0.0f,
+        Behavior moveArcBehavior(const float t = 0.0f,
+                                 const float r = 0.0f,
                                  const Status  s = ACTIVE);
-        Behavior moveForward(const GLfloat speed);
-        Behavior moveForwardBehavior(const GLfloat speed);
-        Behavior moveBackward(const GLfloat speed);
-        Behavior moveBackwardBehavior(const GLfloat speed);
+        Behavior moveForward(const float speed);
+        Behavior moveForwardBehavior(const float speed);
+        Behavior moveBackward(const float speed);
+        Behavior moveBackwardBehavior(const float speed);
         Behavior moveStop();
         Behavior moveStopBehavior();
 
         // <public pair behaviors>
-        Behavior orientTo(const Vector &target, const GLfloat theta = 0.0f);
+        Behavior orientTo(const Vector &target, const float theta = 0.0f);
         Behavior orientToBehavior(const Vector &target,
-                                  const GLfloat theta = 0.0f);
-        Behavior follow(const Vector &target, const GLfloat dist);
-        Behavior followBehavior(const Vector &target, const GLfloat dist);
-        Behavior avoid(const Vector &target, const GLfloat dist);
-        Behavior avoidBehavior(const Vector &target, const GLfloat dist);
-        Behavior orientForOrbit(const Vector &target, const GLfloat dist);
+                                  const float theta = 0.0f);
+        Behavior follow(const Vector &target, const float dist);
+        Behavior followBehavior(const Vector &target, const float dist);
+        Behavior avoid(const Vector &target, const float dist);
+        Behavior avoidBehavior(const Vector &target, const float dist);
+        Behavior orientForOrbit(const Vector &target, const float dist);
         Behavior orientForOrbitBehavior(const Vector &target,
-                                        const GLfloat dist);
-        Behavior orbit(const Vector &target, const GLfloat dist);
-        Behavior orbitBehavior(const Vector &target, const GLfloat dist);
+                                        const float dist);
+        Behavior orbit(const Vector &target, const float dist);
+        Behavior orbitBehavior(const Vector &target, const float dist);
         bool     processPacket(Packet &p);
         bool     processPackets();
 
     protected:
 
         // <protected data members>
-        GLint         ID;     // identification number of robot
+        int         ID;     // identification number of robot
         Environment  *env;    // the environment of the robot
 
         // <protected static data members>
-        static GLint  nRobots;    // number of total robots
+        static int  nRobots;    // number of total robots
 
         // <protected utility functions>
-        GLfloat rangeSensor(Packet &p);
-        GLfloat bearingSensor(GLint &cellID);
+        float rangeSensor(Packet &p);
+        float bearingSensor(int &cellID);
 
         // <virtual protected utility functions>
-        virtual bool init(const GLfloat dx         = 0.0f,
-                          const GLfloat dy         = 0.0f,
-                          const GLfloat dz         = 0.0f,
-                          const GLfloat theta      = 0.0f);
+        virtual bool init(const float dx         = 0.0f,
+                          const float dy         = 0.0f,
+                          const float dz         = 0.0f,
+                          const float theta      = 0.0f);
 };  // Robot
 
 #endif

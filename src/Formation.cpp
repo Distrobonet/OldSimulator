@@ -31,11 +31,11 @@
 //      theta       in      the initial heading of the formation
 //
 Formation::Formation(const Function f,
-                     const GLfloat  r,
+                     const float  r,
                      const Vector   sGrad,
-                     const GLint    sID,
-                     const GLint    fID,
-                     const GLfloat  theta)
+                     const int    sID,
+                     const int    fID,
+                     const float  theta)
 {
     setFunction(f);
     setRadius(r);
@@ -43,7 +43,7 @@ Formation::Formation(const Function f,
     setSeedID(sID);
     setFormationID(fID);
     setHeading(theta);
-}   // Formation(const..{Function, GLfloat, Vector, GLint, GLint, GLfloat})
+}   // Formation(const..{Function, float, Vector, int, int, float})
 
 
 
@@ -64,11 +64,11 @@ Formation::Formation(const Function f,
 //      theta       in      the initial heading of the formation
 //
 Formation::Formation(vector<Function> f,
-                     const GLfloat    r,
+                     const float    r,
                      const Vector     sGrad,
-                     const GLint      sID,
-                     const GLint      fID,
-                     const GLfloat    theta)
+                     const int      sID,
+                     const int      fID,
+                     const float    theta)
 {
     setFunctions(f);
     setRadius(r);
@@ -76,7 +76,7 @@ Formation::Formation(vector<Function> f,
     setSeedID(sID);
     setFormationID(fID);
     setHeading(theta);
-}   // Formation(const..{LL<Function>, GLfloat, Vector, GLint..<2>, GLfloat})
+}   // Formation(const..{LL<Function>, float, Vector, int..<2>, float})
 
 
 
@@ -172,7 +172,7 @@ bool Formation::addFunction(const Function f)
 //
 bool Formation::addFunctions(const vector<Function> &f)
 {
-    for (GLint i = 0; i < f.size(); ++i)
+    for (int i = 0; i < f.size(); ++i)
         if (!addFunction(f[i])) return false;
     return true;
 }   // addFunctions(const vector<Function> &)
@@ -191,12 +191,12 @@ bool Formation::addFunctions(const vector<Function> &f)
 // Parameters:
 //      pos     in      the position to remove (default 0)
 //
-bool Formation::removeFunction(const GLint pos)
+bool Formation::removeFunction(const int pos)
 {
     if ((pos < 0) || (pos >= size())) return false;
     erase(begin() + pos);
     return true;
-}   // removeFunction(const GLint)
+}   // removeFunction(const int)
 
 
 
@@ -230,12 +230,12 @@ bool Formation::removeFunctions()
 // Parameters:
 //      r       in      the radius to be set to
 //
-bool Formation::setRadius(const GLfloat r)
+bool Formation::setRadius(const float r)
 {
     if (r <= 0.0f) return false;
     radius = r;
     return true;
-}   // setRadius(const GLfloat)
+}   // setRadius(const float)
 
 
 
@@ -270,13 +270,13 @@ bool Formation::setSeedGradient(const Vector sGrad)
 // Parameters:
 //      sID     in/out  the seed ID to be set to
 //
-bool Formation::setSeedID(const GLint sID)
+bool Formation::setSeedID(const int sID)
 {
     if ((sID < 0) && (sID != ID_OPERATOR) && (sID != ID_BROADCAST))
         return false;
     seedID = sID;
     return true;
-}   // setSeedID(const GLint)
+}   // setSeedID(const int)
 
 
 
@@ -291,11 +291,11 @@ bool Formation::setSeedID(const GLint sID)
 // Parameters:
 //      fID     in/out  the formation ID to be set to
 //
-bool Formation::setFormationID(const GLint fID)
+bool Formation::setFormationID(const int fID)
 {
     formationID = fID;
     return true;
-}   // setFormationID(const GLint)
+}   // setFormationID(const int)
 
 
 
@@ -310,11 +310,11 @@ bool Formation::setFormationID(const GLint fID)
 // Parameters:
 //      theta   in/out  the heading to be set to
 //
-bool Formation::setHeading(const GLfloat theta)
+bool Formation::setHeading(const float theta)
 {
     heading = scaleDegrees(theta);
     return true;
-}   // setHeading(const GLint)
+}   // setHeading(const int)
 
 
 
@@ -355,7 +355,7 @@ vector<Function> Formation::getFunctions() const
 
 
 //
-// GLfloat getRadius() const
+// float getRadius() const
 // Last modified: 28Aug2006
 //
 // Returns the radius of this formation.
@@ -363,7 +363,7 @@ vector<Function> Formation::getFunctions() const
 // Returns:     the radius of this formation
 // Parameters:  <none>
 //
-GLfloat Formation::getRadius() const
+float Formation::getRadius() const
 {
     return radius;
 }   // getRadius() const
@@ -387,7 +387,7 @@ Vector Formation::getSeedGradient() const
 
 
 //
-// GLint getSeedID() const
+// int getSeedID() const
 // Last modified: 28Aug2006
 //
 // Returns the seed ID of this formation.
@@ -395,7 +395,7 @@ Vector Formation::getSeedGradient() const
 // Returns:     the seed ID of this formation
 // Parameters:  <none>
 //
-GLint Formation::getSeedID() const
+int Formation::getSeedID() const
 {
     return seedID;
 }   // getSeedID() const
@@ -403,7 +403,7 @@ GLint Formation::getSeedID() const
 
 
 //
-// GLint getFormationID() const
+// int getFormationID() const
 // Last modified: 28Aug2006
 //
 // Returns the formation ID of this formation.
@@ -411,7 +411,7 @@ GLint Formation::getSeedID() const
 // Returns:     the formation ID of this formation
 // Parameters:  <none>
 //
-GLint Formation::getFormationID() const
+int Formation::getFormationID() const
 {
     return formationID;
 }   // getFormationID() const
@@ -419,7 +419,7 @@ GLint Formation::getFormationID() const
 
 
 //
-// GLfloat getHeading() const
+// float getHeading() const
 // Last modified: 28Aug2006
 //
 // Returns the heading of this formation.
@@ -427,7 +427,7 @@ GLint Formation::getFormationID() const
 // Returns:     the heading of this formation
 // Parameters:  <none>
 //
-GLfloat Formation::getHeading() const
+float Formation::getHeading() const
 {
     return heading;
 }   // getHeading() const
@@ -453,7 +453,7 @@ vector<Vector> Formation::getRelationships(const Vector c)
     if (empty()) return vector<Vector>();
     vector<Vector> rels;
     Function       curr = NULL;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         curr = at(i);
         rels.push_back(getRelationship(curr, -radius, c, heading));
@@ -483,12 +483,12 @@ vector<Vector> Formation::getRelationships(const Vector c)
 //      theta       in      the rotation of the relationship (default 0)
 //
 Vector Formation::getRelationship(const Function f,
-                                  const GLfloat  r,
+                                  const float  r,
                                   const Vector   c,
-                                  const GLfloat  theta)
+                                  const float  theta)
 {
     if (f == NULL) return Vector();
-    GLfloat xn        = c.x + r + X_ROOT_THRESHOLD,
+    float xn        = c.x + r + X_ROOT_THRESHOLD,
             xn_1      = c.x + r - X_ROOT_THRESHOLD,
             intersect = 0.0f, error = 0.0f;
     for (int i = 0; i < X_N_ITERATIONS; ++i)
@@ -503,7 +503,7 @@ Vector Formation::getRelationship(const Function f,
     Vector rel        = Vector(xn, f(xn)) - c;
     rel.rotateRelative(-theta);
     return rel;
-}   // getRelationship(const..{Function, GLfloat, Vector, GLfloat})
+}   // getRelationship(const..{Function, float, Vector, float})
 
 
 
@@ -523,13 +523,13 @@ Vector Formation::getRelationship(const Function f,
 //      c       in      the position to be centered at
 //      theta   in      the rotation of the relationship (default 0)
 //
-Vector Formation::getRelationship(const GLint   pos,
-                                  const GLfloat r,
+Vector Formation::getRelationship(const int   pos,
+                                  const float r,
                                   const Vector  c,
-                                  const GLfloat theta)
+                                  const float theta)
 {
     return getRelationship(getFunction(pos), r, c, theta);
-}   // getRelationship(const GLint, const GLfloat, const Vector, const GLfloat)
+}   // getRelationship(const int, const float, const Vector, const float)
 
 
 
@@ -561,7 +561,7 @@ Formation& Formation::operator =(const Formation &f)
 // <protected utility functions>
 
 //
-// GLfloat fIntersect(f, r, c, x)
+// float fIntersect(f, r, c, x)
 // Last modified: 28Aug2006
 //
 // Used to determine the intersection of the parameterized function
@@ -572,10 +572,10 @@ Formation& Formation::operator =(const Formation &f)
 // Parameters:
 //      f       in/out      the formation being copied
 //
-GLfloat Formation::fIntersect(const Function f, const GLfloat r,
-                              const Vector   c, const GLfloat x)
+float Formation::fIntersect(const Function f, const float r,
+                              const Vector   c, const float x)
 {
-	GLfloat dx = x - c.x, dy = f(x) - c.y;
+	float dx = x - c.x, dy = f(x) - c.y;
 	return  dx * dx + dy * dy - r * r;
     //return pow(x - c.x, 2.0f) + pow(f(x) - c.y, 2.0f) - pow(r, 2.0f);
-}   // fIntersect(const Function, const GLfloat, const Vector, const GLfloat)
+}   // fIntersect(const Function, const float, const Vector, const float)

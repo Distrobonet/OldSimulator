@@ -28,7 +28,7 @@ using namespace std;
 
 
 // <protected static data members>
-GLint Cell::nCells = 0;
+int Cell::nCells = 0;
 
 
 
@@ -49,13 +49,13 @@ GLint Cell::nCells = 0;
 //      theta       in      the initial heading of the cell (default 0)
 //      colorIndex  in      the initial array index of the color of the cell
 //
-Cell::Cell(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLfloat theta)
+Cell::Cell(const float dx, const float dy, const float dz, const float theta)
 : State(), Neighborhood(), Robot(dx, dy, dz, theta)
 {
   init(dx, dy, dz, theta);
   ID      = nCells++;
   numBids = 0;
-}   // Cell(const GLfloat..<4>, const Color)
+}   // Cell(const float..<4>, const Color)
 
 
 
@@ -325,7 +325,7 @@ void Cell::updateState()
 
   // update actual relationships to neighbors
   Neighbor *currNbr = NULL;
-  for (GLint i = 0; i < size(); ++i)
+  for (int i = 0; i < size(); ++i)
   {
     currNbr = getNbr(i);
     if (currNbr == NULL) break;
@@ -338,18 +338,18 @@ void Cell::updateState()
   rels = getRelationships();
 
   // update temperature
-  GLfloat m    = 1.0f;  // mass
-  //GLfloat C    = 2.11f;  // specific heat
-  //GLfloat K    = 2.0f;  // thermal conductivity (of material)
-  //GLfloat A    = PI * getRadius();  // area of contact
-  GLfloat C    = 1.0f;  // specific heat
-  GLfloat K    = 1.0f;  // thermal conductivity (of material)
-  GLfloat A    = 1.0f;  // area of contact
-  GLfloat dT   = 0.0f;  // difference in temperature
-  GLfloat d    = 0.0f;  // distance
-  GLfloat q    = 0.0f;  // heat
-  GLfloat qSum = 0.0f;  // accumulated heat
-  for (GLint i = 0; i < size(); ++i)
+  float m    = 1.0f;  // mass
+  //float C    = 2.11f;  // specific heat
+  //float K    = 2.0f;  // thermal conductivity (of material)
+  //float A    = PI * getRadius();  // area of contact
+  float C    = 1.0f;  // specific heat
+  float K    = 1.0f;  // thermal conductivity (of material)
+  float A    = 1.0f;  // area of contact
+  float dT   = 0.0f;  // difference in temperature
+  float d    = 0.0f;  // distance
+  float q    = 0.0f;  // heat
+  float qSum = 0.0f;  // accumulated heat
+  for (int i = 0; i < size(); ++i)
   {
 	currNbr = getNbr(i);
 	if (currNbr == NULL) break;
@@ -381,7 +381,7 @@ void Cell::updateState()
       // accumulated error in the formation
       Vector  nbrRelToMeDesired = nbrRelToMe->relDesired;
       nbrRelToMeDesired.rotateRelative(-refNbr->rotError);
-      GLfloat theta = scaleDegrees(nbrRelToMe->relActual.angle() -
+      float theta = scaleDegrees(nbrRelToMe->relActual.angle() -
           (-refNbr->relActual).angle());
       rotError      = scaleDegrees(theta + refNbr->rotError);
       transError    = nbrRelToMeDesired - nbrRelToMe->relActual +
@@ -399,7 +399,7 @@ void Cell::updateState()
 /*void Cell::updateState()
   {
   Neighbor currNbr;
-  for (GLint i = 0; i < getNNbrs(); ++i)
+  for (int i = 0; i < getNNbrs(); ++i)
   {
   if (!getHead(currNbr)) break;
 
@@ -420,7 +420,7 @@ if ((formation.getSeedID() != ID) && (refNbr != NULL) && (nbrRel != NULL))
 
 // error (state) is based upon the accumulated error in the formation
 nbrRel->relDesired.rotateRelative(-refNbr->rotError);
-GLfloat theta = scaleDegrees(nbrRel->relActual.angle() -
+float theta = scaleDegrees(nbrRel->relActual.angle() -
 (-refNbr->relActual).angle());
 rotError      = scaleDegrees(theta + refNbr->rotError);
 transError    = nbrRel->relDesired - nbrRel->relActual +
@@ -442,7 +442,7 @@ else moveStop();
   {
   if(VERBOSE) printf("entering updateState()\n");
   Neighbor currNbr;
-  for (GLint i = 0; i < getNNbrs(); ++i)
+  for (int i = 0; i < getNNbrs(); ++i)
   {
   if (!getHead(currNbr)) break;
 
@@ -473,7 +473,7 @@ if ((formation.getSeedID() != ID) && (refNbr != NULL) && (nbrRel != NULL))
 
 // error (state) is based upon the accumulated error in the formation
 nbrRel->relDesired.rotateRelative(-refNbr->rotError);
-GLfloat theta = scaleDegrees(nbrRel->relActual.angle() -
+float theta = scaleDegrees(nbrRel->relActual.angle() -
 (-refNbr->relActual).angle());
 rotError      = scaleDegrees(theta + refNbr->rotError);
 transError    = nbrRel->relDesired - nbrRel->relActual +
@@ -529,21 +529,21 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
   vector<Vector> r = formation.getRelationships(gradient);
 
   /*--ROSS--
-    GLfloat currDist        = 0.0f, closestDist = GLfloat(RAND_MAX);
-    GLint   closestNbrIndex = -1;
-  //GLint   closestRelIndex = -1;
+    float currDist        = 0.0f, closestDist = float(RAND_MAX);
+    int   closestNbrIndex = -1;
+  //int   closestRelIndex = -1;
   cout << "myID = " << ID << endl;
   cout << "+ nRels = " << r.getSize() << endl;
   cout << "+ nNbrs = " << getNNbrs()  << endl;
-  vector<GLint> assignedIDs;
-  for (GLint i = 0; i < r.getSize(); ++i)
+  vector<int> assignedIDs;
+  for (int i = 0; i < r.getSize(); ++i)
   {
-  closestDist     = GLfloat(RAND_MAX);
+  closestDist     = float(RAND_MAX);
   closestNbrIndex = -1;
   Vector currRel;
   if (r.getHead(currRel))
   {
-  for (GLint j = 0; j < getNNbrs(); ++j)
+  for (int j = 0; j < getNNbrs(); ++j)
   {
   Neighbor currNbr;
   if (getHead(currNbr))
@@ -552,9 +552,9 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
   if (currDist < closestDist)
   {
   bool assignedID = false;
-  for (GLint k = 0; k < assignedIDs.getSize(); ++k)
+  for (int k = 0; k < assignedIDs.getSize(); ++k)
   {
-  GLint currID = -1;
+  int currID = -1;
   if ((assignedIDs.getHead(currID)) &&
   (currID == getNbr(0)->ID))
   {
@@ -591,13 +591,13 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
   }
   --ROSS--*/
   /*--ROSS--
-    for (GLint i = 0; i < getNNbrs(); ++i)
+    for (int i = 0; i < getNNbrs(); ++i)
     {
-    closestDist     = GLfloat(RAND_MAX);
+    closestDist     = float(RAND_MAX);
     closestRelIndex = -1;
     if (getHead(currNbr))
     {
-    for (GLint j = 0; j < r.getSize(); ++j)
+    for (int j = 0; j < r.getSize(); ++j)
     {
     Vector currRel;
     if (r.getHead(currRel))
@@ -652,7 +652,7 @@ bool Cell::sendStateToNbrs()
 {
   Neighbor curr;
   if(VERBOSE) string printf("cellID=%d\n",getID());
-  for (GLint i = 0; i < getNNbrs(); ++i)
+  for (int i = 0; i < getNNbrs(); ++i)
   {
     if(VERBOSE) string printf("sending state to id= %d\n",getNbr(i)->ID);
 
@@ -683,7 +683,7 @@ bool Cell::sendStateToNbrs()
 // Parameters:
 //      toID    in      the ID of the receiving neighbor
 //
-bool Cell::sendState(const GLint toID)
+bool Cell::sendState(const int toID)
 {
   //printf("in sendState()\n");
   State *s = new State(*this);
@@ -693,7 +693,7 @@ bool Cell::sendState(const GLint toID)
   bool answer = sendMsg(s, toID, STATE);
   //printf("leaving sendState()\n");
   return answer;
-}   // sendState(const GLint)
+}   // sendState(const int)
 
 
 
@@ -821,7 +821,7 @@ bool Cell::processNCell(Packet &p)
     bool is_ref_nbr = false;
     Neighbor nbr;
     //loop through nbrs
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
 
@@ -864,13 +864,13 @@ bool Cell::processNCell(Packet &p)
     Neighbor nbr;
     bool all_response = false;
     // cycle through nbrs in your props list?
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
       //check if msg came from a nbr who references you
       if(p.fromID == nbr.ID && nbr.refID == ID)
       {
-        for(GLint j = 0; j < props.size(); ++j)
+        for(int j = 0; j < props.size(); ++j)
         {
           if(props.at(j).toID == p.fromID) //msg came from a cell we sent to
           {
@@ -879,7 +879,7 @@ bool Cell::processNCell(Packet &p)
             props.at(j).count = (*((PropMsg *)p.msg)).count; //FCntrMsg.gradient
           }
         }
-        for(GLint j = 0; j <props.size(); ++j)
+        for(int j = 0; j <props.size(); ++j)
         {
           if(props.at(j).response == false)
           {
@@ -893,7 +893,7 @@ bool Cell::processNCell(Packet &p)
         {
           int sum = 1;
           //cout << "gradient of " << ID << " is: " << gradient << endl;
-          for(GLint k=0; k < props.size(); ++k)
+          for(int k=0; k < props.size(); ++k)
           {
             sum += props.at(k).count;
           }
@@ -933,7 +933,7 @@ bool Cell::processFcntr(Packet &p)
     bool is_ref_nbr = false;
     Neighbor nbr;
     //loop through nbrs
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
 
@@ -978,13 +978,13 @@ bool Cell::processFcntr(Packet &p)
     Neighbor nbr;
     bool all_response = false;
     //maybe cycle through nbrs in your props list?
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
       //if msg came from a nbr who references you
       if(p.fromID == nbr.ID && nbr.refID == ID)
       {
-        for(GLint j = 0; j < props.size(); ++j)
+        for(int j = 0; j < props.size(); ++j)
         {
           if(props.at(j).toID == p.fromID) //msg came from a cell we sent to
           {
@@ -1001,7 +1001,7 @@ bool Cell::processFcntr(Packet &p)
            // }
           }
         }
-        for(GLint j = 0; j <props.size(); ++j)
+        for(int j = 0; j <props.size(); ++j)
         {
           if(props.at(j).response == false)
           {
@@ -1018,7 +1018,7 @@ bool Cell::processFcntr(Packet &p)
 				  transErrorCopy.rotateRelative(rotError + formation.getHeading());
           Vector gradSum = gradient - transErrorCopy;
           cout << "gradient of " << ID << " is: " << gradient << endl;
-          for(GLint k=0; k < props.size(); ++k)
+          for(int k=0; k < props.size(); ++k)
           {
             sum += props.at(k).count;
             gradSum += props.at(k).gradient;
@@ -1060,7 +1060,7 @@ bool Cell::processFRad(Packet &p)
     bool is_ref_nbr = false;
     Neighbor nbr;
     //loop through nbrs
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
 
@@ -1102,13 +1102,13 @@ bool Cell::processFRad(Packet &p)
     Neighbor nbr;
     bool all_response = false;
     // cycle through nbrs in your props list?
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
       //if msg came from a nbr who references you
       if(p.fromID == nbr.ID && nbr.refID == ID)
       {
-        for(GLint j = 0; j < props.size(); ++j)
+        for(int j = 0; j < props.size(); ++j)
         {
           if(props.at(j).toID == p.fromID) //msg came from a cell we sent to
           {
@@ -1116,7 +1116,7 @@ bool Cell::processFRad(Packet &p)
               props.at(j).radius = (*((PropMsg *)p.msg)).radius;
           }
         }
-        for(GLint j = 0; j <props.size(); ++j)
+        for(int j = 0; j <props.size(); ++j)
         {
           if(props.at(j).response == false)
           {
@@ -1131,8 +1131,8 @@ bool Cell::processFRad(Packet &p)
           //cout << "gradient of " << ID << " is: " << gradient << endl;
 				  Vector transErrorCopy = transError;
 				  transErrorCopy.rotateRelative(rotError + formation.getHeading());
-          GLfloat maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
-          for(GLint k=0; k < props.size(); ++k)
+          float maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
+          for(int k=0; k < props.size(); ++k)
           {
             //compute max radius between mine and the best in my list
             if(maxRadius < props.at(k).radius)
@@ -1168,7 +1168,7 @@ bool Cell::processFSeed(Packet &p)
     bool is_ref_nbr = false;
     Neighbor nbr;
     //loop through nbrs
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
 
@@ -1211,13 +1211,13 @@ bool Cell::processFSeed(Packet &p)
     Neighbor nbr;
     bool all_response = false;
     //maybe cycle through nbrs in your props list?
-    for(GLint i = 0; i < getNNbrs(); ++i)
+    for(int i = 0; i < getNNbrs(); ++i)
     {
       nbr = at(i);
       //if msg came from a nbr who references you
       if(p.fromID == nbr.ID && nbr.refID == ID)
       {
-        for(GLint j = 0; j < props.size(); ++j)
+        for(int j = 0; j < props.size(); ++j)
         {
           if(props.at(j).toID == p.fromID) //msg came from a cell we sent to
           {
@@ -1225,7 +1225,7 @@ bool Cell::processFSeed(Packet &p)
               props.at(j).distance = (*((PropMsg *)p.msg)).distance;
           }
         }
-        for(GLint j = 0; j <props.size(); ++j)
+        for(int j = 0; j <props.size(); ++j)
         {
           if(props.at(j).response == false)
           {
@@ -1240,10 +1240,10 @@ bool Cell::processFSeed(Packet &p)
           //cout << "gradient of " << ID << " is: " << gradient << endl;
 				  //Vector transErrorCopy = transError;
 				  //transErrorCopy.rotateRelative(rotError + formation.getHeading());
-         // GLfloat maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
-          GLfloat minDist = (gradient - env->centroid).magnitude();
+         // float maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
+          float minDist = (gradient - env->centroid).magnitude();
           Vector minVector = (gradient - env->centroid);
-          for(GLint k=0; k < props.size(); ++k)
+          for(int k=0; k < props.size(); ++k)
           {
             //compute max radius between mine and the best in my list
             if(minDist > (props.at(k).distance).magnitude())
@@ -1307,10 +1307,10 @@ Behavior Cell::moveError()
 //      tError  in      the translational error
 //      rError  in      the rotational error
 //
-Behavior Cell::moveError(const Vector tError, const GLfloat rError)
+Behavior Cell::moveError(const Vector tError, const float rError)
 {
   return behavior = moveErrorBehavior(tError, rError);
-}   // moveError(const Vector, const GLfloat)
+}   // moveError(const Vector, const float)
 
 
 
@@ -1326,14 +1326,14 @@ Behavior Cell::moveError(const Vector tError, const GLfloat rError)
 //      tError  in      the translational error
 //      rError  in      the rotational error
 //
-Behavior Cell::moveErrorBehavior(const Vector tError, const GLfloat rError)
+Behavior Cell::moveErrorBehavior(const Vector tError, const float rError)
 {
   if      (transError.magnitude() > threshold())
     return moveArc(transError);
   else if (abs(rotError)          > angThreshold())
     return moveArc(0.0, degreesToRadians(-rotError));
   return moveStop();
-}   // moveErrorBehavior(const Vector, const GLfloat)
+}   // moveErrorBehavior(const Vector, const float)
 
 
 
@@ -1407,13 +1407,13 @@ Cell& Cell::operator =(const Robot &r)
 //      theta       in      the initial heading of the cell (default 0)
 //      colorIndex  in      the initial array index of the color of the cell
 //
-bool Cell::init(const GLfloat dx, const GLfloat dy, const GLfloat dz, const GLfloat theta)
+bool Cell::init(const float dx, const float dy, const float dz, const float theta)
 {
   showFilled = DEFAULT_CELL_SHOW_FILLED;
   leftNbr    = rightNbr = NULL;
   auctionStepCount = 0;
   return true;
-}   // init(const GLfloat..<4>)
+}   // init(const float..<4>)
 
 
 void Cell::settleAuction()
@@ -1438,7 +1438,7 @@ void Cell::settleAuction()
   bids.clear();
 }
 
-GLint Cell::getNBids() const
+int Cell::getNBids() const
 {
   return bids.size();
 }

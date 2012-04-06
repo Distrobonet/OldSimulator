@@ -21,8 +21,8 @@ struct NCellMsg
 {
 
   // <data members>
-  GLint toID;    //ID of the robot the message was sent to.
-  GLint count;  //count of the number of responses summed up so far.
+  int toID;    //ID of the robot the message was sent to.
+  int count;  //count of the number of responses summed up so far.
   //vector gradient;
   bool response; //boolean of wheather or not the msg has been received.
 
@@ -41,11 +41,11 @@ struct NCellMsg
   //     toID      in         the default ID of recipient 
   //     count     in         the default count of responses.
   //     response  in         the default of state of a response
-  NCellMsg(const GLint    to        = -1,
-          const GLint     num       = 0,
+  NCellMsg(const int    to        = -1,
+          const int     num       = 0,
           const bool      answer    = false)
         : toID(to), count(num), response(answer)
   {
-  }//PropMsg(const..{GLint, GLint,bool})
+  }//PropMsg(const..{int, int,bool})
 }; //PropMsg
 #endif

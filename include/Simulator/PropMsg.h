@@ -21,11 +21,11 @@ struct PropMsg
 {
 
   // <data members>
-  GLint toID;    //ID of the robot the message was sent to.
+  int toID;    //ID of the robot the message was sent to.
   Vector gradient;  //count of the number of responses summed up so far.
   Vector distance; //distance of the cell who is currently closest to the FCNTR
-  GLfloat radius;
-  GLint count;
+  float radius;
+  int count;
   bool response; //boolean of whether or not the msg has been received.
   //msgID as a (long)timestampto ensure that the message you send out for
   //a request is the same you're getting back on a response
@@ -45,15 +45,15 @@ struct PropMsg
   //     toID      in         the default ID of recipient 
   //     count     in         the default count of responses.
   //     response  in         the default of state of a response
-  PropMsg(const GLint     to         = -1,
+  PropMsg(const int     to         = -1,
           const Vector    grad       = Vector(),
           const Vector    dist       = Vector(),
-          const GLfloat   rad        = 0.0f,
-          const GLint     num        = 0,
+          const float   rad        = 0.0f,
+          const int     num        = 0,
           const bool      answer     = false)
           : toID(to), gradient(grad),distance(dist) ,radius(rad),
           count(num), response(answer)
   {
-  }//PropMsg(const..{GLint, GLint,bool})
+  }//PropMsg(const..{int, int,bool})
 }; //PropMsg
 #endif

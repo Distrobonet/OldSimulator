@@ -64,7 +64,7 @@ Neighborhood::Neighborhood(const Neighborhood &nh)
 //
 Neighborhood::Neighborhood(const vector<Relationship> &r)
 {
-    for (GLint i = 0; i < r.size(); ++i) addNbr(r[i], State());
+    for (int i = 0; i < r.size(); ++i) addNbr(r[i], State());
 }   // Neighborhood(const vector<Relationship> &)
 
 
@@ -82,7 +82,7 @@ Neighborhood::Neighborhood(const vector<Relationship> &r)
 //
 Neighborhood::Neighborhood(const vector<State> &s)
 {
-    for (GLint i = 0; i < s.size(); ++i) addNbr(Relationship(), s[i]);
+    for (int i = 0; i < s.size(); ++i) addNbr(Relationship(), s[i]);
 }   // Neighborhood(const vector<State> &)
 
 
@@ -164,11 +164,11 @@ bool Neighborhood::addNbr(const Relationship r, const State s)
 //      desired     in  the desired relationship of the neighbor being added
 //      actual      in  the actual relationship of the neighbor being added
 //
-bool Neighborhood::addNbr(const GLint  id,      const State  s,
+bool Neighborhood::addNbr(const int  id,      const State  s,
                           const Vector desired, const Vector actual)
 {
     return addNbr(Neighbor(id, s, desired, actual));
-}   // addNbr(const GLint, const State, const Vector, const Vector)
+}   // addNbr(const int, const State, const Vector, const Vector)
 
 
 
@@ -201,10 +201,10 @@ bool Neighborhood::removeNbr(const Neighbor n)
 // Parameters:
 //      id      in      the ID of the neighbor to remove
 //
-bool Neighborhood::removeNbr(const GLint id)
+bool Neighborhood::removeNbr(const int id)
 {
     Neighbor nbr;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         nbr = at(i);
         if (nbr.ID == id)
@@ -214,7 +214,7 @@ bool Neighborhood::removeNbr(const GLint id)
         }
     }
     return false;
-}   // removeNbr(const GLint)
+}   // removeNbr(const int)
 
 
 
@@ -233,7 +233,7 @@ vector<Relationship> Neighborhood::getRelationships()
 {
     vector<Relationship> rels;
     Neighbor currNbr;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         rels.push_back(currNbr);
@@ -256,7 +256,7 @@ vector<State> Neighborhood::getStates()
 {
     vector<State> states;
     Neighbor currNbr;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         states.push_back(currNbr);
@@ -278,11 +278,11 @@ vector<State> Neighborhood::getStates()
 // Parameters:
 //      pos     in      the position of the desired neighbor (default 0)
 //
-Neighbor* Neighborhood::getNbr(const GLint pos)
+Neighbor* Neighborhood::getNbr(const int pos)
 {
     if ((pos < 0) || (pos >= size())) return NULL;
     return &at(pos);
-}   // getNbr(const GLint) const
+}   // getNbr(const int) const
 
 
 
@@ -303,7 +303,7 @@ vector<Neighbor> Neighborhood::getNbrs() const
 
 
 //
-// GLint getNNbrs() const
+// int getNNbrs() const
 // Last modified: 29Nov2009
 //
 // Returns the number of neighbors in this neighborhood.
@@ -311,7 +311,7 @@ vector<Neighbor> Neighborhood::getNbrs() const
 // Returns:     the number of neighbors in this neighborhood
 // Parameters:  <none>
 //
-GLint Neighborhood::getNNbrs() const
+int Neighborhood::getNNbrs() const
 {
     return size();
 }   // getNNbrs() const
@@ -352,12 +352,12 @@ bool Neighborhood::updateNbr(Neighbor &n, const State &s)
 //      id      in      the ID of the neighbor being updated
 //      s       in/out  the updated state of the neighbor
 //
-bool Neighborhood::updateNbr(const GLint id, const State &s)
+bool Neighborhood::updateNbr(const int id, const State &s)
 {
     Neighbor *nbr = nbrWithID(id);
     if (nbr == NULL) return false;
     return updateNbr(*nbr, s);
-}   // updateNbr(const GLint, const State &)
+}   // updateNbr(const int, const State &)
 
 
 
@@ -390,16 +390,16 @@ bool Neighborhood::isNbr(const Neighbor n)
 // Parameters:
 //      id      in      the ID of the neighbor to find
 //
-bool Neighborhood::isNbr(const GLint id)
+bool Neighborhood::isNbr(const int id)
 {
     Neighbor nbr;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         nbr = at(i);
         if (nbr.ID == id) return true;
     }
     return false;
-}   // isNbr(const GLint)
+}   // isNbr(const int)
 
 //
 // void clearNbrs()
@@ -502,9 +502,9 @@ Neighbor* Neighborhood::lastNbr()
 Neighbor* Neighborhood::closestNbr(const Vector v)
 {
     Neighbor currNbr;
-    GLfloat  minDist  = 0.0f, currDist = 0.0f;
-    GLint    minIndex = ID_NO_NBR;
-    for (GLint i = 0; i < size(); ++i)
+    float  minDist  = 0.0f, currDist = 0.0f;
+    int    minIndex = ID_NO_NBR;
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -535,9 +535,9 @@ Neighbor* Neighborhood::closestNbr(const Vector v)
 Neighbor* Neighborhood::furthestNbr(const Vector v)
 {
     Neighbor currNbr;
-    GLfloat  maxDist  = 0.0f, currDist = 0.0f;
-    GLint    maxIndex = ID_NO_NBR;
-    for (GLint i = 0; i < size(); ++i)
+    float  maxDist  = 0.0f, currDist = 0.0f;
+    int    maxIndex = ID_NO_NBR;
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -566,16 +566,16 @@ Neighbor* Neighborhood::furthestNbr(const Vector v)
 // Parameters:
 //      id      in      the ID of the neighbor to find
 //
-Neighbor* Neighborhood::nbrWithID(const GLint id)
+Neighbor* Neighborhood::nbrWithID(const int id)
 {
     Neighbor currNbr;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if (currNbr.ID == id) return &at(i);
     }
     return NULL;
-}   // nbrWithID(const GLint)
+}   // nbrWithID(const int)
 
 
 
@@ -592,7 +592,7 @@ Neighbor* Neighborhood::nbrWithID(const GLint id)
 Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
 {
     Neighbor currNbr;
-    for (GLint i = 0; i < size(); ++i)
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if (currNbr.gradient == grad) return &at(i);
@@ -616,9 +616,9 @@ Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
 Neighbor* Neighborhood::nbrWithMinGradient(const Vector v)
 {
     Neighbor currNbr;
-    GLfloat  minGrad  = 0.0f, currGrad = 0.0f;
-    GLint    minIndex = ID_NO_NBR;
-    for (GLint i = 0; i < size(); ++i)
+    float  minGrad  = 0.0f, currGrad = 0.0f;
+    int    minIndex = ID_NO_NBR;
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -649,9 +649,9 @@ Neighbor* Neighborhood::nbrWithMinGradient(const Vector v)
 Neighbor* Neighborhood::nbrWithMaxGradient(const Vector v)
 {
     Neighbor currNbr;
-    GLfloat  maxGrad  = 0.0f, currGrad = 0.0f;
-    GLint    maxIndex = ID_NO_NBR;
-    for (GLint i = 0; i < size(); ++i)
+    float  maxGrad  = 0.0f, currGrad = 0.0f;
+    int    maxIndex = ID_NO_NBR;
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -680,9 +680,9 @@ Neighbor* Neighborhood::nbrWithMaxGradient(const Vector v)
 Neighbor* Neighborhood::nbrWithMinStep()
 {
     Neighbor currNbr;
-    GLint    minStep  = 0, currStep = 0;
-    GLint    minIndex = ID_NO_NBR;
-    for (GLint i = 0; i < size(); ++i)
+    int    minStep  = 0, currStep = 0;
+    int    minIndex = ID_NO_NBR;
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -711,9 +711,9 @@ Neighbor* Neighborhood::nbrWithMinStep()
 Neighbor* Neighborhood::nbrWithMaxStep()
 {
     Neighbor currNbr;
-    GLint    maxStep  = 0, currStep = 0;
-    GLint    maxIndex = ID_NO_NBR;
-    for (GLint i = 0; i < size(); ++i)
+    int    maxStep  = 0, currStep = 0;
+    int    maxIndex = ID_NO_NBR;
+    for (int i = 0; i < size(); ++i)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
@@ -743,8 +743,8 @@ Neighbor* Neighborhood::nbrWithMaxStep()
 //
 void Neighborhood::sortByID()
 {
-    for (GLint i = 0; i < size() - 1; ++i)
-        for (GLint j = i; j < size(); ++j)
+    for (int i = 0; i < size() - 1; ++i)
+        for (int j = i; j < size(); ++j)
             if (getNbr(i)->ID > getNbr(j)->ID) swapNbrs(i, j);
 }   // sortByID()
 
@@ -763,8 +763,8 @@ void Neighborhood::sortByID()
 //
 void Neighborhood::sortByGradient(const Vector v)
 {
-    for (GLint i = 0; i < size() - 1; ++i)
-        for (GLint j = i; j < size(); ++j)
+    for (int i = 0; i < size() - 1; ++i)
+        for (int j = i; j < size(); ++j)
             if ((getNbr(i)->gradient - v).magnitude() >
                 (getNbr(j)->gradient - v).magnitude()) swapNbrs(i, j);
 }   // sortByGradient(const Vector)
@@ -784,8 +784,8 @@ void Neighborhood::sortByGradient(const Vector v)
 //
 void Neighborhood::sortByDistance(const Vector v)
 {
-    for (GLint i = 0; i < size() - 1; ++i)
-        for (GLint j = i; j < size(); ++j)
+    for (int i = 0; i < size() - 1; ++i)
+        for (int j = i; j < size(); ++j)
             if ((getNbr(i)->relActual - v).magnitude() >
                 (getNbr(j)->relActual - v).magnitude()) swapNbrs(i, j);
 }   // sortByDistance(const Vector)
@@ -805,8 +805,8 @@ void Neighborhood::sortByDistance(const Vector v)
 //
 void Neighborhood::sortByAngle(const Vector v)
 {
-    for (GLint i = 0; i < size() - 1; ++i)
-        for (GLint j = i; j < size(); ++j)
+    for (int i = 0; i < size() - 1; ++i)
+        for (int j = i; j < size(); ++j)
             if ((getNbr(i)->relActual - v).angle() >
                 (getNbr(j)->relActual - v).angle()) swapNbrs(i, j);
 }   // sortByAngle(const Vector)
@@ -826,8 +826,8 @@ void Neighborhood::sortByAngle(const Vector v)
 //
 void Neighborhood::sortByAbsAngle(const Vector v)
 {
-    for (GLint i = 0; i < size() - 1; ++i)
-        for (GLint j = i; j < size(); ++j)
+    for (int i = 0; i < size() - 1; ++i)
+        for (int j = i; j < size(); ++j)
             if (abs((getNbr(i)->relActual - v).angle()) >
                 abs((getNbr(j)->relActual - v).angle())) swapNbrs(i, j);
 }   // sortByAbsAngle(const Vector)
@@ -845,11 +845,11 @@ void Neighborhood::sortByAbsAngle(const Vector v)
 //      i       in      the index of the first neigbor
 //      j       in      the index of the second neigbor
 //
-bool Neighborhood::swapNbrs(const GLint i, const GLint j)
+bool Neighborhood::swapNbrs(const int i, const int j)
 {
     if ((i < 0) || (i >= size()) || (j < 0) || (j >= size())) return false;
     Neighbor tempNbr = at(i);
     at(i)            = at(j);
     at(j)            = tempNbr;
     return true;
-}   // swapNbrs(const GLint, const GLint)
+}   // swapNbrs(const int, const int)

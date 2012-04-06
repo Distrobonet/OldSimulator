@@ -46,27 +46,27 @@ class Neighborhood: public vector<Neighbor>
         bool addNbr(const Neighbor n);
         bool addNbr(const Relationship r = Relationship(),
                     const State        s = State());
-        bool addNbr(const GLint  id,
+        bool addNbr(const int  id,
                     const State  s       = State(),
                     const Vector desired = Vector(),
                     const Vector actual  = Vector());
         bool removeNbr(const Neighbor n);
-        bool removeNbr(const GLint id);
+        bool removeNbr(const int id);
 
         // <virtual public accessor functions>
         virtual vector<Relationship> getRelationships();
         virtual vector<State>        getStates();
 
         // <public accessor functions>
-        Neighbor*        getNbr(const GLint pos);
+        Neighbor*        getNbr(const int pos);
         vector<Neighbor> getNbrs()  const;
-        GLint            getNNbrs() const;
+        int            getNNbrs() const;
 
         // <public utility functions>
         bool updateNbr(Neighbor &n, const State &s);
-        bool updateNbr(const GLint id, const State &s);
+        bool updateNbr(const int id, const State &s);
         bool isNbr(const Neighbor n);
-        bool isNbr(const GLint id);
+        bool isNbr(const int id);
         void clearNbrs();
 
         // <public single neighbor member functions>
@@ -78,7 +78,7 @@ class Neighborhood: public vector<Neighbor>
         Neighbor* furthestNbr(const Vector c = Vector());
 
         // <public single neighbor property member functions>
-        Neighbor* nbrWithID(const GLint id);
+        Neighbor* nbrWithID(const int id);
         Neighbor* nbrWithGradient(const Vector grad);
         Neighbor* nbrWithMinGradient(const Vector c = Vector());
         Neighbor* nbrWithMaxGradient(const Vector c = Vector());
@@ -91,7 +91,7 @@ class Neighborhood: public vector<Neighbor>
         void sortByDistance(const Vector c = Vector());
         void sortByAngle(const Vector c = Vector());
         void sortByAbsAngle(const Vector c = Vector());
-        bool swapNbrs(const GLint i, const GLint j);
+        bool swapNbrs(const int i, const int j);
 };  // Neighborhood
 
 #endif

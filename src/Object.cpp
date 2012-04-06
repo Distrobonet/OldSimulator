@@ -14,7 +14,7 @@
 
 
 // <protected static data members>
-GLint Object::nObjects = 0;   // initializes the number of objects to 0
+int Object::nObjects = 0;   // initializes the number of objects to 0
 
 
 
@@ -35,13 +35,13 @@ GLint Object::nObjects = 0;   // initializes the number of objects to 0
 //      r           in      the initial radius of the object
 //      colorIndex  in      the initial array index of the color of the object
 //
-Object::Object(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-               const GLfloat r,
+Object::Object(const float dx, const float dy, const float dz,
+               const float r,
                const Color   colorIndex)
 {
     init(dx, dy, dz, r, colorIndex);
     ID = ++nObjects;
-}   // Object(const GLfloat, const GLfloat, const GLfloat, const Color)
+}   // Object(const float, const float, const float, const Color)
 
 
 
@@ -60,7 +60,7 @@ Object::Object(const Object &obj)
 {
     init(obj.x, obj.y, obj.z, DEFAULT_OBJECT_COLOR);
     setColor(obj.color);
-    for (GLint i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         translate[i] = obj.translate[i];
         rotate[i]    = obj.rotate[i];
@@ -104,10 +104,10 @@ Object::~Object()
 // Parameters:
 //      r       in      the radius to be set to
 //
-bool Object::setRadius(const GLfloat r)
+bool Object::setRadius(const float r)
 {
   return Circle::setRadius(r);
-}   // setRadius(const GLfloat)
+}   // setRadius(const float)
 
 
 
@@ -151,7 +151,7 @@ Environment* Object::getEnvironment() const
 // <public accessor functions>
 
 //
-// GLint getID() const
+// int getID() const
 // Last modified: 22Dec2010
 //
 // Returns the ID of this object.
@@ -159,7 +159,7 @@ Environment* Object::getEnvironment() const
 // Returns:     the ID of this object
 // Parameters:  <none>
 //
-GLint Object::getID() const
+int Object::getID() const
 {
     return ID;
 }   // getID()
@@ -205,12 +205,12 @@ void Object::draw()
 //      r           in      the initial radius of the object
 //      colorIndex  in      the initial array index of the color of the object
 //
-bool Object::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-                  const GLfloat r,
+bool Object::init(const float dx, const float dy, const float dz,
+                  const float r,
                   const Color   colorIndex)
 {
     Circle::init(dx, dy, dz, r, colorIndex);
     showFilled = DEFAULT_OBJECT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
-}   // init(const GLfloat..<4>, const Color)
+}   // init(const float..<4>, const Color)

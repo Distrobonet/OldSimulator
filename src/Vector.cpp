@@ -28,10 +28,10 @@
 //      dz          in      the initial z-coordinate of the vector (default 0)
 //      colorIndex  in      the initial array index of the color of the vector
 //
-Vector::Vector(const GLfloat dx, const GLfloat dy, const GLfloat dz, const Color colorIndex)
+Vector::Vector(const float dx, const float dy, const float dz, const Color colorIndex)
 {
     init(dx, dy, dz, colorIndex);
-}   // Vector(const GLfloat, const GLfloat, const GLfloat, const Color)
+}   // Vector(const float, const float, const float, const Color)
 
 
 
@@ -52,7 +52,7 @@ Vector::Vector(const Vector &v)
     *this = v;
 
     setColor(v.color);
-    for (GLint i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         translate[i] = v.translate[i];
         rotate[i]    = v.rotate[i];
@@ -97,13 +97,13 @@ Vector::~Vector()
 //      dy      in      the y-coordinate to be set to (default 0)
 //      dz      in      the z-coordinate to be set to (default 0)
 //
-bool Vector::set(const GLfloat dx, const GLfloat dy, const GLfloat dz)
+bool Vector::set(const float dx, const float dy, const float dz)
 {
     x = dx;
     y = dy;
     z = dz;
     return true;
-}   // set(const GLfloat, const GLfloat, const GLfloat)
+}   // set(const float, const float, const float)
 
 
 
@@ -138,13 +138,13 @@ bool Vector::set(const Vector &v)
 //      g       in/out  the green in the color to be set to
 //      b       in/out  the blue in the color to be set to
 //
-bool Vector::setColor(const GLfloat r, const GLfloat g, const GLfloat b)
+bool Vector::setColor(const float r, const float g, const float b)
 {
     color[GLUT_RED]   = r;
     color[GLUT_GREEN] = g;
     color[GLUT_BLUE]  = b;
     return true;
-}   // setColor(const GLfloat, const GLfloat, const GLfloat)
+}   // setColor(const float, const float, const float)
 
 
 
@@ -159,10 +159,10 @@ bool Vector::setColor(const GLfloat r, const GLfloat g, const GLfloat b)
 // Parameters:
 //      clr     in/out  the color to be set to
 //
-bool Vector::setColor(const GLfloat clr[3])
+bool Vector::setColor(const float clr[3])
 {
     return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
-}   // setColor(const GLfloat [])
+}   // setColor(const float [])
 
 
 
@@ -179,7 +179,7 @@ bool Vector::setColor(const GLfloat clr[3])
 //
 bool Vector::setColor(const Color colorIndex)
 {
-    return setColor(COLOR[(GLint)colorIndex]);
+    return setColor(COLOR[(int)colorIndex]);
 }   // setColor(const Color)
 
 
@@ -199,12 +199,12 @@ bool Vector::setColor(const Color colorIndex)
 //      dy      in      the y-coordinate translation transformation
 //      dz      in      the z-coordinate translation transformation
 //
-void Vector::translated(const GLfloat dx, const GLfloat dy, const GLfloat dz)
+void Vector::translated(const float dx, const float dy, const float dz)
 {
     translate[0] = dx;
     translate[1] = dy;
     translate[2] = dz;
-}   // translated(const GLfloat, const GLfloat, const GLfloat)
+}   // translated(const float, const float, const float)
 
 
 
@@ -237,10 +237,10 @@ void Vector::translated(const Vector &v)
 // Parameters:
 //      theta   in      the rotation transformation angle
 //
-void Vector::rotated(GLfloat theta)
+void Vector::rotated(float theta)
 {
     rotate[2] = theta;
-}   // rotated(GLfloat)
+}   // rotated(float)
 
 
 
@@ -255,11 +255,11 @@ void Vector::rotated(GLfloat theta)
 // Parameters:
 //      theta   in      the rotation angle
 //
-void Vector::rotateRelative(GLfloat theta)
+void Vector::rotateRelative(float theta)
 {
     theta = degreesToRadians(theta);
     set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
-}   // rotateRelative(GLfloat)
+}   // rotateRelative(float)
 
 
 
@@ -273,10 +273,10 @@ void Vector::rotateRelative(GLfloat theta)
 // Parameters:
 //      s       in      the transformation scalar
 //
-void Vector::scaled(const GLfloat s)
+void Vector::scaled(const float s)
 {
     scale[0] = scale[1] = scale[2] = s;
-}   // scaled(const GLfloat)
+}   // scaled(const float)
 
 
 
@@ -295,11 +295,11 @@ void Vector::scaled(const GLfloat s)
 //      theta   in      the angle to be set to (default 0)
 //      dz      in      the z-coordinate to be set to (default 0)
 //
-bool Vector::setPolar(GLfloat mag, GLfloat theta, GLfloat dz)
+bool Vector::setPolar(float mag, float theta, float dz)
 {
     theta = degreesToRadians(theta);
     return set(mag * cos(theta), mag * sin(theta), dz);
-}   // setPolar(GLfloat, GLfloat, GLfloat)
+}   // setPolar(float, float, float)
 
 
 
@@ -334,10 +334,10 @@ bool Vector::setDiff(const Vector &dest, const Vector &source)
 // Parameters:
 //      theta   in      the angle to be set to (default 0)
 //
-bool Vector::setAngle(const GLfloat theta)
+bool Vector::setAngle(const float theta)
 {
     return setPolar(magnitude(), theta);
-}   // setAngleconst GLfloat)
+}   // setAngleconst float)
 
 
 
@@ -352,11 +352,11 @@ bool Vector::setAngle(const GLfloat theta)
 // Parameters:
 //      mag     in      the magnitude to be set to (default 1)
 //
-bool Vector::setMagnitude(const GLfloat mag)
+bool Vector::setMagnitude(const float mag)
 {
     if (!normalize()) return false;
     return set(x * mag, y * mag, z * mag);
-}   // setMagnitude(const GLfloat)
+}   // setMagnitude(const float)
 
 
 
@@ -371,11 +371,11 @@ bool Vector::setMagnitude(const GLfloat mag)
 // Parameters:
 //      mag     in      the magnitude to be set to (default 1)
 //
-/*bool Vector::setNorm(const GLfloat mag)
+/*bool Vector::setNorm(const float mag)
 {
     if (!normalize()) return false;
     return set(x * mag, y * mag, z * mag);
-}   // setNorm(const GLfloat)*/
+}   // setNorm(const float)*/
 
 
 
@@ -391,7 +391,7 @@ bool Vector::setMagnitude(const GLfloat mag)
 //
 bool Vector::setPerp()
 {
-    GLfloat temp = x;
+    float temp = x;
     x            = -y;
     y            = temp;
     return true;
@@ -412,15 +412,15 @@ bool Vector::setPerp()
 //      v       in/out  the vectors to be averaged
 //      n       in      the number of vectors to be averaged
 //
-bool Vector::setAvg(const Vector v[], const GLint n)
+bool Vector::setAvg(const Vector v[], const int n)
 {
     if (n <= 0) return false;
-    for (GLint i = 0; i < n; i++) *this += v[i];
-    x /= (GLfloat)n;
-    y /= (GLfloat)n;
-    z /= (GLfloat)n;
+    for (int i = 0; i < n; i++) *this += v[i];
+    x /= (float)n;
+    y /= (float)n;
+    z /= (float)n;
     return true;
-}   // avg(const Vector [], const GLint)
+}   // avg(const Vector [], const int)
 
 
 
@@ -436,7 +436,7 @@ bool Vector::setAvg(const Vector v[], const GLint n)
 //
 bool Vector::normalize()
 {
-    GLfloat mag = magnitude();
+    float mag = magnitude();
 
     // does nothing to zero vectors
     if (mag == 0.0f) return false;
@@ -473,7 +473,7 @@ void Vector::draw()
         glScaled(scale[0], scale[1], scale[2]);
 
         // draw vector head
-        GLfloat mag = magnitude();
+        float mag = magnitude();
         if ((showHead) && (mag >= VECTOR_HEAD_HEIGHT))
         {
             glColor3fv(color);
@@ -534,7 +534,7 @@ void Vector::drawX(Vector location)
 // <public utility functions>
 
 //
-// GLfloat angle() const
+// float angle() const
 // Last modified: 04Sep2006
 //
 // Returns the angle of this vector.
@@ -542,7 +542,7 @@ void Vector::drawX(Vector location)
 // Returns:     the angle of this vector
 // Parameters:  <none>
 //
-GLfloat Vector::angle() const
+float Vector::angle() const
 {
     if ((x == 0.0f) && (y == 0.0f) && (z == 0.0f)) return 0.0f;
     return sign(y) *
@@ -552,7 +552,7 @@ GLfloat Vector::angle() const
 
 
 //
-// GLfloat magnitude() const
+// float magnitude() const
 // Last modified: 07Nov2009
 //
 // Returns the magnitude (normal) of this vector.
@@ -560,7 +560,7 @@ GLfloat Vector::angle() const
 // Returns:     the magnitude (normal) of this vector
 // Parameters:  <none>
 //
-GLfloat Vector::magnitude() const
+float Vector::magnitude() const
 {
     return sqrt(x * x + y * y + z * z);
 }   // magnitude()
@@ -568,7 +568,7 @@ GLfloat Vector::magnitude() const
 
 
 //
-// GLfloat norm() const
+// float norm() const
 // Last modified: 07Nov2009
 //
 // Returns the normal (magnitude) of this vector.
@@ -576,7 +576,7 @@ GLfloat Vector::magnitude() const
 // Returns:     the normal (magnitude) of this vector
 // Parameters:  <none>
 //
-/*GLfloat Vector::norm() const
+/*float Vector::norm() const
 {
     return sqrt(x * x + y * y + z * z);
 }   // norm()*/
@@ -600,7 +600,7 @@ Vector Vector::perp()
 }   // perp()
 
 //
-// GLfloat perpDot(v) const
+// float perpDot(v) const
 // Last modified: 04Sep2006
 //
 // Returns the dot product of the perpendicular vector
@@ -611,7 +611,7 @@ Vector Vector::perp()
 // Parameters:
 //      v       in/out  the vector to be dotted with
 //
-GLfloat Vector::perpDot(const Vector &v) const
+float Vector::perpDot(const Vector &v) const
 {
     return x * v.x - y * v.y;
 }   // perpDot(const Vector &)
@@ -633,7 +633,7 @@ Vector& Vector::operator =(const Vector &v)
 {
     set(v.x, v.y, v.z);
     setColor(v.color);
-    for (GLint i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         translate[i] = v.translate[i];
         rotate[i]    = v.rotate[i];
@@ -726,7 +726,7 @@ Vector& Vector::operator -=(const Vector &v)
 // Parameters:
 //      scalar  in      the vector multiplier
 //
-Vector& Vector::operator *=(const GLfloat scalar)
+Vector& Vector::operator *=(const float scalar)
 {
     return *this = *this * scalar;
 }   // *=(const Vector &)
@@ -818,10 +818,10 @@ Vector operator -(const Vector &v)
 //      scalar  in      the vector multiplier
 //      v       in/out  the vector to be negated
 //
-Vector operator *(const GLfloat scalar, const Vector &v)
+Vector operator *(const float scalar, const Vector &v)
 {
     return Vector(scalar * v.x, scalar * v.y, scalar * v.z);
-}   // *(const GLfloat, const Vector &)
+}   // *(const float, const Vector &)
 
 
 
@@ -836,10 +836,10 @@ Vector operator *(const GLfloat scalar, const Vector &v)
 //      v       in/out  the vector to be negated
 //      scalar  in      the vector multiplier
 //
-Vector operator *(const Vector &v, const GLfloat scalar)
+Vector operator *(const Vector &v, const float scalar)
 {
     return scalar * v;
-}   // *(const Vector &, const GLfloat)
+}   // *(const Vector &, const float)
 
 
 
@@ -891,7 +891,7 @@ Vector crossProduct(const Vector &v1, const Vector &v2)
 //      v1      in/out  the first vector
 //      v2      in/out  the second vector
 //
-GLfloat dotProduct(const Vector &v1, const Vector &v2)
+float dotProduct(const Vector &v1, const Vector &v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }   // dotProduct(const Vector &, const Vector &)
@@ -899,7 +899,7 @@ GLfloat dotProduct(const Vector &v1, const Vector &v2)
 
 
 //
-// GLfloat angle(v)
+// float angle(v)
 // Last modified: 05Sep2006
 //
 // Returns the angle of the parameterized vector.
@@ -908,7 +908,7 @@ GLfloat dotProduct(const Vector &v1, const Vector &v2)
 // Parameters:
 //      v       in/out  the vector
 //
-GLfloat angle(const Vector &v)
+float angle(const Vector &v)
 {
     return v.angle();
 }   // angle(const Vector &)
@@ -916,7 +916,7 @@ GLfloat angle(const Vector &v)
 
 
 //
-// GLfloat angle(v1, v2)
+// float angle(v1, v2)
 // Last modified: 05Sep2006
 //
 // Returns the angle between the parameterized vectors.
@@ -926,7 +926,7 @@ GLfloat angle(const Vector &v)
 //      v1      in/out  the first vector
 //      v2      in/out  the second vector
 //
-GLfloat angle(const Vector &v1, const Vector &v2)
+float angle(const Vector &v1, const Vector &v2)
 {
     return scaleDegrees(v1.angle() - v2.angle());
 }   // angle(const Vector &, const Vector &)
@@ -949,11 +949,11 @@ GLfloat angle(const Vector &v1, const Vector &v2)
 //      dz          in      the initial z-coordinate of the vector (default 0)
 //      colorIndex  in      the initial array index of the color of the vector
 //
-bool Vector::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
+bool Vector::init(const float dx, const float dy, const float dz,
                   const Color   colorIndex)
 {
     set(dx, dy, dz);
-    for (GLint i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         translate[i] = DEFAULT_VECTOR_TRANSLATE[i];
         rotate[i]    = DEFAULT_VECTOR_ROTATE[i];
@@ -962,4 +962,4 @@ bool Vector::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
     showLine         = DEFAULT_VECTOR_SHOW_LINE;
     showHead         = DEFAULT_VECTOR_SHOW_HEAD;
     return true;
-}   // init(const GLfloat, const GLfloat, const GLfloat, const Color)
+}   // init(const float, const float, const float, const Color)

@@ -29,12 +29,12 @@
 //      r           in      the initial radius of the circle (default 0)
 //      colorIndex  in      the initial array index of the color of the circle
 //
-Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-               const GLfloat r,
+Circle::Circle(const float dx, const float dy, const float dz,
+               const float r,
                const Color   colorIndex)
 {
     init(dx, dy, dz, r, colorIndex);
-}   // Circle(const GLfloat..<4>, const Color)
+}   // Circle(const float..<4>, const Color)
 
 
 
@@ -50,11 +50,11 @@ Circle::Circle(const GLfloat dx, const GLfloat dy, const GLfloat dz,
 //      v           in      the initial vector coordinates of the circle
 //      r           in      the initial radius of the circle (default 0)
 //
-Circle::Circle(const Vector &v, const GLfloat r)
+Circle::Circle(const Vector &v, const float r)
 {
     init(v.x, v.y, v.z, r);
     setColor(v.color);
-}   // Circle(const Vector, const GLfloat)
+}   // Circle(const Vector, const float)
 
 
 
@@ -72,7 +72,7 @@ Circle::Circle(const Vector &v, const GLfloat r)
 Circle::Circle(const Circle &c)
 {
     init(c.x, c.y, c.z, c.radius);
-    for (GLint i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         translate[i] = c.translate[i];
         rotate[i]    = c.rotate[i];
@@ -115,12 +115,12 @@ Circle::~Circle()
 // Parameters:
 //      r       in      the radius to be set to
 //
-bool Circle::setRadius(const GLfloat r)
+bool Circle::setRadius(const float r)
 {
     if (r <= 0.0f) return false;
     radius = r;
     return true;
-}   // setRadius(const GLfloat)
+}   // setRadius(const float)
 
 
 
@@ -135,10 +135,10 @@ bool Circle::setRadius(const GLfloat r)
 // Parameters:
 //      d       in      the diameter to determine the radius be set to
 //
-bool Circle::setDiameter(const GLfloat d)
+bool Circle::setDiameter(const float d)
 {
     return setRadius(0.5f * d);
-}   // setDiameter(const GLfloat)
+}   // setDiameter(const float)
 
 
 
@@ -153,10 +153,10 @@ bool Circle::setDiameter(const GLfloat d)
 // Parameters:
 //      c       in      the circumference to determine the radius be set to
 //
-bool Circle::setCircumference(const GLfloat c)
+bool Circle::setCircumference(const float c)
 {
     return setRadius(0.5f * c / PI);
-}   // setCircumference(const GLfloat)
+}   // setCircumference(const float)
 
 
 
@@ -171,17 +171,17 @@ bool Circle::setCircumference(const GLfloat c)
 // Parameters:
 //      a       in      the area to determine the radius be set to
 //
-bool Circle::setArea(const GLfloat a)
+bool Circle::setArea(const float a)
 {
     return setRadius(sqrt(a / PI));
-}   // setArea(const GLfloat)
+}   // setArea(const float)
 
 
 
 // <public accessor functions>
 
 //
-// GLfloat getRadius() const
+// float getRadius() const
 // Last modified: 27Aug2006
 //
 // Returns the radius of this circle.
@@ -189,7 +189,7 @@ bool Circle::setArea(const GLfloat a)
 // Returns:     the radius of this circle
 // Parameters:  <none>
 //
-GLfloat Circle::getRadius() const
+float Circle::getRadius() const
 {
     return radius;
 }   // getRadius() const
@@ -197,7 +197,7 @@ GLfloat Circle::getRadius() const
 
 
 //
-// GLfloat getDiameter() const
+// float getDiameter() const
 // Last modified: 27Aug2006
 //
 // Returns the diameter of this circle.
@@ -205,7 +205,7 @@ GLfloat Circle::getRadius() const
 // Returns:     the diameter of this circle
 // Parameters:  <none>
 //
-GLfloat Circle::getDiameter() const
+float Circle::getDiameter() const
 {
     return 2.0f * radius;
 }   // getDiameter() const
@@ -213,7 +213,7 @@ GLfloat Circle::getDiameter() const
 
 
 //
-// GLfloat getCircumference() const
+// float getCircumference() const
 // Last modified: 27Aug2006
 //
 // Returns the circumference of this circle.
@@ -221,7 +221,7 @@ GLfloat Circle::getDiameter() const
 // Returns:     the circumference of this circle
 // Parameters:  <none>
 //
-GLfloat Circle::getCircumference() const
+float Circle::getCircumference() const
 {
     return getDiameter() * PI;
 }   // getCircumference() const
@@ -229,7 +229,7 @@ GLfloat Circle::getCircumference() const
 
 
 //
-// GLfloat getArea() const
+// float getArea() const
 // Last modified: 27Aug2006
 //
 // Returns the area of this circle.
@@ -237,7 +237,7 @@ GLfloat Circle::getCircumference() const
 // Returns:     the area of this circle
 // Parameters:  <none>
 //
-GLfloat Circle::getArea() const
+float Circle::getArea() const
 {
 	return PI * radius * radius;
     //return PI * pow(radius, 2.0f);
@@ -277,14 +277,14 @@ void Circle::draw()
         glScaled(scale[0], scale[1], scale[2]);
 
         // draw each edge of the polygonal approximation to the circle
-        GLfloat dx = radius, dy = 0.0f, tx = 0.0f, ty = 0.0f;
+        float dx = radius, dy = 0.0f, tx = 0.0f, ty = 0.0f;
         if (showFilled)
         {
             glBegin(GL_TRIANGLE_FAN);
             glVertex2f(0.0f, 0.0f);    // origin
         }
         else glBegin(GL_LINE_LOOP);
-        for (GLint i = 0; i <= CIRCLE_N_LINKS; ++i)
+        for (int i = 0; i <= CIRCLE_N_LINKS; ++i)
 	      {
             glVertex2f(dx, dy);    // output vertex
 
@@ -347,8 +347,8 @@ Circle Circle::operator = (const Circle &c)
 //      r           in      the initial radius of the circle (default 0)
 //      colorIndex  in      the initial array index of the color of the circle
 //
-bool Circle::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
-                  const GLfloat r,
+bool Circle::init(const float dx, const float dy, const float dz,
+                  const float r,
                   const Color   colorIndex)
 {
     Vector::init(dx, dy, dz, colorIndex);
@@ -356,4 +356,4 @@ bool Circle::init(const GLfloat dx, const GLfloat dy, const GLfloat dz,
     showPos    = DEFAULT_CIRCLE_SHOW_POS;
     showFilled = DEFAULT_CIRCLE_SHOW_FILLED;
     return true;
-}   // init(const GLfloat..<4>)
+}   // init(const float..<4>)

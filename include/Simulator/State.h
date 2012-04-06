@@ -27,11 +27,11 @@ struct State
     Vector               gradient;      // the formation gradient
     vector<Relationship> rels;          // the formation relationships
     Vector               transError;    // the summed translational error
-    GLfloat              rotError;      // the summed rotational error
-    GLint                tStep;         // the time step in the formation
-    GLint                refID;         // the ID of the reference nbr
-    GLfloat              temperature;   // the current temperature
-    GLfloat              heat;          // the current heat
+    float              rotError;      // the summed rotational error
+    int                tStep;         // the time step in the formation
+    int                refID;         // the ID of the reference nbr
+    float              temperature;   // the current temperature
+    float              heat;          // the current heat
     vector<PropMsg>     props;         // maintaining responses of the 
                                         // from the request msgs sent
 
@@ -58,18 +58,18 @@ struct State
           const Vector               grad   = Vector(),
           const vector<Relationship> r      = vector<Relationship>(),
           const Vector               tError = Vector(),
-          const GLfloat              rError = 0.0f,
-          const GLint                ts     = 0,
-          const GLint                rID    = -1,
-          const GLfloat              temp   = 0.0f,
-          const GLfloat              h      = 0.0f,
+          const float              rError = 0.0f,
+          const int                ts     = 0,
+          const int                rID    = -1,
+          const float              temp   = 0.0f,
+          const float              h      = 0.0f,
           const vector<PropMsg>     msgs   = vector<PropMsg>())
           : formation(f),       gradient(grad),   rels(r),
             transError(tError), rotError(rError), tStep(ts), refID(rID),
             temperature(temp),  heat(h),
             props(msgs)
     {
-    }   // State(const..{Formation, Vector, LL<Relationship>, Vector, GLint,GLint})
+    }   // State(const..{Formation, Vector, LL<Relationship>, Vector, int,int})
 };  // State
 
 #endif

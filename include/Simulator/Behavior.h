@@ -34,29 +34,29 @@ class Behavior
 
         // <constructors>
         Behavior(const Status  s     = INACTIVE,
-                 const GLfloat t     = 0.0f,
-                 const GLfloat r     = 0.0f,
-                 const GLfloat speed = 1.0f);
+                 const float t     = 0.0f,
+                 const float r     = 0.0f,
+                 const float speed = 1.0f);
         Behavior(const Behavior &beh);
 
         // <public mutator functions>
         bool setStatus(const Status s);
-        bool setTransVel(const GLfloat t);
-        bool setRotVel(const GLfloat r);
-        bool setDiffVel(const GLfloat right, const GLfloat left);
-        bool setVelocity(const GLfloat t, const GLfloat r);
-        bool setMaxSpeed(const GLfloat speed);
+        bool setTransVel(const float t);
+        bool setRotVel(const float r);
+        bool setDiffVel(const float right, const float left);
+        bool setVelocity(const float t, const float r);
+        bool setMaxSpeed(const float speed);
 
         // <public accessor functions>
         Status  getStatus()    const;
         bool    isActive()     const;
         bool    isDone()       const;
         bool    isInactive()   const;
-        GLfloat getTransVel()  const;
-        GLfloat getRotVel()    const;
-        GLfloat getVelocity()  const;
-        GLfloat getSpeed()     const;
-        GLfloat getMaxSpeed()  const;
+        float getTransVel()  const;
+        float getRotVel()    const;
+        float getVelocity()  const;
+        float getSpeed()     const;
+        float getMaxSpeed()  const;
 
         // <overloaded operators>
         Behavior& operator =(const Behavior &beh);
@@ -70,10 +70,10 @@ class Behavior
 
         // <protected data members>
         Status  status;
-        GLfloat transVel, rotVel, maxSpeed;
+        float transVel, rotVel, maxSpeed;
 
         // <protected utility functions>
-        GLfloat scaleVel();
+        float scaleVel();
 };  // Behavior
 
 #endif

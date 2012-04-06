@@ -17,7 +17,7 @@
 #define E         (1.0f)//ADDED BY KEVIN
 
 // <protected static data members>
-GLint Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
+int Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
 
 
 
@@ -38,12 +38,12 @@ GLint Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
 //      theta       in      the initial heading of the robot (default 0)
 //      colorIndex  in      the initial array index of the color of the robot
 //
-Robot::Robot(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
-             const GLfloat theta)
+Robot::Robot(const float dx,    const float dy, const float dz,
+             const float theta)
 {
     init(dx, dy, dz, theta);
     ID = --nRobots;
-}   // Robot(const GLfloat..<4>, const Color)
+}   // Robot(const float..<4>, const Color)
 
 
 
@@ -61,7 +61,7 @@ Robot::Robot(const GLfloat dx,    const GLfloat dy, const GLfloat dz,
 Robot::Robot(const Robot &r)
 {
     init(r.x, r.y, r.z, r.getHeading());
-    for (GLint i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
         translate[i] = r.translate[i];
         rotate[i]    = r.rotate[i];
@@ -108,11 +108,11 @@ Robot::~Robot()
 // Parameters:
 //      r       in      the radius to be set to
 //
-bool Robot::setRadius(const GLfloat r)
+bool Robot::setRadius(const float r)
 {
     if (!Circle::setRadius(r)) return false;
     return behavior.setMaxSpeed(maxSpeed());
-}   // setRadius(const GLfloat)
+}   // setRadius(const float)
 
 
 
@@ -127,10 +127,10 @@ bool Robot::setRadius(const GLfloat r)
 // Parameters:
 //      theta   in      the heading to be set to
 //
-bool Robot::setHeading(const GLfloat theta)
+bool Robot::setHeading(const float theta)
 {
     return heading.setPolar(radius + VECTOR_HEAD_HEIGHT, theta);
-}   // setHeading(const GLfloat)
+}   // setHeading(const float)
 
 
 
@@ -185,10 +185,10 @@ void Robot::translateRelative(Vector v)
 //      dx      in      the x-coordinate translation
 //      dy      in      the y-coordinate translation
 //
-void Robot::translateRelative(const GLfloat dx, const GLfloat dy)
+void Robot::translateRelative(const float dx, const float dy)
 {
     translateRelative(Vector(dx, dy));
-}   // rotateRelative(const GLfloat, const GLfloat)
+}   // rotateRelative(const float, const float)
 
 
 
@@ -203,10 +203,10 @@ void Robot::translateRelative(const GLfloat dx, const GLfloat dy)
 // Parameters:
 //      theta   in      the rotation angle
 //
-void Robot::rotateRelative(GLfloat theta)
+void Robot::rotateRelative(float theta)
 {
     heading.rotateRelative(theta);
-}   // rotateRelative(GLfloat)
+}   // rotateRelative(float)
 
 
 
@@ -231,7 +231,7 @@ Environment* Robot::getEnvironment() const
 // <public accessor functions>
 
 //
-// GLint getID() const
+// int getID() const
 // Last modified: 03Sep2006
 //
 // Returns the ID of this robot.
@@ -239,7 +239,7 @@ Environment* Robot::getEnvironment() const
 // Returns:     the ID of this robot
 // Parameters:  <none>
 //
-GLint Robot::getID() const
+int Robot::getID() const
 {
     return ID;
 }   // getID()
@@ -247,7 +247,7 @@ GLint Robot::getID() const
 
 
 //
-// GLfloat getHeading() const
+// float getHeading() const
 // Last modified: 03Sep2006
 //
 // Returns the heading of this robot.
@@ -255,7 +255,7 @@ GLint Robot::getID() const
 // Returns:     the heading of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::getHeading() const
+float Robot::getHeading() const
 {
     return heading.angle();
 }   // getHeading() const
@@ -263,7 +263,7 @@ GLfloat Robot::getHeading() const
 
 
 //
-// GLfloat getTransVel() const
+// float getTransVel() const
 // Last modified: 03Sep2006
 //
 // Returns the translational velocity of this robot.
@@ -271,7 +271,7 @@ GLfloat Robot::getHeading() const
 // Returns:     the translational velocity of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::getTransVel() const
+float Robot::getTransVel() const
 {
     return behavior.getTransVel();
 }   // getTransVel() const
@@ -279,7 +279,7 @@ GLfloat Robot::getTransVel() const
 
 
 //
-// GLfloat getRotVel() const
+// float getRotVel() const
 // Last modified: 03Sep2006
 //
 // Returns the rotational velocity of this robot.
@@ -287,7 +287,7 @@ GLfloat Robot::getTransVel() const
 // Returns:     the rotational velocity of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::getRotVel() const
+float Robot::getRotVel() const
 {
     return behavior.getRotVel();
 }   // getRotVel() const
@@ -295,7 +295,7 @@ GLfloat Robot::getRotVel() const
 
 
 //
-// GLfloat getAngVel() const
+// float getAngVel() const
 // Last modified: 03Sep2006
 //
 // Returns the angular velocity of this robot.
@@ -303,7 +303,7 @@ GLfloat Robot::getRotVel() const
 // Returns:     the angular velocity of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::getAngVel() const
+float Robot::getAngVel() const
 {
     return radiansToDegrees(getRotVel() / radius);
 }   // getAngVel() const
@@ -311,7 +311,7 @@ GLfloat Robot::getAngVel() const
 
 
 //
-// GLfloat getVelocity() const
+// float getVelocity() const
 // Last modified: 03Sep2006
 //
 // Returns the velocity of this robot.
@@ -319,7 +319,7 @@ GLfloat Robot::getAngVel() const
 // Returns:     the velocity of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::getVelocity() const
+float Robot::getVelocity() const
 {
     return behavior.getVelocity();
 }   // getVelocity() const
@@ -327,7 +327,7 @@ GLfloat Robot::getVelocity() const
 
 
 //
-// GLfloat getArcRadius() const
+// float getArcRadius() const
 // Last modified: 03Sep2006
 //
 // Returns the arc radius based on the translational
@@ -336,7 +336,7 @@ GLfloat Robot::getVelocity() const
 // Returns:     the arc radius of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::getArcRadius() const
+float Robot::getArcRadius() const
 {
     return (behavior.getRotVel() == 0.0f) ? 0.0f :
             radius * behavior.getTransVel() / behavior.getRotVel();
@@ -362,7 +362,7 @@ void Robot::draw()
         (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
 
     vector<Vector> rels = getObjectRelationships(2.0f * collisionRadius());
-    for (GLint i = 0, n = rels.size(); i < n; ++i)
+    for (int i = 0, n = rels.size(); i < n; ++i)
     {
         rels[i].rotated(rotate[2]);
         rels[i].translated(x, y, z);
@@ -402,15 +402,15 @@ void Robot::draw()
 //
 void Robot::step()
 {
-    GLfloat collDist = collisionRadius();
+    float collDist = collisionRadius();
     vector<Vector> rels = getObjectRelationships(collDist);
     if (rels.size() > 0)
     {
-		GLfloat minDist  = HUGE;
-		GLint   minIndex = 0;
-		for (GLint i = 0, n = rels.size(); i < n; ++i)
+		float minDist  = HUGE;
+		int   minIndex = 0;
+		for (int i = 0, n = rels.size(); i < n; ++i)
 		{
-			GLfloat currDist = rels[i].magnitude();
+			float currDist = rels[i].magnitude();
 			if (currDist < minDist)
 			{
 				minDist  = currDist;
@@ -452,7 +452,7 @@ Vector Robot::getRelationship(Vector &target) const
 
 
 //
-// GLfloat getDistanceTo(target)
+// float getDistanceTo(target)
 // Last modified: 07Nov2009
 //
 // Returns the distance from this robot
@@ -462,7 +462,7 @@ Vector Robot::getRelationship(Vector &target) const
 // Parameters:
 //      target  in/out  the target vector being related to
 //
-GLfloat Robot::getDistanceTo(Vector &target) const
+float Robot::getDistanceTo(Vector &target) const
 {
     return getRelationship(target).magnitude();
 }   // getDistanceTo(Vector &) const
@@ -470,7 +470,7 @@ GLfloat Robot::getDistanceTo(Vector &target) const
 
 
 //
-// GLfloat getAngleTo(target)
+// float getAngleTo(target)
 // Last modified: 06Mar2007
 //
 // Returns the angle from this robot
@@ -480,7 +480,7 @@ GLfloat Robot::getDistanceTo(Vector &target) const
 // Parameters:
 //      target  in/out  the target vector being related to
 //
-GLfloat Robot::getAngleTo(Vector &target) const
+float Robot::getAngleTo(Vector &target) const
 {
     return getRelationship(target).angle();
 }   // getAngleTo(Vector &) const
@@ -488,7 +488,7 @@ GLfloat Robot::getAngleTo(Vector &target) const
 
 
 //
-// GLfloat maxSpeed() const
+// float maxSpeed() const
 // Last modified: 03Sep2006
 //
 // Returns the max speed of this robot.
@@ -496,7 +496,7 @@ GLfloat Robot::getAngleTo(Vector &target) const
 // Returns:     the max speed of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::maxSpeed() const
+float Robot::maxSpeed() const
 {
     return FACTOR_MAX_SPEED * radius;
 }   // maxSpeed() const
@@ -504,7 +504,7 @@ GLfloat Robot::maxSpeed() const
 
 
 //
-// GLfloat maxAngSpeed() const
+// float maxAngSpeed() const
 // Last modified: 03Sep2006
 //
 // Returns the max angular speed of this robot.
@@ -512,7 +512,7 @@ GLfloat Robot::maxSpeed() const
 // Returns:     the max angular speed of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::maxAngSpeed() const
+float Robot::maxAngSpeed() const
 {
     return radiansToDegrees(maxSpeed() / radius);
 }   // maxAngSpeed() const
@@ -520,7 +520,7 @@ GLfloat Robot::maxAngSpeed() const
 
 
 //
-// GLfloat threshold() const
+// float threshold() const
 // Last modified: 03Sep2006
 //
 // Returns the minimum movement threshold of this robot.
@@ -528,7 +528,7 @@ GLfloat Robot::maxAngSpeed() const
 // Returns:     the minimum movement threshold of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::threshold() const
+float Robot::threshold() const
 {
     return FACTOR_THRESHOLD * maxSpeed();
 }   // threshold() const
@@ -536,7 +536,7 @@ GLfloat Robot::threshold() const
 
 
 //
-// GLfloat angThreshold() const
+// float angThreshold() const
 // Last modified: 07Nov2009
 //
 // Returns the minimum angular movement threshold of this robot.
@@ -544,7 +544,7 @@ GLfloat Robot::threshold() const
 // Returns:     the minimum angular movement threshold of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::angThreshold() const
+float Robot::angThreshold() const
 {
     return 0.5f * FACTOR_THRESHOLD * maxAngSpeed();
 }   // angThreshold() const
@@ -552,7 +552,7 @@ GLfloat Robot::angThreshold() const
 
 
 //
-// GLfloat collisionRadius() const
+// float collisionRadius() const
 // Last modified: 15Nov2006
 //
 // Returns the minimum collision radius of this robot.
@@ -560,7 +560,7 @@ GLfloat Robot::angThreshold() const
 // Returns:     the minimum collision radius of this robot
 // Parameters:  <none>
 //
-GLfloat Robot::collisionRadius() const
+float Robot::collisionRadius() const
 {
     return FACTOR_COLLISION_RADIUS * radius;
 }   // collisionRadius() const
@@ -581,11 +581,11 @@ GLfloat Robot::collisionRadius() const
 // Parameters:
 //      maxDist in      the maximum distance to be considered
 //
-vector<Vector> Robot::getObjectRelationships(const GLfloat maxDist) const
+vector<Vector> Robot::getObjectRelationships(const float maxDist) const
 {
     return (env == NULL) ? vector<Vector>()
                          : env->getObjectRelationships(ID, maxDist);
-}   // getObjectRelationships(const GLfloat) const
+}   // getObjectRelationships(const float) const
 
 
 
@@ -602,15 +602,15 @@ vector<Vector> Robot::getObjectRelationships(const GLfloat maxDist) const
 // Parameters:
 //      toID    in      the ID of the robot being related to
 //
-Vector Robot::getRelationship(const GLint toID) const
+Vector Robot::getRelationship(const int toID) const
 {
     return (env == NULL) ? Vector() : env->getRelationship(toID, ID);
-}   // getRelationship(const GLint) const
+}   // getRelationship(const int) const
 
 
 
 //
-// GLfloat getDistance(toID)
+// float getDistance(toID)
 // Last modified: 07Nov2009
 //
 // Returns the distance from this robot
@@ -620,15 +620,15 @@ Vector Robot::getRelationship(const GLint toID) const
 // Parameters:
 //      toID    in      the ID of the robot being related to
 //
-GLfloat Robot::getDistanceTo(const GLint toID) const
+float Robot::getDistanceTo(const int toID) const
 {
     return getRelationship(toID).magnitude();
-}   // getDistanceTo(const GLint) const
+}   // getDistanceTo(const int) const
 
 
 
 //
-// GLfloat getAngle(toID)
+// float getAngle(toID)
 // Last modified: 03Sep2006
 //
 // Returns the angle from this robot
@@ -638,10 +638,10 @@ GLfloat Robot::getDistanceTo(const GLint toID) const
 // Parameters:
 //      toID    in      the ID of the robot being related to
 //
-GLfloat Robot::getAngleTo(const GLint toID) const
+float Robot::getAngleTo(const int toID) const
 {
     return getRelationship(toID).angle();
-}   // getAngleTo(const GLint) const
+}   // getAngleTo(const int) const
 
 
 
@@ -661,12 +661,12 @@ GLfloat Robot::getAngleTo(const GLint toID) const
 //      toID    in      the ID of the cell receiving the packet
 //      type    in      the type of message being sent
 //
-bool Robot::sendMsg(const Message &msg, const GLint toID, const GLint type)
+bool Robot::sendMsg(const Message &msg, const int toID, const int type)
 {
     if (sendPacket(Packet(msg, toID, ID, type))) return true;
     //delete msg;    // TO-DO: call destructor of appropriate type... ?
     return false;
-}   // sendMsg(const Message &, const GLint, const GLint)
+}   // sendMsg(const Message &, const int, const int)
 
 
 
@@ -723,13 +723,13 @@ Behavior Robot::moveArc(const Vector &target)
 //
 Behavior Robot::moveArcBehavior(const Vector &target)
 {
-    GLfloat theta    = target.angle();
-	  GLfloat phi      = this->heading.angle();
-	  GLfloat delta    = degreesToRadians(theta);
-    GLfloat cosDelta = cos(delta);
-    GLfloat sinDelta = sin(delta);
-	  GLfloat t        = cosDelta * cosDelta * sign(cosDelta);
-	  GLfloat r        = sinDelta * sinDelta * sign(sinDelta);
+    float theta    = target.angle();
+	  float phi      = this->heading.angle();
+	  float delta    = degreesToRadians(theta);
+    float cosDelta = cos(delta);
+    float sinDelta = sin(delta);
+	  float t        = cosDelta * cosDelta * sign(cosDelta);
+	  float r        = sinDelta * sinDelta * sign(sinDelta);
 	  behavior         = Behavior(ACTIVE, t, r, maxSpeed());
     if (abs(theta) < 90.0f)
 	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
@@ -737,9 +737,9 @@ Behavior Robot::moveArcBehavior(const Vector &target)
         behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));
 	  return behavior;
 /*
-    GLfloat r     = target.magnitude();
+    float r     = target.magnitude();
     if (r <= threshold()) return moveStop();
-    GLfloat theta = degreesToRadians(target.angle());
+    float theta = degreesToRadians(target.angle());
     if (theta == 0.0f)    return moveForwardBehavior(r);
     else return moveArcBehavior((abs(theta) >
                                 degreesToRadians(angThreshold())) ?
@@ -764,10 +764,10 @@ Behavior Robot::moveArcBehavior(const Vector &target)
 //      r       in      the rotational velocity of the behavior
 //      s       in      the status of the behavior (default ACTIVE)
 //
-Behavior Robot::moveArc(const GLfloat t, const GLfloat r, const Status s)
+Behavior Robot::moveArc(const float t, const float r, const Status s)
 {
     return behavior = moveArcBehavior(t, r, s);
-}   // moveArc(const GLfloat, const GLfloat, const Status)
+}   // moveArc(const float, const float, const Status)
 
 
 
@@ -784,12 +784,12 @@ Behavior Robot::moveArc(const GLfloat t, const GLfloat r, const Status s)
 //      r       in      the rotational velocity of the behavior
 //      s       in      the status of the behavior (default ACTIVE)
 //
-Behavior Robot::moveArcBehavior(const GLfloat t,
-                                const GLfloat r,
+Behavior Robot::moveArcBehavior(const float t,
+                                const float r,
                                 const Status  s)
 {
     return Behavior(s, t, r, maxSpeed());
-}   // moveArcBehavior(const GLfloat, const GLfloat, const Status)
+}   // moveArcBehavior(const float, const float, const Status)
 
 
 
@@ -804,10 +804,10 @@ Behavior Robot::moveArcBehavior(const GLfloat t,
 // Parameters:
 //      vel     in      the velocity of the behavior
 //
-Behavior Robot::moveForward(const GLfloat speed)
+Behavior Robot::moveForward(const float speed)
 {
     return behavior = moveForwardBehavior(speed);
-}   // moveForward(const GLfloat)
+}   // moveForward(const float)
 
 
 
@@ -822,10 +822,10 @@ Behavior Robot::moveForward(const GLfloat speed)
 // Parameters:
 //      vel     in      the velocity of the behavior
 //
-Behavior Robot::moveForwardBehavior(const GLfloat vel)
+Behavior Robot::moveForwardBehavior(const float vel)
 {
     return moveArcBehavior(vel, 0.0f);
-}   // moveForwardBehavior(const GLfloat)
+}   // moveForwardBehavior(const float)
 
 
 
@@ -840,10 +840,10 @@ Behavior Robot::moveForwardBehavior(const GLfloat vel)
 // Parameters:
 //      vel     in      the velocity of the behavior
 //
-Behavior Robot::moveBackward(const GLfloat vel)
+Behavior Robot::moveBackward(const float vel)
 {
     return behavior = moveForwardBehavior(vel);
-}   // moveForward(const GLfloat)
+}   // moveForward(const float)
 
 
 
@@ -858,10 +858,10 @@ Behavior Robot::moveBackward(const GLfloat vel)
 // Parameters:
 //      vel     in      the velocity of the behavior
 //
-Behavior Robot::moveBackwardBehavior(const GLfloat vel)
+Behavior Robot::moveBackwardBehavior(const float vel)
 {
     return moveArcBehavior(-vel, 0.0f);
-}   // moveForwardBehavior(const GLfloat)
+}   // moveForwardBehavior(const float)
 
 
 
@@ -914,10 +914,10 @@ Behavior Robot::moveStopBehavior()
 //      target  in/out  the target to orient to
 //      theta   in      the heading to maintain to the target
 //
-Behavior Robot::orientTo(const Vector &target, const GLfloat theta)
+Behavior Robot::orientTo(const Vector &target, const float theta)
 {
     return behavior = orientToBehavior(target, theta);
-}   // orientTo(const Vector &, const GLfloat)
+}   // orientTo(const Vector &, const float)
 
 
 
@@ -934,12 +934,12 @@ Behavior Robot::orientTo(const Vector &target, const GLfloat theta)
 //      target  in/out  the target to orient to
 //      theta   in      the heading to maintain to the target
 //
-Behavior Robot::orientToBehavior(const Vector &target, const GLfloat theta)
+Behavior Robot::orientToBehavior(const Vector &target, const float theta)
 {
-    GLfloat delta   = scaleDegrees(target.angle() - theta);
+    float delta   = scaleDegrees(target.angle() - theta);
     if (abs(delta) <= angThreshold()) return moveStopBehavior();
     return moveArcBehavior(0.0f, degreesToRadians(delta));
-}   // orientToBehavior(const Vector &, const GLfloat)
+}   // orientToBehavior(const Vector &, const float)
 
 
 
@@ -956,10 +956,10 @@ Behavior Robot::orientToBehavior(const Vector &target, const GLfloat theta)
 //      target  in/out  the target to follow
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::follow(const Vector &target, const GLfloat dist)
+Behavior Robot::follow(const Vector &target, const float dist)
 {
     return behavior = followBehavior(target, dist);
-}   // follow(const Vector &, const GLfloat)
+}   // follow(const Vector &, const float)
 
 
 
@@ -976,14 +976,14 @@ Behavior Robot::follow(const Vector &target, const GLfloat dist)
 //      target  in/out  the target to follow
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::followBehavior(const Vector &target, const GLfloat dist)
+Behavior Robot::followBehavior(const Vector &target, const float dist)
 {
-    GLfloat  r   = target.magnitude();
+    float  r   = target.magnitude();
     if (r <= threshold()) return moveStopBehavior();
     Behavior beh = orientToBehavior(target, 0.0f);
     if ((beh.isDone()) && (r > dist)) return moveForwardBehavior(r - dist);
     return beh;
-}   // followBehavior(const Vector &, const GLfloat)
+}   // followBehavior(const Vector &, const float)
 
 
 
@@ -1000,10 +1000,10 @@ Behavior Robot::followBehavior(const Vector &target, const GLfloat dist)
 //      target  in/out  the target to avoid
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::avoid(const Vector &target, const GLfloat dist)
+Behavior Robot::avoid(const Vector &target, const float dist)
 {
     return behavior = avoidBehavior(target, dist);
-}   // avoid(const Vector &, const GLfloat)
+}   // avoid(const Vector &, const float)
 
 
 
@@ -1020,13 +1020,13 @@ Behavior Robot::avoid(const Vector &target, const GLfloat dist)
 //      target  in/out  the target to avoid
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::avoidBehavior(const Vector &target, const GLfloat dist)
+Behavior Robot::avoidBehavior(const Vector &target, const float dist)
 {
-    GLfloat r                     = target.magnitude();
+    float r                     = target.magnitude();
     if (r < dist) return sumBehaviors(orientToBehavior(target, 180.0f),
                                       moveForwardBehavior(dist - r));
     return moveStopBehavior();
-}   // avoidBehavior(const Vector &, const GLfloat)
+}   // avoidBehavior(const Vector &, const float)
 
 
 
@@ -1045,10 +1045,10 @@ Behavior Robot::avoidBehavior(const Vector &target, const GLfloat dist)
 //      target  in/out  the target to orient to for orbit
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::orientForOrbit(const Vector &target, const GLfloat dist)
+Behavior Robot::orientForOrbit(const Vector &target, const float dist)
 {
     return behavior = orientForOrbitBehavior(target, dist);
-}   // orientForOrbit(const Vector &, const GLfloat)
+}   // orientForOrbit(const Vector &, const float)
 
 
 
@@ -1067,14 +1067,14 @@ Behavior Robot::orientForOrbit(const Vector &target, const GLfloat dist)
 //      dist    in      the distance to maintain from the target
 //
 Behavior Robot::orientForOrbitBehavior(const Vector &target,
-                                       const GLfloat dist)
+                                       const float dist)
 {
-    GLfloat  r = target.magnitude(),       dir = 0.0f;
+    float  r = target.magnitude(),       dir = 0.0f;
     if      (r > dist + collisionRadius()) dir = 0.0f;
     else if (r < dist - collisionRadius()) dir = 180.0f;
     else dir = 180.0f - r * 90.0f / collisionRadius();
     return orientToBehavior(target, dir);
-}   // orientForOrbitBehavior(const Vector &, const GLfloat)
+}   // orientForOrbitBehavior(const Vector &, const float)
 
 
 
@@ -1091,10 +1091,10 @@ Behavior Robot::orientForOrbitBehavior(const Vector &target,
 //      target  in/out  the target to orbit
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::orbit(const Vector &target, const GLfloat dist)
+Behavior Robot::orbit(const Vector &target, const float dist)
 {
     return behavior = orbitBehavior(target, dist);
-}   // orbit(const Vector &, const GLfloat)
+}   // orbit(const Vector &, const float)
 
 
 
@@ -1111,11 +1111,11 @@ Behavior Robot::orbit(const Vector &target, const GLfloat dist)
 //      target  in/out  the target to orbit
 //      dist    in      the distance to maintain from the target
 //
-Behavior Robot::orbitBehavior(const Vector &target, const GLfloat dist)
+Behavior Robot::orbitBehavior(const Vector &target, const float dist)
 {
     return sumBehaviors(orientForOrbitBehavior(target, dist),
                         moveForwardBehavior(maxSpeed()));
-}   // orbit(const Vector &, const GLfloat)
+}   // orbit(const Vector &, const float)
 
 
 
@@ -1136,7 +1136,7 @@ Behavior Robot::orbitBehavior(const Vector &target, const GLfloat dist)
 //      theta       in      the initial heading of the robot (default 0)
 //      colorIndex  in      the initial array index of the color of the robot
 //
-bool Robot::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz, const GLfloat theta)
+bool Robot::init(const float dx,    const float dy, const float dz, const float theta)
 {
     Circle::init(dx, dy, dz, DEFAULT_ROBOT_RADIUS);
     setHeading(theta);
@@ -1148,7 +1148,7 @@ bool Robot::init(const GLfloat dx,    const GLfloat dy, const GLfloat dz, const 
     showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
-}   // init(const GLfloat..<4>)
+}   // init(const float..<4>)
 
 
 
@@ -1193,10 +1193,10 @@ bool Robot::processPacket(Packet &p)
     {
         case AUCTION_ANNOUNCEMENT:
         {
-           GLfloat range = rangeSensor(p);
+           float range = rangeSensor(p);
            if (range > 0.0f)
            {
-               GLfloat b_j = E * range;
+               float b_j = E * range;
                Bid    *b   = new Bid(b_j, getID());
                success     = env->sendMsg(b, p.fromID, (-1 * (ID * 10)), BID);
            }
@@ -1211,7 +1211,7 @@ bool Robot::processPacket(Packet &p)
 
 
 //
-// GLfloat rangeSensor(p)
+// float rangeSensor(p)
 // Last modified: 08Nov2009
 //
 // Returns with the distance from this robot
@@ -1220,7 +1220,7 @@ bool Robot::processPacket(Packet &p)
 // Returns:    the distance from this robot to the position being auctioned
 // Parameters:
 //      p      in/out   the packet (auction) to be processed
-GLfloat Robot::rangeSensor(Packet &p)
+float Robot::rangeSensor(Packet &p)
 {
 
     // unpack the auction from the packet
@@ -1230,16 +1230,16 @@ GLfloat Robot::rangeSensor(Packet &p)
     Formation f = aa->s_i.formation;
 
     // get the range from the auctioneer to this robot
-    GLfloat range = env->distanceToRobot(env->getCell(p.fromID), this);
+    float range = env->distanceToRobot(env->getCell(p.fromID), this);
 
     // if the auctioneer is beyond sensor range, do not bid
     if (range > SENSOR_RANGE) return -1.0f;
 
     // get the relative bearing from the auctioneer to this robot
-    GLfloat bearing = bearingSensor(p.fromID);
+    float bearing = bearingSensor(p.fromID);
 
     // get the angle between the auctioneer and the position being auctioned
-    GLfloat ang = atan2(f.getFunction()(f.getRadius()), f.getRadius()) -
+    float ang = atan2(f.getFunction()(f.getRadius()), f.getRadius()) -
                   bearing;
 
     // get the vector between the auctioneer and this robot
@@ -1269,7 +1269,7 @@ GLfloat Robot::rangeSensor(Packet &p)
 
 
 //
-// GLfloat bearingSensor(cellID)
+// float bearingSensor(cellID)
 // Last modified: 08Nov2009
 //
 // Returns the relative bearing (in degrees) from the robot
@@ -1278,22 +1278,22 @@ GLfloat Robot::rangeSensor(Packet &p)
 // Returns:    the relative bearing from robot[ID] and this robot
 // Parameters:
 //      cellID       in/out  the ID of the robot
-GLfloat Robot::bearingSensor(GLint &cellID)
+float Robot::bearingSensor(int &cellID)
 {
 
     // get the vector between the auctioneer and this robot
     Vector e = (*(Vector *)this) - (*(Vector *)env->getCell(cellID));
 
     // get the distance between the auctioneer and this robot
-    GLfloat dist = e.magnitude();
+    float dist = e.magnitude();
 
     // get the bearing between the auctioneer and this robot
-    GLfloat bearing = radiansToDegrees(atan2(e.y, e.x));
+    float bearing = radiansToDegrees(atan2(e.y, e.x));
 
     // subtract the bearing between the auction and this robot
     // from the auctioneer's heading
     bearing = env->getCell(cellID)->getHeading() - bearing;
 
     return bearing;
-}   // bearingSensor(GLint &)
+}   // bearingSensor(int &)
 

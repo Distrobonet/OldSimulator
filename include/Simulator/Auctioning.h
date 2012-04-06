@@ -46,12 +46,12 @@ struct Auction_Announcement
 //
 struct Bid
 {
-    GLfloat b_i;
-    GLint   rID;
+    float b_i;
+    int   rID;
 
-    Bid(const GLfloat b = MAX_FLOAT, const GLint id = -1): b_i(b), rID(id)
+    Bid(const float b = MAX_FLOAT, const int id = -1): b_i(b), rID(id)
     {
-    }   // Bid(const GLfloat, const GLint)
+    }   // Bid(const float, const int)
 };  // Bid
 
 #endif

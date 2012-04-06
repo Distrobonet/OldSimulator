@@ -27,8 +27,8 @@ enum Color    // color array index values
     BLUE,
     MAGENTA
 };  // Color
-const GLint   N_COLORS           = 9;    // number of colors
-const GLfloat COLOR[N_COLORS][3] =       // color array
+const int   N_COLORS           = 9;    // number of colors
+const float COLOR[N_COLORS][3] =       // color array
 {
     {-1.0f, -1.0f, -1.0f},    // INVISIBLE
     { 0.0f,  0.0f,  0.0f},    // BLACK
