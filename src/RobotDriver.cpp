@@ -122,16 +122,16 @@ const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIU
 
 
 // simulation global variables
-Environment *g_env           = NULL;
-int        g_nRobots       = 0;
-float      g_fRadius       = DEFAULT_FORMATION.getRadius();
-int        g_sID           = DEFAULT_FORMATION.getSeedID();
-int        g_fID           = DEFAULT_FORMATION.getFormationID();
-float      g_fHeading      = DEFAULT_FORMATION.getHeading();
-int        g_fIndex        = 0;
-int        g_selectedIndex = g_sID;
-int        g_dt            = 50;    // time interval (in milliseconds)
-bool       g_prop_toggle   = false;
+Environment *g_env               = NULL;
+int        g_nRobots             = 0;
+float      g_formationRadius     = DEFAULT_FORMATION.getRadius();
+int        g_seedID              = DEFAULT_FORMATION.getSeedID();
+int        g_formationID         = DEFAULT_FORMATION.getFormationID();
+float      g_formationHeading    = DEFAULT_FORMATION.getHeading();
+int        g_formationIndex      = 0;
+int        g_selectedIndex       = g_seedID;
+int        g_dTime               = 50;    // time interval (in milliseconds)
+bool       g_prop_toggle         = false;
 
 
 
@@ -151,14 +151,14 @@ int main(int argc, char **argv)
 {
   // parse command line arguments
   if (!parseArguments(argc, argv,
-        g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
+        g_nRobots, g_formationIndex, g_formationRadius, g_formationHeading, g_dTime))
   {
     cerr << ">> ERROR: Unable to parse arguments...\n\n";
     return 1;
   }
 
   // validate parameters
-  if (!validateParameters(g_nRobots, g_fIndex, g_fRadius, g_fHeading, g_dt))
+  if (!validateParameters(g_nRobots, g_formationIndex, g_formationRadius, g_formationHeading, g_dTime))
   {
     cerr << ">> ERROR: Unable to validate parameters...\n\n";
     return 1;
@@ -188,22 +188,13 @@ int main(int argc, char **argv)
 //  glutTimerFunc(50, timerFunction, 1);
 
   // initialize and execute the robot cell environment
-  if (!initEnv(g_nRobots, g_fIndex))
+  if (!initEnv(g_nRobots, g_formationIndex))
   {
     cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
     return 1;
   }
   initWindow();
   //glutMainLoop();
-
-
-
-
-
-
-
-
-
 
 
   // BEGIN DISTROBONET CODE
@@ -595,8 +586,8 @@ bool initEnv(const int nRobots, const int fIndex)
     g_env = NULL;
   }
 
-  Formation f(formations[fIndex], g_fRadius, Vector(),
-      g_sID,            ++g_fID,     g_fHeading);
+  Formation f(formations[fIndex], g_formationRadius, Vector(),
+      g_seedID,            ++g_formationID,     g_formationHeading);
   if ((g_env = new Environment(nRobots, f)) == NULL) return false;
   return true;
 }   // initEnv(const int, const int)
@@ -638,7 +629,7 @@ bool deinitEnv()
 //
 bool changeFormation(const int index, const Vector gradient)
 {
-  g_fIndex = index;
+  g_formationIndex = index;
   if (!g_env->startFormation)
   {
     g_env->startFormation = true;
@@ -646,11 +637,11 @@ bool changeFormation(const int index, const Vector gradient)
   // determine if a new seed has been selected
   if (g_selectedIndex != -1)
   {
-    g_env->getCell(g_sID)->setColor(DEFAULT_CELL_COLOR);
-    g_sID = g_selectedIndex;
+    g_env->getCell(g_seedID)->setColor(DEFAULT_CELL_COLOR);
+    g_seedID = g_selectedIndex;
   }
-  Formation f(formations[index], g_fRadius,     gradient,
-      g_sID,           ++g_env->formationID, g_fHeading);
+  Formation f(formations[index], g_formationRadius,     gradient,
+      g_seedID,           ++g_env->formationID, g_formationHeading);
 
   return g_env->changeFormation(f);
 }   // changeFormation(const int, const Vector)
@@ -668,9 +659,9 @@ bool changeFormationSim(const int index, const Vector gradient)
 {
   if(g_selectedIndex > -1)
   {
-    g_env->getCell(g_sID)->setColor(DEFAULT_CELL_COLOR);
+    g_env->getCell(g_seedID)->setColor(DEFAULT_CELL_COLOR);
     g_selectedIndex = index;
-    return changeFormation(g_fIndex,gradient);
+    return changeFormation(g_formationIndex,gradient);
   }
   else return false;
 }
@@ -678,25 +669,25 @@ bool changeFormationSim(const int index, const Vector gradient)
 bool sendNCellRequest()
 {
   PropMsg *ncell = new PropMsg();
-  return g_env->sendMsg(ncell, g_sID,ID_OPERATOR, NCELL_REQUEST);
+  return g_env->sendMsg(ncell, g_seedID,ID_OPERATOR, NCELL_REQUEST);
 }  //sendNCellRequest()
 
 
 bool sendFcntrRequest()
 {
   PropMsg *fcntr = new PropMsg();
-  return g_env->sendMsg(fcntr, g_sID,ID_OPERATOR, FCNTR_REQUEST);
+  return g_env->sendMsg(fcntr, g_seedID,ID_OPERATOR, FCNTR_REQUEST);
 }  //sendFcntrRequest()
 
 bool sendFRadRequest()
 {
   PropMsg *frad = new PropMsg();
-  return g_env->sendMsg(frad, g_sID,ID_OPERATOR, FRAD_REQUEST);
+  return g_env->sendMsg(frad, g_seedID,ID_OPERATOR, FRAD_REQUEST);
 }  //sendFRadRequest()
 bool sendFSeedRequest()
 {
   PropMsg *fseed = new PropMsg();
-  return g_env->sendMsg(fseed, g_sID,ID_OPERATOR, FSEED_REQUEST);
+  return g_env->sendMsg(fseed, g_seedID,ID_OPERATOR, FSEED_REQUEST);
 }// sendFSeedRequest();
 
 //
@@ -740,10 +731,10 @@ void display()
   // draws environment robot cells
   if (g_env->getCells().size() > 0)
   {
-    g_env->getCell(g_sID)->setColor(GREEN);
+    g_env->getCell(g_seedID)->setColor(GREEN);
     for(int i = 0; i < g_env->getNCells(); ++i)
     {
-      if(g_env->getCell(i) != g_env->getCell(g_sID))
+      if(g_env->getCell(i) != g_env->getCell(g_seedID))
       {
         if(g_env->getCell(i) == g_env->getCell(g_selectedIndex))
         {
@@ -793,20 +784,20 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
     case '<': case ',':
       if (g_env->getNCells() > 0)
       {
-        g_fHeading += g_env->getCell(g_sID)->maxAngSpeed();
+        g_formationHeading += g_env->getCell(g_seedID)->maxAngSpeed();
         changeFormation(g_fIndex);
-        g_env->getCell(g_sID)->rotateRelative(
-            g_env->getCell(g_sID)->maxAngSpeed());
+        g_env->getCell(g_seedID)->rotateRelative(
+            g_env->getCell(g_seedID)->maxAngSpeed());
         //min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
       }
       break;
     case '>': case '.':
       if (g_env->getNCells() > 0)
       {
-        g_fHeading -= g_env->getCell(g_sID)->maxAngSpeed();
+        g_formationHeading -= g_env->getCell(g_seedID)->maxAngSpeed();
         changeFormation(g_fIndex);
-        g_env->getCell(g_sID)->rotateRelative(
-            -g_env->getCell(g_sID)->maxAngSpeed());
+        g_env->getCell(g_seedID)->rotateRelative(
+            -g_env->getCell(g_seedID)->maxAngSpeed());
         //-min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
       }
       break;
@@ -815,42 +806,42 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
     case '+': case '=':
       if (g_env->getNCells() > 0)
       {
-        g_fRadius += 0.01f;
-        changeFormation(g_fIndex);
+        g_formationRadius += 0.01f;
+        changeFormation(g_formationIndex);
       }
       break;
     case '-': case '_':
       if (g_env->getNCells() > 0)
       {
-        g_fRadius -= 0.01f;
-        g_fRadius  = max(g_fRadius,
-            g_env->getCell(g_sID)->collisionRadius());
-        changeFormation(g_fIndex);
+        g_formationRadius -= 0.01f;
+        g_formationRadius  = max(g_formationRadius,
+            g_env->getCell(g_seedID)->collisionRadius());
+        changeFormation(g_formationIndex);
       }
       break;
 
     case 'h': case 'H':
       if (g_env->getNCells() > 0)
       {
-        g_env->showHeading(!g_env->getCell(g_sID)->showHeading);
+        g_env->showHeading(!g_env->getCell(g_seedID)->showHeading);
       }
       break;
     case 'l': case 'L':
       if (g_env->getNCells() > 0)
       {
-        g_env->showLine(!g_env->getCell(g_sID)->heading.showLine);
+        g_env->showLine(!g_env->getCell(g_seedID)->heading.showLine);
       }
       break;
     case 'p': case 'P':
       if (g_env->getNCells() > 0)
       {
-        g_env->showPos(!g_env->getCell(g_sID)->showPos);
+        g_env->showPos(!g_env->getCell(g_seedID)->showPos);
       }
       break;
     case 't': case 'T':
       if (g_env->getNCells() > 0)
       {
-        g_env->showHead(!g_env->getCell(g_sID)->heading.showHead);
+        g_env->showHead(!g_env->getCell(g_seedID)->heading.showHead);
       }
       break;
     case 'n': case 'N':
@@ -925,8 +916,8 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
     case GLUT_KEY_LEFT:
       if (g_env->getNCells() > 0)
       {
-        g_env->getCell(g_sID)->rotError =
-          -(1.0001f * g_env->getCell(g_sID)->angThreshold());
+        g_env->getCell(g_seedID)->rotError =
+          -(1.0001f * g_env->getCell(g_seedID)->angThreshold());
         //g_env->getCell(g_sID)->rotateRelative(
         //    min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
       }
@@ -934,8 +925,8 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
     case GLUT_KEY_UP:
       if (g_env->getNCells() > 0)
       {
-        g_env->getCell(g_sID)->transError.x =
-          1.0001f * g_env->getCell(g_sID)->threshold();
+        g_env->getCell(g_seedID)->transError.x =
+          1.0001f * g_env->getCell(g_seedID)->threshold();
         //g_env->getCell(g_sID)->translateRelative(
         //    min(0.001f, g_env->getCell(g_sID)->maxSpeed()));
       }
@@ -943,8 +934,8 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
     case GLUT_KEY_RIGHT:
       if (g_env->getNCells() > 0)
       {
-        g_env->getCell(g_sID)->rotError =
-          1.0001f * g_env->getCell(g_sID)->angThreshold();
+        g_env->getCell(g_seedID)->rotError =
+          1.0001f * g_env->getCell(g_seedID)->angThreshold();
         //g_env->getCell(g_sID)->rotateRelative(
         //    -min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
       }
@@ -952,8 +943,8 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
     case GLUT_KEY_DOWN:
       if (g_env->getNCells() > 0)
       {
-        g_env->getCell(g_sID)->transError.x =
-          -(1.0001f * g_env->getCell(g_sID)->threshold());
+        g_env->getCell(g_seedID)->transError.x =
+          -(1.0001f * g_env->getCell(g_seedID)->threshold());
         //g_env->getCell(g_sID)->translateRelative(
         //    -min(0.001f, g_env->getCell(g_sID)->maxSpeed()));
       }
@@ -983,13 +974,13 @@ void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
     case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
       if (g_env->getNCells() > 0)
       {
-        g_env->getCell(g_sID)->rotError = 0.0f;
+        g_env->getCell(g_seedID)->rotError = 0.0f;
       }
       break;
     case GLUT_KEY_UP: case GLUT_KEY_DOWN:
       if (g_env->getNCells() > 0)
       {
-        g_env->getCell(g_sID)->transError.x = 0.0f;
+        g_env->getCell(g_seedID)->transError.x = 0.0f;
       }
       break;
     default: break;
