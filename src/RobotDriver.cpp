@@ -44,14 +44,6 @@ using namespace std;
 #endif
 
 // simulation environment function prototypes
-void printUsage(int argc, char **argv);
-bool parseArguments(int   argc,
-    char  **argv,
-    int   &nRobots,
-    int   &fIndex,
-    float &fRadius,
-    float &fHeading,
-    int   &dt);
 bool validateParameters(const int   nRobots,
     const int   fIndex,
     const float fRadius,
@@ -68,15 +60,11 @@ bool changeFormationSim(const int index, const Vector gradient = Vector());
 
 
 // OpenGL function prototypes
-void initWindow();
 void display();
 void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY);
 void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
 void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
-void mouseClick(int mouseButton, int mouseState,
-    int mouseX,      int mouseY);
-void mouseDrag(int mouseX, int mouseY);
-void resizeWindow(GLsizei w, GLsizei h);
+
 void timerFunction(int value);
 
 
@@ -150,12 +138,12 @@ bool       g_prop_toggle         = false;
 int main(int argc, char **argv)
 {
   // parse command line arguments
-  if (!parseArguments(argc, argv,
-        g_nRobots, g_formationIndex, g_formationRadius, g_formationHeading, g_dTime))
-  {
-    cerr << ">> ERROR: Unable to parse arguments...\n\n";
-    return 1;
-  }
+//  if (!parseArguments(argc, argv,
+//        g_nRobots, g_formationIndex, g_formationRadius, g_formationHeading, g_dTime))
+//  {
+//    cerr << ">> ERROR: Unable to parse arguments...\n\n";
+//    return 1;
+//  }
 
   // validate parameters
   if (!validateParameters(g_nRobots, g_formationIndex, g_formationRadius, g_formationHeading, g_dTime))
@@ -350,48 +338,6 @@ void displayMenu()
 
 }
 
-// void printUsage(argc, argv)
-// Last modified: 08Nov2009
-//
-// Prints the program usage message.
-//
-// Returns:     <none>
-// Parameters:
-//      argc    in      an argument counter
-//      argv    in      initialization arguments
-//
-void printUsage(int argc, char **argv)
-{
-  cout << "USAGE: " << argv[0]
-    << " [-n <nRobots>]"
-    << " [-f <fIndex>]"
-    << " [-r <fRadius>]"
-    << " [-h <fHeading>]"
-    << " [-t <dT>]"
-    << endl
-    << "      -n <nRobots>: number of robots"
-    << " [0, MAX_N_ROBOTS] (DEFAULT=19)"        << endl
-    << "      -f <fIndex>: formation function index"
-    << " [0, 9] (default=0):"                   << endl
-                                                   << "             0) f(x) = 0;"              << endl
-                                                     << "             1) f(x) = x;"              << endl
-                                                     << "             2) f(x) = |x|;"            << endl
-                                                     << "             3) f(x) = -0.5 x;"         << endl
-                                                     << "             4) f(x) = -|0.5 x|;"       << endl
-                                                     << "             5) f(x) = -|x|;"           << endl
-                                                     << "             6) f(x) = x^2;"            << endl
-                                                     << "             7) f(x) = x^3;"            << endl
-                                                     << "             8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0};"
-                                                     << endl
-                                                     << "             9) f(x) = 0.05 sin(10 x);" << endl
-                                                     << "      -r <fRadius>: formation radius"
-                                                     << " [0.0, 1.0] (default=?.?)"              << endl
-                                                     << "      -h <fHeading>: formation heading"
-                                                     << " (in degrees; default=90.0)"            << endl
-                                                     << "      -t <dt>: update time interval"
-                                                     << " [1, ??] (in milliseconds; default=50)"
-                                                     << endl;
-}   // printUsage(int, char **)
 
 
 
@@ -412,71 +358,6 @@ void printUsage(int argc, char **argv)
 //      fHeading      in/out  the initial heading of robots in the formation
 //      dt            in/out  the time interval (in ms) between OpenGL updates
 //
-bool parseArguments(int    argc,
-    char   **argv,
-    int   &nRobots,
-    int   &fIndex,
-    float &fRadius,
-    float &fHeading,
-    int   &dt)
-{
-  int i = 0;
-  while (++i < argc)
-  {
-    if      (!strncmp(argv[i], "--help", 6))
-    {
-      printUsage(argc, argv);
-      exit(0);
-    }
-    else if (!strncmp(argv[i], "-n", 2))
-    {
-      if (++i < argc) nRobots = atoi(argv[i]);
-      else
-      {
-        printUsage(argc, argv);
-        return false;
-      }
-    }
-    else if (!strncmp(argv[i], "-f", 2))
-    {
-      if (++i < argc) fIndex = atoi(argv[i]);
-      else
-      {
-        printUsage(argc, argv);
-        return false;
-      }
-    }
-    else if (!strncmp(argv[i], "-r", 2))
-    {
-      if (++i < argc) fRadius = atof(argv[i]);
-      else
-      {
-        printUsage(argc, argv);
-        return false;
-      }
-    }
-    else if (!strncmp(argv[i], ".h", 2))
-    {
-      if (++i < argc) fHeading = scaleDegrees(atof(argv[i]));
-      else
-      {
-        printUsage(argc, argv);
-        return false;
-      }
-    }
-    else if (!strncmp(argv[i], "-t", 2))
-    {
-      if (++i < argc) dt = atoi(argv[i]);
-      else
-      {
-        printUsage(argc, argv);
-        return false;
-      }
-    }
-  }
-
-  return true;
-}   // parseArguments(int, char **, int &, int &, float &, float &)
 
 
 
