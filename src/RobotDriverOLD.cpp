@@ -23,10 +23,6 @@
 
 using namespace std;
 
-//#include "Simulator/Formation.h"
-//Function aFunction;
-//Formation asdf = Formation(aFunction, 1,Vector(),1,1,1);
-
 
 
 // Global variables
