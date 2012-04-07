@@ -785,7 +785,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
       if (g_env->getNCells() > 0)
       {
         g_formationHeading += g_env->getCell(g_seedID)->maxAngSpeed();
-        changeFormation(g_fIndex);
+        changeFormation(g_formationIndex);
         g_env->getCell(g_seedID)->rotateRelative(
             g_env->getCell(g_seedID)->maxAngSpeed());
         //min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
@@ -795,7 +795,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
       if (g_env->getNCells() > 0)
       {
         g_formationHeading -= g_env->getCell(g_seedID)->maxAngSpeed();
-        changeFormation(g_fIndex);
+        changeFormation(g_formationIndex);
         g_env->getCell(g_seedID)->rotateRelative(
             -g_env->getCell(g_seedID)->maxAngSpeed());
         //-min(1.0f, g_env->getCell(g_sID)->maxAngSpeed()));
