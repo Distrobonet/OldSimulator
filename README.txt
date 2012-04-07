@@ -1,7 +1,7 @@
 To run the location_driver, do the following:
 
 roscore
-rosrun stage stageros `rospack find stage_controllers`/world/clean-with-2-robots.world
+rosrun stage stageros `rospack find stage_controllers`/world/distrobo-world-7-robots.world
 rosrun Simulator robotDriver
 
 *This has to have been built before it will work or there are no binaries to run against
