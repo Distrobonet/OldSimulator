@@ -123,7 +123,7 @@ const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIU
 
 // simulation global variables
 Environment *g_env               = NULL;
-int        g_nRobots             = 0;
+int        g_nRobots             = 7;
 float      g_formationRadius     = DEFAULT_FORMATION.getRadius();
 int        g_seedID              = DEFAULT_FORMATION.getSeedID();
 int        g_formationID         = DEFAULT_FORMATION.getFormationID();
@@ -715,13 +715,9 @@ void display()
       if(g_env->getCell(i) != g_env->getCell(g_seedID))
       {
         if(g_env->getCell(i) == g_env->getCell(g_selectedIndex))
-        {
           g_env->getCell(i)->setColor(RED);
-        }
         else
-        {
           g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-        }
       }
     }
   }
