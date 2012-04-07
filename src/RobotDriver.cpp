@@ -193,21 +193,22 @@ int main(int argc, char **argv)
     cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
     return 1;
   }
-  initWindow();
-  //glutMainLoop();
 
 
-  // BEGIN DISTROBONET CODE
 
-//	ros::init(argc, argv, "robot_driver");
-//	ros::NodeHandle aNode;
-//	ros::Publisher chatter_pub = aNode.advertise<std_msgs::String>("chatter", 1000);
-//
-//	ros::Rate loop_rate(10);
-//
-//	ros::Subscriber subRobot0 = aNode.subscribe("/robot_0/base_pose_ground_truth", 1000, callBackRobot0);
-//
-//	ros::Publisher pub_cmd_vel1 = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
+   // BEGIN DISTROBONET CODE
+
+
+
+	ros::init(argc, argv, "robot_driver");
+	ros::NodeHandle aNode;
+	ros::Publisher chatter_pub = aNode.advertise<std_msgs::String>("chatter", 1000);
+
+	ros::Rate loop_rate(10);
+
+	ros::Subscriber subRobot0 = aNode.subscribe("/robot_0/base_pose_ground_truth", 1000, callBackRobot0);
+
+	ros::Publisher pub_cmd_vel1 = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
 
 	geometry_msgs::Twist commandVelocity;
 
@@ -690,29 +691,6 @@ bool sendFSeedRequest()
   return g_env->sendMsg(fseed, g_seedID,ID_OPERATOR, FSEED_REQUEST);
 }// sendFSeedRequest();
 
-//
-// void initWindow()
-// Last modified:   08Nov2009
-//
-// Initializes the simulator window.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
-void initWindow()
-{
-
-//  // clear background color
-//  glClearColor(g_env->color[0], g_env->color[1], g_env->color[2], 0.0f);
-//
-//  // viewport transformation
-//  glViewport(0, 0, g_windowSize[0], g_windowSize[1]);
-//
-//  glMatrixMode(GL_PROJECTION);    // projection transformation
-//  glLoadIdentity();               // initialize projection identity matrix
-}   // initWindow()
-
-
 
 //
 // void display()
@@ -988,181 +966,6 @@ void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
 }   // keyboardReleaseSpecial(int, int, int)
 
 
-
-//
-// void mouseClick(mouseButton, mouseState, mouseX, mouseY)
-// Last modified:   08Nov2009
-//
-// Reacts to mouse clicks.
-//
-// Returns:     <none>
-// Parameters:
-//      mouseButton     in      the mouse button that was pressed
-//      mouseState      in      the state of the mouse
-//      mouseX          in      the x-coordinate of the mouse position
-//      mouseY          in      the y-coordinate of the mouse position
-//
-void mouseClick(int mouseButton,    int mouseState,
-    int mouseX, int mouseY)
-{
-//  int mod = glutGetModifiers();
-//  if (mouseState == GLUT_DOWN)
-//  {
-//    if(mod == GLUT_ACTIVE_CTRL)
-//    {
-//      if(g_env->getCells().size() > 0)
-//      {
-//        for (int i = 0; i < g_env->getNCells(); ++i)
-//        {
-//          float x     = g_windowWidth * mouseX / g_windowSize[0] -
-//            0.5 * g_windowWidth;
-//          float y     = 0.5 * g_windowHeight -
-//            (g_windowHeight * mouseY / g_windowSize[1]);
-//          g_selectedIndex = g_sID;
-//          float dx = g_env->getCell(i)->x - x,
-//                  dy = g_env->getCell(i)->y - y;
-//          if ((g_selectedIndex == g_sID) &&
-//              (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
-//          {
-//            g_env->removeCell(g_env->getCell(g_selectedIndex = i));
-//
-//          }else if (i != g_sID){
-//            g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-//          }
-//        }
-//      }
-//      if(g_env->getRobots().size()>0)
-//      {
-//        int ii=-1;
-//        for (int i = 0; i < g_env->getNFreeRobots(); ++i)
-//        {
-//          float x     = g_windowWidth * mouseX / g_windowSize[0] -
-//            0.5 * g_windowWidth;
-//          float y     = 0.5 * g_windowHeight -
-//            (g_windowHeight * mouseY / g_windowSize[1]);
-//          g_selectedIndex = -1;
-//          float dx = g_env->getRobot(ii)->x - x,
-//                  dy = g_env->getRobot(ii)->y - y;
-//          float distance = sqrt(dx * dx  + dy * dy);
-//          cout << "Distance between click and robotID " << ii << " is " << distance << endl;
-//          if (distance < SELECT_RADIUS)
-//          {
-//            string printf("IS WITHIN RADIUS");
-//            cout << "Remove robotID = " << ii << endl;
-//            g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
-//            //g_env->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-//            //cout << "Remove robotID = " << ii << endl;
-//            //g_env->removeRobot(g_env->getRobot(g_selectedIndex = ii));
-//          }
-//          ii--;
-//        }
-//      }
-//    }
-//    if(g_env->getCells().size()>0)
-//    {
-//      float x     = g_windowWidth * mouseX / g_windowSize[0] -
-//        0.5 * g_windowWidth;
-//      float y     = 0.5 * g_windowHeight -
-//        (g_windowHeight * mouseY / g_windowSize[1]);
-//      g_selectedIndex = g_sID;
-//      for (int i = 0; i < g_env->getNCells(); ++i)
-//      {
-//        float dx = g_env->getCell(i)->x - x,
-//                dy = g_env->getCell(i)->y - y;
-//        if ((g_selectedIndex == g_sID) &&
-//            (sqrt(dx * dx  + dy * dy) < SELECT_RADIUS))
-//        {
-//         g_env->getCell(g_selectedIndex = i)->setColor(RED);
-//        }
-//        else if (i != g_sID)
-//        {
-//          g_env->getCell(i)->setColor(RED);
-//        }
-//      }
-//    }else{
-//      float x     = g_windowWidth * mouseX / g_windowSize[0] -
-//        0.5 * g_windowWidth;
-//      float y     = 0.5 * g_windowHeight -
-//        (g_windowHeight * mouseY / g_windowSize[1]);
-//      g_env->formFromClick(x,y);
-//    }
-//  }
-//  glutPostRedisplay();            // redraw the scene
-}   // mouseClick(int, int, int, int)
-
-
-
-//
-// void mouseDrag(mouseX, mouseY)
-// Last modified:   08Nov2009
-//
-// Moves the position of a nearby cell to the
-// current mouse pointer position if the mouse
-// button is pressed and the pointer is in motion.
-//
-// Returns:     <none>
-// Parameters:
-//      mouseX  in      the x-coordinate of the mouse position
-//      mouseY  in      the y-coordinate of the mouse position
-//
-void mouseDrag(int mouseX, int mouseY)
-{
-  if (g_env->getNCells() > 0)
-  {
-    if (g_selectedIndex != ID_NO_NBR)
-    {
-      g_env->getCell(g_selectedIndex)->
-        set(g_windowWidth * mouseX / g_windowSize[0] - 0.5 *
-            g_windowWidth, 0.5 * g_windowHeight - (g_windowHeight *
-              mouseY / g_windowSize[1]));
-    }
-  }
-  //glutPostRedisplay();    // redraw the scene
-}   // mouseDrag(int, int)
-
-
-
-
-// void resizeWindow(w, h)
-// Last modified:   08Nov2009
-//
-// Scales the rendered scene according to the window dimensions,
-// setting the global variables so the mouse operations will
-// correspond to mouse pointer positions.
-//
-// Returns:     <none>
-// Parameters:
-//      w       in      the new screen width
-//      h       in      the new screen height
-
-void resizeWindow(GLsizei w, GLsizei h)
-{
-  g_windowSize[0] = w;            // obtain new screen width
-  g_windowSize[1] = h;            // obtain new screen height
-
-//  glClear(GL_COLOR_BUFFER_BIT);   // clear color buffer to draw next frame
-//  glViewport(0, 0, w, h);         // viewport transformation
-//
-//  glMatrixMode(GL_PROJECTION);    // projection transformation
-//  glLoadIdentity();               // initialize projection identity matrix
-//
-//  if (w <= h)
-//  {
-//    g_windowWidth  = 2.0f;
-//    g_windowHeight = 2.0f * (float)h / (float)w;
-//    glOrtho(-1.0f, 1.0f, -1.0f * (float)h / (float)w,
-//        (float)h / (float)w, -10.0f, 10.0f);
-//  }
-//  else
-//  {
-//    g_windowWidth  = 2.0f * (float)w / (float)h;
-//    g_windowHeight = 2.0f;
-//    glOrtho(-1.0f * (float)w / (float)h,
-//        (float)w / (float)h,
-//        -1.0f, 1.0f, -10.0f, 10.0f);
-//  }
-//  glutPostRedisplay();            // redraw the scene
-}   // resizeWindow(GLsizei, GLsizei)
 
 
 
