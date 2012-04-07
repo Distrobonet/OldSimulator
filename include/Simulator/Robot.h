@@ -11,6 +11,7 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+// ROS includes
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
@@ -23,17 +24,10 @@
 #include <Simulator/Circle.h>
 #include <Simulator/Packet.h>
 
-
-
 using namespace std;
 
 
-
-//
 #define SENSOR_RANGE (2.0f)
-
-
-
 
 // global constants
 static const float    DEFAULT_ROBOT_RADIUS       = 0.03f;
@@ -71,7 +65,7 @@ class Robot: public Circle
 
 
 
-        string generateUniqueMessage(bool subOrPub);
+        string generateSubPubMessage(bool subOrPub);
 
         // <constructors>
         Robot(const float dx         = 0.0f,

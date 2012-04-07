@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// ROS includes
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
@@ -12,8 +13,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-// Global variable
-int currentSelection;
+
 
 
 #ifndef ROBOTDRIVER_H
@@ -91,104 +91,47 @@ double getAngle(double target_x, double target_y, double origin_x, double origin
 }
 
 // This function does all the actual computation depending on which function the user has selected
-double getYValue(double xValue)
-{
-	double yValue = -9999.0l;
-	switch(currentSelection)
-	{
-		case '0':
-			yValue = 0.0l;
-		break;
-		case '1':
-			yValue = xValue;
-		break;
-		case '2':
-			yValue = abs(xValue);
-		break;
-		case '3':
-			yValue = -0.5f * xValue;
-		break;
-		case '4':
-			yValue = -abs(0.5f * xValue);
-		break;
-		case '5':
-			yValue = -abs(xValue);
-		break;
-		case '6':
-			yValue = xValue*xValue;
-		break;
-		case '7':
-			yValue = xValue*xValue*xValue;
-		break;
-		case '8':
-			yValue = sqrt(abs(0.5f * xValue)) * ((xValue >= 0) ? 1.0f : -1.0f);
-		break;
-		case '9':
-			yValue = 0.05f * sin(10.0f * xValue);;
-		break;
-	}
-	return yValue;
-}
-
-//// A simple and basic way to clear the screen for the menu refresh
-//void clearScreen()
+//double getYValue(double xValue)
 //{
-//	std::cout << "\n\n\n\n\n";
-//}
-//
-//// Displays the selection menu to the screen
-//void displayMenu()
-//{
-//	clearScreen();
-//
-//
-//	cout << endl << endl << "Use the '0-9' keys to "
-//		<< "change to a formation seeded at the selected robot."
-//		<< endl << endl
-//		<< "PRESET FORMATIONS\n-----------------"            << endl
-//		<< "0) f(x) = 0"                                     << endl
-//		<< "1) f(x) = x"                                     << endl
-//		<< "2) f(x) = |x|"                                   << endl
-//		<< "3) f(x) = -0.5 x"                                << endl
-//		<< "4) f(x) = -|0.5 x|"                              << endl
-//		<< "5) f(x) = -|x|"                                  << endl
-//		<< "6) f(x) = x^2"                                   << endl
-//		<< "7) f(x) = x^3"                                   << endl
-//		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
-//		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
-//		<< "Use the mouse to select a robot."                << endl
-//		<< "Use ctrl+C to exit."                                << endl << endl
-//		<< "Please enter your selection: ";
-//
+//	double yValue = -9999.0l;
+//	switch(currentSelection)
+//	{
+//		case '0':
+//			yValue = 0.0l;
+//		break;
+//		case '1':
+//			yValue = xValue;
+//		break;
+//		case '2':
+//			yValue = abs(xValue);
+//		break;
+//		case '3':
+//			yValue = -0.5f * xValue;
+//		break;
+//		case '4':
+//			yValue = -abs(0.5f * xValue);
+//		break;
+//		case '5':
+//			yValue = -abs(xValue);
+//		break;
+//		case '6':
+//			yValue = xValue*xValue;
+//		break;
+//		case '7':
+//			yValue = xValue*xValue*xValue;
+//		break;
+//		case '8':
+//			yValue = sqrt(abs(0.5f * xValue)) * ((xValue >= 0) ? 1.0f : -1.0f);
+//		break;
+//		case '9':
+//			yValue = 0.05f * sin(10.0f * xValue);;
+//		break;
+//	}
+//	return yValue;
 //}
 
-// Used by keyboardInput() to catch keystrokes without blocking
-int kbhit(void)
-{
-        struct termios oldt, newt;
-        int ch;
-        int oldf;
 
-        tcgetattr(STDIN_FILENO, &oldt);
-        newt = oldt;
-        newt.c_lflag &= ~(ICANON | ECHO);
-        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-        oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-        fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
 
-        ch = getchar();
-
-        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-        fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-        if(ch != EOF)
-        {
-                ungetc(ch, stdin);
-                return 1;
-        }
-
-        return 0;
-}
 
 
 

@@ -30,6 +30,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_listener.h>
 
+
 #include "Simulator/RobotDriver.h"
 
 #include <Simulator/Environment.h>
@@ -103,7 +104,8 @@ Function formations[] = {line,        x,       absX,     negHalfX,
 const int INIT_WINDOW_POSITION[2] = {0, 0};      // window offset
 const char  CHAR_ESCAPE             = char(27);    // 'ESCAPE' character key
 
-
+// Menu Global variable
+int currentSelection;
 
 // OpenGL global variables
 int   g_windowSize[2] = {800, 800};   // window size in pixels
@@ -116,6 +118,7 @@ const int     N_CELLS           = 0;
 const int     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
 // A formation is a vector of Functions, which are functions that take floats and return floats
 const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
+
 
 
 // simulation global variables
@@ -191,7 +194,6 @@ int main(int argc, char **argv)
     return 1;
   }
   initWindow();
-  //displayMenu();
   //glutMainLoop();
 
 
@@ -265,8 +267,35 @@ int main(int argc, char **argv)
 }   // main(int, char **)
 
 
+
+// Used by keyboardInput() to catch keystrokes without blocking
+int kbhit(void)
+{
+        struct termios oldt, newt;
+        int ch;
+        int oldf;
+
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+        oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+        fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+        ch = getchar();
+
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+        if(ch != EOF)
+        {
+                ungetc(ch, stdin);
+                return 1;
+        }
+
+        return 0;
+}
 // Catches keyboard input and sets currentSelection based on user input, redisplays the menu
-// TODO: This should probably clear the terminal window each time the user changes the selection
 void keyboardInput()
 {
 	char keyPressed;
@@ -290,7 +319,44 @@ void keyboardInput()
 
 }
 
+// A simple and basic way to clear the screen for the menu refresh
+void clearScreen()
+{
+	std::cout << "\n\n\n\n\n";
+}
 
+// void displayMenu()
+// Last modified: 08Nov2009
+//
+// Displays the following menu (program description) to the console:
+//
+// Returns:     <none>
+// Parameters:  <none>
+// Displays the selection menu to the screen
+void displayMenu()
+{
+	clearScreen();
+
+
+	cout << endl << endl << "Use the '0-9' keys to "
+		<< "change to a formation seeded at the selected robot."
+		<< endl << endl
+		<< "PRESET FORMATIONS\n-----------------"            << endl
+		<< "0) f(x) = 0"                                     << endl
+		<< "1) f(x) = x"                                     << endl
+		<< "2) f(x) = |x|"                                   << endl
+		<< "3) f(x) = -0.5 x"                                << endl
+		<< "4) f(x) = -|0.5 x|"                              << endl
+		<< "5) f(x) = -|x|"                                  << endl
+		<< "6) f(x) = x^2"                                   << endl
+		<< "7) f(x) = x^3"                                   << endl
+		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
+		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
+		<< "Use the mouse to select a robot."                << endl
+		<< "Use ctrl+C to exit."                                << endl << endl
+		<< "Please enter your selection: ";
+
+}
 
 // void printUsage(argc, argv)
 // Last modified: 08Nov2009
@@ -504,44 +570,7 @@ void terminate(int retVal)
 
 
 
-// A simple and basic way to clear the screen for the menu refresh
-void clearScreen()
-{
-	std::cout << "\n\n\n\n\n";
-}
 
-// void displayMenu()
-// Last modified: 08Nov2009
-//
-// Displays the following menu (program description) to the console:
-//
-// Returns:     <none>
-// Parameters:  <none>
-// Displays the selection menu to the screen
-void displayMenu()
-{
-	clearScreen();
-
-
-	cout << endl << endl << "Use the '0-9' keys to "
-		<< "change to a formation seeded at the selected robot."
-		<< endl << endl
-		<< "PRESET FORMATIONS\n-----------------"            << endl
-		<< "0) f(x) = 0"                                     << endl
-		<< "1) f(x) = x"                                     << endl
-		<< "2) f(x) = |x|"                                   << endl
-		<< "3) f(x) = -0.5 x"                                << endl
-		<< "4) f(x) = -|0.5 x|"                              << endl
-		<< "5) f(x) = -|x|"                                  << endl
-		<< "6) f(x) = x^2"                                   << endl
-		<< "7) f(x) = x^3"                                   << endl
-		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
-		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
-		<< "Use the mouse to select a robot."                << endl
-		<< "Use ctrl+C to exit."                                << endl << endl
-		<< "Please enter your selection: ";
-
-}
 
 
 

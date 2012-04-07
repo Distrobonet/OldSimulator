@@ -66,9 +66,9 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 Robot::Robot(const float dx,    const float dy, const float dz,
              const float theta)
 {
-	subRobot = aNode.subscribe(generateUniqueMessage(SUBSCRIBER), 1000, callBackRobot);
+	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, callBackRobot);
 
-	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateUniqueMessage(PUBLISHER), 1);
+	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
 
     init(dx, dy, dz, theta);
     ID = --nRobots;
@@ -76,11 +76,12 @@ Robot::Robot(const float dx,    const float dy, const float dz,
 }   // Robot(const float..<4>, const Color)
 
 
-
-string Robot::generateUniqueMessage(bool subOrPub)
+// This method will generate the appropriate Subscriber/Publisher message for a new robot
+// using the current number of robots + 1
+string Robot::generateSubPubMessage(bool subOrPub)
 {
 	stringstream ss;//create a stringstream
-	ss << nRobots;//add number to the stream
+	ss << (nRobots + 1);//add number to the stream
 	string numRobots = ss.str();
 
 

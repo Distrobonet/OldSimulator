@@ -66,9 +66,9 @@ int junkmain(int argc, char** argv)
 	{
 		//keyboardInput();
 
-		// Robot 1
+		// A robot
 		xValue = velocityX0 + 1;
-		yValue = getYValue(velocityY0 + 1);
+		//yValue = getYValue(velocityY0 + 1);
 		if(yValue != -9999)
 		{
 			distanceToTarget = getDistance(xValue, yValue, velocityX1, velocityY1);
@@ -91,31 +91,11 @@ int junkmain(int argc, char** argv)
 				pub_cmd_vel1.publish(commandVelocity);
 			}
 		}
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Robot 2
-		xValue = velocityX0 - 1;
-		yValue = getYValue(velocityY0 - 1);
-		if(yValue != -9999)
-			{
-			distanceToTarget1 = getDistance(xValue, yValue, velocityX2, velocityY2);
-			angleChange1 = getAngle(xValue, yValue, velocityX2, velocityY2, theta2);
 
-			if (distanceToTarget1 < 0.00001){
-				distanceToTarget1 = 0;
-				angleChange1 = getAngle(xValue, velocityY0 + 2, velocityX2, velocityY2, theta2);
-			}
-			commandVelocity1.linear.x = 0;
-			commandVelocity1.linear.y = 0;
-			commandVelocity1.angular.z = angleChange1;
-			pub_cmd_vel2.publish(commandVelocity1);
 
-			if((angleChange1 < 0.1 && angleChange1 > 0) || (angleChange1 > -0.1 && angleChange1 < 0)){
-				commandVelocity1.linear.x = distanceToTarget1;
-				commandVelocity1.linear.y = distanceToTarget1;
-				commandVelocity1.angular.z = 0;
-				pub_cmd_vel2.publish(commandVelocity1);
-			}
-		}
+
+
+
 		ros::spinOnce();
 		loop_rate.sleep();
 	}
