@@ -28,6 +28,10 @@
 #include "Simulator/RobotDriver.h"
 #include <Simulator/Environment.h>
 
+// HUH?
+#define SUBSCRIBER 0
+#define PUBLISHER 1
+
 using namespace std;
 
 
@@ -53,7 +57,6 @@ void display();
 void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY);
 void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
 void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
-
 void timerFunction(int value);
 
 
@@ -99,6 +102,17 @@ int        g_selectedIndex       = g_seedID;
 int        g_dTime               = 50;    // time interval (in milliseconds)
 bool       g_prop_toggle         = false;
 
+// Global variables
+double distanceToTarget = 0.0l;
+double angleChange = 0.0l;
+
+double distanceToTarget1 = 0.0l;
+double angleChange1 = 0.0l;
+
+float xValue = 0.0l;
+float yValue = 0.0l;
+
+double getYValue(double xValue);
 
 
 int main(int argc, char **argv)
@@ -108,35 +122,79 @@ int main(int argc, char **argv)
 	ros::Rate loop_rate(10);
 
 	ros::Publisher chatter_pub = aNode.advertise<std_msgs::String>("chatter", 1000);
-	ros::Subscriber subRobot0 = aNode.subscribe("/robot_0/base_pose_ground_truth", 1000, callBackRobot0);
-	ros::Publisher pub_cmd_vel1 = aNode.advertise < geometry_msgs::Twist > ("/robot_1/cmd_vel", 1);
+	ros::Subscriber subRobot = aNode.subscribe(generateUniqueMessage(SUBSCRIBER), 1000, callBackRobot);
+    ros::Publisher pub_cmd_vel = aNode.advertise <geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
+
 	geometry_msgs::Twist commandVelocity;
 
-	displayMenu();
-	keyboardInput();
+	// Primary ROS loop
+	while(ros::ok())
+	{
+		displayMenu();
+		keyboardInput();
 
-//	while (ros::ok())
-//	{
-//		cout << "basdgf";
-//		std_msgs::String msg;
-//		std::stringstream ss;
-//		  ss << "hello world " << count;
-//		  msg.data = ss.str();
-//		  ROS_INFO("%s", msg.data.c_str());
-//
-//		  chatter_pub.publish(msg);
-//
-//		 ros::spinOnce();
-//		 loop_rate.sleep();
-//		 ++count;
-//
-//	}
+		for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
+		{
+			// A robot
+			xValue = velocityX0 + 1;
+			yValue = getYValue(velocityY0 + 1);
+			if(yValue != -9999)
+			{
+				distanceToTarget = getDistance(xValue, yValue, velocityX1, velocityY1);
+				angleChange = getAngle(xValue, yValue, velocityX1, velocityY1, theta1);
+
+				if (distanceToTarget < 0.00001)
+				{
+					distanceToTarget = 0;
+					angleChange = getAngle(xValue, velocityY0 + 2, velocityX1, velocityY1, theta1);
+				}
+				commandVelocity.linear.x = 0;
+				commandVelocity.linear.y = 0;
+				commandVelocity.angular.z = angleChange;
+				pub_cmd_vel.publish(commandVelocity);
+
+				if((angleChange < 0.1 && angleChange > 0) || (angleChange > -0.1 && angleChange < 0))
+				{
+					commandVelocity.linear.x = distanceToTarget;
+					commandVelocity.linear.y = distanceToTarget;
+					commandVelocity.angular.z = 0;
+					pub_cmd_vel.publish(commandVelocity);
+				}
+			}
+		}
+		ros::spinOnce();
+		loop_rate.sleep();
+	}
 
   deinitEnv();
 
   return 0;
 }
 
+// This method will generate the appropriate Subscriber/Publisher message for a new robot
+// using the current number of robots + 1
+string Robot::generateSubPubMessage(bool subOrPub)
+{
+		stringstream ss;//create a stringstream
+		ss << (nRobots + 1);//add number to the stream
+		string numRobots = ss.str();
+
+	// Subscriber
+	if(subOrPub == SUBSCRIBER)
+	{
+		string subString = "/robot_/base_pose_ground_truth";
+		subString.insert(7, numRobots);
+		return subString;
+	}
+
+	// Publisher
+	else
+	{
+		string pubString = "/robot_/cmd_vel";
+		pubString.insert(7, numRobots);
+		return pubString;
+	}
+}
 
 
 // Used by keyboardInput() to catch keystrokes without blocking
@@ -221,7 +279,6 @@ void displayMenu()
 		<< "Use the mouse to select a robot."                << endl
 		<< "Use ctrl+C to exit."                                << endl << endl
 		<< "Please enter your selection: ";
-
 }
 
 
@@ -596,6 +653,46 @@ void timerFunction(int value)
   g_env->step();          // update the robot cell environment
 }
 
+
+// This function does all the actual computation depending on which function the user has selected
+double getYValue(double xValue)
+{
+	double yValue = -9999.0l;
+	switch(currentSelection)
+	{
+		case '0':
+			yValue = 0.0l;
+		break;
+		case '1':
+			yValue = xValue;
+		break;
+		case '2':
+			yValue = abs(xValue);
+		break;
+		case '3':
+			yValue = -0.5f * xValue;
+		break;
+		case '4':
+			yValue = -abs(0.5f * xValue);
+		break;
+		case '5':
+			yValue = -abs(xValue);
+		break;
+		case '6':
+			yValue = xValue*xValue;
+		break;
+		case '7':
+			yValue = xValue*xValue*xValue;
+		break;
+		case '8':
+			yValue = sqrt(abs(0.5f * xValue)) * ((xValue >= 0) ? 1.0f : -1.0f);
+		break;
+		case '9':
+			yValue = 0.05f * sin(10.0f * xValue);;
+		break;
+	}
+	return yValue;
+}
 
 
 // <test formation functions>

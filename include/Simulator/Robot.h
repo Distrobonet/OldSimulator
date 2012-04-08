@@ -59,10 +59,9 @@ class Robot: public Circle
         bool     showHeading;      // shows the vector heading of the robot
         queue<Packet> msgQueue;    // message packet queue for communication
 
-        ros::NodeHandle aNode;
-        ros::Subscriber subRobot;
-        ros::Publisher pub_cmd_vel;
-
+//        ros::NodeHandle aNode;
+//        ros::Subscriber subRobot;
+//        ros::Publisher  pub_cmd_vel, chatter_pub;
 
 
         string generateSubPubMessage(bool subOrPub);
@@ -103,14 +102,14 @@ class Robot: public Circle
         virtual void step();
 
         // <public utility functions>
-        Vector  getRelationship(Vector &target) const;
-        float getDistanceTo(Vector &target)   const;
-        float getAngleTo(Vector &target)      const;
-        float maxSpeed()                      const;
-        float maxAngSpeed()                   const;
-        float threshold()                     const;
-        float angThreshold()                  const;
-        float collisionRadius()               const;
+        Vector getRelationship(Vector &target) const;
+        float  getDistanceTo(Vector &target)   const;
+        float  getAngleTo(Vector &target)      const;
+        float  maxSpeed()                      const;
+        float  maxAngSpeed()                   const;
+        float  threshold()                     const;
+        float  angThreshold()                  const;
+        float  collisionRadius()               const;
 
 
 
@@ -120,8 +119,8 @@ class Robot: public Circle
 
         // <public environment functions>
         Vector  getRelationship(const int toID) const;
-        float getDistanceTo(const int toID)   const;
-        float getAngleTo(const int toID)      const;
+        float   getDistanceTo(const int toID)   const;
+        float   getAngleTo(const int toID)      const;
 
         // <virtual public environment functions>
         virtual bool sendMsg(const Message &msg  = NULL,
