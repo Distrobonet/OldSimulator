@@ -116,12 +116,19 @@ float yValue = 0.0l;
 
 double getYValue(double xValue);
 
+vector<Robot> robots;
 
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "robot_driver");
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
+
+	for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
+	{
+		Robot *temp = new Robot(0, 0, 0, 0);
+		robots.push_back(*temp);
+	}
 
 
 	// Primary ROS loop
@@ -145,17 +152,17 @@ int main(int argc, char **argv)
 					distanceToTarget = 0;
 					angleChange = getAngle(xValue, velocityY0 + 2, velocityX1, velocityY1, theta1);
 				}
-				robot[robotNum]->commandVelocity.linear.x = 0;
-				robot[robotNum]->commandVelocity.linear.y = 0;
-				robot[robotNum]->commandVelocity.angular.z = angleChange;
-				robot[robotNum]->pub_cmd_vel.publish(commandVelocity);
+				robots.at(robotNum).commandVelocity.linear.x = 0;
+				robots.at(robotNum).commandVelocity.linear.y = 0;
+				robots.at(robotNum).commandVelocity.angular.z = angleChange;
+				robots.at(robotNum).pub_cmd_vel.publish(robots.at(robotNum).commandVelocity);
 
 				if((angleChange < 0.1 && angleChange > 0) || (angleChange > -0.1 && angleChange < 0))
 				{
-					robot[robotNum]->commandVelocity.linear.x = distanceToTarget;
-					robot[robotNum]->commandVelocity.linear.y = distanceToTarget;
-					robot[robotNum]->commandVelocity.angular.z = 0;
-					robot[robotNum]->pub_cmd_vel.publish(commandVelocity);
+					robots.at(robotNum).commandVelocity.linear.x = distanceToTarget;
+					robots.at(robotNum).commandVelocity.linear.y = distanceToTarget;
+					robots.at(robotNum).commandVelocity.angular.z = 0;
+					robots.at(robotNum).pub_cmd_vel.publish(robots.at(robotNum).commandVelocity);
 				}
 			}
 		}

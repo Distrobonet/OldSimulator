@@ -59,13 +59,13 @@ class Robot: public Circle
         bool     showHeading;      // shows the vector heading of the robot
         queue<Packet> msgQueue;    // message packet queue for communication
 
-//        ros::NodeHandle aNode;
-//        ros::Subscriber subRobot;
-//        ros::Publisher  pub_cmd_vel, chatter_pub;
+
+        ros::Subscriber subRobot;
+        ros::Publisher  pub_cmd_vel;
+        geometry_msgs::Twist commandVelocity;
 
 
         string generateSubPubMessage(bool subOrPub);
-        void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 
         // <constructors>
         Robot(const float dx         = 0.0f,
@@ -116,7 +116,7 @@ class Robot: public Circle
 
         // <public sensor functions>
 		vector<Vector> getObjectRelationships(
-		   float maxDist = SENSOR_RANGE) const;
+		float maxDist = SENSOR_RANGE) const;
 
         // <public environment functions>
         Vector  getRelationship(const int toID) const;
@@ -179,6 +179,7 @@ class Robot: public Circle
                           const float dy         = 0.0f,
                           const float dz         = 0.0f,
                           const float theta      = 0.0f);
+
 };  // Robot
 
 #endif

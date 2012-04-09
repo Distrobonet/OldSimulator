@@ -21,62 +21,6 @@
 
 using namespace std;
 
-double velocityX0, velocityY0, theta0;
-double velocityX1, velocityY1, theta1;
-double velocityX2, velocityY2, theta2;
-
-static void callBackRobot0(const nav_msgs::Odometry::ConstPtr& odom)
-{
-	velocityY0 = odom-> pose.pose.position.x;
-	velocityX0 = -odom-> pose.pose.position.y;
-
-	btScalar roll = 0.0l;
-	btScalar pitch = 0.0l;
-	btScalar yaw = 0.0l;
-	btQuaternion q(odom-> pose.pose.orientation.x,
-	odom-> pose.pose.orientation.y,
-	odom-> pose.pose.orientation.z,
-	odom-> pose.pose.orientation.w);
-
-	btMatrix3x3(q).getRPY(roll, pitch, yaw);
-	theta0 = angles::normalize_angle(yaw + M_PI / 2.0l);
-	ros::spinOnce();
-}
-
-static void callBackRobot1(const nav_msgs::Odometry::ConstPtr& odom)
-{
-	velocityY1 = odom-> pose.pose.position.x;
-	velocityX1 = -odom-> pose.pose.position.y;
-
-	btScalar roll = 0.0l;
-	btScalar pitch = 0.0l;
-	btScalar yaw = 0.0l;
-	btQuaternion q(odom-> pose.pose.orientation.x,
-	odom-> pose.pose.orientation.y,
-	odom-> pose.pose.orientation.z,
-	odom-> pose.pose.orientation.w);
-
-	btMatrix3x3(q).getRPY(roll, pitch, yaw);
-	theta1 = angles::normalize_angle(yaw + M_PI / 2.0l);
-	ros::spinOnce();
-}
-
-static void callBackRobot2(const nav_msgs::Odometry::ConstPtr& odom)
-{
-	velocityY2 = odom-> pose.pose.position.x;
-	velocityX2 = -odom-> pose.pose.position.y;
-
-	btScalar roll = 0.0l;
-	btScalar pitch = 0.0l;
-	btScalar yaw = 0.0l;
-	btQuaternion q(odom-> pose.pose.orientation.x,
-	odom-> pose.pose.orientation.y,
-	odom-> pose.pose.orientation.z,
-	odom-> pose.pose.orientation.w);
-	btMatrix3x3(q).getRPY(roll, pitch, yaw);
-	theta2 = angles::normalize_angle(yaw + M_PI / 2.0l);
-	ros::spinOnce();
-}
 
 // Returns the distance between two points
 double getDistance(double target_x, double target_y, double origin_x, double origin_y)
