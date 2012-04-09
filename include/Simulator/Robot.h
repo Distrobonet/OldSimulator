@@ -63,6 +63,9 @@ class Robot: public Circle
         ros::Subscriber subRobot;
         ros::Publisher  pub_cmd_vel;
         geometry_msgs::Twist commandVelocity;
+        double robotX;
+        double robotY;
+        double robotTheta;
 
 
         string generateSubPubMessage(bool subOrPub);

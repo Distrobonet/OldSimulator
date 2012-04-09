@@ -140,17 +140,17 @@ int main(int argc, char **argv)
 		for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
 		{
 			// A robot
-			xValue = velocityX0 + 1;
-			yValue = getYValue(velocityY0 + 1);
+			xValue = robots.at(robotNum).robotX + 1;//velocityX + 1;
+			yValue = getYValue(robots.at(robotNum).robotY + 1);
 			if(yValue != -9999)
 			{
-				distanceToTarget = getDistance(xValue, yValue, velocityX1, velocityY1);
-				angleChange = getAngle(xValue, yValue, velocityX1, velocityY1, theta1);
+				distanceToTarget = getDistance(xValue, yValue, robots.at(robotNum + 1).robotX, robots.at(robotNum + 1).robotY);
+				angleChange = getAngle(xValue, yValue, robots.at(robotNum + 1).robotX, robots.at(robotNum + 1).robotY, robots.at(robotNum + 1).robotTheta);
 
 				if (distanceToTarget < 0.00001)
 				{
 					distanceToTarget = 0;
-					angleChange = getAngle(xValue, velocityY0 + 2, velocityX1, velocityY1, theta1);
+					angleChange = getAngle(xValue, yValue + 2, robots.at(robotNum + 1).robotX, robots.at(robotNum + 1).robotY, robots.at(robotNum + 1).robotTheta);
 				}
 				robots.at(robotNum).commandVelocity.linear.x = 0;
 				robots.at(robotNum).commandVelocity.linear.y = 0;

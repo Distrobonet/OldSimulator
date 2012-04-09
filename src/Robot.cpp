@@ -37,7 +37,7 @@ int Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
 //      colorIndex  in      the initial array index of the color of the robot
 //
 
-   double velocityX, velocityY, theta;
+   double velocityX, velocityY, velocityTheta;
 
 static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
@@ -53,7 +53,7 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	odom-> pose.pose.orientation.w);
 
 	btMatrix3x3(q).getRPY(roll, pitch, yaw);
-	theta = angles::normalize_angle(yaw + M_PI / 2.0l);
+	velocityTheta = angles::normalize_angle(yaw + M_PI / 2.0l);
 	ros::spinOnce();
 }
 
@@ -64,6 +64,9 @@ Robot::Robot(const float dx,    const float dy, const float dz,
 {
 	ros::NodeHandle aNode;
 	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, callBackRobot);
+	robotX = velocityX;
+	robotY = velocityY;
+	robotTheta = velocityTheta;
 	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
 	geometry_msgs::Twist commandVelocity;
 
@@ -179,7 +182,7 @@ bool Robot::setRadius(const float r)
 //
 // Returns:     true if successful, false otherwise
 // Parameters:
-//      theta   in      the heading to be set to
+//      velocityTheta   in      the heading to be set to
 //
 bool Robot::setHeading(const float theta)
 {
@@ -255,7 +258,7 @@ void Robot::translateRelative(const float dx, const float dy)
 //
 // Returns:     <none>
 // Parameters:
-//      theta   in      the rotation angle
+//      velocityTheta   in      the rotation angle
 //
 void Robot::rotateRelative(float theta)
 {
@@ -798,7 +801,7 @@ Behavior Robot::moveArcBehavior(const Vector &target)
     else return moveArcBehavior((abs(theta) >
                                 degreesToRadians(angThreshold())) ?
                                 0.0f :
-                                r * theta / sin(theta), getDiameter() * theta);
+                                r * velocityTheta / sin(theta), getDiameter() * theta);
 */
 }   // moveArcBehavior(const Vector &)
 
