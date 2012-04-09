@@ -60,15 +60,13 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 }
 
 
-
-
-
 Robot::Robot(const float dx,    const float dy, const float dz,
              const float theta)
 {
-	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, callBackRobot);
-
-	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
+	ros::NodeHandle aNode;
+	ros::Subscriber subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, callBackRobot);
+	ros::Publisher pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
+	geometry_msgs::Twist commandVelocity;
 
     init(dx, dy, dz, theta);
     ID = --nRobots;

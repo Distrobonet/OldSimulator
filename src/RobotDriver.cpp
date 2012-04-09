@@ -25,14 +25,16 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_listener.h>
 
-#include "Simulator/RobotDriver.h"
+#include <Simulator/RobotDriver.h>
 #include <Simulator/Environment.h>
+#include <Simulator/Robot.h>
 
 // HUH?
 #define SUBSCRIBER 0
 #define PUBLISHER 1
 
 using namespace std;
+class Robot;
 
 
 // define SIGPIPE if not defined (compatibility for win32)
@@ -121,11 +123,6 @@ int main(int argc, char **argv)
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
 
-	ros::Publisher chatter_pub = aNode.advertise<std_msgs::String>("chatter", 1000);
-	ros::Subscriber subRobot = aNode.subscribe(generateUniqueMessage(SUBSCRIBER), 1000, callBackRobot);
-    ros::Publisher pub_cmd_vel = aNode.advertise <geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
-
-	geometry_msgs::Twist commandVelocity;
 
 	// Primary ROS loop
 	while(ros::ok())
@@ -148,17 +145,17 @@ int main(int argc, char **argv)
 					distanceToTarget = 0;
 					angleChange = getAngle(xValue, velocityY0 + 2, velocityX1, velocityY1, theta1);
 				}
-				commandVelocity.linear.x = 0;
-				commandVelocity.linear.y = 0;
-				commandVelocity.angular.z = angleChange;
-				pub_cmd_vel.publish(commandVelocity);
+				robot[robotNum]->commandVelocity.linear.x = 0;
+				robot[robotNum]->commandVelocity.linear.y = 0;
+				robot[robotNum]->commandVelocity.angular.z = angleChange;
+				robot[robotNum]->pub_cmd_vel.publish(commandVelocity);
 
 				if((angleChange < 0.1 && angleChange > 0) || (angleChange > -0.1 && angleChange < 0))
 				{
-					commandVelocity.linear.x = distanceToTarget;
-					commandVelocity.linear.y = distanceToTarget;
-					commandVelocity.angular.z = 0;
-					pub_cmd_vel.publish(commandVelocity);
+					robot[robotNum]->commandVelocity.linear.x = distanceToTarget;
+					robot[robotNum]->commandVelocity.linear.y = distanceToTarget;
+					robot[robotNum]->commandVelocity.angular.z = 0;
+					robot[robotNum]->pub_cmd_vel.publish(commandVelocity);
 				}
 			}
 		}
@@ -169,31 +166,6 @@ int main(int argc, char **argv)
   deinitEnv();
 
   return 0;
-}
-
-// This method will generate the appropriate Subscriber/Publisher message for a new robot
-// using the current number of robots + 1
-string Robot::generateSubPubMessage(bool subOrPub)
-{
-		stringstream ss;//create a stringstream
-		ss << (nRobots + 1);//add number to the stream
-		string numRobots = ss.str();
-
-	// Subscriber
-	if(subOrPub == SUBSCRIBER)
-	{
-		string subString = "/robot_/base_pose_ground_truth";
-		subString.insert(7, numRobots);
-		return subString;
-	}
-
-	// Publisher
-	else
-	{
-		string pubString = "/robot_/cmd_vel";
-		pubString.insert(7, numRobots);
-		return pubString;
-	}
 }
 
 

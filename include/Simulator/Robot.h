@@ -65,6 +65,7 @@ class Robot: public Circle
 
 
         string generateSubPubMessage(bool subOrPub);
+        void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 
         // <constructors>
         Robot(const float dx         = 0.0f,
