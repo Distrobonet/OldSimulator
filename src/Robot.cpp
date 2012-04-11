@@ -781,14 +781,15 @@ Behavior Robot::moveArc(const Vector &target)
 Behavior Robot::moveArcBehavior(const Vector &target)
 {
     float theta    = target.angle();
-	  float phi      = this->heading.angle();
-	  float delta    = degreesToRadians(theta);
+	float phi      = this->heading.angle();
+	float delta    = degreesToRadians(theta);
     float cosDelta = cos(delta);
     float sinDelta = sin(delta);
-	  float t        = cosDelta * cosDelta * sign(cosDelta);
-	  float r        = sinDelta * sinDelta * sign(sinDelta);
-	  behavior         = Behavior(ACTIVE, t, r, maxSpeed());
-    if (abs(theta) < 90.0f)
+	float t        = cosDelta * cosDelta * sign(cosDelta);
+	float r        = sinDelta * sinDelta * sign(sinDelta);
+	behavior         = Behavior(ACTIVE, t, r, maxSpeed());
+
+	if (abs(theta) < 90.0f)
 	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
     else
         behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));

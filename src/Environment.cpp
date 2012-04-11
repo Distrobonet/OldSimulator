@@ -16,26 +16,18 @@
 
 #define AUCTION_STEP_COUNT (3)
 
-// <constructors>
 
-//
-// Environment(n, f, colorIndex)
-// Last modified: 08Nov2009
-//
 // Default constructor that initializes
 // this environment to the parameterized values.
 //
-// Returns:     <none>
-// Parameters:
 //      n           in      the initial number of cells
 //      f           in      the initial formation
-//      colorIndex  in      the initial array index of the color of the cells
 //
-Environment::Environment(const int     n,
-    const Formation f)
+Environment::Environment(const int numRobots, const Formation formation)
 {
-  if (!init(n, f)) clear();
-}   // Environment(const int, const Formation, const Color)
+  if (!init(numRobots, formation))
+	  clear();
+}
 
 
 
@@ -906,10 +898,8 @@ bool Environment::init(const int n, const Formation f)
 bool Environment::initRobots()
 {
   for (int i = 0; i < nRobots; ++i)
-    addRobot(randSign() * frand(),
-        randSign() * frand(),
-        0.0f,
-        randSign() * frand(0.0f, 180.0f));
+    addRobot(randSign() * frand(), randSign() * frand(), 0.0f, randSign() * frand(0.0f, 180.0f));
+
   return true;
 }
 
@@ -917,10 +907,11 @@ bool Environment::addRobot(float x, float y, float z, float theta)
 {
   if (VERBOSE)
 	  printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
+
   Robot *r = new Robot(x, y, z, theta);
   r->setEnvironment(this);
-
   robots.push_back(r);
+
   return true;
 }
 

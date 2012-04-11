@@ -150,32 +150,37 @@ int main(int argc, char **argv)
 		displayMenu();
 		keyboardInput();
 
-		for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
+		for(int robotNum = 0; robotNum < g_nRobots - 1; robotNum++)
 		{
+			Robot *robot1 = Environment::robots.at(robotNum);
+			Robot *robot2 = Environment::robots.at(robotNum + 1);
+
 			// A robot
-			xValue = robots.at(robotNum).robotX + 1;//velocityX + 1;
-			yValue = getYValue(robots.at(robotNum).robotY + 1);
+			xValue = robot1->robotX + 1;//velocityX + 1;
+			yValue = getYValue(robot1->robotY + 1);
+
 			if(yValue != -9999)
 			{
-				distanceToTarget = getDistance(xValue, yValue, robots.at(robotNum + 1).robotX, robots.at(robotNum + 1).robotY);
-				angleChange = getAngle(xValue, yValue, robots.at(robotNum + 1).robotX, robots.at(robotNum + 1).robotY, robots.at(robotNum + 1).robotTheta);
+				distanceToTarget = getDistance(xValue, yValue, robot2->robotX, robot2->robotY);
+				angleChange = getAngle(xValue, yValue, robot2->robotX, robot2->robotY, robot2->robotTheta);
 
 				if (distanceToTarget < 0.00001)
 				{
 					distanceToTarget = 0;
-					angleChange = getAngle(xValue, yValue + 2, robots.at(robotNum + 1).robotX, robots.at(robotNum + 1).robotY, robots.at(robotNum + 1).robotTheta);
+					angleChange = getAngle(xValue, yValue + 2, robot2->robotX, robot2->robotY, robot2->robotTheta);
 				}
-				robots.at(robotNum).commandVelocity.linear.x = 0;
-				robots.at(robotNum).commandVelocity.linear.y = 0;
-				robots.at(robotNum).commandVelocity.angular.z = angleChange;
-				robots.at(robotNum).pub_cmd_vel.publish(robots.at(robotNum).commandVelocity);
+
+				robot1->x = 0;
+				robot1->y = 0;
+				robot1->robotTheta = angleChange;
+				robot1->pub_cmd_vel.publish(robot1->commandVelocity);
 
 				if((angleChange < 0.1 && angleChange > 0) || (angleChange > -0.1 && angleChange < 0))
 				{
-					robots.at(robotNum).commandVelocity.linear.x = distanceToTarget;
-					robots.at(robotNum).commandVelocity.linear.y = distanceToTarget;
-					robots.at(robotNum).commandVelocity.angular.z = 0;
-					robots.at(robotNum).pub_cmd_vel.publish(robots.at(robotNum).commandVelocity);
+					robot1->commandVelocity.linear.x = distanceToTarget;
+					robot1->commandVelocity.linear.y = distanceToTarget;
+					robot1->commandVelocity.angular.z = 0;
+					robot1->pub_cmd_vel.publish(robot1->commandVelocity);
 				}
 			}
 		}
@@ -300,8 +305,10 @@ bool initEnv(const int nRobots, const int formationIndex)
   }
 
   Formation f(formations[formationIndex], g_formationRadius, Vector(),
-      g_seedID,            ++g_formationID,     g_formationHeading);
-  if ((g_environment = new Environment(nRobots, f)) == NULL) return false;
+		  	  	  g_seedID, ++g_formationID, g_formationHeading);
+
+  if ((g_environment = new Environment(nRobots, f)) == NULL)
+	  return false;
   return true;
 }
 
