@@ -121,14 +121,14 @@ TEST(RobotDriver, getYValueCase6){
 TEST(RobotDriver, setFunctionSelection){
 	string input = "3";
 	setFunctionSelection(input);
-	double actual = currentSelection;
+	double actual = CURRENT_SELECTION;
 	EXPECT_EQ(3, actual);
 }
 
 TEST(RobotDriver, setFunctionSelectionWithNegNumber){
 	string input = "-3";
 	setFunctionSelection(input);
-	double actual = currentSelection;
+	double actual = CURRENT_SELECTION;
 	EXPECT_EQ(-3, actual);
 }
 
@@ -137,7 +137,7 @@ TEST(RobotDriver, setFunctionSelectionWithNoValueDoesNotChangeSelection){
 	setFunctionSelection(input);
 	input = "";
 	setFunctionSelection(input);
-	double actual = currentSelection;
+	double actual = CURRENT_SELECTION;
 	EXPECT_EQ(1, actual);
 }
 

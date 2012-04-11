@@ -24,12 +24,6 @@
 //
 // Default constructor that initializes
 // this environment to the parameterized values.
-//
-// Returns:     <none>
-// Parameters:
-//      n           in      the initial number of cells
-//      f           in      the initial formation
-//
 Environment::Environment(const int numRobots, const Formation formation)
 {
   if (!init(numRobots, formation))
@@ -37,56 +31,24 @@ Environment::Environment(const int numRobots, const Formation formation)
 }   // Environment(const int, const Formation, const Color)
 
 
-
-//
-// Environment(e)
-// Last modified: 22Dec2010
-//
 // Copy constructor that copies the contents of
 // the parameterized environment into this environment.
-//
-// Returns:     <none>
-// Parameters:
-//      e       in/out      the environment being copied
-//
-  Environment::Environment(const Environment &e)
-: cells(e.cells), robots(e.robots), objects(e.objects),  // BAD!!!
-  msgQueue(e.msgQueue)
+  Environment::Environment(const Environment &env)
+: cells(env.cells), robots(env.robots), objects(env.objects),  // BAD!!!
+  msgQueue(env.msgQueue)
 {
-}   // Environment(const Environment &)
+}
 
 
-
-// <destructors>
-
-//
-// ~Environment()
-// Last modified: 27Aug2006
-//
 // Destructor that clears this environment.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
 Environment::~Environment()
 {
   clear();
-}   // ~Environment()
+}
 
 
-// <public mutator functions>
-
-//
-// bool addCell(c)
-// Last modified: 22Dec2010
-//
 // Attempts to add a cell to the environment,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      c       in      the cell being added
-//
 bool Environment::addCell(Cell *cell)
 {
   if ((cell == NULL) && ((cell = new Cell()) == NULL)) return false;
@@ -96,20 +58,12 @@ bool Environment::addCell(Cell *cell)
   // attempt to add this cell to the cell list
   cells.push_back(cell);
   return true;
-}   // addCell(Cell *)
+}
 
 
-
-//
-// bool removeCell()
-// Last modified: 27Aug2006
-//
 // Attempts to remove a cell from the environment,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:  <none>
-//
+
 bool Environment::removeCell()
 {
   if (cells.size() == 0) return false;
@@ -117,22 +71,12 @@ bool Environment::removeCell()
   if (!removeCell(cell)) return false;
   delete cell;
   return true;
-}   // removeCell()
+}
 
 
-
-//
-// bool removeCell(c)
-// Last modified: 27Aug2006
-//
 // Attempts to remove a cell from the environment,
 // storing the address of the removed cell and
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      c       in/out  set to the cell being removed
-//
 bool Environment::removeCell(Cell* cell)
 {
   if(cell==NULL)
@@ -150,24 +94,12 @@ bool Environment::removeCell(Cell* cell)
     }
   }
   return answer;
-}   // removeCell(Cell*)
+}
 
 
-
-//
-// bool addObject(dx, dy, dz)
-// Last modified: 22Dec2010
-//
 // Attempts to add an object to the environment
 // at the parameterized position, returning
 // true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      dx      in      the x-coordinate of the object (default 0)
-//      dy      in      the y-coordinate of the object (default 0)
-//      dz      in      the z-coordinate of the object (default 0)
-//
 //bool Environment::addObject(float dx, float dy, float dz)
 //{
 //   Object* o = new Object(dx, dy, dz);
@@ -180,18 +112,8 @@ bool Environment::removeCell(Cell* cell)
 //}  // addObject(float, float, float)
 
 
-
-//
-// bool addObject(o)
-// Last modified: 22Dec2010
-//
 // Attempts to add an object to the environment,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      o       in      the object being added
-//
 //bool Environment::addObject(Object *o)
 //{
 //   if ((o == NULL) && ((o = new Object()) == NULL)) return false;
@@ -202,17 +124,8 @@ bool Environment::removeCell(Cell* cell)
 //}   // addObject(Object *)
 
 
-
-//
-// bool removeObject()
-// Last modified: 22Dec2010
-//
 // Attempts to remove an object from the environment,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:  <none>
-//
 //bool Environment::removeObject()
 //{
 //   if (objects.size() == 0) return false;
@@ -223,19 +136,9 @@ bool Environment::removeCell(Cell* cell)
 //}   // removeObject()
 
 
-
-//
-// bool removeObject(o)
-// Last modified: 22Dec2010
-//
 // Attempts to remove an object from the environment,
 // storing the address of the removed object and
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      o       in/out  set to the object being removed
-//
 //bool Environment::removeObject(Object *o)
 //{
 //   if (o == NULL) return false;
@@ -251,18 +154,7 @@ bool Environment::removeCell(Cell* cell)
 //}  // removeObject(Object *)
 
 
-
-// <public accessor functions>
-
-//
-// Cell* getCell() const
-// Last modified: 27Aug2006
-//
 // Returns the cell at the parameterized position.
-//
-// Returns:     the cell at the parameterized position
-// Parameters:  <none>
-//
 Cell* Environment::getCell(int position) const
 {
   Cell *cell = NULL;
@@ -275,19 +167,10 @@ Cell* Environment::getCell(int position) const
     }
   }
   return cell;
-}   // getCell(int) const
+}
 
 
-
-//
-// Object* getObject(index) const
-// Last modified: 22Dec2010
-//
 // Returns the object at the parameterized index.
-//
-// Returns:     the object at the parameterized index
-// Parameters:  <none>
-//
 //Object* Environment::getObject(int index) const
 //{
 //   if ((index < 0) || (index >= objects.size())) return NULL;
@@ -295,114 +178,41 @@ Cell* Environment::getCell(int position) const
 //}  // getObject(int) const
 
 
-
-//
-// vector<Cell *> getCells()
-// Last modified: 27Aug2006
-//
-// Returns all of the cells in the environment.
-//
-// Returns:     all of the cells in the environment
-// Parameters:  <none>
-//
-vector<Cell *> Environment::getCells()
-{
-  return cells;
-}   // getCells()
-
-
-
-//
-// vector<Robot *> getRobots()
-// Last modified: 08Nov2009
-//
 // Returns all of the [free] robots in the environment.
-//
-// Returns:     all of the [free] robots in the environment
-// Parameters:  <none>
-//
 vector<Robot *> Environment::getRobots()
 {
   return robots;
-}   // getRobots()
+}
 
-
-
-//
-// vector<Object *> getObjects()
-// Last modified: 22Dec2010
-//
 // Returns all of the objects in the environment.
-//
-// Returns:     all of the objects in the environment
-// Parameters:  <none>
-//
 //vector<Object *> Environment::getObjects()
 //{
 //  return objects;
 //}   // getObjects()
 
 
-
-//
-// int getNCells() const
-// Last modified: 27Aug2006
-//
 // Returns the number of cells in the environment.
-//
-// Returns:     the number of cells in the environment
-// Parameters:  <none>
-//
 int Environment::getNumberOfCells() const
 {
   return cells.size();
-}   // getNCells() const
+}
 
 
-
-//
-// int getNFreeRobots() const
-// Last modified: 08Nov2009
-//
 // Returns the number of [free] robots in the environment.
-//
-// Returns:     the number of [free] robots in the environment
-// Parameters:  <none>
-//
 int Environment::getNumberOfFreeRobots() const
 {
   return robots.size();
-}   // getNFreeRobots() const
+}
 
 
-
-//
-// int getNObjects() const
-// Last modified: 22Dec2010
-//
 // Returns the number of objects in the environment.
-//
-// Returns:     the number of objects in the environment
-// Parameters:  <none>
-//
 int Environment::getNObjects() const
 {
   return objects.size();
-}   // getNObjects() const
+}
 
 
-
-// <virtual public utility functions>
-
-//
-// void draw()
-// Last modified: 22Dec2010
-//
 // Renders the environment.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
 void Environment::draw()
 {
 
@@ -456,20 +266,11 @@ void Environment::draw()
 
     }
   }
-}   // draw()
+}
 
 
-
-//
-// void step()
-// Last modified: 27Aug2006
-//
 // Executes the next step in each cell in the environment
 // and forwards all sent packets to their destinations.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
 bool Environment::step()
 {
   vector<Cell*> auctionCalls;
@@ -515,42 +316,20 @@ bool Environment::step()
     }
   }
   return true;
-}   // step()
+}
 
 
-
-//
-// void clear()
-// Last modified: 22Dec2010
-//
-// Clears this environment.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
+// Clears this environment
 void Environment::clear()
 {
    while (removeCell());
    while (removeRobot());
 //   while (removeObject());
-}  // clear()
+}
 
 
-
-// <public utility functions>
-
-//
-// Vector getRelationship(toID, fromID)
-// Last modified: 27Aug2006
-//
 // Returns the relationship between the two cells
 // with the parameterized ID's.
-//
-// Returns:     the relationship between two cells
-// Parameters:
-//      toID    in      the ID of the cell being related to
-//      fromID  in      the ID of the cell being related from
-//
 Vector Environment::getRelationship(const int toID, const int fromID)
 {
   Cell  *toCell = getCell(toID), *fromCell = getCell(fromID);
@@ -562,13 +341,9 @@ Vector Environment::getRelationship(const int toID, const int fromID)
   temp.rotateRelative(-fromCell->getHeading());
 
   return temp;
-}   // getRelationship(const int, const int)
+}
 
 
-// void getCentroid(Vector v)
-// last modified: 07-01-10
-//
-//
 void Environment::getCentroid(Vector v)
 {
   centroid = v;
@@ -603,23 +378,9 @@ void Environment::getDistance(Vector dist)
 }
 
 
-
-//
-// bool sendMsg(msg, toID, fromID, type)
-// Last modified: 07Sep2006
-//
 // Attempts to send a packet to its destination
 // based upon the given parameters, returning
 // true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      msg     in/out  the message being sent
-//      toID    in      the ID of the cell receiving the packet
-//      fromID  in      the ID of the cell sending the packet
-//      type    in      the type of message being sent
-//
-//removed const from parameters
 bool Environment::sendMsg(const Message &msg,
     const int    toID,
     const int    fromID,
@@ -629,23 +390,11 @@ bool Environment::sendMsg(const Message &msg,
   bool answer = sendPacket(Packet(msg_c, toID, fromID, type));
   //if(VERBOSE)printf("Received sendPacket answer\n");
   return answer;
-}   // sendMsg(const Message &, const int, const int, const int)
+}
 
 
-
-//
-// bool sendPacket(p)
-// Last modified: 07Sep2006
-//
 // Attempts to send a packet to its destination,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      p       in/out  the packet being sent
-//
-
-//removed const
 bool Environment::sendPacket(const Packet &packet)
 {
   // discrete message passing
@@ -672,21 +421,11 @@ bool Environment::sendPacket(const Packet &packet)
   //p.msg = NULL;
   if(VERBOSE) string printf("finished sendPacket()\n");
   	  return false;
-}   // sendPacket(const Packet &)
+}
 
-//
-// bool forwardPacket(p)
-// Last modified: 29Nov2009
-//
+
 // Attempts to forward a packet to its destination,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      p       in/out  the packet being forwarded
-//
-
-//remove const
 bool Environment::forwardPacket(const Packet &packet)
 {
   Cell *cell;
@@ -721,20 +460,11 @@ bool Environment::forwardPacket(const Packet &packet)
   }
   if(VERBOSE) string printf("finished forwarding Packet to %d\n",to);
   	  return false;
-}   // forwardPacket(const Packet &)
+}
 
 
-
-//
-// bool forwardPackets()
-// Last modified: 29Nov2009
-//
 // Attempts to forward all packets to their destinations,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:  <none>
-//
 bool Environment::forwardPackets()
 {
   Packet packet;
@@ -745,24 +475,11 @@ bool Environment::forwardPackets()
     if (!forwardPacket(packet)) return false;
   }
   return true;
-}   // forwardPackets()
+}
 
 
-
-// <public sensor functions>
-
-//
-// vector<Vector> getObjectRelationships(fromID, maxDist)
-// Last modified: 26Dec2010
-//
 // Returns the relationships between the robot with
 // parameterized ID and all objects in the environment.
-//
-// Returns:     the relationship between the robot and all objects
-// Parameters:
-//      fromID  in      the ID of the cell being related from
-//      maxDist in      the maximum distance to be considered
-//
 vector<Vector> Environment::getObjectRelationships(const int   fromID,
                                                    const float maxDistance)
 {
@@ -778,111 +495,55 @@ vector<Vector> Environment::getObjectRelationships(const int   fromID,
 		relationships.push_back(relationship);
   }
   return relationships;
-}   // getObjectRelationships(const int, const float)
+}
 
 
-
-// <public utility cell functions>
-
-//
-// bool showLine(show)
-// Last modified: 28Aug2006
-//
 // Attempts to display the line of the heading vector of each cell,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      show    in      display flag for showing the line
-//
 bool Environment::showLine(const bool show)
 {
   for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->heading.showLine = show;
 
   return true;
-}   // showPos(const bool)
+}
 
 
-
-//
-// bool showHead(show)
-// Last modified: 28Aug2006
-//
 // Attempts to display the head of the heading vector of each cell,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      show    in      display flag for showing the head
-//
 bool Environment::showHead(const bool show)
 {
   for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->heading.showHead = show;
 
   return true;
-}   // showHeading(const bool)
+}
 
 
-
-//
-// bool showPos(show)
-// Last modified: 28Aug2006
-//
 // Attempts to display the position vector of each cell,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      show    in      display flag for showing the position vector
-//
 bool Environment::showPos(const bool show)
 {
   for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->showPos = show;
 
   return true;
-}   // showPos(const bool)
+}
 
 
-
-//
-// bool showHeading(show)
-// Last modified: 28Aug2006
-//
 // Attempts to display the heading vector of each cell,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      show    in      display flag for showing the heading vector
-//
 bool Environment::showHeading(const bool show)
 {
   for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->showHeading = show;
 
   return true;
-}   // showHeading(const bool)
+}
 
 
-
-// <virtual protected utility functions>
-
-//
-// bool init(n, f, colorIndex)
-// Last modified: 07Nov2009
-//
 // Initializes the environment to the parameterized values,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      n           in      the initial number of robots
-//      f           in      the initial formation
-//      colorIndex  in      the initial array index of the color of the cells
-//
 bool Environment::init(const int numberOfRobots, const Formation f)
 {
   srand(time(NULL));
@@ -923,18 +584,9 @@ bool Environment::addRobot(float x, float y, float z, float theta)
   return true;
 }
 
-//
-// bool initCells(n, f)
-// Last modified: 28Aug2006
-//
+
 // Initializes each cell to the parameterized values,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      n           in      the initial number of cells
-//      f           in      the initial formation
-//
 /*bool Environment::initCells(const int n, const Formation f)
   {
   srand(time(NULL));
@@ -1219,16 +871,8 @@ void Environment::settleAuction(Cell* auctionCell,int rID)
 }
 
 
-
-//
-// bool removeRobot()
-// Last modified: 22Dec2010
-//
 // Attempts to remove a robot from the environment,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:  <none>
 //
 bool Environment::removeRobot()
 {
