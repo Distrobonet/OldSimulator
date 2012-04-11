@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 			Robot *robot2 = g_environment->getRobot(robotNum + 1);
 
 			// A robot
-			xValue = robot1->robotX + 1;//velocityX + 1;
+			xValue = robot1->robotX + 1;
 			yValue = getYValue(robot1->robotY + 1);
 
 			if(yValue != -9999)

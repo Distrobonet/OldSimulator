@@ -63,6 +63,9 @@ class Robot: public Circle
         ros::Subscriber subRobot;
         ros::Publisher  pub_cmd_vel;
         geometry_msgs::Twist commandVelocity;
+        nav_msgs::Odometry odomMsg;
+        ros::Time current_time, last_time;
+
         double robotX;
         double robotY;
         double robotTheta;

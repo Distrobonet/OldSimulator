@@ -14,6 +14,7 @@
 #include <Simulator/Robot.h>
 #define SUBSCRIBER 0
 #define PUBLISHER 1
+#define ROBOT_LABEL -1
 
 // <protected static data members>
 int Robot::numOfRobots = ID_ROBOT;   // initializes the number of robots to 0
@@ -100,6 +101,11 @@ bool Robot::init(const float dx,    const float dy, const float dz, const float 
 	robotTheta = velocityTheta;
 	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
 	geometry_msgs::Twist commandVelocity;
+
+	// odom message
+	odomMsg.header.stamp = current_time = ros::Time::now();
+	odomMsg.header.frame_id = generateSubPubMessage(ROBOT_LABEL);
+
     setEnvironment(NULL);
     return true;
 }
@@ -130,6 +136,15 @@ string Robot::generateSubPubMessage(bool subOrPub)
 		return subString;
 
 	}
+
+	// Robot label
+	else if(subOrPub == ROBOT_LABEL)
+	{
+		string subString = "robot_";
+		subString.insert(7, numRobots);
+		return subString;
+	}
+
 	// Publisher
 	else
 	{

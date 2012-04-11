@@ -819,6 +819,7 @@ void Environment::settleAuction(Cell* auctionCell,int rID)
       cout << "addCell() failed!" << endl;
       system("PAUSE");
     }
+
     Robot *robot = getRobot(rID);
     if (robot == NULL)
     {
