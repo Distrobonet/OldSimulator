@@ -178,6 +178,13 @@ Cell* Environment::getCell(int position) const
 //}  // getObject(int) const
 
 
+// Returns all of the cells in the environment.
+vector<Cell *> Environment::getCells()
+{
+  return cells;
+} 
+
+
 // Returns all of the [free] robots in the environment.
 vector<Robot *> Environment::getRobots()
 {
