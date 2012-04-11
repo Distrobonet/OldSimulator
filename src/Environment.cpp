@@ -1,9 +1,4 @@
 //
-// Filename:        "Environment.cpp"
-//
-// Programmer:      Ross Mead
-// Last modified:   22Dec2010
-//
 // Description:     This class implements a robot cell environment.
 //
 
@@ -572,7 +567,7 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 
 bool Environment::initRobots()
 {
-  for (int i = 0; i < numOfRobots; ++i)
+  for (int i = 0; i <= numOfRobots; ++i)
     addRobot(randSign() * frand(),
         randSign() * frand(),
         0.0f,

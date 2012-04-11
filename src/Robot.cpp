@@ -62,7 +62,7 @@ Robot::Robot(const float dx,    const float dy, const float dz,
              const float theta)
 {
     init(dx, dy, dz, theta);
-    ID = ++numOfRobots;
+    ID = numOfRobots++;
 
 }   // Robot(const float..<4>, const Color)
 // <virtual protected utility functions>
