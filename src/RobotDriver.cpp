@@ -81,7 +81,7 @@ Function formations[] = {line,        x,       absX,     negHalfX,
 
 
 // Menu Global variable
-int currentSelection;
+int CURRENT_SELECTION;
 
 // simulation global constants
 const float   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
@@ -117,7 +117,6 @@ float yValue = 0.0l;
 double getYValue(double xValue);
 bool initEnv(const int nRobots, const int formationIndex);
 
-vector<Robot> robots;
 
 int main(int argc, char **argv)
 {
@@ -128,21 +127,16 @@ int main(int argc, char **argv)
 	displayMenu();
 	keyboardInput();
 
-	//TODO: LINK g_formationIndex to the incomming keyboard command
+	// create handler for interrupts (i.e., ^C)
+	if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
+		signal(SIGPIPE, SIG_IGN);
+
 	// initialize and execute the robot cell environment
-	if (!initEnv(g_nRobots, g_formationIndex))
+	if (!initEnv(g_nRobots, CURRENT_SELECTION))
 	{
 		cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
 		return 1;
 	}
-
-	//TODO: set default initializaton of robot positions elsewhere (start w/ Environment.cpp)
-//	for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
-//	{
-//		Robot *temp = new Robot(0, 0, 0, 0);
-//		robots.push_back(*temp);
-//	}
-
 
 	// Primary ROS loop
 	while(ros::ok())
@@ -150,10 +144,10 @@ int main(int argc, char **argv)
 		displayMenu();
 		keyboardInput();
 
-		for(int robotNum = 0; robotNum < g_nRobots - 1; robotNum++)
+		for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
 		{
-			Robot *robot1 = Environment::robots.at(robotNum);
-			Robot *robot2 = Environment::robots.at(robotNum + 1);
+			Robot *robot1 = g_environment->getRobot(robotNum);
+			Robot *robot2 = g_environment->getRobot(robotNum + 1);
 
 			// A robot
 			xValue = robot1->robotX + 1;//velocityX + 1;
@@ -197,33 +191,33 @@ int main(int argc, char **argv)
 // Used by keyboardInput() to catch keystrokes without blocking
 int kbhit(void)
 {
-        struct termios oldt, newt;
-        int ch;
-        int oldf;
+	struct termios oldt, newt;
+	int ch;
+	int oldf;
 
-        tcgetattr(STDIN_FILENO, &oldt);
-        newt = oldt;
-        newt.c_lflag &= ~(ICANON | ECHO);
-        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-        oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-        fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+	oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+	fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
 
-        ch = getchar();
+	ch = getchar();
 
-        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-        fcntl(STDIN_FILENO, F_SETFL, oldf);
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+	fcntl(STDIN_FILENO, F_SETFL, oldf);
 
-        if(ch != EOF)
-        {
-			ungetc(ch, stdin);
-			return 1;
-        }
+	if(ch != EOF)
+	{
+		ungetc(ch, stdin);
+		return 1;
+	}
 
-        return 0;
+	return 0;
 }
 
 
-// Catches keyboard input and sets currentSelection based on user input, redisplays the menu
+// Catches keyboard input and sets CURRENT_SELECTION based on user input, redisplays the menu
 void keyboardInput()
 {
 	char keyPressed;
@@ -237,7 +231,7 @@ void keyboardInput()
 		if(keyPressed >= '0' && keyPressed <= '9')
 		{
 			cout << " - Setting to " << keyPressed;
-			currentSelection = keyPressed;
+			CURRENT_SELECTION = keyPressed;
 		}
 		else
 			cout << " - Not a valid input.";
@@ -657,7 +651,7 @@ void timerFunction(int value)
 double getYValue(double xValue)
 {
 	double yValue = -9999.0l;
-	switch(currentSelection)
+	switch(CURRENT_SELECTION)
 	{
 		case '0':
 			yValue = 0.0l;
