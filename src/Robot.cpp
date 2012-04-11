@@ -16,7 +16,7 @@
 #define PUBLISHER 1
 
 // <protected static data members>
-int Robot::nRobots = ID_ROBOT;   // initializes the number of robots to 0
+int Robot::numOfRobots = ID_ROBOT;   // initializes the number of robots to 0
 
 
 // <constructors>
@@ -58,10 +58,41 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 }
 
 
-
 Robot::Robot(const float dx,    const float dy, const float dz,
              const float theta)
 {
+    init(dx, dy, dz, theta);
+    ID = ++numOfRobots;
+
+}   // Robot(const float..<4>, const Color)
+// <virtual protected utility functions>
+
+//
+// bool init(dx, dy, dz, theta)
+// Last modified: 06Nov2009
+//
+// Initializes the robot to the parameterized values,
+// returning true if successful, false otherwise.
+//
+// Returns:     true if successful, false otherwise
+// Parameters:
+//      dx          in      the initial x-coordinate of the robot (default 0)
+//      dy          in      the initial y-coordinate of the robot (default 0)
+//      dz          in      the initial z-coordinate of the robot (default 0)
+//      theta       in      the initial heading of the robot (default 0)
+//      colorIndex  in      the initial array index of the color of the robot
+//
+bool Robot::init(const float dx,    const float dy, const float dz, const float theta)
+{
+    Circle::init(dx, dy, dz, DEFAULT_ROBOT_RADIUS);
+    setHeading(theta);
+    behavior         = DEFAULT_ROBOT_BEHAVIOR;
+    behavior.setMaxSpeed(maxSpeed());
+    showHeading      = DEFAULT_ROBOT_SHOW_HEADING;
+    heading.showLine = DEFAULT_ROBOT_SHOW_LINE;
+    heading.showHead = DEFAULT_ROBOT_SHOW_HEAD;
+    showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
+
 	ros::NodeHandle aNode;
 	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, callBackRobot);
 	robotX = velocityX;
@@ -69,11 +100,16 @@ Robot::Robot(const float dx,    const float dy, const float dz,
 	robotTheta = velocityTheta;
 	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
 	geometry_msgs::Twist commandVelocity;
+    setEnvironment(NULL);
+    return true;
+}
 
-    init(dx, dy, dz, theta);
-    ID = --nRobots;
-
-}   // Robot(const float..<4>, const Color)
+void Robot::updatePosition()
+{
+	x = velocityX;
+	y = velocityY;
+	z = velocityTheta;
+}
 
 
 // This method will generate the appropriate Subscriber/Publisher message for a new robot
@@ -81,7 +117,7 @@ Robot::Robot(const float dx,    const float dy, const float dz,
 string Robot::generateSubPubMessage(bool subOrPub)
 {
 	stringstream ss;//create a stringstream
-	ss << (nRobots + 1);//add number to the stream
+	ss << (numOfRobots + 1);//add number to the stream
 	string numRobots = ss.str();
 
 
@@ -115,22 +151,22 @@ string Robot::generateSubPubMessage(bool subOrPub)
 // Parameters:
 //      r       in/out      the robot being copied
 //
-Robot::Robot(const Robot &r)
+Robot::Robot(const Robot &robot)
 {
-    init(r.x, r.y, r.z, r.getHeading());
+    init(robot.x, robot.y, robot.z, robot.getHeading());
     for (int i = 0; i < 3; ++i)
     {
-        translate[i] = r.translate[i];
-        rotate[i]    = r.rotate[i];
-        scale[i]     = r.scale[i];
+        translate[i] = robot.translate[i];
+        rotate[i]    = robot.rotate[i];
+        scale[i]     = robot.scale[i];
     }
-    showLine    = r.showLine;
-    showHead    = r.showHead;
-    showPos     = r.showPos;
-    showHeading = r.showHeading;
-    ID          = r.ID;
-    env         = r.env;
-    msgQueue    = r.msgQueue;
+    showLine    = robot.showLine;
+    showHead    = robot.showHead;
+    showPos     = robot.showPos;
+    showHeading = robot.showHeading;
+    ID          = robot.ID;
+    env         = robot.env;
+    msgQueue    = robot.msgQueue;
 }   // Robot(const Robot &)
 
 
@@ -165,9 +201,9 @@ Robot::~Robot()
 // Parameters:
 //      r       in      the radius to be set to
 //
-bool Robot::setRadius(const float r)
+bool Robot::setRadius(const float radis)
 {
-    if (!Circle::setRadius(r)) return false;
+    if (!Circle::setRadius(radis)) return false;
     return behavior.setMaxSpeed(maxSpeed());
 }   // setRadius(const float)
 
@@ -202,9 +238,9 @@ bool Robot::setHeading(const float theta)
 // Parameters:
 //      e       in      the envirnment to be set to
 //
-bool Robot::setEnvironment(Environment *e)
+bool Robot::setEnvironment(Environment *enviroment)
 {
-    env = e;
+    env = enviroment;
     return true;
 }   // setEnvironment(Environment *)
 
@@ -418,13 +454,13 @@ void Robot::draw()
         (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
         (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
 
-    vector<Vector> rels = getObjectRelationships(2.0f * collisionRadius());
-    for (int i = 0, n = rels.size(); i < n; ++i)
+    vector<Vector> relationships = getObjectRelationships(2.0f * collisionRadius());
+    for (int i = 0, n = relationships.size(); i < n; ++i)
     {
-        rels[i].rotated(rotate[2]);
-        rels[i].translated(x, y, z);
-        rels[i].scaled(scale[0]);
-        rels[i].draw();
+        relationships[i].rotated(rotate[2]);
+        relationships[i].translated(x, y, z);
+        relationships[i].scaled(scale[0]);
+        relationships[i].draw();
     }
 
     // draw a circle representing the robot
@@ -459,18 +495,18 @@ void Robot::draw()
 //
 void Robot::step()
 {
-    float collDist = collisionRadius();
-    vector<Vector> rels = getObjectRelationships(collDist);
-    if (rels.size() > 0)
+    float collisionDistance = collisionRadius();
+    vector<Vector> relationships = getObjectRelationships(collisionDistance);
+    if (relationships.size() > 0)
     {
 		float minDist  = HUGE;
 		int   minIndex = 0;
-		for (int i = 0, n = rels.size(); i < n; ++i)
+		for (int i = 0, n = relationships.size(); i < n; ++i)
 		{
-			float currDist = rels[i].magnitude();
-			if (currDist < minDist)
+			float currentDist = relationships[i].magnitude();
+			if (currentDist < minDist)
 			{
-				minDist  = currDist;
+				minDist  = currentDist;
 				minIndex = i;
 			}
 		}
@@ -738,9 +774,9 @@ bool Robot::sendMsg(const Message &msg, const int toID, const int type)
 // Parameters:
 //      p       in/out  the packet being sent
 //
-bool Robot::sendPacket(const Packet &p)
+bool Robot::sendPacket(const Packet &packet)
 {
-    if ((env != NULL) && (env->sendPacket(p))) return true;
+    if ((env != NULL) && (env->sendPacket(packet))) return true;
     //delete p.msg;    // TO-DO: call destructor of appropriate type... ?
     return false;
 }   // sendPacket(const Packet &)
@@ -781,15 +817,14 @@ Behavior Robot::moveArc(const Vector &target)
 Behavior Robot::moveArcBehavior(const Vector &target)
 {
     float theta    = target.angle();
-	float phi      = this->heading.angle();
-	float delta    = degreesToRadians(theta);
+	  float phi      = this->heading.angle();
+	  float delta    = degreesToRadians(theta);
     float cosDelta = cos(delta);
     float sinDelta = sin(delta);
-	float t        = cosDelta * cosDelta * sign(cosDelta);
-	float r        = sinDelta * sinDelta * sign(sinDelta);
-	behavior         = Behavior(ACTIVE, t, r, maxSpeed());
-
-	if (abs(theta) < 90.0f)
+	  float t        = cosDelta * cosDelta * sign(cosDelta);
+	  float r        = sinDelta * sinDelta * sign(sinDelta);
+	  behavior         = Behavior(ACTIVE, t, r, maxSpeed());
+    if (abs(theta) < 90.0f)
 	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
     else
         behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));
@@ -1177,36 +1212,7 @@ Behavior Robot::orbitBehavior(const Vector &target, const float dist)
 
 
 
-// <virtual protected utility functions>
-
-//
-// bool init(dx, dy, dz, theta)
-// Last modified: 06Nov2009
-//
-// Initializes the robot to the parameterized values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      dx          in      the initial x-coordinate of the robot (default 0)
-//      dy          in      the initial y-coordinate of the robot (default 0)
-//      dz          in      the initial z-coordinate of the robot (default 0)
-//      theta       in      the initial heading of the robot (default 0)
-//      colorIndex  in      the initial array index of the color of the robot
-//
-bool Robot::init(const float dx,    const float dy, const float dz, const float theta)
-{
-    Circle::init(dx, dy, dz, DEFAULT_ROBOT_RADIUS);
-    setHeading(theta);
-    behavior         = DEFAULT_ROBOT_BEHAVIOR;
-    behavior.setMaxSpeed(maxSpeed());
-    showHeading      = DEFAULT_ROBOT_SHOW_HEADING;
-    heading.showLine = DEFAULT_ROBOT_SHOW_LINE;
-    heading.showHead = DEFAULT_ROBOT_SHOW_HEAD;
-    showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
-    setEnvironment(NULL);
-    return true;
-}   // init(const float..<4>)
+  // init(const float..<4>)
 
 
 
@@ -1222,11 +1228,11 @@ bool Robot::init(const float dx,    const float dy, const float dz, const float 
 bool Robot::processPackets()
 {
     bool   success = true;
-    Packet p;
+    Packet packet;
     while (!msgQueue.empty())
     {
-        p = msgQueue.front();
-        if (!processPacket(p)) success = false;
+        packet = msgQueue.front();
+        if (!processPacket(packet)) success = false;
         msgQueue.pop();
 		}
     return success;
@@ -1244,19 +1250,19 @@ bool Robot::processPackets()
 // Parameters:
 //      p      in/out  the packet to be processed
 //
-bool Robot::processPacket(Packet &p)
+bool Robot::processPacket(Packet &packet)
 {
     bool success = false;
-    switch (p.type)
+    switch (packet.type)
     {
         case AUCTION_ANNOUNCEMENT:
         {
-           float range = rangeSensor(p);
+           float range = rangeSensor(packet);
            if (range > 0.0f)
            {
                float b_j = E * range;
-               Bid    *b   = new Bid(b_j, getID());
-               success     = env->sendMsg(b, p.fromID, (-1 * (ID * 10)), BID);
+               Bid    *bid   = new Bid(b_j, getID());
+               success     = env->sendMsg(bid, packet.fromID, (-1 * (ID * 10)), BID);
            }
            else success    = true;
         }
@@ -1278,39 +1284,39 @@ bool Robot::processPacket(Packet &p)
 // Returns:    the distance from this robot to the position being auctioned
 // Parameters:
 //      p      in/out   the packet (auction) to be processed
-float Robot::rangeSensor(Packet &p)
+float Robot::rangeSensor(Packet &packet)
 {
 
     // unpack the auction from the packet
-    Auction_Announcement *aa = (Auction_Announcement *)p.msg;
+    Auction_Announcement *auctionAnnouncement = (Auction_Announcement *)packet.msg;
 
     // unpack the formation definition from the state within the auction
-    Formation f = aa->s_i.formation;
+    Formation formation = auctionAnnouncement->s_i.formation;
 
     // get the range from the auctioneer to this robot
-    float range = env->distanceToRobot(env->getCell(p.fromID), this);
+    float range = env->distanceToRobot(env->getCell(packet.fromID), this);
 
     // if the auctioneer is beyond sensor range, do not bid
     if (range > SENSOR_RANGE) return -1.0f;
 
     // get the relative bearing from the auctioneer to this robot
-    float bearing = bearingSensor(p.fromID);
+    float bearing = bearingSensor(packet.fromID);
 
     // get the angle between the auctioneer and the position being auctioned
-    float ang = atan2(f.getFunction()(f.getRadius()), f.getRadius()) -
+    float ang = atan2(formation.getFunction()(formation.getRadius()), formation.getRadius()) -
                   bearing;
 
     // get the vector between the auctioneer and this robot
-    Vector d = (*(Vector *)this) - (*(Vector *)env->getCell(p.fromID));
+    Vector d = (*(Vector *)this) - (*(Vector *)env->getCell(packet.fromID));
 
     // get the vector between the auctioneer and the position being auctioned
     Vector e;
-    e.y = f.getFunction()(f.getRadius());
-    e.x = sqrt((f.getRadius() * f.getRadius()) - (e.y * e.y));
+    e.y = formation.getFunction()(formation.getRadius());
+    e.x = sqrt((formation.getRadius() * formation.getRadius()) - (e.y * e.y));
 
     // get the vector between the position being auctioned and this robot
     Vector a;
-    if (aa->right)    // if the position is to the right of the auctioneer
+    if (auctionAnnouncement->right)    // if the position is to the right of the auctioneer
         a = d - e;
     else
         a = d + e;

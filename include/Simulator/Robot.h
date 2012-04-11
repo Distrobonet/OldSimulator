@@ -69,13 +69,14 @@ class Robot: public Circle
 
 
         string generateSubPubMessage(bool subOrPub);
+        void updatePosition();
 
         // <constructors>
         Robot(const float dx         = 0.0f,
               const float dy         = 0.0f,
               const float dz         = 0.0f,
               const float theta      = 0.0f);
-        Robot(const Robot &r);
+        Robot(const Robot &robot);
 
         // <destructors>
         virtual ~Robot();
@@ -83,7 +84,7 @@ class Robot: public Circle
         // <virtual public mutator functions>
         virtual bool setRadius(const float r = DEFAULT_ROBOT_RADIUS);
         virtual bool setHeading(const float theta);
-        virtual bool setEnvironment(Environment *e);
+        virtual bool setEnvironment(Environment *enviroment);
         virtual void translateRelative(Vector v);
         virtual void translateRelative(const float dx = 0.0f,
                                        const float dy = 0.0f);
@@ -114,7 +115,6 @@ class Robot: public Circle
         float  threshold()                     const;
         float  angThreshold()                  const;
         float  collisionRadius()               const;
-
 
 
         // <public sensor functions>
@@ -161,7 +161,7 @@ class Robot: public Circle
                                         const float dist);
         Behavior orbit(const Vector &target, const float dist);
         Behavior orbitBehavior(const Vector &target, const float dist);
-        bool     processPacket(Packet &p);
+        bool     processPacket(Packet &packet);
         bool     processPackets();
 
     protected:
@@ -171,10 +171,10 @@ class Robot: public Circle
         Environment  *env;    // the environment of the robot
 
         // <protected static data members>
-        static int  nRobots;    // number of total robots
+        static int  numOfRobots;    // number of total robots
 
         // <protected utility functions>
-        float rangeSensor(Packet &p);
+        float rangeSensor(Packet &packet);
         float bearingSensor(int &cellID);
 
         // <virtual protected utility functions>

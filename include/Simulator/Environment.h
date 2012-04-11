@@ -76,8 +76,8 @@ class Environment
         vector<Cell *>      getCells();    // BAD!!!
         vector<Robot *>     getRobots();   // BAD!!!
 		vector<Object *>    getObjects();  // BAD!!!
-        int                 getNCells() const;
-        int                 getNFreeRobots() const;
+        int                 getNumberOfCells() const;
+        int                 getNumberOfFreeRobots() const;
 		int                 getNObjects() const;
 
 
@@ -142,7 +142,7 @@ class Environment
         queue<Packet>      msgQueue;
         Cell              *newestCell;
         Formation          formation;
-        int                nRobots;
+        int                numOfRobots;
 
         // <virtual protected utility functions>
         virtual bool init(const int n = 0, const Formation f = Formation());

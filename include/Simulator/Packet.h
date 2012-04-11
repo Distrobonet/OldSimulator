@@ -18,7 +18,7 @@ using namespace std;
 // global constants
 static const int ID_OPERATOR  = -1;
 static const int ID_BROADCAST = -2;
-static const int ID_ROBOT     = -3;
+static const int ID_ROBOT     =  0;
 
 
 

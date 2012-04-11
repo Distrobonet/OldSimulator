@@ -16,10 +16,17 @@
 
 #define AUCTION_STEP_COUNT (3)
 
+// <constructors>
 
+//
+// Environment(n, f, colorIndex)
+// Last modified: 08Nov2009
+//
 // Default constructor that initializes
 // this environment to the parameterized values.
 //
+// Returns:     <none>
+// Parameters:
 //      n           in      the initial number of cells
 //      f           in      the initial formation
 //
@@ -27,7 +34,7 @@ Environment::Environment(const int numRobots, const Formation formation)
 {
   if (!init(numRobots, formation))
 	  clear();
-}
+}   // Environment(const int, const Formation, const Color)
 
 
 
@@ -80,14 +87,14 @@ Environment::~Environment()
 // Parameters:
 //      c       in      the cell being added
 //
-bool Environment::addCell(Cell *c)
+bool Environment::addCell(Cell *cell)
 {
-  if ((c == NULL) && ((c = new Cell()) == NULL)) return false;
+  if ((cell == NULL) && ((cell = new Cell()) == NULL)) return false;
 
-  c->setEnvironment(this);
+  cell->setEnvironment(this);
 
   // attempt to add this cell to the cell list
-  cells.push_back(c);
+  cells.push_back(cell);
   return true;
 }   // addCell(Cell *)
 
@@ -106,9 +113,9 @@ bool Environment::addCell(Cell *c)
 bool Environment::removeCell()
 {
   if (cells.size() == 0) return false;
-  Cell *c = cells[cells.size() - 1];
-  if (!removeCell(c)) return false;
-  delete c;
+  Cell *cell = cells[cells.size() - 1];
+  if (!removeCell(cell)) return false;
+  delete cell;
   return true;
 }   // removeCell()
 
@@ -126,16 +133,16 @@ bool Environment::removeCell()
 // Parameters:
 //      c       in/out  set to the cell being removed
 //
-bool Environment::removeCell(Cell* c)
+bool Environment::removeCell(Cell* cell)
 {
-  if(c==NULL)
+  if(cell==NULL)
   {
     return false;
   }
   bool answer = false;
   for(unsigned i = 0; i < cells.size(); i++)
   {
-    if(c == cells[i])
+    if(cell == cells[i])
     {
       cells.erase(cells.begin() + i);
       answer = true;
@@ -161,16 +168,16 @@ bool Environment::removeCell(Cell* c)
 //      dy      in      the y-coordinate of the object (default 0)
 //      dz      in      the z-coordinate of the object (default 0)
 //
-bool Environment::addObject(float dx, float dy, float dz)
-{
-   Object* o = new Object(dx, dy, dz);
-   if (!addObject(o))
-   {
-      if (o != NULL) delete o;
-      return false;
-   }
-   return true;
-}  // addObject(float, float, float)
+//bool Environment::addObject(float dx, float dy, float dz)
+//{
+//   Object* o = new Object(dx, dy, dz);
+//   if (!addObject(o))
+//   {
+//      if (o != NULL) delete o;
+//      return false;
+//   }
+//   return true;
+//}  // addObject(float, float, float)
 
 
 
@@ -185,14 +192,14 @@ bool Environment::addObject(float dx, float dy, float dz)
 // Parameters:
 //      o       in      the object being added
 //
-bool Environment::addObject(Object *o)
-{
-   if ((o == NULL) && ((o = new Object()) == NULL)) return false;
-   o->setRadius(DEFAULT_ROBOT_RADIUS);
-   o->showFilled = true;
-   objects.push_back(o);   // attempt to add this object to the object list
-   return true;
-}   // addObject(Object *)
+//bool Environment::addObject(Object *o)
+//{
+//   if ((o == NULL) && ((o = new Object()) == NULL)) return false;
+//   o->setRadius(DEFAULT_ROBOT_RADIUS);
+//   o->showFilled = true;
+//   objects.push_back(o);   // attempt to add this object to the object list
+//   return true;
+//}   // addObject(Object *)
 
 
 
@@ -206,14 +213,14 @@ bool Environment::addObject(Object *o)
 // Returns:     true if successful, false otherwise
 // Parameters:  <none>
 //
-bool Environment::removeObject()
-{
-   if (objects.size() == 0) return false;
-   Object* o = objects[objects.size() - 1];
-   if (!removeObject(o)) return false;
-   delete o;
-   return true;
-}   // removeObject()
+//bool Environment::removeObject()
+//{
+//   if (objects.size() == 0) return false;
+//   Object* o = objects[objects.size() - 1];
+//   if (!removeObject(o)) return false;
+//   delete o;
+//   return true;
+//}   // removeObject()
 
 
 
@@ -229,19 +236,19 @@ bool Environment::removeObject()
 // Parameters:
 //      o       in/out  set to the object being removed
 //
-bool Environment::removeObject(Object *o)
-{
-   if (o == NULL) return false;
-   for (unsigned i = 0; i < objects.size(); ++i)
-   {
-      if (o == objects[i])
-      {
-         objects.erase(objects.begin() + i);
-         return true;
-      }
-   }
-   return false;
-}  // removeObject(Object *)
+//bool Environment::removeObject(Object *o)
+//{
+//   if (o == NULL) return false;
+//   for (unsigned i = 0; i < objects.size(); ++i)
+//   {
+//      if (o == objects[i])
+//      {
+//         objects.erase(objects.begin() + i);
+//         return true;
+//      }
+//   }
+//   return false;
+//}  // removeObject(Object *)
 
 
 
@@ -256,18 +263,18 @@ bool Environment::removeObject(Object *o)
 // Returns:     the cell at the parameterized position
 // Parameters:  <none>
 //
-Cell* Environment::getCell(int pos) const
+Cell* Environment::getCell(int position) const
 {
-  Cell *c = NULL;
+  Cell *cell = NULL;
   for(unsigned i = 0; i < cells.size(); i++)
   {
-    if(pos == cells[i]->getID())
+    if(position == cells[i]->getID())
     {
-      c = cells[i];
+      cell = cells[i];
       break;
     }
   }
-  return c;
+  return cell;
 }   // getCell(int) const
 
 
@@ -281,11 +288,11 @@ Cell* Environment::getCell(int pos) const
 // Returns:     the object at the parameterized index
 // Parameters:  <none>
 //
-Object* Environment::getObject(int index) const
-{
-   if ((index < 0) || (index >= objects.size())) return NULL;
-   return objects[index];
-}  // getObject(int) const
+//Object* Environment::getObject(int index) const
+//{
+//   if ((index < 0) || (index >= objects.size())) return NULL;
+//   return objects[index];
+//}  // getObject(int) const
 
 
 
@@ -330,10 +337,10 @@ vector<Robot *> Environment::getRobots()
 // Returns:     all of the objects in the environment
 // Parameters:  <none>
 //
-vector<Object *> Environment::getObjects()
-{
-  return objects;
-}   // getObjects()
+//vector<Object *> Environment::getObjects()
+//{
+//  return objects;
+//}   // getObjects()
 
 
 
@@ -346,7 +353,7 @@ vector<Object *> Environment::getObjects()
 // Returns:     the number of cells in the environment
 // Parameters:  <none>
 //
-int Environment::getNCells() const
+int Environment::getNumberOfCells() const
 {
   return cells.size();
 }   // getNCells() const
@@ -362,7 +369,7 @@ int Environment::getNCells() const
 // Returns:     the number of [free] robots in the environment
 // Parameters:  <none>
 //
-int Environment::getNFreeRobots() const
+int Environment::getNumberOfFreeRobots() const
 {
   return robots.size();
 }   // getNFreeRobots() const
@@ -414,7 +421,7 @@ void Environment::draw()
   }
 
   // draw cells
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
   {
     cells[i]->draw();
   }
@@ -470,7 +477,7 @@ bool Environment::step()
   Cell *auctionCall = NULL;
   //Robot *r = NULL;
 
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
   {
     auctionCall = cells[i]->cStep();
     if((auctionCall != NULL)&&(startFormation))
@@ -501,7 +508,7 @@ bool Environment::step()
     }
     forwardPackets();
     auctionCalls.clear();
-    for(int i=0; i<getNCells(); i++)
+    for(int i=0; i<getNumberOfCells(); i++)
     {
       if(cells[i]->getAuctionStepCount() >= AUCTION_STEP_COUNT)
     	  cells[i]->settleAuction();
@@ -525,7 +532,7 @@ void Environment::clear()
 {
    while (removeCell());
    while (removeRobot());
-   while (removeObject());
+//   while (removeObject());
 }  // clear()
 
 
@@ -580,7 +587,7 @@ void Environment::getDistance(Vector dist)
   distance = dist;
 
   //send a formation change message for the cell at dist+centroid to be seed
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
   {
     if( ((distance.magnitude()) - (cells[i]->gradient).magnitude()) < 0.01)
     {
@@ -639,27 +646,27 @@ bool Environment::sendMsg(const Message &msg,
 //
 
 //removed const
-bool Environment::sendPacket(const Packet &p)
+bool Environment::sendPacket(const Packet &packet)
 {
   // discrete message passing
   //if (msgQueue.enqueue(p)) return true;
 
   // continuous message passing
   //if(p.type==AUCTION_ANNOUNCEMENT)printf("auctionannouncement in sendPacket()\n");
-  if (forwardPacket(p)) return true;
+  if (forwardPacket(packet)) return true;
   //if(VERBOSE)printf("just before delete p.msg;\n");
   //(cast as message type -- delete (state *)
-  if(p.msg != NULL)
+  if(packet.msg != NULL)
   {
-    if(p.type==STATE)
+    if(packet.type==STATE)
     {
       //if(VERBOSE) printf("attempting to delete STATE message\n");
-      delete (State *)p.msg;
+      delete (State *)packet.msg;
       //if(VERBOSE) printf("successfully deleted STATE message\n");
-    }else if(p.type==CHANGE_FORMATION)
+    }else if(packet.type==CHANGE_FORMATION)
     {
       //if(VERBOSE) printf("attempting to delete CHANGE_FORMATION message\n");
-      delete (Formation *)p.msg;
+      delete (Formation *)packet.msg;
     }
   }
   //p.msg = NULL;
@@ -680,34 +687,34 @@ bool Environment::sendPacket(const Packet &p)
 //
 
 //remove const
-bool Environment::forwardPacket(const Packet &p)
+bool Environment::forwardPacket(const Packet &packet)
 {
-  Cell *c;
-  if(!p.fromBroadcast())
-	  c = getCell(p.toID);
+  Cell *cell;
+  if(!packet.fromBroadcast())
+	  cell = getCell(packet.toID);
 
-  int to = p.toID;
-  if (c != NULL)
+  int to = packet.toID;
+  if (cell != NULL)
   {
-    c->msgQueue.push(p);
+    cell->msgQueue.push(packet);
     return true;
   }
   //if (c == NULL) printf("CELL is NULL!\n");
   //if p.msg != NULL
   //if(p.msg != NULL) delete p.msg;
-  if(p.msg != NULL)
+  if(packet.msg != NULL)
   {
-    if(p.type==STATE)
-    	delete (State *)p.msg;
-    else if(p.type==CHANGE_FORMATION)
-    	delete (Formation *)p.msg;
-    else if(p.type == AUCTION_ANNOUNCEMENT)
+    if(packet.type==STATE)
+    	delete (State *)packet.msg;
+    else if(packet.type==CHANGE_FORMATION)
+    	delete (Formation *)packet.msg;
+    else if(packet.type == AUCTION_ANNOUNCEMENT)
     {
       //Robot* r;
       for(unsigned i = 0; i < robots.size(); i++)
-    	  robots[i]->msgQueue.push(p);
+    	  robots[i]->msgQueue.push(packet);
 
-    }else if(p.type == NCELL_REQUEST)
+    }else if(packet.type == NCELL_REQUEST)
     {
     	// WTF?
     }
@@ -730,12 +737,12 @@ bool Environment::forwardPacket(const Packet &p)
 //
 bool Environment::forwardPackets()
 {
-  Packet p;
+  Packet packet;
   while (!msgQueue.empty())
   {
-    p = msgQueue.front();
+    packet = msgQueue.front();
     msgQueue.pop();
-    if (!forwardPacket(p)) return false;
+    if (!forwardPacket(packet)) return false;
   }
   return true;
 }   // forwardPackets()
@@ -757,20 +764,20 @@ bool Environment::forwardPackets()
 //      maxDist in      the maximum distance to be considered
 //
 vector<Vector> Environment::getObjectRelationships(const int   fromID,
-                                                   const float maxDist)
+                                                   const float maxDistance)
 {
   Cell *fromCell = getCell(fromID);
-  int nObjects = getNObjects();
-  if ((fromCell == NULL) || (nObjects == 0)) return vector<Vector>();
+  int numberOfObjects = getNObjects();
+  if ((fromCell == NULL) || (numberOfObjects == 0)) return vector<Vector>();
 
-  vector<Vector> rels;
-  for (int i = 0; i < nObjects; ++i)
+  vector<Vector> relationships;
+  for (int i = 0; i < numberOfObjects; ++i)
   {
-	Vector rel = *objects[i] - *fromCell;
-	if (rel.magnitude() <= maxDist)
-		rels.push_back(rel);
+	Vector relationship = *objects[i] - *fromCell;
+	if (relationship.magnitude() <= maxDistance)
+		relationships.push_back(relationship);
   }
-  return rels;
+  return relationships;
 }   // getObjectRelationships(const int, const float)
 
 
@@ -790,7 +797,7 @@ vector<Vector> Environment::getObjectRelationships(const int   fromID,
 //
 bool Environment::showLine(const bool show)
 {
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->heading.showLine = show;
 
   return true;
@@ -811,7 +818,7 @@ bool Environment::showLine(const bool show)
 //
 bool Environment::showHead(const bool show)
 {
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->heading.showHead = show;
 
   return true;
@@ -832,7 +839,7 @@ bool Environment::showHead(const bool show)
 //
 bool Environment::showPos(const bool show)
 {
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->showPos = show;
 
   return true;
@@ -853,7 +860,7 @@ bool Environment::showPos(const bool show)
 //
 bool Environment::showHeading(const bool show)
 {
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); ++i)
 	  cells[i]->showHeading = show;
 
   return true;
@@ -876,11 +883,11 @@ bool Environment::showHeading(const bool show)
 //      f           in      the initial formation
 //      colorIndex  in      the initial array index of the color of the cells
 //
-bool Environment::init(const int n, const Formation f)
+bool Environment::init(const int numberOfRobots, const Formation f)
 {
   srand(time(NULL));
 
-  nRobots      = n;
+  numOfRobots      = numberOfRobots;
   formation    = f;
   formation.setFormationID(0);
   formationID  = 0;
@@ -897,9 +904,11 @@ bool Environment::init(const int n, const Formation f)
 
 bool Environment::initRobots()
 {
-  for (int i = 0; i < nRobots; ++i)
-    addRobot(randSign() * frand(), randSign() * frand(), 0.0f, randSign() * frand(0.0f, 180.0f));
-
+  for (int i = 0; i < numOfRobots; ++i)
+    addRobot(randSign() * frand(),
+        randSign() * frand(),
+        0.0f,
+        randSign() * frand(0.0f, 180.0f));
   return true;
 }
 
@@ -907,11 +916,10 @@ bool Environment::addRobot(float x, float y, float z, float theta)
 {
   if (VERBOSE)
 	  printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
+  Robot *robot = new Robot(x, y, z, theta);
+  robot->setEnvironment(this);
 
-  Robot *r = new Robot(x, y, z, theta);
-  r->setEnvironment(this);
-  robots.push_back(r);
-
+  robots.push_back(robot);
   return true;
 }
 
@@ -985,57 +993,57 @@ ID_OPERATOR,      CHANGE_FORMATION);
   return true;
   } */  // initNbrs(const int)
 
-Robot * Environment::getNearestRobot(Cell *c)
+Robot * Environment::getNearestRobot(Cell *cell)
 {
-	Robot *r = robots[0];
-	float minDistance = distanceToRobot(c,robots[0]), distance;
+	Robot *robot = robots[0];
+	float minDistance = distanceToRobot(cell,robots[0]), distance;
 
-	for (int i = 1; i < getNFreeRobots(); ++i)
+	for (int i = 1; i < getNumberOfFreeRobots(); ++i)
 	{
-		distance = distanceToRobot(c,robots[i]);
+		distance = distanceToRobot(cell,robots[i]);
 		if(minDistance > distance)
 		{
-		  r = robots[i];
+		  robot = robots[i];
 		  minDistance = distance;
 		}
 	}
 	//printf("minDistance = %f\n",minDistance);
-	return r;
+	return robot;
 }
 
 Robot * Environment::getNearestRobot(float x, float y)
 {
-	Robot *r = robots[0];
+	Robot *robot = robots[0];
 	float minDistance = distanceToRobot(x,y,robots[0]), distance;
 	distance = minDistance;
 
-	for (int i = 0; i < getNFreeRobots(); ++i)
+	for (int i = 0; i < getNumberOfFreeRobots(); ++i)
 	{
 		distance = distanceToRobot(x,y,robots[i]);
 		if(minDistance> distance)
 		{
-		  r = robots[i];
+		  robot = robots[i];
 		  minDistance = distance;
 		}
 	}
 	//printf("minDistance = %f\n",minDistance);
-	return r;
+	return robot;
 }
 
 
-float Environment::distanceToRobot(Cell *c,Robot *r)
+float Environment::distanceToRobot(Cell *cell,Robot *robot)
 {
   float x = 0, y = 0;
-  x = fabs(r->x - c->x);
-  y = fabs(r->y - c->y);
+  x = fabs(robot->x - cell->x);
+  y = fabs(robot->y - cell->y);
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
-float Environment::distanceToRobot(float xx,float yy, Robot* r)
+float Environment::distanceToRobot(float xx,float yy, Robot* robot)
 {
   float x = 0, y = 0;
-  x = fabs(r->x - xx);
-  y = fabs(r->y - yy);
+  x = fabs(robot->x - xx);
+  y = fabs(robot->y - yy);
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
@@ -1096,14 +1104,14 @@ void Environment::formUp()
 void Environment::formFromClick(float x, float y)
 {
   addCell();
-  Cell *c  = cells[0];
-  Robot* r = getNearestRobot(x,y);
-  c->x = r->x;
-  c->y = r->y;
+  Cell *cell  = cells[0];
+  Robot* robot = getNearestRobot(x,y);
+  cell->x = robot->x;
+  cell->y = robot->y;
 
   for(unsigned i = 0; i < robots.size(); i++)
   {
-    if(r == robots[i])
+    if(robot == robots[i])
     {
       robots.erase(robots.begin() + i);
       break;
@@ -1111,8 +1119,8 @@ void Environment::formFromClick(float x, float y)
   }
 
   //c->setColor(MAGENTA);
-  c->setHeading(formation.getHeading());
-  newestCell = c;
+  cell->setHeading(formation.getHeading());
+  newestCell = cell;
   sendMsg(new Formation(formation), formation.getSeedID(),
       ID_OPERATOR,      CHANGE_FORMATION);
 }
@@ -1133,32 +1141,32 @@ bool Environment::changeFormationSeed(Formation &f, int id)
 Robot* Environment::getRobot(int id)
 {
 	// TODO catch possible null pointer
-  Robot* r;
+  Robot* robot;
   int rID=id;
 
   for(unsigned i = 0; i < robots.size(); i++)
   {
     if(robots[i]->getID()== rID)
-      r = robots[i];
+      robot = robots[i];
   }
-  return r;
+  return robot;
 }
 
-void Environment::settleAuction(Cell* a,int rID)
+void Environment::settleAuction(Cell* auctionCell,int rID)
 {
   //cout << "entering env->settleAuction()" << endl;
 
   if(robots.size() > 0)
   {
-    Cell* c;
-    c = new Cell();
-    if(!addCell(c))
+    Cell* cell;
+    cell = new Cell();
+    if(!addCell(cell))
     {
       cout << "addCell() failed!" << endl;
       system("PAUSE");
     }
-    Robot *r = getRobot(rID);
-    if (r == NULL)
+    Robot *robot = getRobot(rID);
+    if (robot == NULL)
     {
       cout << ">> ERROR: Robot[" << rID << "] not found!\n\n";
       return;
@@ -1170,35 +1178,35 @@ void Environment::settleAuction(Cell* a,int rID)
     //a->draw();
     //r->draw();
     //system("PAUSE");
-    c->x = r->x;
-    c->y = r->y;
+    cell->x = robot->x;
+    cell->y = robot->y;
     for(unsigned i = 0; i < robots.size(); i++)
     {
-      if(r->getID() == robots[i]->getID())
+      if(robot->getID() == robots[i]->getID())
       {
         robots.erase(robots.begin() + i);
         break;
       }
     }
     //c->setColor(MAGENTA);
-    c->clearNbrs();
-    c->leftNbr = c->rightNbr = NULL;
-    c->addNbr(a->getID());
-    a->addNbr(c->getID());
+    cell->clearNbrs();
+    cell->leftNbr = cell->rightNbr = NULL;
+    cell->addNbr(auctionCell->getID());
+    auctionCell->addNbr(cell->getID());
 
-    if(a->rightNbr == NULL)
+    if(auctionCell->rightNbr == NULL)
     {
-      c->leftNbr  = c->nbrWithID(a->getID());
-      a->rightNbr = a->nbrWithID(c->getID());
+      cell->leftNbr  = cell->nbrWithID(auctionCell->getID());
+      auctionCell->rightNbr = auctionCell->nbrWithID(cell->getID());
       //cout << "a->rightNbr = " << a->rightNbr->ID << endl;
-      newestCell  = c;
+      newestCell  = cell;
     }
-    else if(a->leftNbr == NULL)
+    else if(auctionCell->leftNbr == NULL)
     {
-      c->rightNbr = c->nbrWithID(a->getID());
-      a->leftNbr  = a->nbrWithID(c->getID());
+      cell->rightNbr = cell->nbrWithID(auctionCell->getID());
+      auctionCell->leftNbr  = auctionCell->nbrWithID(cell->getID());
       //cout << "a->leftNbr = " << a->leftNbr->ID << endl;
-      newestCell  = c;
+      newestCell  = cell;
     }
     formation.setFormationID(++formationID);
     sendMsg(new Formation(formation),
@@ -1227,9 +1235,9 @@ bool Environment::removeRobot()
   if (robots.size() == 0)
 	  return false;
 
-  Robot *r = robots[robots.size()-1];
-  if (!removeRobot(r)) return false;
-  	  delete r;
+  Robot *robot = robots[robots.size()-1];
+  if (!removeRobot(robot)) return false;
+  	  delete robot;
 
   return true;
 }   // removeRobot()
@@ -1237,11 +1245,11 @@ bool Environment::removeRobot()
 
 
 // remove a robot form the environment
-bool Environment::removeRobot(Robot *r)
+bool Environment::removeRobot(Robot *robot)
 {
   for(unsigned i = 0; i < robots.size(); i++)
   {
-    if(r == robots[i])
+    if(robot == robots[i])
     {
       robots.erase(robots.begin() + i);
       return true;
