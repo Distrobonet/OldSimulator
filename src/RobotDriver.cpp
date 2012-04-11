@@ -115,6 +115,7 @@ float xValue = 0.0l;
 float yValue = 0.0l;
 
 double getYValue(double xValue);
+bool initEnv(const int nRobots, const int formationIndex);
 
 vector<Robot> robots;
 
@@ -124,11 +125,23 @@ int main(int argc, char **argv)
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
 
-	for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
+	displayMenu();
+	keyboardInput();
+
+	//TODO: LINK g_formationIndex to the incomming keyboard command
+	// initialize and execute the robot cell environment
+	if (!initEnv(g_nRobots, g_formationIndex))
 	{
-		Robot *temp = new Robot(0, 0, 0, 0);
-		robots.push_back(*temp);
+		cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
+		return 1;
 	}
+
+	//TODO: set default initializaton of robot positions elsewhere (start w/ Environment.cpp)
+//	for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
+//	{
+//		Robot *temp = new Robot(0, 0, 0, 0);
+//		robots.push_back(*temp);
+//	}
 
 
 	// Primary ROS loop
