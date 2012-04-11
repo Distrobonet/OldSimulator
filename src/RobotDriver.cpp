@@ -401,7 +401,7 @@ void display()
   if (g_environment->getCells().size() > 0)
   {
     g_environment->getCell(g_seedID)->setColor(GREEN);
-    for(int i = 0; i < g_environment->getNCells(); ++i)
+    for(int i = 0; i < g_environment->getNumberOfCells(); ++i)
     {
       if(g_environment->getCell(i) != g_environment->getCell(g_seedID))
       {
@@ -429,7 +429,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 {
   if ((keyPressed >= '0') && (keyPressed <= '9'))
   {
-    if (g_environment->getNCells() > 0)
+    if (g_environment->getNumberOfCells() > 0)
     {
       char cIndex = keyPressed;
       changeFormation(atoi(&cIndex));
@@ -440,7 +440,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 
     // change formation heading
     case '<': case ',':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_formationHeading += g_environment->getCell(g_seedID)->maxAngSpeed();
         changeFormation(g_formationIndex);
@@ -451,7 +451,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
       break;
 
     case '>': case '.':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_formationHeading -= g_environment->getCell(g_seedID)->maxAngSpeed();
         changeFormation(g_formationIndex);
@@ -463,7 +463,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 
       // change formation scale
     case '+': case '=':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_formationRadius += 0.01f;
         changeFormation(g_formationIndex);
@@ -471,7 +471,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
       break;
 
     case '-': case '_':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_formationRadius -= 0.01f;
         g_formationRadius  = max(g_formationRadius,
@@ -481,51 +481,51 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
       break;
 
     case 'h': case 'H':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         g_environment->showHeading(!g_environment->getCell(g_seedID)->showHeading);
       break;
 
     case 'l': case 'L':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         g_environment->showLine(!g_environment->getCell(g_seedID)->heading.showLine);
       break;
 
     case 'p': case 'P':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         g_environment->showPos(!g_environment->getCell(g_seedID)->showPos);
 
       break;
 
     case 't': case 'T':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         g_environment->showHead(!g_environment->getCell(g_seedID)->heading.showHead);
       break;
 
     case 'n': case 'N':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         //g_prop_toggle = !g_prop_toggle;
         sendNCellRequest();
       break;
 
     case 'c': case 'C':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         sendFcntrRequest();
       break;
 
     case 'r': case 'R':
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         sendFRadRequest();
       break;
 
     case 's': case 'S':
-      if (g_environment->getNCells()> 0)
+      if (g_environment->getNumberOfCells()> 0)
         sendFSeedRequest();
       break;
 
-    case 'a': case 'A':
-      g_environment->addObject(randSign() * frand(),
-                       randSign() * frand(),
-                       0.0f);
+//    case 'a': case 'A':
+//      g_environment->addObject(randSign() * frand(),
+//                       randSign() * frand(),
+//                       0.0f);
 /*
       g_environment->addRobot(randSign() * frand(),
                       randSign() * frand(),
@@ -533,8 +533,8 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
                       randSign() * frand(0.0f, 180.0f)); */
       break;
 
-    case 'd': case 'D':
-      g_environment->removeObject();
+//    case 'd': case 'D':
+//      g_environment->removeObject();
 /*
       if ((g_selectedIndex >= 0) && (g_selectedIndex < g_environment->getNCells()))
       {
@@ -562,7 +562,7 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
   switch (keyPressed)
   {
     case GLUT_KEY_LEFT:
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_environment->getCell(g_seedID)->rotError =
           -(1.0001f * g_environment->getCell(g_seedID)->angThreshold());
@@ -572,7 +572,7 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
       break;
 
     case GLUT_KEY_UP:
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_environment->getCell(g_seedID)->transError.x =
           1.0001f * g_environment->getCell(g_seedID)->threshold();
@@ -582,7 +582,7 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
       break;
 
     case GLUT_KEY_RIGHT:
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_environment->getCell(g_seedID)->rotError =
           1.0001f * g_environment->getCell(g_seedID)->angThreshold();
@@ -592,7 +592,7 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
       break;
 
     case GLUT_KEY_DOWN:
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
       {
         g_environment->getCell(g_seedID)->transError.x =
           -(1.0001f * g_environment->getCell(g_seedID)->threshold());
@@ -617,12 +617,12 @@ void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
   switch (keyReleased)
   {
     case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         g_environment->getCell(g_seedID)->rotError = 0.0f;
       break;
 
     case GLUT_KEY_UP: case GLUT_KEY_DOWN:
-      if (g_environment->getNCells() > 0)
+      if (g_environment->getNumberOfCells() > 0)
         g_environment->getCell(g_seedID)->transError.x = 0.0f;
       break;
 
