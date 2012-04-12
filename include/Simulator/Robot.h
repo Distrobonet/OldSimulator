@@ -72,7 +72,7 @@ class Robot: public Circle
 
 
         string generateSubPubMessage(bool subOrPub);
-        void updatePosition();
+        void updatePosition(int robotID);
 
         // <constructors>
         Robot(const float dx         = 0.0f,
