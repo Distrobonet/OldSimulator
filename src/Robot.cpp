@@ -17,7 +17,7 @@ double velocityX, velocityY, velocityTheta;
 
 void Robot::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
-	int robotID = atoi(odom->header.frame_id.c_str());
+	int robotID = atoi(odom-> header.frame_id.c_str());
 
 	velocityY = odom-> pose.pose.position.x;
 	velocityX = -odom-> pose.pose.position.y;

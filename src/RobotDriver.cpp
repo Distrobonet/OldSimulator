@@ -161,30 +161,30 @@ int main(int argc, char **argv)
 
 			if(yValue != -9999)
 			{
-				distanceToTarget = getDistance(xValue, yValue, robot2->robotX, robot2->robotY);
-				angleChange = getAngle(xValue, yValue, robot2->robotX, robot2->robotY, robot2->robotTheta);
+				distanceToTarget = getDistance(xValue, yValue, robot2-> robotX, robot2-> robotY);
+				angleChange = getAngle(xValue, yValue, robot2-> robotX, robot2-> robotY, robot2-> robotTheta);
 
 				if (distanceToTarget < 0.00001)
 				{
 					distanceToTarget = 0;
-					angleChange = getAngle(xValue, yValue + 2, robot2->robotX, robot2->robotY, robot2->robotTheta);
+					angleChange = getAngle(xValue, yValue + 2, robot2-> robotX, robot2-> robotY, robot2-> robotTheta);
 				}
 
-				robot1->x = 0;
-				robot1->y = 0;
-				robot1->robotTheta = angleChange;
-				robot1->pub_cmd_vel.publish(robot1->commandVelocity);
+				robot1-> robotX = 0;
+				robot1-> robotY = 0;
+				robot1-> robotTheta = angleChange;
+				robot1-> pub_cmd_vel.publish(robot1->commandVelocity);
 
 				if((angleChange < 0.1 && angleChange > 0) || (angleChange > -0.1 && angleChange < 0))
 				{
-					robot1->commandVelocity.linear.x = distanceToTarget;
-					robot1->commandVelocity.linear.y = distanceToTarget;
-					robot1->commandVelocity.angular.z = 0;
-					robot1->pub_cmd_vel.publish(robot1->commandVelocity);
+					robot1-> commandVelocity.linear.x = distanceToTarget;
+					robot1-> commandVelocity.linear.y = distanceToTarget;
+					robot1-> commandVelocity.angular.z = 0;
+					robot1-> pub_cmd_vel.publish(robot1-> commandVelocity);
 				}
 			}
 		}
-		ros::spinOnce();
+		//ros::spinOnce();
 		loop_rate.sleep();
 	}
 
@@ -230,14 +230,13 @@ void keyboardInput()
 
 	if(kbhit())
 	{
-		keyPressed=getchar();
-
+		keyPressed = getchar();
 		cout << "\nKey pressed: " << keyPressed;
 
 		if(keyPressed >= '0' && keyPressed <= '9')
 		{
 			cout << " - Setting to " << keyPressed;
-			CURRENT_SELECTION = keyPressed;
+			CURRENT_SELECTION = keyPressed - '0';
 		}
 		else
 			cout << " - Not a valid input.";
