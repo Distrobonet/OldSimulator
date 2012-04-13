@@ -72,8 +72,9 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
     showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
 
 
+    Robot tempBot = *this;
 	ros::NodeHandle aNode;
-	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot);
+	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, &tempBot);
 	robotX = velocityX;
 	robotY = velocityY;
 	robotTheta = velocityTheta;
