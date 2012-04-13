@@ -15,7 +15,7 @@ double velocityX, velocityY, velocityTheta;
 
 
 
-static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
+void Robot::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
 	int robotID = atoi(odom->header.frame_id.c_str());
 
@@ -23,7 +23,7 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	velocityX = -odom-> pose.pose.position.y;
 
 	//TODO: can't seem to resolve this
-	//updatePosition(robotID);
+	updatePosition(robotID);
 
 	btScalar roll = 0.0l;
 	btScalar pitch = 0.0l;
@@ -71,8 +71,9 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
     heading.showHead = DEFAULT_ROBOT_SHOW_HEAD;
     showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
 
+
 	ros::NodeHandle aNode;
-	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, callBackRobot);
+	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot);
 	robotX = velocityX;
 	robotY = velocityY;
 	robotTheta = velocityTheta;

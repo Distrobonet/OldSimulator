@@ -73,6 +73,7 @@ class Robot: public Circle
 
         string generateSubPubMessage(bool subOrPub);
         void updatePosition(int robotID);
+        void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom);
 
         // <constructors>
         Robot(const float dx         = 0.0f,
@@ -166,6 +167,8 @@ class Robot: public Circle
         Behavior orbitBehavior(const Vector &target, const float dist);
         bool     processPacket(Packet &packet);
         bool     processPackets();
+
+
 
     protected:
 
