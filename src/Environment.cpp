@@ -426,8 +426,9 @@ bool Environment::sendPacket(const Packet &packet)
     }
   }
   //p.msg = NULL;
-  if(VERBOSE) string printf("finished sendPacket()\n");
-  	  return false;
+  if(VERBOSE)
+	  cout << "finished sendPacket()\n";
+  return false;
 }
 
 
@@ -452,21 +453,26 @@ bool Environment::forwardPacket(const Packet &packet)
   {
     if(packet.type==STATE)
     	delete (State *)packet.msg;
+
     else if(packet.type==CHANGE_FORMATION)
     	delete (Formation *)packet.msg;
+
     else if(packet.type == AUCTION_ANNOUNCEMENT)
     {
       //Robot* r;
       for(unsigned i = 0; i < robots.size(); i++)
     	  robots[i]->msgQueue.push(packet);
+    }
 
-    }else if(packet.type == NCELL_REQUEST)
+    else if(packet.type == NCELL_REQUEST)
     {
     	// WTF?
     }
   }
-  if(VERBOSE) string printf("finished forwarding Packet to %d\n",to);
-  	  return false;
+
+  if(VERBOSE)
+	  cout << "finished forwarding Packet to %d\n" << to;
+  return false;
 }
 
 
@@ -566,8 +572,9 @@ bool Environment::init(const int numberOfRobots, const Formation f)
   //system("PAUSE");
   initRobots();
 
-  if (VERBOSE) string printf("finished initCells()\n");
-  	  return result;
+  if (VERBOSE)
+	  cout << "finished initCells()\n";
+  return result;
 }   // init(const int, const Formation)
 
 bool Environment::initRobots()
