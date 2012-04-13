@@ -46,9 +46,10 @@ Environment::~Environment()
 // returning true if successful, false otherwise.
 bool Environment::addCell(Cell *cell)
 {
-  if ((cell == NULL) && ((cell = new Cell()) == NULL)) return false;
+  if ((cell == NULL) && ((cell = new Cell()) == NULL))
+	  return false;
 
-  cell->setEnvironment(this);
+  cell-> setEnvironment(this);
 
   // attempt to add this cell to the cell list
   cells.push_back(cell);
@@ -61,9 +62,13 @@ bool Environment::addCell(Cell *cell)
 
 bool Environment::removeCell()
 {
-  if (cells.size() == 0) return false;
+  if (cells.size() == 0)
+	  return false;
+
   Cell *cell = cells[cells.size() - 1];
-  if (!removeCell(cell)) return false;
+  if (!removeCell(cell))
+	  return false;
+
   delete cell;
   return true;
 }
@@ -75,10 +80,10 @@ bool Environment::removeCell()
 bool Environment::removeCell(Cell* cell)
 {
   if(cell==NULL)
-  {
     return false;
-  }
+
   bool answer = false;
+
   for(unsigned i = 0; i < cells.size(); i++)
   {
     if(cell == cells[i])
@@ -137,7 +142,7 @@ bool Environment::removeCell(Cell* cell)
 //bool Environment::removeObject(Object *o)
 //{
 //   if (o == NULL) return false;
-//   for (unsigned i = 0; i < objects.size(); ++i)
+//   for (unsigned i = 0; i < objects.size(); i++)
 //   {
 //      if (o == objects[i])
 //      {
@@ -220,20 +225,20 @@ void Environment::draw()
 
   // draw objects
   //Object *currObj = NULL;
-  for (unsigned i = 0; i < objects.size(); ++i)
+  for (unsigned i = 0; i < objects.size(); i++)
   {
     objects[i]->draw();
   }
 
   // draw [free] robots
   //Robot *currRobot = NULL;
-  for (unsigned i = 0; i < robots.size(); ++i)
+  for (unsigned i = 0; i < robots.size(); i++)
   {
     robots[i]->draw();
   }
 
   // draw cells
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
   {
     cells[i]->draw();
   }
@@ -280,7 +285,7 @@ bool Environment::step()
   Cell *auctionCall = NULL;
   //Robot *r = NULL;
 
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
   {
     auctionCall = cells[i]->cStep();
     if((auctionCall != NULL)&&(startFormation))
@@ -364,7 +369,7 @@ void Environment::getDistance(Vector dist)
   distance = dist;
 
   //send a formation change message for the cell at dist+centroid to be seed
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
   {
     if( ((distance.magnitude()) - (cells[i]->gradient).magnitude()) < 0.01)
     {
@@ -490,7 +495,7 @@ vector<Vector> Environment::getObjectRelationships(const int   fromID,
   if ((fromCell == NULL) || (numberOfObjects == 0)) return vector<Vector>();
 
   vector<Vector> relationships;
-  for (int i = 0; i < numberOfObjects; ++i)
+  for (int i = 0; i < numberOfObjects; i++)
   {
 	Vector relationship = *objects[i] - *fromCell;
 	if (relationship.magnitude() <= maxDistance)
@@ -504,7 +509,7 @@ vector<Vector> Environment::getObjectRelationships(const int   fromID,
 // returning true if successful, false otherwise.
 bool Environment::showLine(const bool show)
 {
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
 	  cells[i]->heading.showLine = show;
 
   return true;
@@ -515,7 +520,7 @@ bool Environment::showLine(const bool show)
 // returning true if successful, false otherwise.
 bool Environment::showHead(const bool show)
 {
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
 	  cells[i]->heading.showHead = show;
 
   return true;
@@ -526,7 +531,7 @@ bool Environment::showHead(const bool show)
 // returning true if successful, false otherwise.
 bool Environment::showPos(const bool show)
 {
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
 	  cells[i]->showPos = show;
 
   return true;
@@ -537,7 +542,7 @@ bool Environment::showPos(const bool show)
 // returning true if successful, false otherwise.
 bool Environment::showHeading(const bool show)
 {
-  for (int i = 0; i < getNumberOfCells(); ++i)
+  for (int i = 0; i < getNumberOfCells(); i++)
 	  cells[i]->showHeading = show;
 
   return true;
@@ -567,7 +572,7 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 
 bool Environment::initRobots()
 {
-  for (int i = 0; i <= numOfRobots; ++i)
+  for (int i = 0; i < numOfRobots; i++)
     addRobot(randSign() * frand(),
         randSign() * frand(),
         0.0f,
@@ -578,9 +583,9 @@ bool Environment::initRobots()
 bool Environment::addRobot(float x, float y, float z, float theta)
 {
   if (VERBOSE)
-	  printf("new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n", x, y, z, theta);
+	  cout << "new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n" <<  x << y << z << theta;
   Robot *robot = new Robot(x, y, z, theta);
-  robot->setEnvironment(this);
+  robot-> setEnvironment(this);
 
   robots.push_back(robot);
   return true;
@@ -592,14 +597,14 @@ bool Environment::addRobot(float x, float y, float z, float theta)
 /*bool Environment::initCells(const int n, const Formation f)
   {
   srand(time(NULL));
-  for (int i = 0; i < n; ++i) if (!addCell()) return false;
+  for (int i = 0; i < n; i++) if (!addCell()) return false;
 
 // initialize each robot's neighborhood
 if (!initNbrs()) return false;
 
 // organizes the cells into an initial formation (default line)
 Cell *c  = NULL;
-for (int i = 0; i < getNCells(); ++i)
+for (int i = 0; i < getNCells(); i++)
 {
 if (!cells.getHead(c)) return false;
 c->x = formation.getRadius() *
@@ -633,7 +638,7 @@ ID_OPERATOR,      CHANGE_FORMATION);
 /*bool Environment::initNbrs(const int nNbrs)
   {
   Cell *c = NULL;
-  for (int i = 0; i < getNCells(); ++i)
+  for (int i = 0; i < getNCells(); i++)
   {
   if (!cells.getHead(c))                            return false;
   c->clearNbrs();
@@ -652,7 +657,7 @@ Robot * Environment::getNearestRobot(Cell *cell)
 	Robot *robot = robots[0];
 	float minDistance = distanceToRobot(cell,robots[0]), distance;
 
-	for (int i = 1; i < getNumberOfFreeRobots(); ++i)
+	for (int i = 0; i < getNumberOfFreeRobots(); i++)
 	{
 		distance = distanceToRobot(cell,robots[i]);
 		if(minDistance > distance)
@@ -671,7 +676,7 @@ Robot * Environment::getNearestRobot(float x, float y)
 	float minDistance = distanceToRobot(x,y,robots[0]), distance;
 	distance = minDistance;
 
-	for (int i = 0; i < getNumberOfFreeRobots(); ++i)
+	for (int i = 0; i < getNumberOfFreeRobots(); i++)
 	{
 		distance = distanceToRobot(x,y,robots[i]);
 		if(minDistance> distance)
@@ -688,16 +693,16 @@ Robot * Environment::getNearestRobot(float x, float y)
 float Environment::distanceToRobot(Cell *cell,Robot *robot)
 {
   float x = 0, y = 0;
-  x = fabs(robot->x - cell->x);
-  y = fabs(robot->y - cell->y);
+  x = fabs(robot-> x - cell-> x);
+  y = fabs(robot-> y - cell-> y);
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
 float Environment::distanceToRobot(float xx,float yy, Robot* robot)
 {
   float x = 0, y = 0;
-  x = fabs(robot->x - xx);
-  y = fabs(robot->y - yy);
+  x = fabs(robot-> x - xx);
+  y = fabs(robot-> y - yy);
   return sqrt(pow(x, 2) + pow(y, 2));
 }
 
@@ -760,8 +765,8 @@ void Environment::formFromClick(float x, float y)
   addCell();
   Cell *cell  = cells[0];
   Robot* robot = getNearestRobot(x,y);
-  cell->x = robot->x;
-  cell->y = robot->y;
+  cell-> x = robot-> x;
+  cell-> y = robot-> y;
 
   for(unsigned i = 0; i < robots.size(); i++)
   {
