@@ -14,6 +14,7 @@ int Robot::numOfRobots = ID_ROBOT;   // initializes the number of robots to 0
 double velocityX, velocityY, velocityTheta;
 
 
+
 static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
 	int robotID = atoi(odom->header.frame_id.c_str());
@@ -22,7 +23,7 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	velocityX = -odom-> pose.pose.position.y;
 
 	//TODO: can't seem to resolve this
-	updatePosition(robotID);
+	//updatePosition(robotID);
 
 	btScalar roll = 0.0l;
 	btScalar pitch = 0.0l;
@@ -37,6 +38,14 @@ static void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	ros::spinOnce();
 }
 
+void Robot::updatePosition(int robot)
+{
+	Robot *r = env->getRobot(robot);
+
+	r->robotX = velocityX;
+	r->robotY = velocityY;
+	r->robotTheta = velocityTheta;
+}
 
 // Default constructor that initializes
 // this robot to the parameterized values.
@@ -76,15 +85,6 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
 
     setEnvironment(NULL);
     return true;
-}
-
-void Robot::updatePosition(int robot)
-{
-	Robot *r = env->getRobot(robot);
-
-	r->robotX = velocityX;
-	r->robotY = velocityY;
-	r->robotTheta = velocityTheta;
 }
 
 
