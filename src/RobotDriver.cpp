@@ -81,7 +81,7 @@ Function formations[] = {line,        x,       absX,     negHalfX,
 
 
 // Menu Global variable
-int CURRENT_SELECTION;
+int CURRENT_SELECTION = -1;
 
 // simulation global constants
 const float   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
@@ -93,7 +93,7 @@ const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIU
 
 
 // simulation global variables
-Environment *g_environment               = NULL;
+Environment *g_environment       = NULL;
 int        g_nRobots             = 7;
 float      g_formationRadius     = DEFAULT_FORMATION.getRadius();
 int        g_seedID              = DEFAULT_FORMATION.getSeedID();
@@ -130,6 +130,12 @@ int main(int argc, char **argv)
 	// create handler for interrupts (i.e., ^C)
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
 		signal(SIGPIPE, SIG_IGN);
+
+	// Only continue program once a selection has been made
+	while(CURRENT_SELECTION == -1)
+	{
+		keyboardInput();
+	}
 
 	// initialize and execute the robot cell environment
 	if (!initEnv(g_nRobots, CURRENT_SELECTION))

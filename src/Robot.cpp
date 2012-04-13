@@ -22,7 +22,6 @@ void Robot::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	velocityY = odom-> pose.pose.position.x;
 	velocityX = -odom-> pose.pose.position.y;
 
-	//TODO: can't seem to resolve this
 	updatePosition(robotID);
 
 	btScalar roll = 0.0l;
