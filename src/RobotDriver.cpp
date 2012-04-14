@@ -125,7 +125,6 @@ int main(int argc, char **argv)
 	ros::Rate loop_rate(10);
 
 	displayMenu();
-	keyboardInput();
 
 	// create handler for interrupts (i.e., ^C)
 	if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
@@ -136,7 +135,6 @@ int main(int argc, char **argv)
 	{
 		keyboardInput();
 	}
-
 	// initialize and execute the robot cell environment
 	if (!initEnv(g_nRobots, CURRENT_SELECTION))
 	{
@@ -144,47 +142,26 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
+
+
 	// Primary ROS loop
 	while(ros::ok())
 	{
-		displayMenu();
 		keyboardInput();
 
-		for(int robotNum = 0; robotNum < g_nRobots; robotNum++)
+
+		for(int robotNum = 1; robotNum < g_nRobots; robotNum++)
 		{
 			Robot *robot1 = g_environment->getRobot(robotNum);
 			Robot *robot2 = g_environment->getRobot(robotNum + 1);
 
 			// A robot
-			xValue = robot1->robotX + 1;
-			yValue = getYValue(robot1->robotY + 1);
+			xValue = robot1->robotX +1;
+			yValue = getYValue(robot1->robotY +1);
 
-			if(yValue != -9999)
-			{
-				distanceToTarget = getDistance(xValue, yValue, robot2-> robotX, robot2-> robotY);
-				angleChange = getAngle(xValue, yValue, robot2-> robotX, robot2-> robotY, robot2-> robotTheta);
 
-				if (distanceToTarget < 0.00001)
-				{
-					distanceToTarget = 0;
-					angleChange = getAngle(xValue, yValue + 2, robot2-> robotX, robot2-> robotY, robot2-> robotTheta);
-				}
-
-				robot1-> robotX = 0;
-				robot1-> robotY = 0;
-				robot1-> robotTheta = angleChange;
-				robot1-> pub_cmd_vel.publish(robot1->commandVelocity);
-
-				if((angleChange < 0.1 && angleChange > 0) || (angleChange > -0.1 && angleChange < 0))
-				{
-					robot1-> commandVelocity.linear.x = distanceToTarget;
-					robot1-> commandVelocity.linear.y = distanceToTarget;
-					robot1-> commandVelocity.angular.z = 0;
-					robot1-> pub_cmd_vel.publish(robot1-> commandVelocity);
-				}
-			}
 		}
-		//ros::spinOnce();
+		ros::spinOnce();
 		loop_rate.sleep();
 	}
 
@@ -230,13 +207,19 @@ void keyboardInput()
 
 	if(kbhit())
 	{
-		keyPressed = getchar();
+		keyPressed=getchar();
+
+		int keyNum = atoi(&keyPressed);
+
 		cout << "\nKey pressed: " << keyPressed;
 
-		if(keyPressed >= '0' && keyPressed <= '9')
+
+		cout << keyNum;
+
+		if(keyNum >= 0 && keyNum <= 9)
 		{
-			cout << " - Setting to " << keyPressed;
-			CURRENT_SELECTION = keyPressed - '0';
+			cout << " - Setting to " << keyPressed <<endl;
+			CURRENT_SELECTION = keyNum;
 		}
 		else
 			cout << " - Not a valid input.";
@@ -306,8 +289,12 @@ bool initEnv(const int nRobots, const int formationIndex)
   Formation f(formations[formationIndex], g_formationRadius, Vector(),
 		  	  	  g_seedID, ++g_formationID, g_formationHeading);
 
+  //cout << endl << formationIndex << endl;
+  // TODO: this causes segmentation fault
   if ((g_environment = new Environment(nRobots, f)) == NULL)
+  {
 	  return false;
+  }
   return true;
 }
 
@@ -658,34 +645,34 @@ double getYValue(double xValue)
 	double yValue = -9999.0l;
 	switch(CURRENT_SELECTION)
 	{
-		case '0':
+		case 0:
 			yValue = 0.0l;
 		break;
-		case '1':
+		case 1:
 			yValue = xValue;
 		break;
-		case '2':
+		case 2:
 			yValue = abs(xValue);
 		break;
-		case '3':
+		case 3:
 			yValue = -0.5f * xValue;
 		break;
-		case '4':
+		case 4:
 			yValue = -abs(0.5f * xValue);
 		break;
-		case '5':
+		case 5:
 			yValue = -abs(xValue);
 		break;
-		case '6':
+		case 6:
 			yValue = xValue*xValue;
 		break;
-		case '7':
+		case 7:
 			yValue = xValue*xValue*xValue;
 		break;
-		case '8':
+		case 8:
 			yValue = sqrt(abs(0.5f * xValue)) * ((xValue >= 0) ? 1.0f : -1.0f);
 		break;
-		case '9':
+		case 9:
 			yValue = 0.05f * sin(10.0f * xValue);;
 		break;
 	}

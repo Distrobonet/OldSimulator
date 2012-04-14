@@ -561,7 +561,8 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 {
   srand(time(NULL));
 
-  numOfRobots      = numberOfRobots;
+  numOfRobots  = numberOfRobots;
+
   formation    = f;
   formation.setFormationID(0);
   formationID  = 0;

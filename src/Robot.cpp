@@ -17,12 +17,11 @@ double velocityX, velocityY, velocityTheta;
 
 void Robot::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
-	int robotID = atoi(odom-> header.frame_id.c_str());
+	int robotID = atoi(odom->header.frame_id.substr(7,1).c_str());
 
 	velocityY = odom-> pose.pose.position.x;
 	velocityX = -odom-> pose.pose.position.y;
 
-	updatePosition(robotID);
 
 	btScalar roll = 0.0l;
 	btScalar pitch = 0.0l;
@@ -34,12 +33,16 @@ void Robot::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 
 	btMatrix3x3(q).getRPY(roll, pitch, yaw);
 	velocityTheta = angles::normalize_angle(yaw + M_PI / 2.0l);
+	updatePosition(robotID);
 	ros::spinOnce();
 }
 
 void Robot::updatePosition(int robot)
 {
 	Robot *r = env->getRobot(robot);
+
+	//	cout<<"id "<<r->ID<<endl;
+//	cout<<"pub "<<r->pub_cmd_vel.getTopic()<<endl;
 
 	r->robotX = velocityX;
 	r->robotY = velocityY;
@@ -71,9 +74,12 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
     showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
 
 
-    Robot *tempBot = this;
+    Robot *tempBotPtr = this;
+
 	ros::NodeHandle aNode;
-	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBot);
+
+	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBotPtr);
+
 	robotX = velocityX;
 	robotY = velocityY;
 	robotTheta = velocityTheta;
@@ -94,14 +100,14 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
 string Robot::generateSubPubMessage(bool subOrPub)
 {
 	stringstream ss;//create a stringstream
-	ss << (numOfRobots + 1);//add number to the stream
+	ss << (numOfRobots);//add number to the stream
 	string numRobots = ss.str();
 
 
 	// Subscriber
 	if(subOrPub == SUBSCRIBER)
 	{
-		string subString = "/robot_/base_pose_ground_truth";
+		string subString = "/robot_/odom";
 
 		subString.insert(7, numRobots);
 		return subString;
