@@ -281,8 +281,8 @@ void Environment::draw()
 bool Environment::step()
 {
   vector<Cell*> auctionCalls;
-  //Cell *currCell = NULL;
   Cell *auctionCall = NULL;
+  //Cell *currCell = NULL;
   //Robot *r = NULL;
 
   for (int i = 0; i < getNumberOfCells(); i++)
@@ -291,6 +291,7 @@ bool Environment::step()
     if((auctionCall != NULL)&&(startFormation))
       auctionCalls.push_back(auctionCall);
   }
+
   if(startFormation)
   {
     for(unsigned i = 0; i < auctionCalls.size(); i++)
@@ -299,6 +300,7 @@ bool Environment::step()
       State s = a->getState() ;
       Formation f = formation;
       bool dir;
+
       if (a->rightNbr == NULL)
     	  dir = true;
       else

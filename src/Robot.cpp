@@ -77,12 +77,12 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
     Robot *tempBotPtr = this;
 
 	ros::NodeHandle aNode;
-
-	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBotPtr);
+	//subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBotPtr);
 
 	robotX = velocityX;
 	robotY = velocityY;
 	robotTheta = velocityTheta;
+
 	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
 	geometry_msgs::Twist commandVelocity;
 
@@ -468,10 +468,10 @@ Behavior Robot::moveArcBehavior(const Vector &target)
     float sinDelta = sin(delta);
     float t        = cosDelta * cosDelta * sign(cosDelta);
 	float r        = sinDelta * sinDelta * sign(sinDelta);
-	behavior         = Behavior(ACTIVE, t, r, maxSpeed());
+	behavior       = Behavior(ACTIVE, t, r, maxSpeed());
 
 	if (abs(theta) < 90.0f)
-	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
+	    behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
     else
         behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));
 
