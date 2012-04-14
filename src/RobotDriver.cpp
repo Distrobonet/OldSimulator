@@ -35,6 +35,7 @@
 
 using namespace std;
 class Robot;
+class OverLord;
 
 
 // define SIGPIPE if not defined (compatibility for win32)
@@ -124,6 +125,8 @@ int main(int argc, char **argv)
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
 
+	OverLord *overLord;
+
 	displayMenu();
 
 	// create handler for interrupts (i.e., ^C)
@@ -147,19 +150,17 @@ int main(int argc, char **argv)
 	{
 		keyboardInput();
 
-//		ros::Publisher formation_pub = aNode.advertise<std_msgs::String>("formation", 1000);
-//		formation_pub.publish(CURRENT_SELECTION);
-//
-//		for(int robotNum = 1; robotNum < g_nRobots; robotNum++)
-//		{
-//			Robot *robot1 = g_environment->getRobot(robotNum);
-//			Robot *robot2 = g_environment->getRobot(robotNum + 1);
-//
-//			// A robot
-//			xValue = robot1->robotX +1;
-//			yValue = getYValue(robot1->robotY +1);
-//
-//		}
+
+		for(int robotNum = 1; robotNum < g_nRobots; robotNum++)
+		{
+			Robot *robot1 = g_environment->getRobot(robotNum);
+			Robot *robot2 = g_environment->getRobot(robotNum + 1);
+
+			// A robot
+			xValue = robot1->robotX +1;
+			yValue = getYValue(robot1->robotY +1);
+
+		}
 
 		// update the robot cell environment
 		g_environment-> step();
