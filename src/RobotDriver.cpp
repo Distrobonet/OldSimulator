@@ -142,8 +142,6 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-
-
 	// Primary ROS loop
 	while(ros::ok())
 	{
@@ -159,8 +157,10 @@ int main(int argc, char **argv)
 			xValue = robot1->robotX +1;
 			yValue = getYValue(robot1->robotY +1);
 
-
 		}
+
+		// update the robot cell environment
+		g_environment-> step();
 		ros::spinOnce();
 		loop_rate.sleep();
 	}
@@ -210,11 +210,7 @@ void keyboardInput()
 		keyPressed=getchar();
 
 		int keyNum = atoi(&keyPressed);
-
 		cout << "\nKey pressed: " << keyPressed;
-
-
-		cout << keyNum;
 
 		if(keyNum >= 0 && keyNum <= 9)
 		{
