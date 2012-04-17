@@ -151,6 +151,13 @@ int main(int argc, char **argv)
 	{
 		keyboardInput();
 
+		std_msgs::String msg;
+		std::stringstream ss;
+		ss << CURRENT_SELECTION;
+		msg.data = ss.str();
+
+		ros::Publisher formation_pub = aNode.advertise<std_msgs::String>("formation", 1000);
+		formation_pub.publish(msg);
 
 		for(int robotNum = 1; robotNum < g_nRobots; robotNum++)
 		{
