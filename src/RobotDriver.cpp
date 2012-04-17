@@ -289,8 +289,6 @@ bool initEnv(const int nRobots, const int formationIndex)
   Formation f(formations[formationIndex], g_formationRadius, Vector(),
 		  	  	  g_seedID, ++g_formationID, g_formationHeading);
 
-  //cout << endl << formationIndex << endl;
-  // TODO: this causes segmentation fault
   if ((g_environment = new Environment(nRobots, f)) == NULL)
   {
 	  return false;
@@ -317,7 +315,6 @@ bool deinitEnv()
 //
 // Parameters:
 //      index   in      the index of the formation to change to
-//
 bool changeFormation(const int index, const Vector gradient)
 {
   g_formationIndex = index;
@@ -338,11 +335,8 @@ bool changeFormation(const int index, const Vector gradient)
 }
 
 
-// called by environment, passes the location of a new calculated cell
-// index.
-//
-// parameters:
-//         index in the index of the formation to change to
+// called by environment, passes the location of a new calculated cell index.
+// parameters:   index in the index of the formation to change to
 bool changeFormationSim(const int index, const Vector gradient)
 {
   if(g_selectedIndex > -1)
