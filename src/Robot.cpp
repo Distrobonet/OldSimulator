@@ -330,7 +330,15 @@ void Robot::step()
     {
         translateRelative(getTransVel());
         rotateRelative(getAngVel());
+
+
+        // Publish command velocities
+        //TODO: these commands came from an email from Ross.  They are not currently correct.
+//        commandVelocity.linear.x = getTransVel().x;
+//        commandVelocity.linear.y = getTransVel().y;
+//        commandVelocity.angular.z = getAngVel().z;
     }
+
 }
 
 

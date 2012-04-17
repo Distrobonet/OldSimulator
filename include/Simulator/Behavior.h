@@ -9,6 +9,7 @@
 
 // preprocessor directives#ifndef BEHAVIOR_H
 #define BEHAVIOR_H
+
 #include <cmath>
 #include <iostream>
 #include <Simulator/GLIncludes.h>

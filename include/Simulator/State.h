@@ -38,22 +38,9 @@ struct State
 
     // <constructors>
 
-    //
-    // State(f, grad, r, e, d, s)
-    // Last modified: 22Feb2010
-    //
+
     // Default constructor that initializes
     // this state to the parameterized values.
-    //
-    // Returns:     <none>
-    // Parameters:
-    //      f       in      the default formation
-    //      grad    in      the default gradient
-    //      r       in      the default list of relationships
-    //      tError  in      the default translational error
-    //      rError  in      the default rotational error
-    //      ts      in      the default time step
-    //
     State(const Formation            f      = Formation(),
           const Vector               grad   = Vector(),
           const vector<Relationship> r      = vector<Relationship>(),

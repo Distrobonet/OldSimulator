@@ -1,9 +1,6 @@
 //
 // Filename:        "Simulator.cpp"
 //
-// Programmer:      Ross Mead
-// Last modified:   30Nov2009
-//
 // Description:     This program tests the robot cell simulator.
 //
 
@@ -117,18 +114,12 @@ bool         g_prop_toggle   = false;
 
 
 
-//
 // GLint main(argc, argv)
-// Last modified:   04Sep2006
-//
-// Uses the OpenGL Utility Toolkit to set the
-// window up to display the window and its contents.
 //
 // Returns:     the result of the OpenGL main loop
 // Parameters:
 //      argc    in      an argument counter
 //      argv    in      initialization arguments
-//
 int main(GLint argc, char **argv)
 {
   // parse command line arguments
@@ -186,9 +177,7 @@ int main(GLint argc, char **argv)
 
 
 
-//
 // void printUsage(argc, argv)
-// Last modified: 08Nov2009
 //
 // Prints the program usage message.
 //
@@ -232,9 +221,7 @@ void printUsage(GLint argc, char **argv)
 
 
 
-//
 // bool parseArguments(argc, argv, nRobots, fIndex, fRadius, fHeading, dt)
-// Last modified: 08Nov2009
 //
 // Parses the parameterized program arguments,
 // returning true if successful, false otherwise.
@@ -317,9 +304,7 @@ bool parseArguments(GLint    argc,
 
 
 
-//
 // bool validateParameters(nRobots, fIndex, fRadius, fHeading, dt)
-// Last modified: 08Nov2009
 //
 // Tests the validate if the specified parameters,
 // returning true if successful, false otherwise.
@@ -563,15 +548,13 @@ bool changeFormation(const GLint index, const Vector gradient)
   return g_env->changeFormation(f);
 }   // changeFormation(const GLint, const Vector)
 
+
 // bool changeFormationSim(index)
-// last modified: april 18, 2010
-//
 // called by environment, passes the location of a new calculated cell
 // index.
 // returns: true if successful, false if not
 // parameters:
 //         index in the index of the formation to change to
-
 bool changeFormationSim(const GLint index, const Vector gradient)
 {
   if(g_selectedIndex > -1)
@@ -580,6 +563,7 @@ bool changeFormationSim(const GLint index, const Vector gradient)
     g_selectedIndex = index;
     return changeFormation(g_fIndex,gradient);
   }
+  return false;
 }
 
 bool sendNCellRequest()
@@ -606,15 +590,8 @@ bool sendFSeedRequest()
   return g_env->sendMsg(fseed, g_sID,ID_OPERATOR, FSEED_REQUEST);
 }// sendFSeedRequest();
 
-//
-// void initWindow()
-// Last modified:   08Nov2009
-//
+
 // Initializes the simulator window.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
 void initWindow()
 {
 

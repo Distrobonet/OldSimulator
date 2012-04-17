@@ -1,9 +1,6 @@
 //
 // Filename:        "Formation.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   30Nov2009
-//
 // Description:     This class describes a formation.
 //
 
@@ -37,21 +34,20 @@ class Formation: protected vector<Function>
 
         // <constructors>
         Formation(const Function f     = DEFAULT_FORMATION_FUNCTION,
-                  const float  r     = DEFAULT_FORMATION_RADIUS,
-                  const Vector   sGrad = Vector(),
-                  const int    sID   = ID_BROADCAST,
-                  const int    fID   = -1,
-                  const float  theta = 0.0f);
-	Formation(vector<Function> f,
                   const float    r     = DEFAULT_FORMATION_RADIUS,
-                  const Vector     sGrad = Vector(),
+                  const Vector   sGrad = Vector(),
+                  const int      sID   = ID_BROADCAST,
+                  const int      fID   = -1,
+                  const float    theta = 0.0f);
+	Formation(vector<Function>   f,
+                  const float    r     = DEFAULT_FORMATION_RADIUS,
+                  const Vector   sGrad = Vector(),
                   const int      sID   = ID_BROADCAST,
                   const int      fID   = -1,
                   const float    theta = 0.0f);
 
-        //Formation(){};//ADDED BY KEVIN
         Formation(const Formation &f);
-        virtual ~Formation(){};//ADDED BY KEVIN
+        virtual ~Formation(){};
 
         // <public mutator functions>
         bool setFunction(const Function f = DEFAULT_FORMATION_FUNCTION);
@@ -69,11 +65,11 @@ class Formation: protected vector<Function>
         // <public accessor functions>
         Function         getFunction(const int pos = 0) const;
         vector<Function> getFunctions()                   const;
-        float          getRadius()                      const;
+        float            getRadius()                      const;
         Vector           getSeedGradient()                const;
-        int            getSeedID()                      const;
-        int            getFormationID()                 const;
-        float          getHeading()                     const;
+        int              getSeedID()                      const;
+        int              getFormationID()                 const;
+        float            getHeading()                     const;
 
         // <public utility functions>
         vector<Vector> getRelationships(const Vector c = Vector());

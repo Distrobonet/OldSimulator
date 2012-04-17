@@ -1,9 +1,6 @@
 //
 // Filename:        "Packet.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   30Nov2009
-//
 // Description:     This structure defines a message packet.
 //
 
@@ -36,23 +33,8 @@ struct Packet
     int   toID, fromID, type;
 
 
-
-    // <constructors>
-
-    //
-    // Packet(m, to, from, t)
-    // Last modified: 04Sep2006
-    //
     // Default constructor that initializes
     // this packet to the parameterized values.
-    //
-    // Returns:     <none>
-    // Parameters:
-    //      m       in      the default message
-    //      to      in      the default ID of the message recipient
-    //      from    in      the default ID of the message sender
-    //      t       in      the default message type
-    //
     Packet(const Message m    = NULL,
            const int   to   = ID_BROADCAST,
            const int   from = ID_OPERATOR,
@@ -63,17 +45,8 @@ struct Packet
 
 
 
-    //
-    // Packet(p)
-    // Last modified: 12Aug2006
-    //
     // Copy constructor that copies the contents of
     // the parameterized packet into this packet.
-    //
-    // Returns:     <none>
-    // Parameters:
-    //      p       in/out      the packet being copied
-    //
     Packet(const Packet &p)
         : msg(p.msg), toID(p.toID), fromID(p.fromID), type(p.type)
     {
@@ -81,34 +54,13 @@ struct Packet
 
 
 
-    // <destructors>
-
-    //
-    // ~Packet()
-    // Last modified: 07Sep2006
-    //
-    // Destructor that clears this packet.
-    //
-    // Returns:     <none>
-    // Parameters:  <none>
-    //
-    ~Packet()
-    {
-    }   // ~Packet()
+    ~Packet(){}
 
 
 
     // <utility functions>
 
-    //
-    // bool fromOperator() const
-    // Last modified: 12Aug2006
-    //
     // Returns true if this packet is from an operator, false otherwise.
-    //
-    // Returns:     true if this packet is from an operator, false otherwise
-    // Parameters:  <none>
-    //
     bool fromOperator() const
     {
         return fromID == ID_OPERATOR;
@@ -116,15 +68,7 @@ struct Packet
 
 
 
-    //
-    // bool fromBroadcast() const
-    // Last modified: 12Aug2006
-    //
     // Returns true if this packet is from a broadcast, false otherwise.
-    //
-    // Returns:     true if this packet is from a broadcast, false otherwise
-    // Parameters:  <none>
-    //
     bool fromBroadcast() const
     {
         return fromID == ID_BROADCAST;

@@ -8,6 +8,11 @@
 #include <string.h>
 #include <iostream>
 
+// Used for non-blocking user input
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -25,11 +30,9 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_listener.h>
 
-#include <Simulator/RobotDriver.h>
 #include <Simulator/Environment.h>
 #include <Simulator/Robot.h>
 
-// HUH?
 #define SUBSCRIBER 0
 #define PUBLISHER 1
 

@@ -1,9 +1,6 @@
 //
 // Filename:        "Object.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   22Dec2010
-//
 // Description:     This class describes a 2-dimensional object.
 //
 
@@ -61,7 +58,7 @@ class Object: public Circle
     protected:
 
         // <protected data members>
-        int         ID;     // identification number of object
+        int          ID;      // identification number of object
         Environment  *env;    // the environment of the object
 
         // <protected static data members>

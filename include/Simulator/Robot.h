@@ -1,9 +1,6 @@
 //
 // Filename:        "Robot.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   22Dec2010
-//
 // Description:     This class describes a 2-dimensional robot.
 //
 

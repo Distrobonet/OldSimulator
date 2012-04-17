@@ -1,9 +1,6 @@
 //
 // Filename:        "Environment.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   22Dec2010
-//
 // Description:     This class describes a robot cell environment.
 //
 
@@ -15,7 +12,7 @@
 #include <Simulator/Cell.h>
 
 
-#include <Simulator/Object.h>//ADDED BY KEVIN
+#include <Simulator/Object.h>
 using namespace std;
 
 

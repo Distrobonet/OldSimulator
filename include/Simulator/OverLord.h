@@ -2,11 +2,10 @@
  * OverLord.h
  *
  *  Created on: Apr 13, 2012
- *      Author: glenn
  */
 
-#ifndef OVERLORD_H_
-#define OVERLORD_H_
+#ifndef OVERLORD_H
+#define OVERLORD_H
 
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
@@ -38,9 +37,10 @@ public:
 
 
 protected:
-	Environment  *env;    // the environment of the robot
-	static int  numOfRobots;    // number of total robots
+	Environment  *env;   		 // the environment of the robot
+	static int   numOfRobots;    // number of total robots
 };
 
 } /* namespace std */
-#endif /* OVERLORD_H_ */
+
+#endif /* OVERLORD_H*/

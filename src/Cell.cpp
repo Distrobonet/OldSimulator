@@ -594,15 +594,11 @@ bool Cell::processNCell(Packet &p) {
 					{
 				//send msg on to this nbr.
 				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-				//
-				//PropMsg *propm = new PropMsg(nbr.ID, 0, false);//why do i have params
 
-				//ADDED BY KEVIN
 				PropMsg *propm = new PropMsg();
 				propm->toID = nbr.ID;
 				propm->count = 0;
 				propm->response = false;
-				//END ADDED
 
 				props.push_back(*propm); //here and not elsewhere
 				env->sendMsg(p.msg, nbr.ID, ID, NCELL_REQUEST);
@@ -691,15 +687,10 @@ bool Cell::processFcntr(Packet &p) {
 					{
 				//send msg on to this nbr.
 				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-				//
-				//PropMsg *propm = new PropMsg(nbr.ID,0, 0, false);
-
-				//ADDED BY KEVIN
 				PropMsg *propm = new PropMsg();
 				propm->toID = nbr.ID;
 				propm->count = 0;
 				propm->response = false;
-				//END ADDED
 
 				props.push_back(*propm); // a pointer? shouldnt it be a copy?
 				env->sendMsg(p.msg, nbr.ID, ID, FCNTR_REQUEST);
@@ -807,15 +798,11 @@ bool Cell::processFRad(Packet &p) {
 					{
 				//send msg on to this nbr.
 				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-				//
-				//PropMsg *propm = new PropMsg(nbr.ID, 0,0, 0.0f, 0, false); //needed for FRAD?
 
-				//ADDED BY KEVIN
 				PropMsg *propm = new PropMsg();
 				propm->toID = nbr.ID;
 				propm->count = 0;
 				propm->response = false;
-				//END ADDED
 
 				props.push_back(*propm); // a pointer? shouldnt it be a copy?
 				env->sendMsg(p.msg, nbr.ID, ID, FRAD_REQUEST);
@@ -905,15 +892,11 @@ bool Cell::processFSeed(Packet &p) {
 					{
 				//send msg on to this nbr.
 				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-				//
-				//PropMsg *propm = new PropMsg(nbr.ID,0, 0, 0.0f, 0, false);
 
-				//ADDED BY KEVIN
 				PropMsg *propm = new PropMsg();
 				propm->toID = nbr.ID;
 				propm->count = 0;
 				propm->response = false;
-				//END ADDED
 
 				props.push_back(*propm); // a pointer? shouldnt it be a copy?
 				env->sendMsg(p.msg, nbr.ID, ID, FSEED_REQUEST);

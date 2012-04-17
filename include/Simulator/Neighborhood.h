@@ -1,9 +1,6 @@
 //
 // Filename:        "Neighborhood.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   30Nov2009
-//
 // Description:     This class describes a robot cell neighborhood.
 //
 
@@ -16,16 +13,10 @@
 using namespace std;
 
 
-
-// neighborhood size definitions
-#define MAX_NEIGHBORHOOD_SIZE (10)
+#define MAX_NEIGHBORHOOD_SIZE (10)		// neighborhood size definitions
 
 
-
-// forward declaration of a robot cell environment
-class Environment;
-
-
+class Environment;		// forward declaration of a robot cell environment
 
 // describes a robot cell neighborhood
 class Neighborhood: public vector<Neighbor>

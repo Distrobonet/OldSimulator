@@ -1,9 +1,6 @@
 //
 // Filename:        "Circle.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   30Nov2009
-//
 // Description:     This class describes a 2-dimensional circle.
 //
 

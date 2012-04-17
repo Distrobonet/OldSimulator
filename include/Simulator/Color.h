@@ -1,9 +1,6 @@
 //
 // Filename:        "Color.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   30Nov2009
-//
 // Description:     This enumerated type defines a color.
 //
 
