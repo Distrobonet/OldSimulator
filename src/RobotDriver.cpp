@@ -63,8 +63,6 @@ void display();
 void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY);
 void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
 void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
-void timerFunction(int value);
-
 
 // formation-testing function prototypes
 float  line(const float x);
@@ -388,9 +386,6 @@ bool sendFSeedRequest()
 // Clears the frame buffer and draws the simulated cells within the window.
 void display()
 {
-//  glClear(GL_COLOR_BUFFER_BIT);   // clear background color
-//  glMatrixMode(GL_MODELVIEW);     // modeling transformation
-
   // draws environment robot cells
   if (g_environment->getCells().size() > 0)
   {
@@ -406,19 +401,11 @@ void display()
       }
     }
   }
-  g_environment->draw();
-
-//  glFlush();                      // force the execution of OpenGL commands
-//  glutSwapBuffers();              // swap visible buffer and writing buffer
+  //g_environment->draw();
 }
 
 
 // Handles the keyboard input (ASCII Characters).
-//
-// Parameters:
-//      keyPressed  in      the ASCII key that was pressed
-//      mouseX      in      the x-coordinate of the mouse position
-//      mouseY      in      the y-coordinate of the mouse position
 void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 {
   if ((keyPressed >= '0') && (keyPressed <= '9'))
@@ -516,28 +503,6 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
         sendFSeedRequest();
       break;
 
-//    case 'a': case 'A':
-//      g_environment->addObject(randSign() * frand(),
-//                       randSign() * frand(),
-//                       0.0f);
-/*
-      g_environment->addRobot(randSign() * frand(),
-                      randSign() * frand(),
-                      0.0f,
-                      randSign() * frand(0.0f, 180.0f)); */
-      break;
-
-//    case 'd': case 'D':
-//      g_environment->removeObject();
-/*
-      if ((g_selectedIndex >= 0) && (g_selectedIndex < g_environment->getNCells()))
-      {
-        g_environment->removeCell(g_environment->getCell(g_selectedIndex));
-		g_selectedIndex = g_sID;
-        //g_environment->removeRobot();
-      } */
-      break;
-
     case CHAR_ESCAPE: 
     	deinitEnv(); 
     	exit(0);
@@ -546,11 +511,6 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 
 
 // Handles the keyboard input (non-ASCII Characters).
-//
-// Parameters:
-//      keyPressed  in      the non-ASCII key that was pressed
-//      mouseX      in      the x-coordinate of the mouse position
-//      mouseY      in      the y-coordinate of the mouse position
 void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
 {
   switch (keyPressed)
@@ -601,11 +561,6 @@ void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
 
 
 // Handles the keyboard input (non-ASCII Characters).
-//
-// Parameters:
-//      keyReleased  in      the non-ASCII key that was released
-//      mouseX       in      the x-coordinate of the mouse position
-//      mouseY       in      the y-coordinate of the mouse position
 void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
 {
   switch (keyReleased)
@@ -623,21 +578,6 @@ void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
     default:
     	break;
   }
-}
-
-
-// Updates the environment and redraws.
-//
-// Parameters:
-//      value   in      the value of the timer
-void timerFunction(int value)
-{
-  // sendFcntrRequest();
-  // sendFRadRequest();
-  // if(g_prop_toggle)
-  // 	sendNCellRequest();
-
-  g_environment->step();          // update the robot cell environment
 }
 
 
@@ -769,187 +709,3 @@ float negXRoot3(const float x)
 {
   return -x * sqrt(3.0f);
 }
-
-//void printUsage(int argc, char **argv);
-//bool parseArguments(int   argc,
-//    char  **argv,
-//    int   &nRobots,
-//    int   &formationIndex,
-//    float &fRadius,
-//    float &fHeading,
-//    int   &dt);
-//bool validateParameters(const int   nRobots,
-//    const int   formationIndex,
-//    const float fRadius,
-//    const float fHeading,
-//    const int   dt);
-
-
-// Prints the program usage message.
-//void printUsage(int argc, char **argv)
-//{
-//  cout << "USAGE: " << argv[0]
-//    << " [-n <nRobots>]"
-//    << " [-f <formationIndex>]"
-//    << " [-r <fRadius>]"
-//    << " [-h <fHeading>]"
-//    << " [-t <dT>]"
-//    << endl
-//    << "      -n <nRobots>: number of robots"
-//    << " [0, MAX_N_ROBOTS] (DEFAULT=19)"        << endl
-//    << "      -f <formationIndex>: formation function index"
-//    << " [0, 9] (default=0):"                   << endl
-//	<< "             0) f(x) = 0;"              << endl
-//	<< "             1) f(x) = x;"              << endl
-//	<< "             2) f(x) = |x|;"            << endl
-//	<< "             3) f(x) = -0.5 x;"         << endl
-//	<< "             4) f(x) = -|0.5 x|;"       << endl
-//	<< "             5) f(x) = -|x|;"           << endl
-//	<< "             6) f(x) = x^2;"            << endl
-//	<< "             7) f(x) = x^3;"            << endl
-//	<< "             8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0};"
-//	<< endl
-//	<< "             9) f(x) = 0.05 sin(10 x);" << endl
-//	<< "      -r <fRadius>: formation radius"
-//	<< " [0.0, 1.0] (default=?.?)"              << endl
-//	<< "      -h <fHeading>: formation heading"
-//	<< " (in degrees; default=90.0)"            << endl
-//	<< "      -t <dt>: update time interval"
-//	<< " [1, ??] (in milliseconds; default=50)"
-//	<< endl;
-//}   // printUsage(int, char **)
-
-
-// Parses the parameterized program arguments,
-// returning true if successful, false otherwise.
-
-
-// Parameters:
-//      argc          in      an argument counter
-//      argv          in      initialization arguments
-//      nRobots       in/out  the number of robots
-//      formationIndex        in/out  the initial function index of the formation
-//      fRadius       in/out  the initial radius between robots in the formation
-//      fHeading      in/out  the initial heading of robots in the formation
-//      dt            in/out  the time interval (in ms) between OpenGL updates
-//
-
-//bool parseArguments(int    argc,
-//    char   **argv,
-//    int   &nRobots,
-//    int   &formationIndex,
-//    float &fRadius,
-//    float &fHeading,
-//    int   &dt)
-//{
-//  int i = 0;
-//  while (++i < argc)
-//  {
-//    if      (!strncmp(argv[i], "--help", 6))
-//    {
-//      printUsage(argc, argv);
-//      exit(0);
-//    }
-//    else if (!strncmp(argv[i], "-n", 2))
-//    {
-//      if (++i < argc) nRobots = atoi(argv[i]);
-//      else
-//      {
-//        printUsage(argc, argv);
-//        return false;
-//      }
-//    }
-//    else if (!strncmp(argv[i], "-f", 2))
-//    {
-//      if (++i < argc) formationIndex = atoi(argv[i]);
-//      else
-//      {
-//        printUsage(argc, argv);
-//        return false;
-//      }
-//    }
-//    else if (!strncmp(argv[i], "-r", 2))
-//    {
-//      if (++i < argc) fRadius = atof(argv[i]);
-//      else
-//      {
-//        printUsage(argc, argv);
-//        return false;
-//      }
-//    }
-//    else if (!strncmp(argv[i], ".h", 2))
-//    {
-//      if (++i < argc) fHeading = scaleDegrees(atof(argv[i]));
-//      else
-//      {
-//        printUsage(argc, argv);
-//        return false;
-//      }
-//    }
-//    else if (!strncmp(argv[i], "-t", 2))
-//    {
-//      if (++i < argc) dt = atoi(argv[i]);
-//      else
-//      {
-//        printUsage(argc, argv);
-//        return false;
-//      }
-//    }
-//  }
-//
-//  return true;
-//}   // parseArguments(int, char **, int &, int &, float &, float &)
-
-
-// Tests the validate if the specified parameters,
-// returning true if successful, false otherwise.
-//
-// Parameters:
-//      nRobots       in/out  the number of robots
-//      formationIndex        in/out  the initial function index of the formation
-//      fRadius       in/out  the initial radius between robots in the formation
-//      fHeading      in/out  the initial heading of robots in the formation
-//      dt            in/out  the time interval (in ms) between OpenGL updates
-//
-//bool validateParameters(const int   nRobots,
-//    const int   formationIndex,
-//    const float fRadius,
-//    const float fHeading,
-//    const int   dt)
-//{
-//  bool valid = true;
-//
-//  // validate the number of robots
-//  if (nRobots < 0)
-//  {
-//    cout << "Parameter: "
-//      << "'nRobots' must be non-negative." << endl;
-//    valid = false;
-//  }
-//
-//  // validate the formation function index
-//  if ((formationIndex < 0) || (formationIndex > 9))
-//  {
-//    cout << "Parameter: "
-//      << "'formationIndex' must be in the range [0, 9]." << endl;
-//    valid = false;
-//  }
-//
-//  // validate the formation radius
-//  if (fRadius < 0.0f)
-//  {
-//    cout << "Parameter: "
-//      << "'fRadius' must be non-negative." << endl;
-//    valid = false;
-//  }
-//
-//  // validate the time interval
-//  if (dt < 1)
-//  {
-//    cout << "Parameter: "
-//      << "'dt' must be greater than 1." << endl;
-//    valid = false;
-//  }
-//
-//  return valid;
-//}   // validateParameters(int, int, float, float)

@@ -1,51 +1,21 @@
 //
 // Filename:        "Vector.cpp"
 //
-// Programmer:      Ross Mead
-// Last modified:   07Nov2009
-//
 // Description:     This class implements a 3-dimensional vector.
 //
 
 // preprocessor directives
 #include <Simulator/Vector.h>
 
-
-
-// <constructors>
-
-//
-// Vector(dx, dy, dz, colorIndex)
-// Last modified: 04Sep2006
-//
-// Default constructor that initializes
-// the vector to the parameterized values.
-//
-// Returns:     <none>
-// Parameters:
-//      dx          in      the initial x-coordinate of the vector (default 0)
-//      dy          in      the initial y-coordinate of the vector (default 0)
-//      dz          in      the initial z-coordinate of the vector (default 0)
-//      colorIndex  in      the initial array index of the color of the vector
-//
+// Default constructor that initializes the vector to the parameterized values.
 Vector::Vector(const float dx, const float dy, const float dz, const Color colorIndex)
 {
     init(dx, dy, dz, colorIndex);
 }   // Vector(const float, const float, const float, const Color)
 
 
-
-//
-// Vector(v)
-// Last modified: 04Sep2006
-//
 // Copy constructor that copies the contents of
 // the parameterized vector into this vector.
-//
-// Returns:     <none>
-// Parameters:
-//      c       in      the vector being copied
-//
 Vector::Vector(const Vector &v)
 {
     init(v.x, v.y, v.z, DEFAULT_VECTOR_COLOR);
@@ -64,39 +34,12 @@ Vector::Vector(const Vector &v)
 }   // Vector(const Vector &)
 
 
-
-// <destructors>
-
-//
-// ~Vector()
-// Last modified: 04Sep2006
-//
-// Destructor that clears this vector.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
-Vector::~Vector()
-{
-}   // ~Vector()
+Vector::~Vector(){}   // ~Vector()
 
 
 
-// <virtual public mutator functions>
-
-//
-// bool set(dx, dy, dz)
-// Last modified: 04Sep2006
-//
 // Attempts to set the xyz-coordinates to the corresponding
 // parameterized values, returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      dx      in      the x-coordinate to be set to (default 0)
-//      dy      in      the y-coordinate to be set to (default 0)
-//      dz      in      the z-coordinate to be set to (default 0)
-//
 bool Vector::set(const float dx, const float dy, const float dz)
 {
     x = dx;
@@ -107,17 +50,9 @@ bool Vector::set(const float dx, const float dy, const float dz)
 
 
 
-//
-// bool set(v)
-// Last modified: 04Sep2006
-//
+
 // Attempts to set the xyz-coordinates to based upon the
 // parameterized vector, returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      v       in      the vector to be set to
-//
 bool Vector::set(const Vector &v)
 {
     return set(v.x, v.y, v.z);
@@ -125,19 +60,8 @@ bool Vector::set(const Vector &v)
 
 
 
-//
-// bool setColor(r, g, b)
-// Last modified: 04Sep2006
-//
 // Attempts to set the color to the parameterized RGB color values,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      r       in/out  the red in the color to be set to
-//      g       in/out  the green in the color to be set to
-//      b       in/out  the blue in the color to be set to
-//
 bool Vector::setColor(const float r, const float g, const float b)
 {
     color[GLUT_RED]   = r;
@@ -148,17 +72,9 @@ bool Vector::setColor(const float r, const float g, const float b)
 
 
 
-//
-// bool setColor(clr)
-// Last modified: 04Sep2006
-//
+
 // Attempts to set the color to the parameterized RGB color values,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      clr     in/out  the color to be set to
-//
 bool Vector::setColor(const float clr[3])
 {
     return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
@@ -166,17 +82,8 @@ bool Vector::setColor(const float clr[3])
 
 
 
-//
-// bool setColor(colorIndex)
-// Last modified: 04Sep2006
-//
 // Attempts to set the color to the parameterized RGB color values,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      colorIndex  in/out  the index of the color to be set to
-//
 bool Vector::setColor(const Color colorIndex)
 {
     return setColor(COLOR[(int)colorIndex]);
@@ -184,21 +91,8 @@ bool Vector::setColor(const Color colorIndex)
 
 
 
-
-
-//
-// void translated(dx, dy, dz)
-// Last modified: 04Sep2006
-//
 // Translates the vector display based on the
 // parameterized xyz-coordinate translations.
-//
-// Returns:     <none>
-// Parameters:
-//      dx      in      the x-coordinate translation transformation
-//      dy      in      the y-coordinate translation transformation
-//      dz      in      the z-coordinate translation transformation
-//
 void Vector::translated(const float dx, const float dy, const float dz)
 {
     translate[0] = dx;
@@ -207,18 +101,8 @@ void Vector::translated(const float dx, const float dy, const float dz)
 }   // translated(const float, const float, const float)
 
 
-
-//
-// void translated(v)
-// Last modified: 04Sep2006
-//
 // Translates the vector display based on the
 // parameterized translation vector.
-//
-// Returns:     <none>
-// Parameters:
-//      v       in      the translation transformation vector
-//
 void Vector::translated(const Vector &v)
 {
     translated(v.x, v.y, v.z);
@@ -226,35 +110,16 @@ void Vector::translated(const Vector &v)
 
 
 
-//
-// void rotated(theta)
-// Last modified: 04Sep2006
-//
 // Rotates the vector display about itself (in 2-dimensions)
 // based on the parameterized rotation angle.
-//
-// Returns:     <none>
-// Parameters:
-//      theta   in      the rotation transformation angle
-//
 void Vector::rotated(float theta)
 {
     rotate[2] = theta;
 }   // rotated(float)
 
 
-
-//
-// void rotateRelative(theta)
-// Last modified: 22Dec2006
-//
 // Rotates the vector about itself (in 2-dimensions)
 // based on the parameterized rotation angle.
-//
-// Returns:     <none>
-// Parameters:
-//      theta   in      the rotation angle
-//
 void Vector::rotateRelative(float theta)
 {
     theta = degreesToRadians(theta);
@@ -262,39 +127,15 @@ void Vector::rotateRelative(float theta)
 }   // rotateRelative(float)
 
 
-
-//
-// void scaled(s)
-// Last modified: 04Sep2006
-//
 // Scales the vector display based on the parameterized scalar.
-//
-// Returns:     <none>
-// Parameters:
-//      s       in      the transformation scalar
-//
 void Vector::scaled(const float s)
 {
     scale[0] = scale[1] = scale[2] = s;
 }   // scaled(const float)
 
 
-
-// <public mutator functions>
-
-//
-// bool setPolar(mag, theta, dz)
-// Last modified: 07Nov2009
-//
 // Attempts to set the vector based on the parameterized polar coordinates,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      mag     in      the magnitude to be set to (default 1)
-//      theta   in      the angle to be set to (default 0)
-//      dz      in      the z-coordinate to be set to (default 0)
-//
 bool Vector::setPolar(float mag, float theta, float dz)
 {
     theta = degreesToRadians(theta);
@@ -303,19 +144,10 @@ bool Vector::setPolar(float mag, float theta, float dz)
 
 
 
-//
-// bool setDiff(dest, source)
-// Last modified: 04Sep2006
-//
+
 // Attempts to set the vector to the difference from the
 // parameterized source to the parameterized destination,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      dest    in      the destination vector
-//      source  in      the source vector
-//
 bool Vector::setDiff(const Vector &dest, const Vector &source)
 {
     return set(source.x - dest.x, source.y - dest.y, source.z - dest.z);
@@ -323,17 +155,9 @@ bool Vector::setDiff(const Vector &dest, const Vector &source)
 
 
 
-//
-// bool setAngle(theta)
-// Last modified: 07Nov2009
-//
+
 // Attempts to set the angle to the parameterized angle,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      theta   in      the angle to be set to (default 0)
-//
 bool Vector::setAngle(const float theta)
 {
     return setPolar(magnitude(), theta);
@@ -341,17 +165,8 @@ bool Vector::setAngle(const float theta)
 
 
 
-//
-// bool setMagnitude(mag)
-// Last modified: 07Nov2009
-//
 // Attempts to set the magnitude (normal) to the parameterized magnitude,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      mag     in      the magnitude to be set to (default 1)
-//
 bool Vector::setMagnitude(const float mag)
 {
     if (!normalize()) return false;
@@ -359,36 +174,8 @@ bool Vector::setMagnitude(const float mag)
 }   // setMagnitude(const float)
 
 
-
-//
-// bool setNorm(mag)
-// Last modified: 07Nov2009
-//
-// Attempts to set the normal (magnitude) to the parameterized magnitude,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      mag     in      the magnitude to be set to (default 1)
-//
-/*bool Vector::setNorm(const float mag)
-{
-    if (!normalize()) return false;
-    return set(x * mag, y * mag, z * mag);
-}   // setNorm(const float)*/
-
-
-
-//
-// bool setPerp()
-// Last modified: 04Sep2006
-//
 // Attempts to set this vector to its perpendicular vector,
 // returning true if successful, false otherwise.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
 bool Vector::setPerp()
 {
     float temp = x;
@@ -399,19 +186,9 @@ bool Vector::setPerp()
 
 
 
-//
-// bool setAvg(v, n)
-// Last modified: 04Sep2006
-//
 // Attempts to set the vector based on the average
 // of the parameterized vectors, returning true
 // if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      v       in/out  the vectors to be averaged
-//      n       in      the number of vectors to be averaged
-//
 bool Vector::setAvg(const Vector v[], const int n)
 {
     if (n <= 0) return false;
@@ -424,16 +201,7 @@ bool Vector::setAvg(const Vector v[], const int n)
 
 
 
-//
-// bool normalize()
-// Last modified: 07Nov2009
-//
-// Attempts to adjust the vector to unit length,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:  <none>
-//
+// Attempts to adjust the vector to unit length, returning true if successful, false otherwise.
 bool Vector::normalize()
 {
     float mag = magnitude();
@@ -445,103 +213,7 @@ bool Vector::normalize()
 
 
 
-// <virtual public utility functions>
-
-//
-// void draw()
-// Last modified: 07Nov2009
-//
-// Renders the vector as a line segment with a triangle head.
-//
-// Returns:     <none>
-// Parameters:  <none>
-//
-void Vector::draw()
-{
-    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
-//    glColor3fv(color);
-//    glLineWidth(VECTOR_LINE_WIDTH);
-//
-//    glPushMatrix();
-//        glRotated(rotate[0], 1, 0, 0);
-//        glRotated(rotate[1], 0, 1, 0);
-//        glRotated(rotate[2], 0, 0, 1);
-//        glTranslated(translate[0], translate[1], translate[2]);
-//        glRotated(angle(),   0, 0, 1);
-//        glScaled(scale[0], scale[1], scale[2]);
-//
-//        // draw vector head
-//        float mag = magnitude();
-//        if ((showHead) && (mag >= VECTOR_HEAD_HEIGHT))
-//        {
-//            glColor3fv(color);
-//            glBegin(GL_TRIANGLES);
-//                glVertex3f(mag, 0.0f, 0.0f);
-//                glVertex3f(mag - VECTOR_HEAD_HEIGHT,
-//                           VECTOR_HEAD_WIDTH,
-//                           0.0f);
-//                glVertex3f(mag - VECTOR_HEAD_HEIGHT,
-//                           -VECTOR_HEAD_WIDTH,
-//                           0.0f);
-//            glEnd();
-//        }
-//
-//        // draw vector line
-//        if (showLine)
-//        {
-//            glBegin(GL_LINES);
-//                glVertex3f(0.0f,      0.0f, 0.0f);
-//                glVertex3f(mag, 0.0f, 0.0f);
-//            glEnd();
-//        }
-//    glPopMatrix();
-//    glFlush();
-} // draw()
-
-//may not be needed
-//added by brentbeer 06-02-10
-// called for drawing the center of the formation calculated for FCNTR
-void Vector::drawX(Vector location)
-{
-   float rotAngle = 2.;
-
-//   glColor3f (0.0, 0.0, 1.0);
-//   glPushMatrix();
-//   glRotatef(-rotAngle, 0.0, 0.0, 0.1);
-//   glTranslatef(location.x, location.y, location.z);
-//   glBegin (GL_LINES);
-//      glVertex2f (-0.025, 0.025);
-//      glVertex2f (0.025, -0.025);
-//   glEnd ();
-//   glPopMatrix();
-//
-//   glColor3f (0.0, 0.0, 1.0);
-//   glPushMatrix();
-//   glRotatef(rotAngle, 0.0, 0.0, 0.1);
-//   glBegin (GL_LINES);
-//      glVertex2f (0.025, 0.025);
-//      glVertex2f (-0.025, -0.025);
-//   glEnd ();
-//   glPopMatrix();
-//
-//   glFlush();
-}   // draw()
-
-
-
-// <public utility functions>
-
-//
-// float angle() const
-// Last modified: 04Sep2006
-//
 // Returns the angle of this vector.
-//
-// Returns:     the angle of this vector
-// Parameters:  <none>
-//
 float Vector::angle() const
 {
     if ((x == 0.0f) && (y == 0.0f) && (z == 0.0f)) return 0.0f;
@@ -551,15 +223,7 @@ float Vector::angle() const
 
 
 
-//
-// float magnitude() const
-// Last modified: 07Nov2009
-//
 // Returns the magnitude (normal) of this vector.
-//
-// Returns:     the magnitude (normal) of this vector
-// Parameters:  <none>
-//
 float Vector::magnitude() const
 {
     return sqrt(x * x + y * y + z * z);
@@ -567,31 +231,7 @@ float Vector::magnitude() const
 
 
 
-//
-// float norm() const
-// Last modified: 07Nov2009
-//
-// Returns the normal (magnitude) of this vector.
-//
-// Returns:     the normal (magnitude) of this vector
-// Parameters:  <none>
-//
-/*float Vector::norm() const
-{
-    return sqrt(x * x + y * y + z * z);
-}   // norm()*/
-
-
-
-//
-// void perp() const
-// Last modified: 04Sep2006
-//
 // Returns the perpendicular vector of this vector.
-//
-// Returns:     the perpendicular vector of this vector
-// Parameters:  <none>
-//
 Vector Vector::perp()
 {
     Vector v = *this;
@@ -599,36 +239,15 @@ Vector Vector::perp()
     return v;
 }   // perp()
 
-//
-// float perpDot(v) const
-// Last modified: 04Sep2006
-//
-// Returns the dot product of the perpendicular vector
-// of this vector and the parameterized vector.
-//
-// Returns:     the dot product of the perpendicular vector
-//              of this vector and the parameterized vector
-// Parameters:
-//      v       in/out  the vector to be dotted with
-//
+
+// Returns the dot product of the perpendicular vector of this vector and the parameterized vector.
 float Vector::perpDot(const Vector &v) const
 {
     return x * v.x - y * v.y;
 }   // perpDot(const Vector &)
 
 
-// <overloaded operators>
-
-//
-// Vector& =(v)
-// Last modified: 05Sep2006
-//
 // Copies the contents of the parameterized vector into this vector.
-//
-// Returns:     this vector
-// Parameters:
-//      v       in/out  the vector being copied
-//
 Vector& Vector::operator =(const Vector &v)
 {
     set(v.x, v.y, v.z);
@@ -646,35 +265,14 @@ Vector& Vector::operator =(const Vector &v)
 
 
 
-//
-// Vector +(v)
-// Last modified: 05Sep2006
-//
-// Calculates the sum of the contents of
-// the parameterized vector and this vector.
-//
-// Returns:     the vector sum
-// Parameters:
-//      v       in/out  the vector being added
-//
+// Calculates the sum of the contents of the parameterized vector and this vector.
 Vector Vector::operator +(const Vector &v)
 {
     return Vector(this->x + v.x, this->y + v.y, this->z + v.z);
 }   // +(const Vector &)
 
 
-
-//
-// Vector -(v)
-// Last modified: 05Sep2006
-//
-// Calculates the difference of the contents of
-// the parameterized vector and this vector.
-//
-// Returns:     this vector difference
-// Parameters:
-//      v       in/out  the vector being subtracted
-//
+// Calculates the difference of the contents of the parameterized vector and this vector.
 Vector Vector::operator -(const Vector &v)
 {
     return *this + -v;
@@ -682,16 +280,7 @@ Vector Vector::operator -(const Vector &v)
 
 
 
-//
-// Vector& +=(v)
-// Last modified: 05Sep2006
-//
 // Adds the contents of the parameterized vector to this vector.
-//
-// Returns:     this vector
-// Parameters:
-//      v       in/out  the vector being added
-//
 Vector& Vector::operator +=(const Vector &v)
 {
     return *this = *this + v;
@@ -699,33 +288,14 @@ Vector& Vector::operator +=(const Vector &v)
 
 
 
-//
-// Vector& -=(v)
-// Last modified: 05Sep2006
-//
 // Subtracts the contents of the parameterized vector from this vector.
-//
-// Returns:     this vector
-// Parameters:
-//      v       in/out  the vector being subtracted
-//
 Vector& Vector::operator -=(const Vector &v)
 {
     return *this = *this - v;
 }   // +=(const Vector &)
 
 
-
-//
-// Vector& *=(v)
-// Last modified: 05Sep2006
-//
 // Multiplies this vector by the parameterized scalar.
-//
-// Returns:     this vector
-// Parameters:
-//      scalar  in      the vector multiplier
-//
 Vector& Vector::operator *=(const float scalar)
 {
     return *this = *this * scalar;
@@ -733,55 +303,21 @@ Vector& Vector::operator *=(const float scalar)
 
 
 
-//
-// bool ==(v)
-// Last modified: 05Sep2006
-//
-// Compares this vector to the parameterized vector,
-// returning true if they are the same, false otherwise.
-//
-// Returns:     true if the vectors are the same, false otherwise
-// Parameters:
-//      v       in/out  the vector to compare to
-//
+// Compares this vector to the parameterized vector, returning true if they are the same, false otherwise.
 bool Vector::operator ==(const Vector &v)
 {
     return (x == v.x) && (y == v.y) && (z == v.z);
 }   // ==(const Vector &)
 
 
-
-//
-// bool !=(v)
-// Last modified: 05Sep2006
-//
-// Compares this vector to the parameterized vector,
-// returning true if they are not the same, false otherwise.
-//
-// Returns:     true if the vectors are not the same, false otherwise
-// Parameters:
-//      v       in/out  the vector to compare to
-//
+// Compares this vector to the parameterized vector, returning true if they are not the same, false otherwise.
 bool Vector::operator !=(const Vector &v)
 {
     return !(*this == v);
 }   // ==(const Vector &)
 
 
-
-// <friend functions>
-
-//
-// ostream& <<(out, v)
-// Last modified: 05Sep2006
-//
 // Outputs the parameterized vector to the parameterized output file stream.
-//
-// Returns:     the output file stream
-// Parameters:
-//      out     in/out  the output files stream
-//      v       in/out  the vector to output
-//
 ostream& operator << (ostream &out, const Vector &v)
 {
     out << "<" << v.x << ", " << v.y << ", " << v.z << ">";
@@ -789,70 +325,28 @@ ostream& operator << (ostream &out, const Vector &v)
 }   // <<(ostream &, const Vector &)
 
 
-
-//
-// Vector -(v)
-// Last modified: 05Sep2006
-//
 // Returns the negation of the parameterized vector.
-//
-// Returns:     the negation of the parameterized vector
-// Parameters:
-//      v       in/out  the vector to be negated
-//
 Vector operator -(const Vector &v)
 {
     return -1.0f * v;
 }   // -(const Vector &)
 
 
-
-//
-// Vector *(scalar, v)
-// Last modified: 05Sep2006
-//
 // Returns the parameterized vector multiplied by the parameterized scalar.
-//
-// Returns:     the negation of the parameterized vector
-// Parameters:
-//      scalar  in      the vector multiplier
-//      v       in/out  the vector to be negated
-//
 Vector operator *(const float scalar, const Vector &v)
 {
     return Vector(scalar * v.x, scalar * v.y, scalar * v.z);
 }   // *(const float, const Vector &)
 
 
-
-//
-// Vector *(v, scalar)
-// Last modified: 05Sep2006
-//
 // Returns the parameterized vector multiplied by the parameterized scalar.
-//
-// Returns:     the negation of the parameterized vector
-// Parameters:
-//      v       in/out  the vector to be negated
-//      scalar  in      the vector multiplier
-//
 Vector operator *(const Vector &v, const float scalar)
 {
     return scalar * v;
 }   // *(const Vector &, const float)
 
 
-
-//
-// Vector unit(v)
-// Last modified: 05Sep2006
-//
 // Returns the unit vector of the parameterized vector.
-//
-// Returns:     the unit vector of the parameterized vector
-// Parameters:
-//      v       in/out  the vector to be unitized
-//
 Vector unit(const Vector &v)
 {
     Vector temp = v;
@@ -861,18 +355,7 @@ Vector unit(const Vector &v)
 }   // unit(const Vector &)
 
 
-
-//
-// Vector crossProduct(v1, v2)
-// Last modified: 05Sep2006
-//
 // Returns the cross product of the parameterized vectors.
-//
-// Returns:     the cross product of the parameterized vectors
-// Parameters:
-//      v1      in/out  the first vector
-//      v2      in/out  the second vector
-//
 Vector crossProduct(const Vector &v1, const Vector &v2)
 {
     return Vector(v1.y * v2.z - v2.y * v1.z,
@@ -880,17 +363,8 @@ Vector crossProduct(const Vector &v1, const Vector &v2)
                   v1.x * v2.y - v2.x * v1.y);
 }   // crossProduct(const Vector &, const Vector &)
 
-//
-// Vector dotProduct(v1, v2)
-// Last modified: 05Sep2006
-//
+
 // Returns the dot product of the parameterized vectors.
-//
-// Returns:     the dot product of the parameterized vectors
-// Parameters:
-//      v1      in/out  the first vector
-//      v2      in/out  the second vector
-//
 float dotProduct(const Vector &v1, const Vector &v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
@@ -898,16 +372,7 @@ float dotProduct(const Vector &v1, const Vector &v2)
 
 
 
-//
-// float angle(v)
-// Last modified: 05Sep2006
-//
 // Returns the angle of the parameterized vector.
-//
-// Returns:     the angle of the parameterized vector
-// Parameters:
-//      v       in/out  the vector
-//
 float angle(const Vector &v)
 {
     return v.angle();
@@ -915,17 +380,7 @@ float angle(const Vector &v)
 
 
 
-//
-// float angle(v1, v2)
-// Last modified: 05Sep2006
-//
 // Returns the angle between the parameterized vectors.
-//
-// Returns:     the angle between the parameterized vectors
-// Parameters:
-//      v1      in/out  the first vector
-//      v2      in/out  the second vector
-//
 float angle(const Vector &v1, const Vector &v2)
 {
     return scaleDegrees(v1.angle() - v2.angle());
@@ -933,22 +388,8 @@ float angle(const Vector &v1, const Vector &v2)
 
 
 
-// <virtual protected utility functions>
 
-//
-// bool init(dx, dy, dz)
-// Last modified: 05Sep2006
-//
-// Initializes the vector to the parameterized values,
-// returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      dx          in      the initial x-coordinate of the vector (default 0)
-//      dy          in      the initial y-coordinate of the vector (default 0)
-//      dz          in      the initial z-coordinate of the vector (default 0)
-//      colorIndex  in      the initial array index of the color of the vector
-//
+// Initializes the vector to the parameterized values, returning true if successful, false otherwise.
 bool Vector::init(const float dx, const float dy, const float dz,
                   const Color   colorIndex)
 {

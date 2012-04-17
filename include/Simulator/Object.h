@@ -52,11 +52,8 @@ class Object: public Circle
         // <public accessor functions>
         int getID() const;
 
-        // <virtual public utility functions>
-        virtual void draw();
 
     protected:
-
         // <protected data members>
         int          ID;      // identification number of object
         Environment  *env;    // the environment of the object

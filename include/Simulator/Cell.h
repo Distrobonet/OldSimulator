@@ -94,7 +94,6 @@ class Cell: public State, public Neighborhood, public Robot
 
 
         // <virtual public utility functions>
-        virtual void draw();
         Cell* cStep();
         //virtual  step();
         virtual void updateState();

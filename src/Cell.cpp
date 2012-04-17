@@ -90,10 +90,6 @@ Robot Cell::getRobot() const {
 	return (Robot) *this;
 }
 
-// Renders the cell as a robot.
-void Cell::draw() {
-	Robot::draw();
-}
 
 // Processes packets received and updates the state of the cell,
 // which is then broadcast within the neighborhood of the cell.

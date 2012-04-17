@@ -219,62 +219,6 @@ int Environment::getNObjects() const
 }
 
 
-// Renders the environment.
-void Environment::draw()
-{
-
-  // draw objects
-  //Object *currObj = NULL;
-  for (unsigned i = 0; i < objects.size(); i++)
-  {
-    objects[i]->draw();
-  }
-
-  // draw [free] robots
-  //Robot *currRobot = NULL;
-  for (unsigned i = 0; i < robots.size(); i++)
-  {
-    robots[i]->draw();
-  }
-
-  // draw cells
-  for (int i = 0; i < getNumberOfCells(); i++)
-  {
-    cells[i]->draw();
-  }
-
-  // draw centroid
-  if (cells.size() > 0) 
-  {
-    Cell* seedCell = getCell(formation.getSeedID());
-    if (seedCell != NULL)
-    {
-      // cout << "centroid = " << centroid << endl;
-      Vector centroidCopy = centroid;
-      centroidCopy.translated(*seedCell);
-      float rotateCentroid = centroid.angle() +
-        seedCell->getHeading() -
-        formation.getHeading();
-      centroidCopy.setAngle(rotateCentroid);
-      centroidCopy.draw();
-      if(radius > 0.0f)
-      {
-		//cout << "radius is: " << radius << endl;
-		Circle circleCopy = circle;
-		circleCopy.setRadius(radius+seedCell->getRadius());
-		circleCopy.translated(*seedCell+centroidCopy);
-		circleCopy.draw();
-		Vector distanceCopy = distance;
-		distanceCopy.translated(*seedCell);
-		distanceCopy.setAngle(rotateCentroid);
-		distanceCopy.draw();
-      }
-      //draw the vector to the cell that should now become seed.
-
-    }
-  }
-}
-
 
 // Executes the next step in each cell in the environment
 // and forwards all sent packets to their destinations.
@@ -842,12 +786,7 @@ void Environment::settleAuction(Cell* auctionCell,int rID)
       return;
     }
     //cout <<"Robot should be "<< rID << " but env->settleAuction() is # "<< r->getID()<<endl;
-    //Robot *rr;
-    //a->setColor(255,0,255);
-    //r->setColor(255,0,255);
-    //a->draw();
-    //r->draw();
-    //system("PAUSE");
+
     cell->x = robot->x;
     cell->y = robot->y;
     for(unsigned i = 0; i < robots.size(); i++)

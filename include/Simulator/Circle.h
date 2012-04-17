@@ -61,8 +61,6 @@ class Circle: public Vector
         float getCircumference() const;
         float getArea()          const;
 
-        // <virtual public utility functions>
-        virtual void draw();
 
         // <virtual overloaded operators>
         virtual Circle operator = (const Circle &c);

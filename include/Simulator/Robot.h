@@ -103,8 +103,6 @@ class Robot: public Circle
         float getVelocity()  const;
         float getArcRadius() const;
 
-        // <virtual public utility functions>
-        virtual void draw();
         virtual void step();
 
         // <public utility functions>

@@ -268,43 +268,6 @@ float Robot::getArcRadius() const
             radius * behavior.getTransVel() / behavior.getRotVel();
 }
 
-
-// Renders the robot as a circle with a vector heading.
-void Robot::draw()
-{
-    if ((color[GLUT_RED]   == COLOR[INVISIBLE][GLUT_RED])   &&
-        (color[GLUT_GREEN] == COLOR[INVISIBLE][GLUT_GREEN]) &&
-        (color[GLUT_BLUE]  == COLOR[INVISIBLE][GLUT_BLUE])) return;
-
-    vector<Vector> relationships = getObjectRelationships(2.0f * collisionRadius());
-    for (int i = 0, n = relationships.size(); i < n; ++i)
-    {
-        relationships[i].rotated(rotate[2]);
-        relationships[i].translated(x, y, z);
-        relationships[i].scaled(scale[0]);
-        relationships[i].draw();
-    }
-
-    // draw a circle representing the robot
-    Circle::draw();
-
-    // draw a vector representing the robot heading
-    if (showHeading)
-    {
-//        glPushMatrix();
-//            glRotated(rotate[0], 0, 0, 1);
-//            glRotated(rotate[1], 0, 0, 1);
-//            glRotated(rotate[2], 0, 0, 1);
-//            heading.translated(x + translate[0],
-//                               y + translate[1],
-//                               z + translate[2]);
-//            heading.scaled(radius / DEFAULT_ROBOT_RADIUS);
-//            heading.draw();
-//        glPopMatrix();
-    }
-}
-
-
 // Executes the appropriate active behavior.
 void Robot::step()
 {

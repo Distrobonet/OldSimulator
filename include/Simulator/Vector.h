@@ -81,11 +81,7 @@ class Vector
         bool setAvg(const Vector v[], const int n = 1);
         bool normalize();
 
-        // <virtual public utility functions>
-        virtual void draw();
-        virtual void drawX(Vector position);
-
-        // <public utility functions>
+           // <public utility functions>
         float angle() const;
         float magnitude() const;
         //float norm()  const;

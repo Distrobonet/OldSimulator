@@ -79,7 +79,6 @@ class Environment
 
 
         // <virtual public utility functions>
-        virtual void draw();
         virtual bool step();
         virtual void clear();
 
