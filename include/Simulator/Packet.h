@@ -3,11 +3,11 @@
 //
 // Description:     This structure defines a message packet.
 //
+#include<cstdlib>
 
 // preprocessor directives
 #ifndef PACKET_H
 #define PACKET_H
-#include <Simulator/GLIncludes.h>
 using namespace std;
 
 

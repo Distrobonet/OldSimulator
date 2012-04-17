@@ -64,9 +64,9 @@ bool Vector::set(const Vector &v)
 // returning true if successful, false otherwise.
 bool Vector::setColor(const float r, const float g, const float b)
 {
-    color[GLUT_RED]   = r;
-    color[GLUT_GREEN] = g;
-    color[GLUT_BLUE]  = b;
+//    color[GLUT_RED]   = r;
+//    color[GLUT_GREEN] = g;
+//    color[GLUT_BLUE]  = b;
     return true;
 }   // setColor(const float, const float, const float)
 
@@ -77,7 +77,8 @@ bool Vector::setColor(const float r, const float g, const float b)
 // returning true if successful, false otherwise.
 bool Vector::setColor(const float clr[3])
 {
-    return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
+//    return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
+	return true;
 }   // setColor(const float [])
 
 

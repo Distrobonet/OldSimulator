@@ -21,7 +21,7 @@ typedef float (*Function)(const float);
 // global constants
 static const Function DEFAULT_FORMATION_FUNCTION = NULL;
 static const float  DEFAULT_FORMATION_RADIUS   = 1.0f;
-static const GLdouble X_ROOT_THRESHOLD           = 5E-7;
+static const double X_ROOT_THRESHOLD           = 5E-7;
 static const int    X_N_ITERATIONS             = 100;
 
 

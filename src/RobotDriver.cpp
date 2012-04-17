@@ -505,74 +505,74 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 
 
 // Handles the keyboard input (non-ASCII Characters).
-void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
-{
-  switch (keyPressed)
-  {
-    case GLUT_KEY_LEFT:
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_environment->getCell(g_seedID)->rotError =
-          -(1.0001f * g_environment->getCell(g_seedID)->angThreshold());
-        //g_environment->getCell(g_seedID)->rotateRelative(
-        //    min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
-      }
-      break;
-
-    case GLUT_KEY_UP:
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_environment->getCell(g_seedID)->transError.x =
-          1.0001f * g_environment->getCell(g_seedID)->threshold();
-        //g_environment->getCell(g_seedID)->translateRelative(
-        //    min(0.001f, g_environment->getCell(g_sID)->maxSpeed()));
-      }
-      break;
-
-    case GLUT_KEY_RIGHT:
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_environment->getCell(g_seedID)->rotError =
-          1.0001f * g_environment->getCell(g_seedID)->angThreshold();
-        //g_environment->getCell(g_seedID)->rotateRelative(
-        //    -min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
-      }
-      break;
-
-    case GLUT_KEY_DOWN:
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_environment->getCell(g_seedID)->transError.x =
-          -(1.0001f * g_environment->getCell(g_seedID)->threshold());
-        //g_environment->getCell(g_seedID)->translateRelative(
-        //    -min(0.001f, g_environment->getCell(g_sID)->maxSpeed()));
-      }
-      break;
-
-    default: break;
-  }
-}
+//void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
+//{
+//  switch (keyPressed)
+//  {
+//    case GLUT_KEY_LEFT:
+//      if (g_environment->getNumberOfCells() > 0)
+//      {
+//        g_environment->getCell(g_seedID)->rotError =
+//          -(1.0001f * g_environment->getCell(g_seedID)->angThreshold());
+//        //g_environment->getCell(g_seedID)->rotateRelative(
+//        //    min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
+//      }
+//      break;
+//
+//    case GLUT_KEY_UP:
+//      if (g_environment->getNumberOfCells() > 0)
+//      {
+//        g_environment->getCell(g_seedID)->transError.x =
+//          1.0001f * g_environment->getCell(g_seedID)->threshold();
+//        //g_environment->getCell(g_seedID)->translateRelative(
+//        //    min(0.001f, g_environment->getCell(g_sID)->maxSpeed()));
+//      }
+//      break;
+//
+//    case GLUT_KEY_RIGHT:
+//      if (g_environment->getNumberOfCells() > 0)
+//      {
+//        g_environment->getCell(g_seedID)->rotError =
+//          1.0001f * g_environment->getCell(g_seedID)->angThreshold();
+//        //g_environment->getCell(g_seedID)->rotateRelative(
+//        //    -min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
+//      }
+//      break;
+//
+//    case GLUT_KEY_DOWN:
+//      if (g_environment->getNumberOfCells() > 0)
+//      {
+//        g_environment->getCell(g_seedID)->transError.x =
+//          -(1.0001f * g_environment->getCell(g_seedID)->threshold());
+//        //g_environment->getCell(g_seedID)->translateRelative(
+//        //    -min(0.001f, g_environment->getCell(g_sID)->maxSpeed()));
+//      }
+//      break;
+//
+//    default: break;
+//  }
+//}
 
 
 // Handles the keyboard input (non-ASCII Characters).
-void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
-{
-  switch (keyReleased)
-  {
-    case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
-      if (g_environment->getNumberOfCells() > 0)
-        g_environment->getCell(g_seedID)->rotError = 0.0f;
-      break;
-
-    case GLUT_KEY_UP: case GLUT_KEY_DOWN:
-      if (g_environment->getNumberOfCells() > 0)
-        g_environment->getCell(g_seedID)->transError.x = 0.0f;
-      break;
-
-    default:
-    	break;
-  }
-}
+//void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
+//{
+//  switch (keyReleased)
+//  {
+//    case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
+//      if (g_environment->getNumberOfCells() > 0)
+//        g_environment->getCell(g_seedID)->rotError = 0.0f;
+//      break;
+//
+//    case GLUT_KEY_UP: case GLUT_KEY_DOWN:
+//      if (g_environment->getNumberOfCells() > 0)
+//        g_environment->getCell(g_seedID)->transError.x = 0.0f;
+//      break;
+//
+//    default:
+//    	break;
+//  }
+//}
 
 
 // This function does all the actual computation depending on which function the user has selected

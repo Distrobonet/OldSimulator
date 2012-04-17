@@ -7,7 +7,6 @@
 // preprocessor directives
 #ifndef COLOR_H
 #define COLOR_H
-#include <Simulator/GLIncludes.h>
 
 
 

@@ -10,7 +10,6 @@
 #define PROPMSG_H
 #include <vector>
 #include <Simulator/Vector.h>
-#include <Simulator/GLIncludes.h>
 
 using namespace std;
 
