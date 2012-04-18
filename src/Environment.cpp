@@ -263,6 +263,28 @@ bool Environment::removeCell(Cell* cell)
 }
 
 
+string Environment::generateSubMessage(bool msgType)
+{
+	stringstream ss;//create a stringstream
+	ss << (numOfRobots);//add number to the stream
+	string numRobots = ss.str();
+
+	// Subscriber
+	if(msgType == SUBSCRIBER)
+	{
+		string subString = "/robot_/odom";
+
+		subString.insert(7, numRobots);
+		return subString;
+
+	}
+
+	//else Robot label
+	string subString = "";
+	subString.insert(0, numRobots);
+	return subString;
+}
+
 // Attempts to add an object to the environment
 // at the parameterized position, returning
 // true if successful, false otherwise.
