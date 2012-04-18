@@ -1,0 +1,10 @@
+(cl:defpackage Simulator-srv
+  (:use )
+  (:export
+   "FORMATIONINDEX"
+   "<FORMATIONINDEX-REQUEST>"
+   "FORMATIONINDEX-REQUEST"
+   "<FORMATIONINDEX-RESPONSE>"
+   "FORMATIONINDEX-RESPONSE"
+  ))
+
