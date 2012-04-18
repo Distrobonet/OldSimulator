@@ -61,8 +61,8 @@ const char  CHAR_ESCAPE             = char(27);    // 'ESCAPE' character key
 // OpenGL function prototypes
 void display();
 void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY);
-void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
-void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
+//void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
+//void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
 
 // formation-testing function prototypes
 float  line(const float x);
@@ -169,6 +169,9 @@ int main(int argc, char **argv)
 			yValue = getYValue(robot1->robotY +1);
 
 		}
+
+		//g_environment->getRobot(1)->commandVelocity.linear.x = 5;
+		//cout << "distance from 0,0 to robot(1): " << g_environment->distanceToRobot(0, 0, g_environment->getRobot(1)) << endl;
 
 		// update the robot cell environment
 		g_environment-> step();
