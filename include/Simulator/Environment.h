@@ -142,8 +142,8 @@ class Environment
 
         // <virtual protected utility functions>
         virtual bool init(const int n = 0, const Formation f = Formation());
-        //virtual bool initCells(const int n = 0, const Formation f = Formation());
-        //virtual bool initNbrs(const int nNbrs = 0);
+        virtual bool initCells(const int n = 0, const Formation f = Formation());
+        virtual bool initNbrs(const int nNbrs = 0);
 		virtual bool initRobots();
 };  // Environment
 

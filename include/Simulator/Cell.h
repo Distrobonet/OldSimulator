@@ -125,8 +125,8 @@ class Cell: public State, public Neighborhood, public Robot
         // <protected data members>
         vector<Bid *> bids;
         Neighbor     *leftNbr, *rightNbr;
-        int         index;
-        int         numBids;
+        int           index;
+        int           numBids;
         int           auctionStepCount;
 
         // <protected static data members>
