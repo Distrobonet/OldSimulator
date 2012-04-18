@@ -226,8 +226,8 @@ bool Environment::step()
 {
   vector<Cell*> auctionCalls;
   Cell *auctionCall = NULL;
-  //Cell *currCell = NULL;
-  //Robot *r = NULL;
+  Cell *currCell = NULL;
+  Robot *r = NULL;
 
   for (int i = 0; i < getNumberOfCells(); i++)
   {
@@ -327,7 +327,6 @@ void Environment::getDistance(Vector dist)
       break;
     }
   }
-
 }
 
 
@@ -515,7 +514,7 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 
   bool result = true;
   startFormation = false;
-  //initCells(n, f);
+  initCells(numberOfRobots, f);
   //system("PAUSE");
   initRobots();
 
@@ -548,63 +547,70 @@ bool Environment::addRobot(float x, float y, float z, float theta)
 
 // Initializes each cell to the parameterized values,
 // returning true if successful, false otherwise.
-/*bool Environment::initCells(const int n, const Formation f)
-  {
-  srand(time(NULL));
-  for (int i = 0; i < n; i++) if (!addCell()) return false;
-
-// initialize each robot's neighborhood
-if (!initNbrs()) return false;
-
-// organizes the cells into an initial formation (default line)
-Cell *c  = NULL;
-for (int i = 0; i < getNCells(); i++)
+bool Environment::initCells(const int numberOfRobots, const Formation f)
 {
-if (!cells.getHead(c)) return false;
-c->x = formation.getRadius() *
-((float)i - (float)(getNCells() - 1) / 2.0f);
-c->y = 0.0f;
-c->setColor(DEFAULT_ROBOT_COLOR);
-c->setHeading(formation.getHeading());
-++cells;
-if(VERBOSE) printf("iterating through cells...\n");
+	srand(time(NULL));
+	for (int i = 0; i < numberOfRobots; i++)
+		if (!addCell())
+			return false;
+
+	// initialize each robot's neighborhood
+	if (!initNbrs())
+		return false;
+
+	// organizes the cells into an initial formation (default line)
+	Cell *c  = NULL;
+	for (int i = 0; i < numberOfRobots; i++)
+	{
+//		if (!cells.getHead(c))
+//			return false;
+		c->x = formation.getRadius() * ((float)i - (float)(getNumberOfCells() - 1) / 2.0f);
+		c->y = 0.0f;
+		c->setHeading(formation.getHeading());
+		cells.push_back(c);
+
+		if(VERBOSE)
+			printf("iterating through cells...\n");
+	}
+
+	newestCell = c;
+	//printf("newestCell == %d\n",c->getID());
+	return (getNumberOfCells() == numberOfRobots)
+			&& sendMsg(new Formation(formation), formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
 }
-newestCell = c;
-//printf("newestCell == %d\n",c->getID());
-return (getNCells() == n) &&
-sendMsg(new Formation(formation), formation.getSeedID(),
-ID_OPERATOR,      CHANGE_FORMATION);
-}*/   // initCells(const int, const Formation f)
 
 
-
-//
-// bool initNbrs(nNbrs)
-// Last modified: 03Sep2006
-//
 // Initializes the neighborhood of each cell,
 // returning true if successful, false otherwise.
-//
-// Returns:     true if successful, false otherwise
-// Parameters:
-//      nNbrs       in      the initial number of neighbors
-//
-/*bool Environment::initNbrs(const int nNbrs)
-  {
-  Cell *c = NULL;
-  for (int i = 0; i < getNCells(); i++)
-  {
-  if (!cells.getHead(c))                            return false;
-  c->clearNbrs();
-  if ((i > 0)               && (!c->addNbr(i - 1))) return false;
-  else c->leftNbr  = c->nbrWithID(i - 1);
-  if ((i < getNCells() - 1) && (!c->addNbr(i + 1))) return false;
-  else c->rightNbr = c->nbrWithID(i + 1);
-  ++cells;
-  }
-  if(VERBOSE) printf("finished initNbrs()\n");
-  return true;
-  } */  // initNbrs(const int)
+bool Environment::initNbrs(const int nNbrs)
+{
+	Cell *c = NULL;
+	for (int i = 0; i < getNumberOfCells(); i++)
+	{
+//		if (!cells.getHead(c))
+//			return false;
+
+		c->clearNbrs();
+		if ((i > 0) && (!c->addNbr(i - 1)))
+			return false;
+
+		else
+			c->leftNbr  = c->nbrWithID(i - 1);
+
+		if ((i < getNumberOfCells() - 1) && (!c->addNbr(i + 1)))
+			return false;
+		else
+			c->rightNbr = c->nbrWithID(i + 1);
+
+		// TODO: fix this neighborhood
+		//neighborhood.push_back(c);
+	}
+
+	if(VERBOSE)
+		printf("finished initNbrs()\n");
+	return true;
+}
+
 
 Robot * Environment::getNearestRobot(Cell *cell)
 {

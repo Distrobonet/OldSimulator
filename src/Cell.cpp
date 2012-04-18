@@ -66,7 +66,7 @@ bool Cell::setRobot(const Robot &r) {
 
 	//changed to  cast *this as a Robot variable
 	(Robot) *this = r;
-	//1if(VERBOSE) printf("robot set============\n");
+	//if(VERBOSE) printf("robot set============\n");
 	return true;
 } // setRobot(const Robot &)
 

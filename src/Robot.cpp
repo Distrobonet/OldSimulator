@@ -75,10 +75,7 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
 
 
     Robot *tempBotPtr = this;
-
 	ros::NodeHandle aNode;
-
-	subRobot = aNode.subscribe(generateSubPubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBotPtr);
 
 	robotX = velocityX;
 	robotY = velocityY;
@@ -108,7 +105,6 @@ string Robot::generateSubPubMessage(bool subOrPub)
 	if(subOrPub == SUBSCRIBER)
 	{
 		string subString = "/robot_/odom";
-
 		subString.insert(7, numRobots);
 		return subString;
 
