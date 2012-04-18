@@ -155,7 +155,7 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 		return false;
 
 	// organizes the cells into an initial formation (default line)
-	Cell *c  = NULL;
+	Cell *c  = new Cell;
 	for (int i = 0; i < numberOfRobots; i++)
 	{
 //		if (!cells.getHead(c))
@@ -185,7 +185,7 @@ bool Environment::initNbrs(const int nNbrs)
 	{
 //		if (!cells.getHead(c))
 //			return false;
-
+		c = cells.at(i);
 		c->clearNbrs();
 		if ((i > 0) && (!c->addNbr(i - 1)))
 			return false;
