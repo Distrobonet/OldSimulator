@@ -7,17 +7,25 @@
 // preprocessor directives
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
+#define SUBSCRIBER 0
+#define ROBOT_LABEL 1
+
+#include <ros/ros.h>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
+#include <angles/angles.h>
+#include <tf/transform_listener.h>
+
 #include <queue>
 #include <vector>
 #include <Simulator/Cell.h>
-
-
 #include <Simulator/Object.h>
+
+#define SUBSCRIBER 0
+#define ROBOT_LABEL 1
+
 using namespace std;
 
-
-
-//
 #define VERBOSE (0)
 
 // type redefinition
@@ -38,6 +46,12 @@ class Environment
         float   radius;
         Circle  circle;
         Vector  distance;
+
+        double robotX;
+		double robotY;
+		double robotTheta;
+		nav_msgs::Odometry odomMsg;
+		vector<ros::Subscriber> subRobots;
 
         // <constructors>
         Environment(const int     n          = 0,
@@ -81,6 +95,14 @@ class Environment
         // <virtual public utility functions>
         virtual bool step();
         virtual void clear();
+
+        //functions for the subscribers for all robots
+        string generateSubMessage(bool msgType);
+		void updatePosition(int robotID);
+		void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom);
+
+		float getDistanceTo(const int fromID, const int toID) const;
+		float getAngleTo(const int fromID, const int toID) const;
 
         // <public utility functions>
         Vector  getRelationship(const int toID, const int fromID);

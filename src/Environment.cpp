@@ -19,6 +19,13 @@ Environment::Environment(const int numRobots, const Formation formation)
 {
   if (!init(numRobots, formation))
 	  clear();
+	Robot *tempBotPtr = new Robot;
+	ros::NodeHandle envNode;
+
+	for(int i = 0; i < numOfRobots; i++){
+		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBotPtr));
+		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
+	}
 }   // Environment(const int, const Formation, const Color)
 
 
