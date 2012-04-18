@@ -160,7 +160,7 @@ void Cell::updateState() {
 
 	// update actual relationships to neighbors
 	Neighbor *currNbr = NULL;
-	for (int i = 0; i < size(); ++i) {
+	for (unsigned int i = 0; i < size(); i++) {
 		currNbr = getNbr(i);
 		if (currNbr == NULL)
 			break;
@@ -184,7 +184,7 @@ void Cell::updateState() {
 	float d = 0.0f; // distance
 	float q = 0.0f; // heat
 	float qSum = 0.0f; // accumulated heat
-	for (int i = 0; i < size(); ++i) {
+	for (unsigned int i = 0; i < size(); i++) {
 		currNbr = getNbr(i);
 		if (currNbr == NULL)
 			break;
@@ -230,7 +230,7 @@ void Cell::updateState() {
 /*void Cell::updateState()
  {
  Neighbor currNbr;
- for (int i = 0; i < getNNbrs(); ++i)
+ for (int i = 0; i < getNNbrs(); i++)
  {
  if (!getHead(currNbr)) break;
 
@@ -273,7 +273,7 @@ void Cell::updateState() {
  {
  if(VERBOSE) printf("entering updateState()\n");
  Neighbor currNbr;
- for (int i = 0; i < getNNbrs(); ++i)
+ for (int i = 0; i < getNNbrs(); i++)
  {
  if (!getHead(currNbr)) break;
 
@@ -356,14 +356,14 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	 cout << "+ nRels = " << r.getSize() << endl;
 	 cout << "+ nNbrs = " << getNNbrs()  << endl;
 	 vector<int> assignedIDs;
-	 for (int i = 0; i < r.getSize(); ++i)
+	 for (int i = 0; i < r.getSize(); i++)
 	 {
 	 closestDist     = float(RAND_MAX);
 	 closestNbrIndex = -1;
 	 Vector currRel;
 	 if (r.getHead(currRel))
 	 {
-	 for (int j = 0; j < getNNbrs(); ++j)
+	 for (int j = 0; j < getNNbrs(); j++)
 	 {
 	 Neighbor currNbr;
 	 if (getHead(currNbr))
@@ -372,7 +372,7 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	 if (currDist < closestDist)
 	 {
 	 bool assignedID = false;
-	 for (int k = 0; k < assignedIDs.getSize(); ++k)
+	 for (int k = 0; k < assignedIDs.getSize(); k++)
 	 {
 	 int currID = -1;
 	 if ((assignedIDs.getHead(currID)) &&
@@ -411,13 +411,13 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	 }
 	 --ROSS--*/
 	/*--ROSS--
-	 for (int i = 0; i < getNNbrs(); ++i)
+	 for (int i = 0; i < getNNbrs(); i++)
 	 {
 	 closestDist     = float(RAND_MAX);
 	 closestRelIndex = -1;
 	 if (getHead(currNbr))
 	 {
-	 for (int j = 0; j < r.getSize(); ++j)
+	 for (int j = 0; j < r.getSize(); j++)
 	 {
 	 Vector currRel;
 	 if (r.getHead(currRel))
@@ -467,7 +467,7 @@ bool Cell::sendStateToNbrs() {
 	if (VERBOSE)
 		cout << "cellID=%d\n", getID();
 
-	for (int i = 0; i < getNNbrs(); ++i) {
+	for (int i = 0; i < getNNbrs(); i++) {
 		if (VERBOSE)
 			cout << "sending state to id= %d\n", getNbr(i)->ID;
 
@@ -585,7 +585,7 @@ bool Cell::processNCell(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (unsigned int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -621,11 +621,11 @@ bool Cell::processNCell(Packet &p) {
 		Neighbor nbr;
 		bool all_response = false;
 		// cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 			//check if msg came from a nbr who references you
 			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
 							{
 						props.at(j).response = true;
@@ -633,7 +633,7 @@ bool Cell::processNCell(Packet &p) {
 						props.at(j).count = (*((PropMsg *) p.msg)).count; //FCntrMsg.gradient
 					}
 				}
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).response == false) {
 						all_response = false;
 						break;
@@ -644,7 +644,7 @@ bool Cell::processNCell(Packet &p) {
 				if (all_response) {
 					int sum = 1;
 					//cout << "gradient of " << ID << " is: " << gradient << endl;
-					for (int k = 0; k < props.size(); ++k) {
+					for (unsigned int k = 0; k < props.size(); k++) {
 						sum += props.at(k).count;
 					}
 					if (refID == -1) //seed
@@ -678,7 +678,7 @@ bool Cell::processFcntr(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (unsigned int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -716,11 +716,11 @@ bool Cell::processFcntr(Packet &p) {
 		Neighbor nbr;
 		bool all_response = false;
 		//maybe cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 			//if msg came from a nbr who references you
 			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
 							{
 						props.at(j).response = true;
@@ -736,7 +736,7 @@ bool Cell::processFcntr(Packet &p) {
 						// }
 					}
 				}
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).response == false) {
 						all_response = false;
 						break;
@@ -751,7 +751,7 @@ bool Cell::processFcntr(Packet &p) {
 							rotError + formation.getHeading());
 					Vector gradSum = gradient - transErrorCopy;
 					cout << "gradient of " << ID << " is: " << gradient << endl;
-					for (int k = 0; k < props.size(); ++k) {
+					for (int k = 0; k < props.size(); k++) {
 						sum += props.at(k).count;
 						gradSum += props.at(k).gradient;
 					}
@@ -789,7 +789,7 @@ bool Cell::processFRad(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (unsigned int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -826,18 +826,18 @@ bool Cell::processFRad(Packet &p) {
 		Neighbor nbr;
 		bool all_response = false;
 		// cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 			//if msg came from a nbr who references you
 			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
 							{
 						props.at(j).response = true;
 						props.at(j).radius = (*((PropMsg *) p.msg)).radius;
 					}
 				}
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).response == false) {
 						all_response = false;
 						break;
@@ -852,7 +852,7 @@ bool Cell::processFRad(Packet &p) {
 							rotError + formation.getHeading());
 					float maxRadius = ((gradient - transErrorCopy)
 							- env->centroid).magnitude();
-					for (int k = 0; k < props.size(); ++k) {
+					for (unsigned int k = 0; k < props.size(); k++) {
 						//compute max radius between mine and the best in my list
 						if (maxRadius < props.at(k).radius) {
 							maxRadius = props.at(k).radius;
@@ -883,7 +883,7 @@ bool Cell::processFSeed(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (unsigned int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -919,18 +919,18 @@ bool Cell::processFSeed(Packet &p) {
 		Neighbor nbr;
 		bool all_response = false;
 		//maybe cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); ++i) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 			//if msg came from a nbr who references you
 			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (int j = 0; j < props.size(); ++j) {
+				for (unsigned int j = 0; j < props.size(); j++) {
 					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
 							{
 						props.at(j).response = true;
 						props.at(j).distance = (*((PropMsg *) p.msg)).distance;
 					}
 				}
-				for (int j = 0; j < props.size(); ++j)
+				for (unsigned int j = 0; j < props.size(); j++)
 				{
 					if (props.at(j).response == false)
 					{
@@ -947,7 +947,7 @@ bool Cell::processFSeed(Packet &p) {
 					// float maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
 					float minDist = (gradient - env->centroid).magnitude();
 					Vector minVector = (gradient - env->centroid);
-					for (int k = 0; k < props.size(); ++k)
+					for (unsigned int k = 0; k < props.size(); k++)
 					{
 						//compute max radius between mine and the best in my list
 						if (minDist > (props.at(k).distance).magnitude())
