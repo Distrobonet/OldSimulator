@@ -585,7 +585,7 @@ bool Cell::processNCell(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (unsigned int i = 0; i < getNNbrs(); i++) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -678,7 +678,7 @@ bool Cell::processFcntr(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (unsigned int i = 0; i < getNNbrs(); i++) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -751,7 +751,7 @@ bool Cell::processFcntr(Packet &p) {
 							rotError + formation.getHeading());
 					Vector gradSum = gradient - transErrorCopy;
 					cout << "gradient of " << ID << " is: " << gradient << endl;
-					for (int k = 0; k < props.size(); k++) {
+					for (unsigned int k = 0; k < props.size(); k++) {
 						sum += props.at(k).count;
 						gradSum += props.at(k).gradient;
 					}
@@ -789,7 +789,7 @@ bool Cell::processFRad(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (unsigned int i = 0; i < getNNbrs(); i++) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!
@@ -883,7 +883,7 @@ bool Cell::processFSeed(Packet &p) {
 		bool is_ref_nbr = false;
 		Neighbor nbr;
 		//loop through nbrs
-		for (unsigned int i = 0; i < getNNbrs(); i++) {
+		for (int i = 0; i < getNNbrs(); i++) {
 			nbr = at(i);
 
 			if (nbr.refID == ID) //this nbr references you!

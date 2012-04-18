@@ -11,12 +11,8 @@
 
 #define AUCTION_STEP_COUNT (3)
 
-// <constructors>
 
-//
-// Environment(n, f, colorIndex)
-// Last modified: 08Nov2009
-//
+
 // Default constructor that initializes
 // this environment to the parameterized values.
 Environment::Environment(const int numRobots, const Formation formation)
@@ -125,6 +121,7 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 	  cout << "finished initCells()\n";
   return result;
 }   // init(const int, const Formation)
+
 
 bool Environment::initRobots()
 {
