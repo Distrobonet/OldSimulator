@@ -33,6 +33,8 @@
 #include <Simulator/Environment.h>
 #include <Simulator/Robot.h>
 
+#include"Simulator/FormationIndex.h"
+
 #define SUBSCRIBER 0
 #define PUBLISHER 1
 
@@ -120,8 +122,56 @@ double getYValue(double xValue);
 bool initEnv(const int nRobots, const int formationIndex);
 
 
+
+// Service utility function to set the formationIndex being served to the CURRENT_SELECTION
+bool setFormation(Simulator::FormationIndex::Request  &req,
+		Simulator::FormationIndex::Response &res )
+{
+  //res.sum = req.a + req.b;
+	res.formationIndex = CURRENT_SELECTION;
+	//ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
+	ROS_INFO("sending back response: [%ld]", (long int)res.formationIndex);
+	return true;
+}
+
+
+
+
+
+
 int main(int argc, char **argv)
 {
+	// Service server
+//	ros::init(argc, argv, "formation_index_server");
+//	ros::NodeHandle serverNode;
+//	ros::ServiceServer service = serverNode.advertiseService("formation_index", setFormation);
+//	ROS_INFO("Ready to serve the formation index.");
+//	ros::spin();
+//
+//
+//	//Service client
+//	ros::init(argc, argv, "formation_index_client");
+//	ros::NodeHandle n;
+//	ros::ServiceClient client = n.serviceClient<Simulator::FormationIndex>("formation_index");
+//	Simulator::FormationIndex srv;
+////	srv.request.a = atoll(argv[1]);
+////	srv.request.b = atoll(argv[2]);
+//	if (client.call(srv))
+//	{
+//		ROS_INFO("Sum: %ld", (long int)srv.response.formationIndex);
+//	}
+//	else
+//	{
+//		ROS_ERROR("Failed to call service add_two_ints");
+//	}
+
+
+
+
+
+
+
+
 	ros::init(argc, argv, "robot_driver");
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
