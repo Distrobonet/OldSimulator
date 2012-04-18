@@ -67,7 +67,8 @@ struct Neighbor: Relationship, State
         return *this;
     }   // =(const Relationship &)
     
-
+    //TODO: add subscriber to state
+    //TODO: case statement for dealing with left and right neighbor; seed, robot1, robot2(-1 & +1), robot[else] (+2, -2)
 
 
     // Copies the contents of the parameterized
