@@ -24,7 +24,7 @@ Neighborhood::Neighborhood(): vector<Neighbor>()
 
 // Copy constructor that copies the contents of the
 // parameterized neighborhood into this neighborhood.
-Neighborhood::Neighborhood(const Neighborhood &nh)
+Neighborhood::Neighborhood(const Neighborhood &nh): vector<Neighbor>()
 {
     reserve(MAX_NEIGHBORHOOD_SIZE);
     *this = nh;
