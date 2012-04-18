@@ -123,7 +123,7 @@ class Cell: public State, public Neighborhood, public Robot
     protected:
 
         // <protected data members>
-        vector<Bid *> bids;
+//        vector<Bid *> bids;
         Neighbor     *leftNbr, *rightNbr;
         int           index;
         int           numBids;

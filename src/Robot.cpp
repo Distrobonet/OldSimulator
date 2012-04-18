@@ -633,42 +633,42 @@ Behavior Robot::orbitBehavior(const Vector &target, const float dist)
 
 // Handles incoming packets, returning true
 // if successful, false otherwise.
-bool Robot::processPackets()
-{
-    bool   success = true;
-    Packet packet;
-    while (!msgQueue.empty())
-    {
-        packet = msgQueue.front();
-        if (!processPacket(packet)) success = false;
-        msgQueue.pop();
-		}
-    return success;
-}
+//bool Robot::processPackets()
+//{
+//    bool   success = true;
+//    Packet packet;
+//    while (!msgQueue.empty())
+//    {
+//        packet = msgQueue.front();
+//        if (!processPacket(packet)) success = false;
+//        msgQueue.pop();
+//		}
+//    return success;
+//}
 
 
 // Responds appropriately to auction announcements.
-bool Robot::processPacket(Packet &packet)
-{
-    bool success = false;
-    switch (packet.type)
-    {
-        case AUCTION_ANNOUNCEMENT:
-        {
-           float range = rangeSensor(packet);
-           if (range > 0.0f)
-           {
-               float b_j = E * range;
-               Bid    *bid   = new Bid(b_j, getID());
-               success     = env->sendMsg(bid, packet.fromID, (-1 * (ID * 10)), BID);
-           }
-           else success    = true;
-        }
-        break;
-        default: break;
-    }
-    return success;
-}
+//bool Robot::processPacket(Packet &packet)
+//{
+//    bool success = false;
+//    switch (packet.type)
+//    {
+//        case AUCTION_ANNOUNCEMENT:
+//        {
+//           float range = rangeSensor(packet);
+//           if (range > 0.0f)
+//           {
+//               float b_j = E * range;
+//               Bid    *bid   = new Bid(b_j, getID());
+//               success     = env->sendMsg(bid, packet.fromID, (-1 * (ID * 10)), BID);
+//           }
+//           else success    = true;
+//        }
+//        break;
+//        default: break;
+//    }
+//    return success;
+//}
 
 
 // Returns with the distance from this robot
@@ -677,10 +677,12 @@ float Robot::rangeSensor(Packet &packet)
 {
 
     // unpack the auction from the packet
-    Auction_Announcement *auctionAnnouncement = (Auction_Announcement *)packet.msg;
+//    Auction_Announcement *auctionAnnouncement = (Auction_Announcement *)packet.msg;
 
     // unpack the formation definition from the state within the auction
-    Formation formation = auctionAnnouncement->s_i.formation;
+//    Formation formation = auctionAnnouncement->s_i.formation;
+	Formation formation = NULL;
+	//TODO:This needs to get set using the service
 
     // get the range from the auctioneer to this robot
     float range = env->distanceToRobot(env->getCell(packet.fromID), this);
@@ -704,15 +706,17 @@ float Robot::rangeSensor(Packet &packet)
     e.x = sqrt((formation.getRadius() * formation.getRadius()) - (e.y * e.y));
 
     // get the vector between the position being auctioned and this robot
-    Vector a;
-    if (auctionAnnouncement->right)    // if the position is to the right of the auctioneer
-        a = d - e;
-    else
-        a = d + e;
+    //TODO: get the right neighbor for the cell in place of auction announcement
+//    Vector a;
+//    if (auctionAnnouncement->right)    // if the position is to the right of the auctioneer
+//        a = d - e;
+//    else
+//        a = d + e;
 
     // range is the magnitude of the vector between
     // the position being auctioned and this robot
-    range = a.magnitude();
+//    range = a.magnitude();
+    //TODO:Uncomment when above is fixed for neighbor->right
 
     //cout << "robot " << getID() << " bidding " << range << endl;
 

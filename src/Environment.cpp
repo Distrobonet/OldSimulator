@@ -224,50 +224,50 @@ int Environment::getNObjects() const
 // and forwards all sent packets to their destinations.
 bool Environment::step()
 {
-  vector<Cell*> auctionCalls;
-  Cell *auctionCall = NULL;
-  Cell *currCell = NULL;
-  Robot *r = NULL;
+//  vector<Cell*> auctionCalls;
+//  Cell *auctionCall = NULL;
+//  Cell *currCell = NULL;
+//  Robot *r = NULL;
 
-  for (int i = 0; i < getNumberOfCells(); i++)
-  {
-    auctionCall = cells[i]->cStep();
-    if((auctionCall != NULL)&&(startFormation))
-      auctionCalls.push_back(auctionCall);
-  }
+//  for (int i = 0; i < getNumberOfCells(); i++)
+//  {
+//    auctionCall = cells[i]->cStep();
+//    if((auctionCall != NULL)&&(startFormation))
+//      auctionCalls.push_back(auctionCall);
+//  }
 
-  if(startFormation)
-  {
-    for(unsigned i = 0; i < auctionCalls.size(); i++)
-    {
-      Cell* a = auctionCalls[i];
-      State s = a->getState() ;
-      Formation f = formation;
-      bool dir;
-
-      if (a->rightNbr == NULL)
-    	  dir = true;
-      else
-    	  dir = false;
-
-      Auction_Announcement* aa = new Auction_Announcement(a->getState().gradient, s, dir);
-      sendMsg((Message)aa, ID_BROADCAST, a->getID(), AUCTION_ANNOUNCEMENT);
-      a->setAuctionStepCount(1);
-    }
+//  if(startFormation)
+//  {
+//    for(unsigned i = 0; i < auctionCalls.size(); i++)
+//    {
+//      Cell* a = auctionCalls[i];
+//      State s = a->getState() ;
+//      Formation f = formation;
+//      bool dir;
+//
+//      if (a->rightNbr == NULL)
+//    	  dir = true;
+//      else
+//    	  dir = false;
+//
+//      Auction_Announcement* aa = new Auction_Announcement(a->getState().gradient, s, dir);
+//      sendMsg((Message)aa, ID_BROADCAST, a->getID(), AUCTION_ANNOUNCEMENT);
+//      a->setAuctionStepCount(1);
+//    }
 
     for(unsigned i = 0; i < robots.size(); i++)
     {
-      robots[i]->processPackets();
+//      robots[i]->processPackets();
       robots[i]->step();
     }
     forwardPackets();
-    auctionCalls.clear();
-    for(int i=0; i<getNumberOfCells(); i++)
-    {
-      if(cells[i]->getAuctionStepCount() >= AUCTION_STEP_COUNT)
-    	  cells[i]->settleAuction();
-    }
-  }
+//    auctionCalls.clear();
+//    for(int i=0; i<getNumberOfCells(); i++)
+//    {
+//      if(cells[i]->getAuctionStepCount() >= AUCTION_STEP_COUNT)
+//    	  cells[i]->settleAuction();
+//    }
+//  }
   return true;
 }
 

@@ -105,20 +105,20 @@ Cell* Cell::cStep() {
 		moveError();
 	}
 
-	if (auctionStepCount > 0)
-		auctionStepCount++;
-
-	if ((AUTONOMOUS_INIT) && (env->getRobots().size() > 0)) {
-		if ((getNNbrs() < NEIGHBORHOOD_SIZE) && (bids.size() == 0)) {
-			if (((getState().transError.magnitude() > 0)
-					|| (getID() == formation.getSeedID()))
-					&& (getState().transError.magnitude()
-							< MAX_TRANSLATIONAL_ERROR)) {
-				if (auctionStepCount == 0)
-					answer = this;
-			}
-		}
-	}
+//	if (auctionStepCount > 0)
+//		auctionStepCount++;
+//
+//	if ((AUTONOMOUS_INIT) && (env->getRobots().size() > 0)) {
+//		if ((getNNbrs() < NEIGHBORHOOD_SIZE) && (bids.size() == 0)) {
+//			if (((getState().transError.magnitude() > 0)
+//					|| (getID() == formation.getSeedID()))
+//					&& (getState().transError.magnitude()
+//							< MAX_TRANSLATIONAL_ERROR)) {
+//				if (auctionStepCount == 0)
+//					answer = this;
+//			}
+//		}
+//	}
 	if (CELL_INFO_VIEW) {
 		cout << "=============================" << endl;
 		cout << "cell.getID() = " << getID() << endl;
@@ -514,52 +514,54 @@ bool Cell::processPackets() {
 
 // Attempts to process the parameterized packet,
 // returning true if successful, false otherwise.
-bool Cell::processPacket(Packet &p) {
+bool Cell::processPacket(Packet &packet) {
 	bool success = false;
-	if ((p.fromOperator()) && (p.type == CHANGE_FORMATION)) {
-		success = changeFormation(*((Formation *) p.msg));
-	} else if (p.type == AUCTION_ANNOUNCEMENT) {
-		if (ALLOW_CELL_BIDS) {
-
-		}
-		success = true;
-	} else if (p.type == BID) {
-		if (p.msg != NULL) {
-			bids.push_back((Bid*) p.msg);
-			success = true;
-			numBids++;
-			//cout << "bid received, total = " << numBids << endl;
-		}
+	if ((packet.fromOperator()) && (packet.type == CHANGE_FORMATION)) {
+		success = changeFormation(*((Formation *) packet.msg));
+	}
+//	else if (packet.type == AUCTION_ANNOUNCEMENT) {
+//		if (ALLOW_CELL_BIDS) {
+//
+//		}
+//		success = true;
+//	} else if (packet.type == BID) {
+//		if (packet.msg != NULL) {
+//			bids.push_back((Bid*) packet.msg);
+//			success = true;
+//			numBids++;
+//			//cout << "bid received, total = " << numBids << endl;
+//		}
 		//PROP_MESSAGE may need to be some kind of prop super-enum that covers the base for all enum_props
 		//
-	} else if (((isNbr(p.fromID)) || (p.fromBroadcast()))
-			&& !(p.type == NCELL_REQUEST || p.type == NCELL_RESPONSE
-					|| (p.type == FCNTR_RESPONSE || p.type == FCNTR_REQUEST)
-					|| (p.type == FRAD_RESPONSE || p.type == FRAD_REQUEST)
-					|| (p.type == FSEED_RESPONSE || p.type == FSEED_REQUEST))) {
-		switch (p.type) {
+//}
+	 else if (((isNbr(packet.fromID)) || (packet.fromBroadcast()))
+			&& !(packet.type == NCELL_REQUEST || packet.type == NCELL_RESPONSE
+					|| (packet.type == FCNTR_RESPONSE || packet.type == FCNTR_REQUEST)
+					|| (packet.type == FRAD_RESPONSE || packet.type == FRAD_REQUEST)
+					|| (packet.type == FSEED_RESPONSE || packet.type == FSEED_REQUEST))) {
+		switch (packet.type) {
 		case STATE:
 			success =
-					(p.msg == NULL) ?
-							false : updateNbr(p.fromID, *((State *) p.msg));
-			delete (State *) p.msg;
-			p.msg = NULL;
+					(packet.msg == NULL) ?
+							false : updateNbr(packet.fromID, *((State *) packet.msg));
+			delete (State *) packet.msg;
+			packet.msg = NULL;
 			break;
 		default:
 			break;
 		}
 	}
 	//receive a request, send out a request to nbrs that ref you
-	else if (p.type == NCELL_REQUEST || p.type == NCELL_RESPONSE) {
-		success = processNCell(p);
+	else if (packet.type == NCELL_REQUEST || packet.type == NCELL_RESPONSE) {
+		success = processNCell(packet);
 	}
 	//receiving a response back from nbrs that ref you
-	else if (p.type == FCNTR_REQUEST || p.type == FCNTR_RESPONSE) {
-		success = processFcntr(p);
-	} else if (p.type == FRAD_REQUEST || p.type == FRAD_RESPONSE) {
-		success = processFRad(p);
-	} else if (p.type == FSEED_REQUEST || p.type == FSEED_RESPONSE) {
-		success = processFSeed(p);
+	else if (packet.type == FCNTR_REQUEST || packet.type == FCNTR_RESPONSE) {
+		success = processFcntr(packet);
+	} else if (packet.type == FRAD_REQUEST || packet.type == FRAD_RESPONSE) {
+		success = processFRad(packet);
+	} else if (packet.type == FSEED_REQUEST || packet.type == FSEED_RESPONSE) {
+		success = processFSeed(packet);
 	}
 
 	return success;
@@ -1029,27 +1031,27 @@ bool Cell::init(const float dx, const float dy, const float dz,
 	return true;
 }
 
-void Cell::settleAuction() {
-	//cout << "Cell::settleAuction() entered\n"<< endl;
-	auctionStepCount = 0;
-	if (bids.size() <= 0) {
-		return;
-	}
-	Bid* winningBid;
-	winningBid = bids[0];
-	for (int i = 0; i < bids.size(); i++) {
-		if (bids[i]->b_i < winningBid->b_i) {
-			winningBid = bids[i];
-		}
-	}
-	//cout <<"Robot # "<<winningBid->rID<<" won the auction" << endl;
-	env->settleAuction(this, winningBid->rID);
-	bids.clear();
-}
+//void Cell::settleAuction() {
+//	//cout << "Cell::settleAuction() entered\n"<< endl;
+//	auctionStepCount = 0;
+//	if (bids.size() <= 0) {
+//		return;
+//	}
+//	Bid* winningBid;
+//	winningBid = bids[0];
+//	for (int i = 0; i < bids.size(); i++) {
+//		if (bids[i]->b_i < winningBid->b_i) {
+//			winningBid = bids[i];
+//		}
+//	}
+//	//cout <<"Robot # "<<winningBid->rID<<" won the auction" << endl;
+//	env->settleAuction(this, winningBid->rID);
+//	bids.clear();
+//}
 
-int Cell::getNBids() const {
-	return bids.size();
-}
+//int Cell::getNBids() const {
+//	return bids.size();
+//}
 
 int Cell::getAuctionStepCount() const {
 	return auctionStepCount;
