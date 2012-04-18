@@ -141,30 +141,32 @@ bool setFormation(Simulator::FormationIndex::Request  &req,
 
 int main(int argc, char **argv)
 {
-	// Service server
-//	ros::init(argc, argv, "formation_index_server");
-//	ros::NodeHandle serverNode;
-//	ros::ServiceServer service = serverNode.advertiseService("formation_index", setFormation);
-//	ROS_INFO("Ready to serve the formation index.");
-//	ros::spin();
-//
-//
-//	//Service client
-//	ros::init(argc, argv, "formation_index_client");
-//	ros::NodeHandle n;
-//	ros::ServiceClient client = n.serviceClient<Simulator::FormationIndex>("formation_index");
-//	Simulator::FormationIndex srv;
-////	srv.request.a = atoll(argv[1]);
-////	srv.request.b = atoll(argv[2]);
+	// Service
+	ros::init(argc, argv, "formation_index_server");
+	ros::NodeHandle serverNode;
+	ros::ServiceServer service = serverNode.advertiseService("formation_index", setFormation);
+	ROS_INFO("Now serving the formation index.");
+	//ros::spin();
+	ros::spinOnce();
+
+
+	//Service client - blank request, gets formationIndex response
+	ros::init(argc, argv, "formation_index_client");
+	ros::NodeHandle clientNode;
+	ros::ServiceClient client = clientNode.serviceClient<Simulator::FormationIndex>("formation_index");
+	Simulator::FormationIndex srv;
+//	srv.request.a = atoll(argv[1]);
+//	srv.request.b = atoll(argv[2]);
+	ROS_INFO("Trying to access the formationIndex");
 //	if (client.call(srv))
 //	{
 //		ROS_INFO("Sum: %ld", (long int)srv.response.formationIndex);
 //	}
 //	else
 //	{
-//		ROS_ERROR("Failed to call service add_two_ints");
+//		ROS_ERROR("Failed to call service formation_index");
 //	}
-
+	//client.call(srv);
 
 
 
@@ -199,6 +201,9 @@ int main(int argc, char **argv)
 	// Primary ROS loop
 	while(ros::ok())
 	{
+
+
+
 		keyboardInput();
 
 		std_msgs::String msg;

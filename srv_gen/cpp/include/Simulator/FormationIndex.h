@@ -134,7 +134,6 @@ public:
 private:
   static const char* __s_getMessageDefinition_() { return "int64 formationIndex\n\
 \n\
-\n\
 "; }
 public:
   ROS_DEPRECATED static const std::string __s_getMessageDefinition() { return __s_getMessageDefinition_(); }
@@ -262,7 +261,6 @@ struct Definition< ::Simulator::FormationIndexResponse_<ContainerAllocator> > {
   static const char* value() 
   {
     return "int64 formationIndex\n\
-\n\
 \n\
 ";
   }

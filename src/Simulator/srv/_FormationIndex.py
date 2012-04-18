@@ -99,7 +99,6 @@ class FormationIndexResponse(roslib.message.Message):
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """int64 formationIndex
 
-
 """
   __slots__ = ['formationIndex']
   _slot_types = ['int64']

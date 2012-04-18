@@ -112,10 +112,10 @@
   "3e0302d241547a13e5cebd81ed40641e")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<FormationIndex-response>)))
   "Returns full string definition for message of type '<FormationIndex-response>"
-  (cl:format cl:nil "int64 formationIndex~%~%~%~%"))
+  (cl:format cl:nil "int64 formationIndex~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'FormationIndex-response)))
   "Returns full string definition for message of type 'FormationIndex-response"
-  (cl:format cl:nil "int64 formationIndex~%~%~%~%"))
+  (cl:format cl:nil "int64 formationIndex~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <FormationIndex-response>))
   (cl:+ 0
      8
