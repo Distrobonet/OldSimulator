@@ -177,7 +177,7 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 // returning true if successful, false otherwise.
 bool Environment::initNbrs(const int nNbrs)
 {
-	Cell *c = NULL;
+	Cell *c = new Cell;
 	for (int i = 0; i < getNumberOfCells(); i++)
 	{
 //		if (!cells.getHead(c))
@@ -186,6 +186,8 @@ bool Environment::initNbrs(const int nNbrs)
 		c = cells.at(i);
 		c->clearNbrs();
 		int leftNbrID, rightNbrID;
+		Cell cell;
+
 
 		switch (i) {
 		case 0:
@@ -209,13 +211,13 @@ bool Environment::initNbrs(const int nNbrs)
 		if ((i >= 0) && (c->addNbr(leftNbrID)))
 		{
 			c->leftNbr  = c->nbrWithID(leftNbrID);
-			ros::Subscriber left_Nbr_Sub = stateNode.subscribe("chatter", 1000, stateCallback);
+			ros::Subscriber left_Nbr_Sub = stateNode.subscribe("leftNbr", 1000, &Cell::stateCallback, &cell);
 		}
 
 		if ((i < getNumberOfCells()) && (c->addNbr(rightNbrID)))
 		{
 			c->rightNbr = c->nbrWithID(i + rightNbrID);
-			ros::Subscriber right_Nbr_Sub = stateNode.subscribe("chatter", 1000, stateCallback);
+			ros::Subscriber right_Nbr_Sub = stateNode.subscribe("rightNbr", 1000, &Cell::stateCallback, &cell);
 		}
 
 		// TODO: fix this neighborhood

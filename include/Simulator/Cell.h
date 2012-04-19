@@ -98,6 +98,9 @@ class Cell: public State, public Neighborhood, public Robot
         //virtual  step();
         virtual void updateState();
 
+        //TODO: fix this input data type
+        void stateCallback(const std_msgs::String::ConstPtr& msg);
+
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,
                                      Neighbor         n = Neighbor());

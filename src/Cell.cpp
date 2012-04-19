@@ -226,6 +226,13 @@ void Cell::updateState() {
 	tStep = max(tStep + 1, nbrWithMaxStep()->tStep);
 }
 
+
+void stateCallback(const std_msgs::String::ConstPtr& msg)
+{
+	// TODO: to be fleshed out when after a publisher is defined
+}
+
+
 /*void Cell::updateState()
  {
  Neighbor currNbr;
