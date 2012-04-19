@@ -185,6 +185,7 @@ bool Environment::initNbrs(const int nNbrs)
 	{
 //		if (!cells.getHead(c))
 //			return false;
+		ros::NodeHandle stateNode;
 		c = cells.at(i);
 		c->clearNbrs();
 		int leftNbrID, rightNbrID;
@@ -211,13 +212,13 @@ bool Environment::initNbrs(const int nNbrs)
 		if ((i >= 0) && (c->addNbr(leftNbrID)))
 		{
 			c->leftNbr  = c->nbrWithID(leftNbrID);
-
+			ros::Subscriber left_Nbr_Sub = stateNode.subscribe("chatter", 1000, stateCallback);
 		}
 
 		if ((i < getNumberOfCells()) && (c->addNbr(rightNbrID)))
 		{
 			c->rightNbr = c->nbrWithID(i + rightNbrID);
-
+			ros::Subscriber right_Nbr_Sub = stateNode.subscribe("chatter", 1000, stateCallback);
 		}
 
 		// TODO: fix this neighborhood
