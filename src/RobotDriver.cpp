@@ -172,7 +172,6 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "robot_driver");
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
-	OverLord *overLord;
 
 	displayMenu();
 

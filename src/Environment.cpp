@@ -146,15 +146,10 @@ bool Environment::initRobots()
 bool Environment::initCells(const int numberOfRobots, const Formation f)
 {
 	srand(time(NULL));
-	for (int i = 0; i < numberOfRobots; i++)
-		if (!addCell())
-			return false;
+//	for (int i = 0; i < numberOfRobots; i++)
+//		if (!addCell())
+//			return false;
 
-	// initialize each robot's neighborhood
-	if (!initNbrs())
-		return false;
-
-	// organizes the cells into an initial formation (default line)
 	Cell *c  = new Cell;
 	for (int i = 0; i < numberOfRobots; i++)
 	{
@@ -169,8 +164,10 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 			printf("iterating through cells...\n");
 	}
 
+	// initialize cell's neighborhoods
+	if (!initNbrs())
+		return false;
 	newestCell = c;
-	//printf("newestCell == %d\n",c->getID());
 	return (getNumberOfCells() == numberOfRobots)
 			&& sendMsg(new Formation(formation), formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
 }
