@@ -35,8 +35,7 @@ Cell::Cell(const float dx, const float dy, const float dz, const float theta) :
 
 // Copy constructor that copies the contents of
 // the parameterized cell into this cell.
-Cell::Cell(const Cell &c) :
-		State(c), Neighborhood(c), Robot(c) {
+Cell::Cell(const Cell &c) :	State(c), Neighborhood(c), Robot(c) {
 	leftNbr = c.leftNbr;
 	rightNbr = c.rightNbr;
 }
