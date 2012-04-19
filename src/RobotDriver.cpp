@@ -141,9 +141,6 @@ bool setFormation(Simulator::FormationIndex::Request  &req,
 
 int main(int argc, char **argv)
 {
-
-
-
 	// Service
 	ros::init(argc, argv, "formation_index_server");
 	ros::NodeHandle serverNode;
@@ -152,8 +149,7 @@ int main(int argc, char **argv)
 	//ros::spin();
 	ros::spinOnce();
 
-
-	//Service client - blank request, gets formationIndex response
+	// Service Client - blank request, gets formationIndex response
 	ros::init(argc, argv, "formation_index_client");
 	ros::NodeHandle clientNode;
 	ros::ServiceClient client = clientNode.serviceClient<Simulator::FormationIndex>("formation_index");
@@ -165,35 +161,27 @@ int main(int argc, char **argv)
 	// Uses an asynchronous spinner to account for the blocking service client call
 	ros::AsyncSpinner spinner(1);
 	spinner.start();
+
 	if (client.call(srv))
-	{
 		ROS_INFO("formation index: %ld", (long int)srv.response.formationIndex);
-	}
 	else
-	{
 		ROS_ERROR("Failed to call service formation_index");
-	}
+
 	spinner.stop();
-
-
 
 	ros::init(argc, argv, "robot_driver");
 	ros::NodeHandle aNode;
 	ros::Rate loop_rate(10);
-
 	OverLord *overLord;
 
 	displayMenu();
-
-	// create handler for interrupts (i.e., ^C)
-	if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
-		signal(SIGPIPE, SIG_IGN);
 
 	// Only continue program once a selection has been made
 	while(CURRENT_SELECTION == -1)
 	{
 		keyboardInput();
 	}
+
 	// initialize and execute the robot cell environment
 	if (!initEnv(g_nRobots, CURRENT_SELECTION))
 	{
@@ -204,9 +192,6 @@ int main(int argc, char **argv)
 	// Primary ROS loop
 	while(ros::ok())
 	{
-
-
-
 		keyboardInput();
 
 		std_msgs::String msg;
