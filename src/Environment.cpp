@@ -187,16 +187,36 @@ bool Environment::initNbrs(const int nNbrs)
 //			return false;
 		c = cells.at(i);
 		c->clearNbrs();
-		if ((i > 0) && (!c->addNbr(i - 1)))
-			return false;
+		int leftOffset, rightOffset;
 
-		else
-			c->leftNbr  = c->nbrWithID(i - 1);
+		switch (i) {
+		case 0:
+			leftOffset = i - 1;
+			rightOffset = i + 1;
+			continue;
+		case 1:
+			leftOffset = i - 2;
+			rightOffset = i + 1;
+			continue;
+		case 2:
+			leftOffset = i - 1;
+			rightOffset = i + 2;
+			continue;
+		default:
+			leftOffset = i - 2;
+			rightOffset = i + 2;
+			continue;
+		}
 
-		if ((i < getNumberOfCells() - 1) && (!c->addNbr(i + 1)))
+		if ((i >= 0) && (!c->addNbr(i - leftOffset)))
 			return false;
 		else
-			c->rightNbr = c->nbrWithID(i + 1);
+			c->leftNbr  = c->nbrWithID(i - leftOffset);
+
+		if ((i < getNumberOfCells()) && (!c->addNbr(i + rightOffset)))
+			return false;
+		else
+			c->rightNbr = c->nbrWithID(i + rightOffset);
 
 		// TODO: fix this neighborhood
 		//neighborhood.push_back(c);
