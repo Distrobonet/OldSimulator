@@ -176,11 +176,6 @@ int main(int argc, char **argv)
 
 	displayMenu();
 
-	// create handler for interrupts (i.e., ^C)
-	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
-		signal(SIGINT, terminate);
-	signal(SIGPIPE, SIG_IGN);
-
 	// Only continue program once a selection has been made
 	while(CURRENT_SELECTION == -1)
 	{
@@ -194,18 +189,48 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-
-//	if(g_environment->getCell(0) != NULL)
-//		cout << g_environment->getCell(0)->formation.setFormationIndexFromService();
-//	else
-//		cout << "no el worko!\n";
-
-
+	// Test FormationIndex service
+	if(g_environment->getCell(0) != NULL)
+		cout << g_environment->getCell(0)->formation.setFormationIndexFromService();
+	else
+		cout << "no el worko!\n";
 
 
 
 
+	cout << "\nnumber of cells: " << g_environment->getNumberOfCells() << endl;
 
+	// output the ID of every cell
+//	for(int i = 1; i <= g_environment->getNumberOfCells(); i++)
+//		cout << "Cell " << i << " ID: "<< g_environment->getCell(i)->getID() << endl;
+
+//	cout << "cell " << 0 << " ID: "<< g_environment->getCell(0)->getID() << endl;
+//	cout << "cell " << 1 << " ID: "<< g_environment->getCell(1)->getID() << endl;
+//	cout << "cell " << 2 << " ID: "<< g_environment->getCell(2)->getID() << endl;
+//	cout << "cell " << 3 << " ID: "<< g_environment->getCell(3)->getID() << endl;
+//	cout << "cell " << 4 << " ID: "<< g_environment->getCell(4)->getID() << endl;
+//	cout << "cell " << 5 << " ID: "<< g_environment->getCell(5)->getID() << endl;
+//	cout << "cell " << 6 << " ID: "<< g_environment->getCell(6)->getID() << endl;
+//	cout << "cell " << 7 << " ID: "<< g_environment->getCell(7)->getID() << endl;
+//	cout << "cell " << 8 << " ID: "<< g_environment->getCell(8)->getID() << endl;
+
+
+	cout << "\nnumber of robots: " <<g_environment->getRobots().size() << endl;
+	//output the ID of every robot
+	for(uint i = 0; i < g_environment->getRobots().size(); i++)
+		cout << "robot " << i << " ID: "<< g_environment->getRobots()[i]->getID() << endl;
+
+	//cout << "robot " << 0 << " ID: "<< g_environment->getRobot(0)->getID() << endl;
+//	cout << "robot " << 1 << " ID: "<< g_environment->getRobot(1)->getID() << endl;
+//	cout << "robot " << 2 << " ID: "<< g_environment->getRobot(2)->getID() << endl;
+//	cout << "robot " << 3 << " ID: "<< g_environment->getRobot(3)->getID() << endl;
+//	cout << "robot " << 4 << " ID: "<< g_environment->getRobot(4)->getID() << endl;
+//	cout << "robot " << 5 << " ID: "<< g_environment->getRobot(5)->getID() << endl;
+//	cout << "robot " << 6 << " ID: "<< g_environment->getRobot(6)->getID() << endl;
+//	cout << "robot " << 7 << " ID: "<< g_environment->getRobot(7)->getID() << endl;
+//	cout << "robot " << 8 << " ID: "<< g_environment->getRobot(8)->getID() << endl;
+//	cout << "robot " << 9 << " ID: "<< g_environment->getRobot(9)->getID() << endl;
+//	cout << "robot " << 10 << " ID: "<< g_environment->getRobot(10)->getID() << endl;
 
 	// Primary ROS loop
 	while(ros::ok())
@@ -240,6 +265,8 @@ int main(int argc, char **argv)
 		g_environment-> step();
 		ros::spinOnce();
 		loop_rate.sleep();
+
+
 	}
 
   deinitEnv();
@@ -359,10 +386,10 @@ bool initEnv(const int nRobots, const int formationIndex)
     g_environment = NULL;
   }
 
-  Formation f(formations[formationIndex], g_formationRadius, Vector(),
+  Formation formation(formations[formationIndex], g_formationRadius, Vector(),
 		  	  	  g_seedID, ++g_formationID, g_formationHeading);
 
-  if ((g_environment = new Environment(nRobots, f)) == NULL)
+  if ((g_environment = new Environment(nRobots, formation)) == NULL)
   {
 	  return false;
   }
