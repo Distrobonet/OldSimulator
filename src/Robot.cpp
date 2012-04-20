@@ -10,7 +10,7 @@
 #define ROBOT_LABEL -1
 
 // <protected static data members>
-int Robot::numOfRobots = ID_ROBOT;   // initializes the number of robots to 0
+int Robot::numOfRobots = 0;   // initializes the number of robots to 0
 double velocityX, velocityY, velocityTheta;
 
 
