@@ -19,6 +19,7 @@
 #include <Simulator/Auctioning.h>
 #include <Simulator/Neighborhood.h>
 #include <Simulator/Robot.h>
+#include "std_msgs/String.h"
 using namespace std;
 
 
@@ -99,7 +100,7 @@ class Cell: public State, public Neighborhood, public Robot
         virtual void updateState();
 
         //TODO: fix this input data type
-        void stateCallback(const std_msgs::String::ConstPtr& msg);
+        void stateCallback(const std_msgs::String::ConstPtr &msg);
 
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,

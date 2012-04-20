@@ -229,7 +229,7 @@ void Cell::updateState() {
 
 void stateCallback(const std_msgs::String::ConstPtr& msg)
 {
-	// TODO: to be fleshed out when after a publisher is defined
+	// TODO: to be fleshed out when after a publisher is
 }
 
 

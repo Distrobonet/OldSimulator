@@ -21,9 +21,6 @@
 #include <Simulator/Cell.h>
 #include <Simulator/Object.h>
 
-#define SUBSCRIBER 0
-#define ROBOT_LABEL 1
-
 using namespace std;
 
 #define VERBOSE (0)
