@@ -118,6 +118,7 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 	startFormation = false;
 
 	initCells(numberOfRobots, f);
+	Robot::numOfRobots--;
 	initRobots();
 
 	if (VERBOSE)
@@ -159,7 +160,7 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 		if(VERBOSE)
 			printf("iterating through cells...\n");
 	}
-
+	
 	// initialize cell's neighborhoods
 	if (!initNbrs())
 		return false;
@@ -803,11 +804,11 @@ Robot* Environment::getRobot(int id)
 {
 	// TODO catch possible null pointer
   Robot* robot;
-  int rID=id;
+  int rID = id;
 
   for(unsigned i = 0; i < robots.size(); i++)
   {
-	  if(robots[i]->getID()== rID)
+	  if(robots[i]->getID() == rID)
 		  return robots[i];
   }
 }
