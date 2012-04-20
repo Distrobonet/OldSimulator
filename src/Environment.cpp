@@ -18,7 +18,10 @@
 Environment::Environment(const int numRobots, const Formation formation)
 {
 	if (!init(numRobots, formation))
-	  clear();
+	{
+		cout << "\nfailed to initialize environment\n";
+		clear();
+	}
 
 	ros::NodeHandle envNode;
 
@@ -802,15 +805,13 @@ bool Environment::changeFormationSeed(Formation &f, int id)
 //return a pointer to the robot with the matching id
 Robot* Environment::getRobot(int id)
 {
-	// TODO catch possible null pointer
-  Robot* robot;
-  int rID = id;
-
   for(unsigned i = 0; i < robots.size(); i++)
   {
-	  if(robots[i]->getID() == rID)
-		  return robots[i];
+    if(robots[i]->getID() == id)
+    	return robots[i];
   }
+
+  return(NULL);
 }
 
 void Environment::settleAuction(Cell* auctionCell,int rID)
