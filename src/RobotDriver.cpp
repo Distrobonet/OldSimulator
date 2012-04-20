@@ -448,33 +448,33 @@ bool changeFormationSim(const int index, const Vector gradient)
   else return false;
 }
 
-
-bool sendNCellRequest()
-{
-  PropMsg *ncell = new PropMsg();
-  return g_environment->sendMsg(ncell, g_seedID,ID_OPERATOR, NCELL_REQUEST);
-}
-
-
-bool sendFcntrRequest()
-{
-  PropMsg *fcntr = new PropMsg();
-  return g_environment->sendMsg(fcntr, g_seedID,ID_OPERATOR, FCNTR_REQUEST);
-}
-
-
-bool sendFRadRequest()
-{
-  PropMsg *frad = new PropMsg();
-  return g_environment->sendMsg(frad, g_seedID,ID_OPERATOR, FRAD_REQUEST);
-}
-
-
-bool sendFSeedRequest()
-{
-  PropMsg *fseed = new PropMsg();
-  return g_environment->sendMsg(fseed, g_seedID,ID_OPERATOR, FSEED_REQUEST);
-}
+//
+//bool sendNCellRequest()
+//{
+//  PropMsg *ncell = new PropMsg();
+//  return g_environment->sendMsg(ncell, g_seedID,ID_OPERATOR, NCELL_REQUEST);
+//}
+//
+//
+//bool sendFcntrRequest()
+//{
+//  PropMsg *fcntr = new PropMsg();
+//  return g_environment->sendMsg(fcntr, g_seedID,ID_OPERATOR, FCNTR_REQUEST);
+//}
+//
+//
+//bool sendFRadRequest()
+//{
+//  PropMsg *frad = new PropMsg();
+//  return g_environment->sendMsg(frad, g_seedID,ID_OPERATOR, FRAD_REQUEST);
+//}
+//
+//
+//bool sendFSeedRequest()
+//{
+//  PropMsg *fseed = new PropMsg();
+//  return g_environment->sendMsg(fseed, g_seedID,ID_OPERATOR, FSEED_REQUEST);
+//}
 
 
 // Clears the frame buffer and draws the simulated cells within the window.
@@ -576,26 +576,26 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
         g_environment->showHead(!g_environment->getCell(g_seedID)->heading.showHead);
       break;
 
-    case 'n': case 'N':
-      if (g_environment->getNumberOfCells() > 0)
-        //g_prop_toggle = !g_prop_toggle;
-        sendNCellRequest();
-      break;
-
-    case 'c': case 'C':
-      if (g_environment->getNumberOfCells() > 0)
-        sendFcntrRequest();
-      break;
-
-    case 'r': case 'R':
-      if (g_environment->getNumberOfCells() > 0)
-        sendFRadRequest();
-      break;
-
-    case 's': case 'S':
-      if (g_environment->getNumberOfCells()> 0)
-        sendFSeedRequest();
-      break;
+//    case 'n': case 'N':
+//      if (g_environment->getNumberOfCells() > 0)
+//        //g_prop_toggle = !g_prop_toggle;
+//        sendNCellRequest();
+//      break;
+//
+//    case 'c': case 'C':
+//      if (g_environment->getNumberOfCells() > 0)
+//        sendFcntrRequest();
+//      break;
+//
+//    case 'r': case 'R':
+//      if (g_environment->getNumberOfCells() > 0)
+//        sendFRadRequest();
+//      break;
+//
+//    case 's': case 'S':
+//      if (g_environment->getNumberOfCells()> 0)
+//        sendFSeedRequest();
+//      break;
 
     case CHAR_ESCAPE: 
     	deinitEnv(); 

@@ -78,6 +78,11 @@ class Cell: public State, public Neighborhood, public Robot
         // <destructors>
         virtual ~Cell();
 
+        ros::NodeHandle stateNode;
+        ros::Publisher state_pub;
+        ros::Subscriber leftNeighborState;
+        ros::Subscriber rightNeighborState;
+
         // <public mutator functions>
         bool setState(const State &s);
         bool setNbrs(Neighborhood &nh);
@@ -100,19 +105,19 @@ class Cell: public State, public Neighborhood, public Robot
         virtual void updateState();
 
         //TODO: fix this input data type
-        void stateCallback(const std_msgs::String::ConstPtr &msg);
+        void stateCallback(const Cell::State &state);
 
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,
                                      Neighbor         n = Neighbor());
         virtual bool sendStateToNbrs();
         virtual bool sendState(const int);
-        virtual bool processPackets();
-        virtual bool processPacket(Packet &p);
-        virtual bool processNCell(Packet &p);
-        virtual bool processFcntr(Packet &p);
-        virtual bool processFRad(Packet &p);
-        virtual bool processFSeed(Packet &p);
+//        virtual bool processPackets();
+//        virtual bool processPacket(Packet &p);
+//        virtual bool processNCell(Packet &p);
+//        virtual bool processFcntr(Packet &p);
+//        virtual bool processFRad(Packet &p);
+//        virtual bool processFSeed(Packet &p);
 
         // <public primitive behaviors>
         Behavior moveError();

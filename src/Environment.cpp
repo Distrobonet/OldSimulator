@@ -151,6 +151,7 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 //			return false;
 
 	Cell *c  = new Cell;
+	std::stringstream converter;
 	for (int i = 0; i < numberOfRobots; i++)
 	{
 //		if (!cells.getHead(c))
@@ -158,6 +159,11 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 		c->x = formation.getRadius() * ((float)i - (float)(getNumberOfCells() - 1) / 2.0f);
 		c->y = 0.0f;
 		c->setHeading(formation.getHeading());
+		string cellName = "robot_";
+		converter<<i;
+		cellName.append(converter.str());
+		cellName.append("/state");
+		c->state_pub = c->stateNode.advertise < Cell::State > (cellName, 1);
 		cells.push_back(c);
 
 		if(VERBOSE)
@@ -178,6 +184,9 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 bool Environment::initNbrs(const int nNbrs)
 {
 	Cell *c = NULL;
+	string cellSubName;
+	std::stringstream converter;
+
 	for (int i = 0; i < getNumberOfCells(); i++)
 	{
 //		if (!cells.getHead(c))
@@ -209,13 +218,21 @@ bool Environment::initNbrs(const int nNbrs)
 		if ((i >= 0) && (c->addNbr(leftNbrID)))
 		{
 			c->leftNbr  = c->nbrWithID(leftNbrID);
-			//ros::Subscriber left_Nbr_Sub = stateNode.subscribe("leftNbr", 1000, &Cell::stateCallback, &*c);
+			cellSubName = "robot_";
+			converter<<leftNbrID;
+			cellSubName.append(converter.str());
+			cellSubName.append("/state");
+//			c->leftNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
 		}
 
 		if ((i < getNumberOfCells()) && (c->addNbr(rightNbrID)))
 		{
 			c->rightNbr = c->nbrWithID(i + rightNbrID);
-			//ros::Subscriber right_Nbr_Sub = stateNode.subscribe("rightNbr", 1000, &Cell::stateCallback, &*c);
+			cellSubName = "robot_";
+			converter<<leftNbrID;
+			cellSubName.append(converter.str());
+			cellSubName.append("/state");
+//			c->rightNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
 		}
 
 		// TODO: fix this neighborhood

@@ -27,7 +27,7 @@ int Cell::nCells = 0;
 // Default constructor that initializes
 // this cell to the parameterized values.
 Cell::Cell(const float dx, const float dy, const float dz, const float theta) :
-		State(), Neighborhood(), Robot(dx, dy, dz, theta) {
+		State(), Neighborhood() {
 	init(dx, dy, dz, theta);
 	ID = nCells++;
 	numBids = 0;
@@ -35,7 +35,7 @@ Cell::Cell(const float dx, const float dy, const float dz, const float theta) :
 
 // Copy constructor that copies the contents of
 // the parameterized cell into this cell.
-Cell::Cell(const Cell &c) :	State(c), Neighborhood(c), Robot(c) {
+Cell::Cell(const Cell &c) :	State(c), Neighborhood(c) {
 	leftNbr = c.leftNbr;
 	rightNbr = c.rightNbr;
 }
@@ -95,14 +95,15 @@ Robot Cell::getRobot() const {
 Cell* Cell::cStep() {
 	Cell* answer = NULL;
 	// there are any movement instructions to be processed
-	if (processPackets()) {
-		// only update state and nbrs if there are any
-		if (getNNbrs() > 0) {
-			updateState();
-			sendStateToNbrs();
-		}
-		moveError();
-	}
+	//TODO:Figure out the lower if statement
+//	if (processPackets()) {
+//		// only update state and nbrs if there are any
+//		if (getNNbrs() > 0) {
+//			updateState();
+//			sendStateToNbrs();
+//		}
+//		moveError();
+//	}
 
 //	if (auctionStepCount > 0)
 //		auctionStepCount++;
@@ -227,7 +228,7 @@ void Cell::updateState() {
 }
 
 
-void stateCallback(const std_msgs::String::ConstPtr& msg)
+void stateCallback(const Cell::State &state)
 {
 	// TODO: to be fleshed out when after a publisher is defined
 }
@@ -505,485 +506,485 @@ bool Cell::sendState(const int toID) {
 
 // Attempts to process all packets received by the cell,
 // returning true if successful, false otherwise.
-bool Cell::processPackets() {
-	bool success = true;
-	Packet p;
-	while (!msgQueue.empty()) {
-		p = msgQueue.front();
-		if (!processPacket(p))
-			success = false;
-		msgQueue.pop();
-	}
-	msgQueue.pop();
-	return success;
-}
+//bool Cell::processPackets() {
+//	bool success = true;
+//	Packet p;
+//	while (!msgQueue.empty()) {
+//		p = msgQueue.front();
+//		if (!processPacket(p))
+//			success = false;
+//		msgQueue.pop();
+//	}
+//	msgQueue.pop();
+//	return success;
+//}
 
 // Attempts to process the parameterized packet,
 // returning true if successful, false otherwise.
-bool Cell::processPacket(Packet &packet) {
-	bool success = false;
-	if ((packet.fromOperator()) && (packet.type == CHANGE_FORMATION)) {
-		success = changeFormation(*((Formation *) packet.msg));
-	}
-//	else if (packet.type == AUCTION_ANNOUNCEMENT) {
-//		if (ALLOW_CELL_BIDS) {
+//bool Cell::processPacket(Packet &packet) {
+//	bool success = false;
+//	if ((packet.fromOperator()) && (packet.type == CHANGE_FORMATION)) {
+//		success = changeFormation(*((Formation *) packet.msg));
+//	}
+////	else if (packet.type == AUCTION_ANNOUNCEMENT) {
+////		if (ALLOW_CELL_BIDS) {
+////
+////		}
+////		success = true;
+////	} else if (packet.type == BID) {
+////		if (packet.msg != NULL) {
+////			bids.push_back((Bid*) packet.msg);
+////			success = true;
+////			numBids++;
+////			//cout << "bid received, total = " << numBids << endl;
+////		}
+//		//PROP_MESSAGE may need to be some kind of prop super-enum that covers the base for all enum_props
+//		//
+////}
+//	 else if (((isNbr(packet.fromID)) || (packet.fromBroadcast()))
+//			&& !(packet.type == NCELL_REQUEST || packet.type == NCELL_RESPONSE
+//					|| (packet.type == FCNTR_RESPONSE || packet.type == FCNTR_REQUEST)
+//					|| (packet.type == FRAD_RESPONSE || packet.type == FRAD_REQUEST)
+//					|| (packet.type == FSEED_RESPONSE || packet.type == FSEED_REQUEST))) {
+//		switch (packet.type) {
+//		case STATE:
+//			success =
+//					(packet.msg == NULL) ?
+//							false : updateNbr(packet.fromID, *((State *) packet.msg));
+//			delete (State *) packet.msg;
+//			packet.msg = NULL;
+//			break;
+//		default:
+//			break;
+//		}
+//	}
+//	//receive a request, send out a request to nbrs that ref you
+//	else if (packet.type == NCELL_REQUEST || packet.type == NCELL_RESPONSE) {
+//		success = processNCell(packet);
+//	}
+//	//receiving a response back from nbrs that ref you
+//	else if (packet.type == FCNTR_REQUEST || packet.type == FCNTR_RESPONSE) {
+//		success = processFcntr(packet);
+//	} else if (packet.type == FRAD_REQUEST || packet.type == FRAD_RESPONSE) {
+//		success = processFRad(packet);
+//	} else if (packet.type == FSEED_REQUEST || packet.type == FSEED_RESPONSE) {
+//		success = processFSeed(packet);
+//	}
+//
+//	return success;
+//}
+
+//bool Cell::processNCell(Packet &p) {
+//	bool success = false;
+//	if (p.type == NCELL_REQUEST) {
+//		//If size is != 0, clear out the entire list and re-calculate.
+//		//wonder if the messages are still floating around
+//		//if information has been calculated previously, we need to erase it,
+//		//and recalculate it
+//		//this doesnt work for radius since the radius is computed only if NCELLS
+//		//and FCNTR have been calculated
+//		//
+//		if (props.size() != 0) {
+//			props.erase(props.begin(), props.end());
+//			success = true;
+//		}
+//
+//		bool is_ref_nbr = false;
+//		Neighbor nbr;
+//		//loop through nbrs
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//
+//			if (nbr.refID == ID) //this nbr references you!
+//					{
+//				//send msg on to this nbr.
+//				//make copy of p.msg, push it onto props, fwd on the message to this nbr
+//
+//				PropMsg *propm = new PropMsg();
+//				propm->toID = nbr.ID;
+//				propm->count = 0;
+//				propm->response = false;
+//
+//				props.push_back(*propm); //here and not elsewhere
+//				env->sendMsg(p.msg, nbr.ID, ID, NCELL_REQUEST);
+//				is_ref_nbr = true;
+//				success = true;
+//			}
+//			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
+//					{
+//				//if this nbr doesnt ref you, and none have, you're at edge,
+//				//send response msg with count +1;
+//				// cout << "at and edge with ID: "
+//				// << ID << " and my gradient is: " << gradient << endl;
+//				PropMsg *prop = new PropMsg();
+//				(*(PropMsg *) prop).count = 1;
+//				env->sendMsg(prop, refID, ID, NCELL_RESPONSE);
+//				success = true;
+//			}
+//		}
+//
+//	} else if (p.type == NCELL_RESPONSE) {
+//
+//		Neighbor nbr;
+//		bool all_response = false;
+//		// cycle through nbrs in your props list?
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//			//check if msg came from a nbr who references you
+//			if (p.fromID == nbr.ID && nbr.refID == ID) {
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
+//							{
+//						props.at(j).response = true;
+//						//following statement grabs the most recent "count" that's out there,
+//						props.at(j).count = (*((PropMsg *) p.msg)).count; //FCntrMsg.gradient
+//					}
+//				}
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).response == false) {
+//						all_response = false;
+//						break;
+//					}
+//					all_response = true; //if you get here, you didnt break, all must be true
+//				}
+//
+//				if (all_response) {
+//					int sum = 1;
+//					//cout << "gradient of " << ID << " is: " << gradient << endl;
+//					for (unsigned int k = 0; k < props.size(); k++) {
+//						sum += props.at(k).count;
+//					}
+//					if (refID == -1) //seed
+//							{
+//						cout << endl << endl;
+//						cout << endl << endl;
+//						cout << "Count of the robots is => " << sum << endl;
+//						success = true;
+//					} else {
+//						PropMsg *prop = new PropMsg();
+//						(*(PropMsg *) prop).count = sum; //FCntrMsg.gradient
+//						env->sendMsg(prop, refID, ID, NCELL_RESPONSE);
+//						success = true;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return success;
+//}
+
+//bool Cell::processFcntr(Packet &p) {
+//	//If size is != 0, clear out the entire list and re-calculate.
+//	bool success = false;
+//	if (p.type == FCNTR_REQUEST) {
+//		if (props.size() != 0) {
+//			props.erase(props.begin(), props.end());
+//			success = true;
 //
 //		}
-//		success = true;
-//	} else if (packet.type == BID) {
-//		if (packet.msg != NULL) {
-//			bids.push_back((Bid*) packet.msg);
-//			success = true;
-//			numBids++;
-//			//cout << "bid received, total = " << numBids << endl;
+//		bool is_ref_nbr = false;
+//		Neighbor nbr;
+//		//loop through nbrs
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//
+//			if (nbr.refID == ID) //this nbr references you!
+//					{
+//				//send msg on to this nbr.
+//				//make copy of p.msg, push it onto props, fwd on the message to this nbr
+//				PropMsg *propm = new PropMsg();
+//				propm->toID = nbr.ID;
+//				propm->count = 0;
+//				propm->response = false;
+//
+//				props.push_back(*propm); // a pointer? shouldnt it be a copy?
+//				env->sendMsg(p.msg, nbr.ID, ID, FCNTR_REQUEST);
+//				is_ref_nbr = true;
+//				success = true;
+//			}
+//			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
+//					{
+//				//if this nbr doesnt ref you, and none have, you're at edge,
+//				//send response msg with count +1;
+//				cout << "at and edge with ID: " << ID << " and my gradient is: "
+//						<< gradient << endl;
+//				PropMsg *prop = new PropMsg();
+//				(*(PropMsg *) prop).count = 1;
+//				Vector transErrorCopy = transError;
+//				transErrorCopy.rotateRelative(
+//						rotError + formation.getHeading());
+//				(*(PropMsg *) prop).gradient = gradient - transErrorCopy;
+//				env->sendMsg(prop, refID, ID, FCNTR_RESPONSE);
+//				success = true;
+//			}
 //		}
-		//PROP_MESSAGE may need to be some kind of prop super-enum that covers the base for all enum_props
-		//
+//	} else if (p.type == FCNTR_RESPONSE) {
+//
+//		Neighbor nbr;
+//		bool all_response = false;
+//		//maybe cycle through nbrs in your props list?
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//			//if msg came from a nbr who references you
+//			if (p.fromID == nbr.ID && nbr.refID == ID) {
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
+//							{
+//						props.at(j).response = true;
+//						//grab p.msg's count, set it to that vector position's count
+//						//for later summing up, only need to do this if props.at(j).count < 1.
+//						//if(props.at(j).count <= 1)
+//						//{
+//						/*cout << "current p.msg count: " << (*((PropMsg *)p.msg)).count
+//						 << " and position " << (*((PropMsg *)p.msg)).gradient
+//						 << " for cell: " << ID << endl;*/
+//						props.at(j).count = (*((PropMsg *) p.msg)).count;
+//						props.at(j).gradient = (*((PropMsg *) p.msg)).gradient;
+//						// }
+//					}
+//				}
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).response == false) {
+//						all_response = false;
+//						break;
+//					}
+//					all_response = true; //if you get here, you didnt break, all must be true
+//				}
+//
+//				if (all_response) {
+//					int sum = 1;
+//					Vector transErrorCopy = transError;
+//					transErrorCopy.rotateRelative(
+//							rotError + formation.getHeading());
+//					Vector gradSum = gradient - transErrorCopy;
+//					cout << "gradient of " << ID << " is: " << gradient << endl;
+//					for (unsigned int k = 0; k < props.size(); k++) {
+//						sum += props.at(k).count;
+//						gradSum += props.at(k).gradient;
+//					}
+//					if (refID == -1) //seed
+//							{
+//						cout << endl << endl;
+//						cout << endl << endl;
+//						cout << "sum of gradients is => " << gradSum << endl;
+//						cout << "Count of the robots is => " << sum << endl;
+//						//gradSum / sum for the center of mass? needs overloaded in vector
+//						Vector mid = gradSum * (1.0f / (float) sum);
+//						cout << "Middle of automaton is => " << mid << endl;
+//						//cout <<"Magnitude is: " << mid.magnitude() << endl;
+//						//draw x at location
+//						env->getCentroid(mid);
+//						success = true;
+//					} else {
+//						PropMsg *prop = new PropMsg();
+//						(*(PropMsg *) prop).count = sum; //FCntrMsg.gradient
+//						(*(PropMsg *) prop).gradient = gradSum; //FCntrMsg.gradient
+//						env->sendMsg(prop, refID, ID, FCNTR_RESPONSE);
+//						success = true;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return success;
 //}
-	 else if (((isNbr(packet.fromID)) || (packet.fromBroadcast()))
-			&& !(packet.type == NCELL_REQUEST || packet.type == NCELL_RESPONSE
-					|| (packet.type == FCNTR_RESPONSE || packet.type == FCNTR_REQUEST)
-					|| (packet.type == FRAD_RESPONSE || packet.type == FRAD_REQUEST)
-					|| (packet.type == FSEED_RESPONSE || packet.type == FSEED_REQUEST))) {
-		switch (packet.type) {
-		case STATE:
-			success =
-					(packet.msg == NULL) ?
-							false : updateNbr(packet.fromID, *((State *) packet.msg));
-			delete (State *) packet.msg;
-			packet.msg = NULL;
-			break;
-		default:
-			break;
-		}
-	}
-	//receive a request, send out a request to nbrs that ref you
-	else if (packet.type == NCELL_REQUEST || packet.type == NCELL_RESPONSE) {
-		success = processNCell(packet);
-	}
-	//receiving a response back from nbrs that ref you
-	else if (packet.type == FCNTR_REQUEST || packet.type == FCNTR_RESPONSE) {
-		success = processFcntr(packet);
-	} else if (packet.type == FRAD_REQUEST || packet.type == FRAD_RESPONSE) {
-		success = processFRad(packet);
-	} else if (packet.type == FSEED_REQUEST || packet.type == FSEED_RESPONSE) {
-		success = processFSeed(packet);
-	}
-
-	return success;
-}
-
-bool Cell::processNCell(Packet &p) {
-	bool success = false;
-	if (p.type == NCELL_REQUEST) {
-		//If size is != 0, clear out the entire list and re-calculate.
-		//wonder if the messages are still floating around
-		//if information has been calculated previously, we need to erase it,
-		//and recalculate it
-		//this doesnt work for radius since the radius is computed only if NCELLS
-		//and FCNTR have been calculated
-		//
-		if (props.size() != 0) {
-			props.erase(props.begin(), props.end());
-			success = true;
-		}
-
-		bool is_ref_nbr = false;
-		Neighbor nbr;
-		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-
-			if (nbr.refID == ID) //this nbr references you!
-					{
-				//send msg on to this nbr.
-				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-
-				PropMsg *propm = new PropMsg();
-				propm->toID = nbr.ID;
-				propm->count = 0;
-				propm->response = false;
-
-				props.push_back(*propm); //here and not elsewhere
-				env->sendMsg(p.msg, nbr.ID, ID, NCELL_REQUEST);
-				is_ref_nbr = true;
-				success = true;
-			}
-			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
-					{
-				//if this nbr doesnt ref you, and none have, you're at edge,
-				//send response msg with count +1;
-				// cout << "at and edge with ID: "
-				// << ID << " and my gradient is: " << gradient << endl;
-				PropMsg *prop = new PropMsg();
-				(*(PropMsg *) prop).count = 1;
-				env->sendMsg(prop, refID, ID, NCELL_RESPONSE);
-				success = true;
-			}
-		}
-
-	} else if (p.type == NCELL_RESPONSE) {
-
-		Neighbor nbr;
-		bool all_response = false;
-		// cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-			//check if msg came from a nbr who references you
-			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
-							{
-						props.at(j).response = true;
-						//following statement grabs the most recent "count" that's out there,
-						props.at(j).count = (*((PropMsg *) p.msg)).count; //FCntrMsg.gradient
-					}
-				}
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).response == false) {
-						all_response = false;
-						break;
-					}
-					all_response = true; //if you get here, you didnt break, all must be true
-				}
-
-				if (all_response) {
-					int sum = 1;
-					//cout << "gradient of " << ID << " is: " << gradient << endl;
-					for (unsigned int k = 0; k < props.size(); k++) {
-						sum += props.at(k).count;
-					}
-					if (refID == -1) //seed
-							{
-						cout << endl << endl;
-						cout << endl << endl;
-						cout << "Count of the robots is => " << sum << endl;
-						success = true;
-					} else {
-						PropMsg *prop = new PropMsg();
-						(*(PropMsg *) prop).count = sum; //FCntrMsg.gradient
-						env->sendMsg(prop, refID, ID, NCELL_RESPONSE);
-						success = true;
-					}
-				}
-			}
-		}
-	}
-	return success;
-}
-
-bool Cell::processFcntr(Packet &p) {
-	//If size is != 0, clear out the entire list and re-calculate.
-	bool success = false;
-	if (p.type == FCNTR_REQUEST) {
-		if (props.size() != 0) {
-			props.erase(props.begin(), props.end());
-			success = true;
-
-		}
-		bool is_ref_nbr = false;
-		Neighbor nbr;
-		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-
-			if (nbr.refID == ID) //this nbr references you!
-					{
-				//send msg on to this nbr.
-				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-				PropMsg *propm = new PropMsg();
-				propm->toID = nbr.ID;
-				propm->count = 0;
-				propm->response = false;
-
-				props.push_back(*propm); // a pointer? shouldnt it be a copy?
-				env->sendMsg(p.msg, nbr.ID, ID, FCNTR_REQUEST);
-				is_ref_nbr = true;
-				success = true;
-			}
-			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
-					{
-				//if this nbr doesnt ref you, and none have, you're at edge,
-				//send response msg with count +1;
-				cout << "at and edge with ID: " << ID << " and my gradient is: "
-						<< gradient << endl;
-				PropMsg *prop = new PropMsg();
-				(*(PropMsg *) prop).count = 1;
-				Vector transErrorCopy = transError;
-				transErrorCopy.rotateRelative(
-						rotError + formation.getHeading());
-				(*(PropMsg *) prop).gradient = gradient - transErrorCopy;
-				env->sendMsg(prop, refID, ID, FCNTR_RESPONSE);
-				success = true;
-			}
-		}
-	} else if (p.type == FCNTR_RESPONSE) {
-
-		Neighbor nbr;
-		bool all_response = false;
-		//maybe cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-			//if msg came from a nbr who references you
-			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
-							{
-						props.at(j).response = true;
-						//grab p.msg's count, set it to that vector position's count
-						//for later summing up, only need to do this if props.at(j).count < 1.
-						//if(props.at(j).count <= 1)
-						//{
-						/*cout << "current p.msg count: " << (*((PropMsg *)p.msg)).count
-						 << " and position " << (*((PropMsg *)p.msg)).gradient
-						 << " for cell: " << ID << endl;*/
-						props.at(j).count = (*((PropMsg *) p.msg)).count;
-						props.at(j).gradient = (*((PropMsg *) p.msg)).gradient;
-						// }
-					}
-				}
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).response == false) {
-						all_response = false;
-						break;
-					}
-					all_response = true; //if you get here, you didnt break, all must be true
-				}
-
-				if (all_response) {
-					int sum = 1;
-					Vector transErrorCopy = transError;
-					transErrorCopy.rotateRelative(
-							rotError + formation.getHeading());
-					Vector gradSum = gradient - transErrorCopy;
-					cout << "gradient of " << ID << " is: " << gradient << endl;
-					for (unsigned int k = 0; k < props.size(); k++) {
-						sum += props.at(k).count;
-						gradSum += props.at(k).gradient;
-					}
-					if (refID == -1) //seed
-							{
-						cout << endl << endl;
-						cout << endl << endl;
-						cout << "sum of gradients is => " << gradSum << endl;
-						cout << "Count of the robots is => " << sum << endl;
-						//gradSum / sum for the center of mass? needs overloaded in vector
-						Vector mid = gradSum * (1.0f / (float) sum);
-						cout << "Middle of automaton is => " << mid << endl;
-						//cout <<"Magnitude is: " << mid.magnitude() << endl;
-						//draw x at location
-						env->getCentroid(mid);
-						success = true;
-					} else {
-						PropMsg *prop = new PropMsg();
-						(*(PropMsg *) prop).count = sum; //FCntrMsg.gradient
-						(*(PropMsg *) prop).gradient = gradSum; //FCntrMsg.gradient
-						env->sendMsg(prop, refID, ID, FCNTR_RESPONSE);
-						success = true;
-					}
-				}
-			}
-		}
-	}
-	return success;
-}
-
-bool Cell::processFRad(Packet &p) {
-	//If size is != 0, clear out the entire list and re-calculate.
-	bool success = false;
-	if (p.type == FRAD_REQUEST) {
-		bool is_ref_nbr = false;
-		Neighbor nbr;
-		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-
-			if (nbr.refID == ID) //this nbr references you!
-					{
-				//send msg on to this nbr.
-				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-
-				PropMsg *propm = new PropMsg();
-				propm->toID = nbr.ID;
-				propm->count = 0;
-				propm->response = false;
-
-				props.push_back(*propm); // a pointer? shouldnt it be a copy?
-				env->sendMsg(p.msg, nbr.ID, ID, FRAD_REQUEST);
-				is_ref_nbr = true;
-				success = true;
-			}
-			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
-					{
-				//if this nbr doesnt ref you, and none have, you're at edge,
-				//send response msg with count +1;
-				PropMsg *prop = new PropMsg();
-				Vector transErrorCopy = transError;
-				transErrorCopy.rotateRelative(
-						rotError + formation.getHeading());
-				(*(PropMsg *) prop).radius = ((gradient - transErrorCopy)
-						- env->centroid).magnitude(); //calculation;
-				env->sendMsg(prop, refID, ID, FRAD_RESPONSE);
-				success = true;
-			}
-		}
-	} else if (p.type == FRAD_RESPONSE) {
-
-		Neighbor nbr;
-		bool all_response = false;
-		// cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-			//if msg came from a nbr who references you
-			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
-							{
-						props.at(j).response = true;
-						props.at(j).radius = (*((PropMsg *) p.msg)).radius;
-					}
-				}
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).response == false) {
-						all_response = false;
-						break;
-					}
-					all_response = true; //if you get here, you didnt break, all must be true
-				}
-
-				if (all_response) {
-					//cout << "gradient of " << ID << " is: " << gradient << endl;
-					Vector transErrorCopy = transError;
-					transErrorCopy.rotateRelative(
-							rotError + formation.getHeading());
-					float maxRadius = ((gradient - transErrorCopy)
-							- env->centroid).magnitude();
-					for (unsigned int k = 0; k < props.size(); k++) {
-						//compute max radius between mine and the best in my list
-						if (maxRadius < props.at(k).radius) {
-							maxRadius = props.at(k).radius;
-						}
-					}
-					if (refID == -1) //seed
-							{
-						cout << "Radius = " << maxRadius << endl;
-						env->getRadius(maxRadius);
-						success = true;
-					} else {
-						PropMsg *prop = new PropMsg();
-						(*(PropMsg *) prop).radius = maxRadius; //FCntrMsg.gradient
-						env->sendMsg(prop, refID, ID, FRAD_RESPONSE);
-						success = true;
-					}
-				}
-			}
-		}
-	}
-	return success;
-}
-
-bool Cell::processFSeed(Packet &p) {
-	//If size is != 0, clear out the entire list and re-calculate.
-	bool success = false;
-	if (p.type == FSEED_REQUEST) {
-		bool is_ref_nbr = false;
-		Neighbor nbr;
-		//loop through nbrs
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-
-			if (nbr.refID == ID) //this nbr references you!
-					{
-				//send msg on to this nbr.
-				//make copy of p.msg, push it onto props, fwd on the message to this nbr
-
-				PropMsg *propm = new PropMsg();
-				propm->toID = nbr.ID;
-				propm->count = 0;
-				propm->response = false;
-
-				props.push_back(*propm); // a pointer? shouldnt it be a copy?
-				env->sendMsg(p.msg, nbr.ID, ID, FSEED_REQUEST);
-				is_ref_nbr = true;
-				success = true;
-			}
-			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
-					{
-				//if this nbr doesnt ref you, and none have, you're at edge,
-				//send response msg with count +1;
-				PropMsg *prop = new PropMsg();
-				//may hve to do the same trick with error as i did with radius
-				//Vector transErrorCopy = transError;
-				//transErrorCopy.rotateRelative(rotError + formation.getHeading());
-				(*(PropMsg *) prop).distance = (gradient - env->centroid);
-				env->sendMsg(prop, refID, ID, FSEED_RESPONSE);
-				success = true;
-			}
-		}
-	} else if (p.type == FSEED_RESPONSE) {
-
-		Neighbor nbr;
-		bool all_response = false;
-		//maybe cycle through nbrs in your props list?
-		for (int i = 0; i < getNNbrs(); i++) {
-			nbr = at(i);
-			//if msg came from a nbr who references you
-			if (p.fromID == nbr.ID && nbr.refID == ID) {
-				for (unsigned int j = 0; j < props.size(); j++) {
-					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
-							{
-						props.at(j).response = true;
-						props.at(j).distance = (*((PropMsg *) p.msg)).distance;
-					}
-				}
-				for (unsigned int j = 0; j < props.size(); j++)
-				{
-					if (props.at(j).response == false)
-					{
-						all_response = false;
-						break;
-					}
-					all_response = true; //if you get here, you didnt break, all must be true
-				}
-
-				if (all_response) {
-					//cout << "gradient of " << ID << " is: " << gradient << endl;
-					//Vector transErrorCopy = transError;
-					//transErrorCopy.rotateRelative(rotError + formation.getHeading());
-					// float maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
-					float minDist = (gradient - env->centroid).magnitude();
-					Vector minVector = (gradient - env->centroid);
-					for (unsigned int k = 0; k < props.size(); k++)
-					{
-						//compute max radius between mine and the best in my list
-						if (minDist > (props.at(k).distance).magnitude())
-						{
-							minDist = (props.at(k).distance).magnitude();
-							minVector = props.at(k).distance;
-						}
-					}
-					if (refID == -1) //seed
-							{
-						cout << "Distance = " << minDist << endl;
-						cout << "Cell at " << (env->centroid) + minVector
-								<< " should be seed." << endl;
-						env->getDistance(env->centroid + minVector);
-						success = true;
-					}
-
-					else
-					{
-						PropMsg *prop = new PropMsg();
-						(*(PropMsg *) prop).distance = minVector; //FCntrMsg.gradient
-						env->sendMsg(prop, refID, ID, FSEED_RESPONSE);
-						success = true;
-					}
-				}
-			}
-		}
-	}
-	return success;
-}
+//
+//bool Cell::processFRad(Packet &p) {
+//	//If size is != 0, clear out the entire list and re-calculate.
+//	bool success = false;
+//	if (p.type == FRAD_REQUEST) {
+//		bool is_ref_nbr = false;
+//		Neighbor nbr;
+//		//loop through nbrs
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//
+//			if (nbr.refID == ID) //this nbr references you!
+//					{
+//				//send msg on to this nbr.
+//				//make copy of p.msg, push it onto props, fwd on the message to this nbr
+//
+//				PropMsg *propm = new PropMsg();
+//				propm->toID = nbr.ID;
+//				propm->count = 0;
+//				propm->response = false;
+//
+//				props.push_back(*propm); // a pointer? shouldnt it be a copy?
+//				env->sendMsg(p.msg, nbr.ID, ID, FRAD_REQUEST);
+//				is_ref_nbr = true;
+//				success = true;
+//			}
+//			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
+//					{
+//				//if this nbr doesnt ref you, and none have, you're at edge,
+//				//send response msg with count +1;
+//				PropMsg *prop = new PropMsg();
+//				Vector transErrorCopy = transError;
+//				transErrorCopy.rotateRelative(
+//						rotError + formation.getHeading());
+//				(*(PropMsg *) prop).radius = ((gradient - transErrorCopy)
+//						- env->centroid).magnitude(); //calculation;
+//				env->sendMsg(prop, refID, ID, FRAD_RESPONSE);
+//				success = true;
+//			}
+//		}
+//	} else if (p.type == FRAD_RESPONSE) {
+//
+//		Neighbor nbr;
+//		bool all_response = false;
+//		// cycle through nbrs in your props list?
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//			//if msg came from a nbr who references you
+//			if (p.fromID == nbr.ID && nbr.refID == ID) {
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
+//							{
+//						props.at(j).response = true;
+//						props.at(j).radius = (*((PropMsg *) p.msg)).radius;
+//					}
+//				}
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).response == false) {
+//						all_response = false;
+//						break;
+//					}
+//					all_response = true; //if you get here, you didnt break, all must be true
+//				}
+//
+//				if (all_response) {
+//					//cout << "gradient of " << ID << " is: " << gradient << endl;
+//					Vector transErrorCopy = transError;
+//					transErrorCopy.rotateRelative(
+//							rotError + formation.getHeading());
+//					float maxRadius = ((gradient - transErrorCopy)
+//							- env->centroid).magnitude();
+//					for (unsigned int k = 0; k < props.size(); k++) {
+//						//compute max radius between mine and the best in my list
+//						if (maxRadius < props.at(k).radius) {
+//							maxRadius = props.at(k).radius;
+//						}
+//					}
+//					if (refID == -1) //seed
+//							{
+//						cout << "Radius = " << maxRadius << endl;
+//						env->getRadius(maxRadius);
+//						success = true;
+//					} else {
+//						PropMsg *prop = new PropMsg();
+//						(*(PropMsg *) prop).radius = maxRadius; //FCntrMsg.gradient
+//						env->sendMsg(prop, refID, ID, FRAD_RESPONSE);
+//						success = true;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return success;
+//}
+//
+//bool Cell::processFSeed(Packet &p) {
+//	//If size is != 0, clear out the entire list and re-calculate.
+//	bool success = false;
+//	if (p.type == FSEED_REQUEST) {
+//		bool is_ref_nbr = false;
+//		Neighbor nbr;
+//		//loop through nbrs
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//
+//			if (nbr.refID == ID) //this nbr references you!
+//					{
+//				//send msg on to this nbr.
+//				//make copy of p.msg, push it onto props, fwd on the message to this nbr
+//
+//				PropMsg *propm = new PropMsg();
+//				propm->toID = nbr.ID;
+//				propm->count = 0;
+//				propm->response = false;
+//
+//				props.push_back(*propm); // a pointer? shouldnt it be a copy?
+//				env->sendMsg(p.msg, nbr.ID, ID, FSEED_REQUEST);
+//				is_ref_nbr = true;
+//				success = true;
+//			}
+//			if (i == size() - 1 && is_ref_nbr == false) //no one has ref'd you.
+//					{
+//				//if this nbr doesnt ref you, and none have, you're at edge,
+//				//send response msg with count +1;
+//				PropMsg *prop = new PropMsg();
+//				//may hve to do the same trick with error as i did with radius
+//				//Vector transErrorCopy = transError;
+//				//transErrorCopy.rotateRelative(rotError + formation.getHeading());
+//				(*(PropMsg *) prop).distance = (gradient - env->centroid);
+//				env->sendMsg(prop, refID, ID, FSEED_RESPONSE);
+//				success = true;
+//			}
+//		}
+//	} else if (p.type == FSEED_RESPONSE) {
+//
+//		Neighbor nbr;
+//		bool all_response = false;
+//		//maybe cycle through nbrs in your props list?
+//		for (int i = 0; i < getNNbrs(); i++) {
+//			nbr = at(i);
+//			//if msg came from a nbr who references you
+//			if (p.fromID == nbr.ID && nbr.refID == ID) {
+//				for (unsigned int j = 0; j < props.size(); j++) {
+//					if (props.at(j).toID == p.fromID) //msg came from a cell we sent to
+//							{
+//						props.at(j).response = true;
+//						props.at(j).distance = (*((PropMsg *) p.msg)).distance;
+//					}
+//				}
+//				for (unsigned int j = 0; j < props.size(); j++)
+//				{
+//					if (props.at(j).response == false)
+//					{
+//						all_response = false;
+//						break;
+//					}
+//					all_response = true; //if you get here, you didnt break, all must be true
+//				}
+//
+//				if (all_response) {
+//					//cout << "gradient of " << ID << " is: " << gradient << endl;
+//					//Vector transErrorCopy = transError;
+//					//transErrorCopy.rotateRelative(rotError + formation.getHeading());
+//					// float maxRadius =  ((gradient-transErrorCopy)-env->centroid).magnitude();
+//					float minDist = (gradient - env->centroid).magnitude();
+//					Vector minVector = (gradient - env->centroid);
+//					for (unsigned int k = 0; k < props.size(); k++)
+//					{
+//						//compute max radius between mine and the best in my list
+//						if (minDist > (props.at(k).distance).magnitude())
+//						{
+//							minDist = (props.at(k).distance).magnitude();
+//							minVector = props.at(k).distance;
+//						}
+//					}
+//					if (refID == -1) //seed
+//							{
+//						cout << "Distance = " << minDist << endl;
+//						cout << "Cell at " << (env->centroid) + minVector
+//								<< " should be seed." << endl;
+//						env->getDistance(env->centroid + minVector);
+//						success = true;
+//					}
+//
+//					else
+//					{
+//						PropMsg *prop = new PropMsg();
+//						(*(PropMsg *) prop).distance = minVector; //FCntrMsg.gradient
+//						env->sendMsg(prop, refID, ID, FSEED_RESPONSE);
+//						success = true;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return success;
+//}
 
 // Moves the robot cell using the current translational and
 // rotational errors, activating and returning the appropriate

@@ -92,12 +92,12 @@ class Formation: protected vector<Function>
         // <virtual overloaded operators>
         virtual Formation& operator =(const Formation &f);
 
-    protected:
-
-        // <protected data members>
         float radius, heading;
         Vector  seedGradient;
         int   seedID, formationID;
+    protected:
+
+        // <protected data members>
 
         // <protected utility functions>
         float fIntersect(const Function f = DEFAULT_FORMATION_FUNCTION,
