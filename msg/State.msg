@@ -1,0 +1,9 @@
+Formation formation
+Vector frp
+Relationship[] relationships
+Vector linear_error
+float64 angular_error
+int32 timestep
+int32 reference_id
+float64 temperature
+float64 heat

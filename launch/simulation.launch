@@ -1,0 +1,11 @@
+<launch>
+	<node pkg="Simulator" type="environment_msg" name="environment" args="7 3.14"/>
+	<node pkg="Simulator" type="cell_msg" name="cell0"/>
+	// for all cell
+	<node pkg="Simulator" type="cell_msg" name="robot1"/>
+	<node pkg="Simulator" type="cell_msg" name="robot2"/>
+	<node pkg="Simulator" type="cell_msg" name="robot3"/>
+	<node pkg="Simulator" type="cell_msg" name="robot4"/>
+	<node pkg="Simulator" type="cell_msg" name="robot5"/>
+	<node pkg="Simulator" type="cell_msg" name="robot6"/>
+</launch>
