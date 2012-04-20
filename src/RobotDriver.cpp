@@ -150,24 +150,25 @@ int main(int argc, char **argv)
 	ros::spinOnce();
 
 	// Service Client - blank request, gets formationIndex response
-	ros::init(argc, argv, "formation_index_client");
-	ros::NodeHandle clientNode;
-	ros::ServiceClient client = clientNode.serviceClient<Simulator::FormationIndex>("formation_index");
-	Simulator::FormationIndex srv;
-//	srv.request.a = atoll(argv[1]);
-//	srv.request.b = atoll(argv[2]);
-	ROS_INFO("Trying to access the formationIndex");
+//	ros::init(argc, argv, "formation_index_client");
+//	ros::NodeHandle clientNode;
+//	ros::ServiceClient client = clientNode.serviceClient<Simulator::FormationIndex>("formation_index");
+//	Simulator::FormationIndex srv;
+////	srv.request.a = atoll(argv[1]);
+////	srv.request.b = atoll(argv[2]);
+//	ROS_INFO("Trying to access the formationIndex");
+//
+//	// Uses an asynchronous spinner to account for the blocking service client call
+//	ros::AsyncSpinner spinner(1);
+//	spinner.start();
+//
+//	if (client.call(srv))
+//		ROS_INFO("formation index: %ld", (long int)srv.response.formationIndex);
+//	else
+//		ROS_ERROR("Failed to call service formation_index");
+//
+//	spinner.stop();
 
-	// Uses an asynchronous spinner to account for the blocking service client call
-	ros::AsyncSpinner spinner(1);
-	spinner.start();
-
-	if (client.call(srv))
-		ROS_INFO("formation index: %ld", (long int)srv.response.formationIndex);
-	else
-		ROS_ERROR("Failed to call service formation_index");
-
-	spinner.stop();
 
 	ros::init(argc, argv, "robot_driver");
 	ros::NodeHandle aNode;
@@ -188,9 +189,24 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
+
+//	if(g_environment->getCell(0) != NULL)
+//		cout << g_environment->getCell(0)->formation.setFormationIndexFromService();
+//	else
+//		cout << "no el worko!\n";
+
+
+
+
+
+
+
+
 	// Primary ROS loop
 	while(ros::ok())
 	{
+
+
 		keyboardInput();
 
 		std_msgs::String msg;

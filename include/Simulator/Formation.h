@@ -7,11 +7,14 @@
 // preprocessor directives
 #ifndef FORMATION_H
 #define FORMATION_H
+
+#include"Simulator/FormationIndex.h"
+
 #include <vector>
 #include <Simulator/Relationship.h>
 using namespace std;
 
-
+#include <ros/ros.h>	// Used for service to get FormationIndex
 
 // mathematical functional type redefinition -  A Function is a function that takes a float and returns a float
 typedef float (*Function)(const float);
@@ -61,6 +64,10 @@ class Formation: protected vector<Function>
         bool setSeedID(const int sID = ID_BROADCAST);
         bool setFormationID(const int fID = -1);
         bool setHeading(const float theta = 0.0f);
+
+        bool setFormationIndexFromService();
+        ros::ServiceClient client;
+        Simulator::FormationIndex srv;
 
         // <public accessor functions>
         Function         getFunction(const int pos = 0) const;
