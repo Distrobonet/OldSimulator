@@ -176,6 +176,11 @@ int main(int argc, char **argv)
 
 	displayMenu();
 
+	// create handler for interrupts (i.e., ^C)
+	if (signal(SIGINT, SIG_IGN) != SIG_IGN)
+		signal(SIGINT, terminate);
+	signal(SIGPIPE, SIG_IGN);
+
 	// Only continue program once a selection has been made
 	while(CURRENT_SELECTION == -1)
 	{
