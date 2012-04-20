@@ -56,7 +56,6 @@ Robot::Robot(const float dx,    const float dy, const float dz,
 {
     init(dx, dy, dz, theta);
     ID = numOfRobots++;
-
 }
 
 
@@ -72,9 +71,6 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
     heading.showLine = DEFAULT_ROBOT_SHOW_LINE;
     heading.showHead = DEFAULT_ROBOT_SHOW_HEAD;
     showFilled       = DEFAULT_ROBOT_SHOW_FILLED;
-
-
-    Robot *tempBotPtr = this;
 	ros::NodeHandle aNode;
 
 	robotX = velocityX;
