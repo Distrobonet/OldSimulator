@@ -119,7 +119,6 @@ bool Environment::init(const int numberOfRobots, const Formation f)
 	formationID  = 0;
 	bool result = true;
 	startFormation = false;
-
 	initCells(numberOfRobots, f);
 	Robot::numOfRobots--;
 	initRobots();
@@ -159,16 +158,18 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 		c->x = formation.getRadius() * ((float)i - (float)(getNumberOfCells() - 1) / 2.0f);
 		c->y = 0.0f;
 		c->setHeading(formation.getHeading());
-		string cellName = "robot_";
-		converter<<i;
-		cellName.append(converter.str());
-		cellName.append("/state");
-		c->state_pub = c->stateNode.advertise < Cell::State > (cellName, 1);
+		//TODO:Add this is when the number of cells we have is actually correct
+//		string cellName = "robot_";
+//		converter<<i;
+//		cellName.append(converter.str());
+//		cellName.append("/state");
+//		c->state_pub = c->stateNode.advertise < Cell::State > (cellName, 1);
 		cells.push_back(c);
 
 		if(VERBOSE)
 			printf("iterating through cells...\n");
 	}
+
 	
 	// initialize cell's neighborhoods
 	if (!initNbrs())
