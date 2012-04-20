@@ -163,6 +163,7 @@ class Robot: public Circle
         bool     processPackets();
 
 
+        void setRobotID(int newID){ID = newID;}
 
     protected:
 
