@@ -17,13 +17,13 @@
 // this environment to the parameterized values.
 Environment::Environment(const int numRobots, const Formation formation)
 {
-  if (!init(numRobots, formation))
+	if (!init(numRobots, formation))
 	  clear();
-	Robot *tempBotPtr = new Robot;
+
 	ros::NodeHandle envNode;
 
 	for(int i = 0; i < numOfRobots; i++){
-		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, tempBotPtr));
+		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, robots[i]));
 		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
 	}
 }   // Environment(const int, const Formation, const Color)
@@ -110,23 +110,19 @@ bool Environment::step()
 // returning true if successful, false otherwise.
 bool Environment::init(const int numberOfRobots, const Formation f)
 {
-  srand(time(NULL));
+	numOfRobots  = numberOfRobots;
+	formation    = f;
+	formation.setFormationID(0);
+	formationID  = 0;
+	bool result = true;
+	startFormation = false;
 
-  numOfRobots  = numberOfRobots;
+	initCells(numberOfRobots, f);
+	initRobots();
 
-  formation    = f;
-  formation.setFormationID(0);
-  formationID  = 0;
-
-  bool result = true;
-  startFormation = false;
-  initCells(numberOfRobots, f);
-  //system("PAUSE");
-  initRobots();
-
-  if (VERBOSE)
-	  cout << "finished initCells()\n";
-  return result;
+	if (VERBOSE)
+		cout << "finished initCells()\n";
+	return result;
 }   // init(const int, const Formation)
 
 
@@ -648,13 +644,13 @@ bool Environment::showHeading(const bool show)
 
 bool Environment::addRobot(float x, float y, float z, float theta)
 {
-  if (VERBOSE)
-	  cout << "new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n" <<  x << y << z << theta;
-  Robot *robot = new Robot(x, y, z, theta);
-  robot-> setEnvironment(this);
+	if (VERBOSE)
+		cout << "new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n" <<  x << y << z << theta;
 
-  robots.push_back(robot);
-  return true;
+	Robot *robot = new Robot(x, y, z, theta);
+	robot-> setEnvironment(this);
+	robots.push_back(robot);
+	return true;
 }
 
 
@@ -811,10 +807,9 @@ Robot* Environment::getRobot(int id)
 
   for(unsigned i = 0; i < robots.size(); i++)
   {
-    if(robots[i]->getID()== rID)
-      robot = robots[i];
+	  if(robots[i]->getID()== rID)
+		  return robots[i];
   }
-  return robot;
 }
 
 void Environment::settleAuction(Cell* auctionCell,int rID)
