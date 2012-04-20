@@ -187,36 +187,35 @@ bool Environment::initNbrs(const int nNbrs)
 		c->clearNbrs();
 		int leftNbrID, rightNbrID;
 
-
 		switch (i) {
-		case 0:
-			leftNbrID = i + 1;
-			rightNbrID = i + 2;
-			continue;
-		case 1:
-			leftNbrID = i + 2;
-			rightNbrID = i - 1;
-			continue;
-		case 2:
-			leftNbrID = i - 1;
-			rightNbrID = i + 2;
-			continue;
-		default:
-			leftNbrID = i + 2;
-			rightNbrID = i - 2;
-			continue;
+			case 0:
+				leftNbrID = i + 1;
+				rightNbrID = i + 2;
+				break;
+			case 1:
+				leftNbrID = i + 2;
+				rightNbrID = i - 1;
+				break;
+			case 2:
+				leftNbrID = i - 1;
+				rightNbrID = i + 2;
+				break;
+			default:
+				leftNbrID = i + 2;
+				rightNbrID = i - 2;
+				break;
 		}
 
 		if ((i >= 0) && (c->addNbr(leftNbrID)))
 		{
 			c->leftNbr  = c->nbrWithID(leftNbrID);
-			ros::Subscriber left_Nbr_Sub = stateNode.subscribe("leftNbr", 1000, &Cell::stateCallback, &*c);
+			//ros::Subscriber left_Nbr_Sub = stateNode.subscribe("leftNbr", 1000, &Cell::stateCallback, &*c);
 		}
 
 		if ((i < getNumberOfCells()) && (c->addNbr(rightNbrID)))
 		{
 			c->rightNbr = c->nbrWithID(i + rightNbrID);
-			ros::Subscriber right_Nbr_Sub = stateNode.subscribe("rightNbr", 1000, &Cell::stateCallback, &*c);
+			//ros::Subscriber right_Nbr_Sub = stateNode.subscribe("rightNbr", 1000, &Cell::stateCallback, &*c);
 		}
 
 		// TODO: fix this neighborhood
