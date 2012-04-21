@@ -168,8 +168,6 @@ int main(int argc, char **argv)
 
 
 	ros::init(argc, argv, "robot_driver");
-	ros::NodeHandle aNode;
-	ros::Rate loop_rate(10);
 
 	displayMenu();
 
@@ -178,14 +176,6 @@ int main(int argc, char **argv)
 	{
 		keyboardInput();
 	}
-
-	// initialize and execute the robot cell environment
-//	if (!initEnv(CURRENT_SELECTION))
-//	{
-//		cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
-//		return 1;
-//	}
-
 
 //** Testing Stuff **//
 //	// Test FormationIndex service
@@ -201,30 +191,6 @@ int main(int argc, char **argv)
 //	for(uint i = 0; i < g_environment->getRobots().size(); i++)
 //		cout << "robot " << i << " ID: "<< g_environment->getRobots()[i]->getID() << endl;
 
-
-
-	// Primary ROS loop
-	while(ros::ok())
-	{
-		keyboardInput();
-
-		// convert msg to string
-		std_msgs::String msg;
-		std::stringstream ss;
-		ss << CURRENT_SELECTION;
-		msg.data = ss.str();
-
-		// publish formation message
-		ros::Publisher formation_pub = aNode.advertise<std_msgs::String>("formation", 1000);
-		formation_pub.publish(msg);
-
-		// update the robot cell environment
-		g_environment-> update(true);
-		ros::spinOnce();
-		loop_rate.sleep();
-	}
-
-  //deinitEnv();
   return 0;
 }
 
