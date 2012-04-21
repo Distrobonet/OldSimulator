@@ -2,17 +2,22 @@
 import roslib.message
 import struct
 
+import Simulator.msg
 
 class RelationshipMessage(roslib.message.Message):
-  _md5sum = "c5e4a7d59c68f74eabcec876a00216aa"
+  _md5sum = "8dd66b6189dbb1e0ac86b46da7968d70"
   _type = "Simulator/RelationshipMessage"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """#VectorMessage desired
-#VectorMessage actual
+  _full_text = """VectorMessage desired
+VectorMessage actual
 int32 id
+================================================================================
+MSG: Simulator/VectorMessage
+float64 x
+float64 y
 """
-  __slots__ = ['id']
-  _slot_types = ['int32']
+  __slots__ = ['desired','actual','id']
+  _slot_types = ['Simulator/VectorMessage','Simulator/VectorMessage','int32']
 
   def __init__(self, *args, **kwds):
     """
@@ -22,7 +27,7 @@ int32 id
     changes.  You cannot mix in-order arguments and keyword arguments.
     
     The available fields are:
-       id
+       desired,actual,id
     
     @param args: complete set of field values, in .msg order
     @param kwds: use keyword arguments corresponding to message field names
@@ -31,9 +36,15 @@ int32 id
     if args or kwds:
       super(RelationshipMessage, self).__init__(*args, **kwds)
       #message fields cannot be None, assign default values for those that are
+      if self.desired is None:
+        self.desired = Simulator.msg.VectorMessage()
+      if self.actual is None:
+        self.actual = Simulator.msg.VectorMessage()
       if self.id is None:
         self.id = 0
     else:
+      self.desired = Simulator.msg.VectorMessage()
+      self.actual = Simulator.msg.VectorMessage()
       self.id = 0
 
   def _get_types(self):
@@ -49,7 +60,8 @@ int32 id
     @type  buff: StringIO
     """
     try:
-      buff.write(_struct_i.pack(self.id))
+      _x = self
+      buff.write(_struct_4di.pack(_x.desired.x, _x.desired.y, _x.actual.x, _x.actual.y, _x.id))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -60,10 +72,15 @@ int32 id
     @type  str: str
     """
     try:
+      if self.desired is None:
+        self.desired = Simulator.msg.VectorMessage()
+      if self.actual is None:
+        self.actual = Simulator.msg.VectorMessage()
       end = 0
+      _x = self
       start = end
-      end += 4
-      (self.id,) = _struct_i.unpack(str[start:end])
+      end += 36
+      (_x.desired.x, _x.desired.y, _x.actual.x, _x.actual.y, _x.id,) = _struct_4di.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
@@ -78,7 +95,8 @@ int32 id
     @type  numpy module
     """
     try:
-      buff.write(_struct_i.pack(self.id))
+      _x = self
+      buff.write(_struct_4di.pack(_x.desired.x, _x.desired.y, _x.actual.x, _x.actual.y, _x.id))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -91,13 +109,18 @@ int32 id
     @type  numpy: module
     """
     try:
+      if self.desired is None:
+        self.desired = Simulator.msg.VectorMessage()
+      if self.actual is None:
+        self.actual = Simulator.msg.VectorMessage()
       end = 0
+      _x = self
       start = end
-      end += 4
-      (self.id,) = _struct_i.unpack(str[start:end])
+      end += 36
+      (_x.desired.x, _x.desired.y, _x.actual.x, _x.actual.y, _x.id,) = _struct_4di.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
-_struct_i = struct.Struct("<i")
+_struct_4di = struct.Struct("<4di")

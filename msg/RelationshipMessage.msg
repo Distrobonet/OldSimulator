@@ -1,3 +1,3 @@
-#VectorMessage desired
-#VectorMessage actual
+VectorMessage desired
+VectorMessage actual
 int32 id

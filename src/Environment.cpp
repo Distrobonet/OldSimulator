@@ -207,7 +207,7 @@ bool Environment::initNbrs(const int nNbrs)
 	{
 //		if (!cells.getHead(c))
 //			return false;
-		ros::NodeHandle stateNode;
+		//ros::NodeHandle stateNode;
 		c = cells.at(i);
 		c->clearNbrs();
 		int leftNbrID, rightNbrID;

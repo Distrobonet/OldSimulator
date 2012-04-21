@@ -140,8 +140,8 @@ int main(int argc, char **argv)
 {
 	// Service
 	ros::init(argc, argv, "formation_server");
-	ros::NodeHandle serverNode;
-	ros::ServiceServer service = serverNode.advertiseService("formation", setFormationMessage);
+	ros::NodeHandle FormationServerNode;
+	ros::ServiceServer formationService = FormationServerNode.advertiseService("formation", setFormationMessage);
 	ROS_INFO("Now serving the formation.");
 	//ros::spin();
 	ros::spinOnce();

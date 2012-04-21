@@ -14,6 +14,8 @@
 
 #include "ros/assert.h"
 
+#include "Simulator/VectorMessage.h"
+#include "Simulator/VectorMessage.h"
 
 namespace Simulator
 {
@@ -22,14 +24,24 @@ struct RelationshipMessage_ {
   typedef RelationshipMessage_<ContainerAllocator> Type;
 
   RelationshipMessage_()
-  : id(0)
+  : desired()
+  , actual()
+  , id(0)
   {
   }
 
   RelationshipMessage_(const ContainerAllocator& _alloc)
-  : id(0)
+  : desired(_alloc)
+  , actual(_alloc)
+  , id(0)
   {
   }
+
+  typedef  ::Simulator::VectorMessage_<ContainerAllocator>  _desired_type;
+   ::Simulator::VectorMessage_<ContainerAllocator>  desired;
+
+  typedef  ::Simulator::VectorMessage_<ContainerAllocator>  _actual_type;
+   ::Simulator::VectorMessage_<ContainerAllocator>  actual;
 
   typedef int32_t _id_type;
   int32_t id;
@@ -43,16 +55,20 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "c5e4a7d59c68f74eabcec876a00216aa"; }
+  static const char* __s_getMD5Sum_() { return "8dd66b6189dbb1e0ac86b46da7968d70"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
   ROS_DEPRECATED const std::string __getMD5Sum() const { return __s_getMD5Sum_(); }
 
 private:
-  static const char* __s_getMessageDefinition_() { return "#VectorMessage desired\n\
-#VectorMessage actual\n\
+  static const char* __s_getMessageDefinition_() { return "VectorMessage desired\n\
+VectorMessage actual\n\
 int32 id\n\
+================================================================================\n\
+MSG: Simulator/VectorMessage\n\
+float64 x\n\
+float64 y\n\
 "; }
 public:
   ROS_DEPRECATED static const std::string __s_getMessageDefinition() { return __s_getMessageDefinition_(); }
@@ -62,6 +78,8 @@ public:
   ROS_DEPRECATED virtual uint8_t *serialize(uint8_t *write_ptr, uint32_t seq) const
   {
     ros::serialization::OStream stream(write_ptr, 1000000000);
+    ros::serialization::serialize(stream, desired);
+    ros::serialization::serialize(stream, actual);
     ros::serialization::serialize(stream, id);
     return stream.getData();
   }
@@ -69,6 +87,8 @@ public:
   ROS_DEPRECATED virtual uint8_t *deserialize(uint8_t *read_ptr)
   {
     ros::serialization::IStream stream(read_ptr, 1000000000);
+    ros::serialization::deserialize(stream, desired);
+    ros::serialization::deserialize(stream, actual);
     ros::serialization::deserialize(stream, id);
     return stream.getData();
   }
@@ -76,6 +96,8 @@ public:
   ROS_DEPRECATED virtual uint32_t serializationLength() const
   {
     uint32_t size = 0;
+    size += ros::serialization::serializationLength(desired);
+    size += ros::serialization::serializationLength(actual);
     size += ros::serialization::serializationLength(id);
     return size;
   }
@@ -108,12 +130,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::Simulator::RelationshipMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "c5e4a7d59c68f74eabcec876a00216aa";
+    return "8dd66b6189dbb1e0ac86b46da7968d70";
   }
 
   static const char* value(const  ::Simulator::RelationshipMessage_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0xc5e4a7d59c68f74eULL;
-  static const uint64_t static_value2 = 0xabcec876a00216aaULL;
+  static const uint64_t static_value1 = 0x8dd66b6189dbb1e0ULL;
+  static const uint64_t static_value2 = 0xac86b46da7968d70ULL;
 };
 
 template<class ContainerAllocator>
@@ -130,9 +152,13 @@ template<class ContainerAllocator>
 struct Definition< ::Simulator::RelationshipMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "#VectorMessage desired\n\
-#VectorMessage actual\n\
+    return "VectorMessage desired\n\
+VectorMessage actual\n\
 int32 id\n\
+================================================================================\n\
+MSG: Simulator/VectorMessage\n\
+float64 x\n\
+float64 y\n\
 ";
   }
 
@@ -152,6 +178,8 @@ template<class ContainerAllocator> struct Serializer< ::Simulator::RelationshipM
 {
   template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
   {
+    stream.next(m.desired);
+    stream.next(m.actual);
     stream.next(m.id);
   }
 
@@ -170,6 +198,12 @@ struct Printer< ::Simulator::RelationshipMessage_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const  ::Simulator::RelationshipMessage_<ContainerAllocator> & v) 
   {
+    s << indent << "desired: ";
+s << std::endl;
+    Printer< ::Simulator::VectorMessage_<ContainerAllocator> >::stream(s, indent + "  ", v.desired);
+    s << indent << "actual: ";
+s << std::endl;
+    Printer< ::Simulator::VectorMessage_<ContainerAllocator> >::stream(s, indent + "  ", v.actual);
     s << indent << "id: ";
     Printer<int32_t>::stream(s, indent + "  ", v.id);
   }
