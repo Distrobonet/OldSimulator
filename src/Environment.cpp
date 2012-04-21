@@ -514,7 +514,7 @@ void Environment::getDistance(Vector dist)
   //send a formation change message for the cell at dist+centroid to be seed
   for (int i = 0; i < getNumberOfCells(); i++)
   {
-    if( ((distance.magnitude()) - (cells[i]->gradient).magnitude()) < 0.01)
+    if( ((distance.magnitude()) - (cells[i]->frp).magnitude()) < 0.01)
     {
       cout << "cell id: " << cells[i]->ID << " is the new seed" << endl;
       Formation formationCopy = formation;

@@ -194,7 +194,7 @@ float Formation::getRadius() const
 
 
 // Returns the seed gradient of this formation.
-Vector Formation::getSeedGradient() const
+Vector Formation::getSeedFrp() const
 {
     return seedFrp;
 }

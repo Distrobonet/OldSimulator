@@ -325,7 +325,7 @@ Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
 
 // Returns the neighbor (in this neighborhood) with the minimum gradient
 // distance as determined by the parameterized difference vector.
-Neighbor* Neighborhood::nbrWithMinGradient(const Vector v)
+Neighbor* Neighborhood::nbrWithMinFrp(const Vector v)
 {
     Neighbor currNbr;
     float  minGrad  = 0.0f, currGrad = 0.0f;
