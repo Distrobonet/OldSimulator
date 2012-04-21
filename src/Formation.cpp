@@ -175,7 +175,7 @@ bool Formation::setHeading(const float theta)
 }
 
 // Sets the Formation Index from the FormationIndex service
-bool Formation::setFormationIndexFromService()
+bool Formation::setFormationFromService()
 {
 	ROS_INFO("Trying to access the formation message");
 
@@ -200,11 +200,6 @@ bool Formation::setFormationIndexFromService()
 		clientNode.shutdown();
 		return false;
 	}
-
-
-
-
-
 }
 
 

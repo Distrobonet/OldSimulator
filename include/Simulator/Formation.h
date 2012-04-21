@@ -44,7 +44,7 @@ class Formation: protected vector<Function>
                   const int      sID   = ID_BROADCAST,
                   const int      fID   = -1,
                   const float    theta = 0.0f);
-	Formation(vector<Function>   f,
+        Formation(vector<Function>   f,
                   const float    r     = DEFAULT_FORMATION_RADIUS,
                   const Vector   sGrad = Vector(),
                   const int      sID   = ID_BROADCAST,
@@ -67,7 +67,7 @@ class Formation: protected vector<Function>
         bool setFormationID(const int fID = -1);
         bool setHeading(const float theta = 0.0f);
 
-        bool setFormationIndexFromService();
+        bool setFormationFromService();
         ros::ServiceClient formationClient;
         Simulator::CurrentFormation srv;
 

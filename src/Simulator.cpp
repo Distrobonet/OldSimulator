@@ -47,7 +47,7 @@ void terminate(int retVal);
 void displayMenu();
 void keyboardInput();
 void clearScreen();
-bool initEnv(const int nRobots, const int formationIndex);
+bool initEnv(const int formationIndex);
 bool deinitEnv();
 bool changeFormation(const int index, const Vector gradient = Vector());
 bool changeFormationSim(const int index, const Vector gradient = Vector());
@@ -118,11 +118,11 @@ bool initEnv(const int nRobots, const int formationIndex);
 
 
 // Service utility function to set the formationIndex being served to the CURRENT_SELECTION
-bool setFormationFromMessage(Simulator::CurrentFormation::Request  &req,
+bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
 		Simulator::CurrentFormation::Response &res )
 {
-  	res.formation.radius = 0;
-  	res.formation.heading = 0;
+  	res.formation.radius = 1.0f;
+  	res.formation.heading = 90.0f;
   	res.formation.seed_frp.x = 0;
   	res.formation.seed_frp.y = 0;
   	res.formation.seed_id = 0;
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 	// Service
 	ros::init(argc, argv, "formation_server");
 	ros::NodeHandle serverNode;
-	ros::ServiceServer service = serverNode.advertiseService("formation", setFormationFromMessage);
+	ros::ServiceServer service = serverNode.advertiseService("formation", setFormationMessage);
 	ROS_INFO("Now serving the formation.");
 	//ros::spin();
 	ros::spinOnce();
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 	}
 
 	// initialize and execute the robot cell environment
-	if (!initEnv(g_nRobots, CURRENT_SELECTION))
+	if (!initEnv(CURRENT_SELECTION))
 	{
 		cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
 		return 1;
@@ -355,7 +355,7 @@ void terminate(int retVal)
 // Parameters:
 //      nRobots       in      the number of robots
 //      formationIndex        in      the index of the initial formation
-bool initEnv(const int nRobots, const int formationIndex)
+bool initEnv(const int formationIndex)
 {
   if (g_environment != NULL)
   {
@@ -366,7 +366,7 @@ bool initEnv(const int nRobots, const int formationIndex)
   Formation formation(formations[formationIndex], g_formationRadius, Vector(),
 		  	  	  g_seedID, ++g_formationID, g_formationHeading);
 
-  if ((g_environment = new Environment(nRobots, formation)) == NULL)
+  if ((g_environment = new Environment(formation)) == NULL)
   {
 	  return false;
   }

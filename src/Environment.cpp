@@ -10,14 +10,15 @@
 #include <stdlib.h>
 
 #define AUCTION_STEP_COUNT (3)
+#define DEFAULT_NUM_ROBOTS  7;
 
 
 
 // Default constructor that initializes
 // this environment to the parameterized values.
-Environment::Environment(const int numRobots, const Formation formation)
+Environment::Environment(const Formation formation)
 {
-	if (!init(numRobots, formation))
+	if (!init(formation))
 	{
 		cout << "\nfailed to initialize environment\n";
 		clear();
@@ -29,6 +30,7 @@ Environment::Environment(const int numRobots, const Formation formation)
 		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, robots[i]));
 		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
 	}
+
 }   // Environment(const int, const Formation, const Color)
 
 
@@ -128,15 +130,15 @@ bool Environment::step()
 
 // Initializes the environment to the parameterized values,
 // returning true if successful, false otherwise.
-bool Environment::init(const int numberOfRobots, const Formation f)
+bool Environment::init(const Formation f)
 {
-	numOfRobots  = numberOfRobots;
+	numOfRobots  = DEFAULT_NUM_ROBOTS;
 	formation    = f;
 	formation.setFormationID(0);
 	formationID  = 0;
 	bool result = true;
 	startFormation = false;
-	initCells(numberOfRobots, f);
+	initCells(f);
 	Robot::numOfRobots--;
 	initRobots();
 
@@ -159,11 +161,11 @@ bool Environment::initRobots()
 
 // Initializes each cell to the parameterized values,
 // returning true if successful, false otherwise.
-bool Environment::initCells(const int numberOfRobots, const Formation f)
+bool Environment::initCells(const Formation f)
 {
 	Cell *c  = new Cell;
 	std::stringstream converter;
-	for (int i = 0; i < numberOfRobots; i++)
+	for (int i = 0; i < numOfRobots; i++)
 	{
 //		if (!cells.getHead(c))
 //			return false;
@@ -187,7 +189,7 @@ bool Environment::initCells(const int numberOfRobots, const Formation f)
 	if (!initNbrs())
 		return false;
 	newestCell = c;
-	return (getNumberOfCells() == numberOfRobots)
+	return (getNumberOfCells() == numOfRobots)
 			&& sendMsg(new Formation(formation), formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
 }
 
