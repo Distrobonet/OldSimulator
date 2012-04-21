@@ -1,5 +1,5 @@
 <launch>
-	<node pkg="Simulator" type="environment_msg" name="environment" args="7"/>
+	<node pkg="Simulator" type="environment_msg" name="environment" args="7 1"/>
 	<node pkg="Simulator" type="cell_msg" name="cell0"/>
 	<node pkg="Simulator" type="cell_msg" name="cell1"/>
 	<node pkg="Simulator" type="cell_msg" name="cell2"/>

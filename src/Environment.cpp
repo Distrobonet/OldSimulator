@@ -10,13 +10,12 @@
 #include <stdlib.h>
 
 #define AUCTION_STEP_COUNT (3)
-#define DEFAULT_NUM_ROBOTS  7;
 
 
 
 // Default constructor that initializes
 // this environment to the parameterized values.
-Environment::Environment(const Formation formation)
+Environment::Environment(int numRobots, const Formation formation)
 {
 	if (!init(formation))
 	{
@@ -24,11 +23,13 @@ Environment::Environment(const Formation formation)
 		clear();
 	}
 
-	ros::NodeHandle envNode;
+	numOfRobots = numRobots;
 
-	for(int i = 0; i < numOfRobots; i++){
-		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, robots[i]));
-		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
+//	ros::NodeHandle envNode;
+//
+//	for(int i = 0; i < numOfRobots; i++){
+//		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, robots[i]));
+//		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
 	}
 
 }   // Environment(const int, const Formation, const Color)
@@ -132,7 +133,6 @@ bool Environment::step()
 // returning true if successful, false otherwise.
 bool Environment::init(const Formation f)
 {
-	numOfRobots  = DEFAULT_NUM_ROBOTS;
 	formation    = f;
 	formation.setFormationID(0);
 	formationID  = 0;
