@@ -62,8 +62,11 @@ void Environment::update(bool doSpin)
 	// ROS loop
 	while(ros::ok())
 	{
-		for(int i = 0; i < cells.size(); i++)
-			Cell temp = cells.at(i)->update(doSpin);
+		for(uint i = 0; i < cells.size(); i++)
+		{
+			Cell *temp = cells.at(i);
+			temp->update(doSpin);
+		}
 
 		ros::spinOnce();
 	}
@@ -157,11 +160,6 @@ bool Environment::initRobots()
 // returning true if successful, false otherwise.
 bool Environment::initCells(const int numberOfRobots, const Formation f)
 {
-	srand(time(NULL));
-//	for (int i = 0; i < numberOfRobots; i++)
-//		if (!addCell())
-//			return false;
-
 	Cell *c  = new Cell;
 	std::stringstream converter;
 	for (int i = 0; i < numberOfRobots; i++)
