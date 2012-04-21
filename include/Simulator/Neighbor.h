@@ -73,7 +73,7 @@ struct Neighbor: Relationship, State
     virtual Neighbor& operator =(const State &s)
     {
         formation  = s.formation;
-        gradient   = s.gradient;
+        frp   = s.frp;
         rels       = s.rels;
         transError = s.transError;
         rotError   = s.rotError;

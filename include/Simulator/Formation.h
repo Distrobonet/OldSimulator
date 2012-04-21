@@ -61,7 +61,7 @@ class Formation: protected vector<Function>
         bool removeFunction(const int pos = 0);
         bool removeFunctions();
         bool setRadius(const float r = DEFAULT_FORMATION_RADIUS);
-        bool setSeedGradient(const Vector sGrad = Vector());
+        bool setSeedFrp(const Vector sGrad = Vector());
         bool setSeedID(const int sID = ID_BROADCAST);
         bool setFormationID(const int fID = -1);
         bool setHeading(const float theta = 0.0f);
@@ -92,7 +92,7 @@ class Formation: protected vector<Function>
         virtual Formation& operator =(const Formation &f);
 
         float radius, heading;
-        Vector  seedGradient;
+        Vector  seedFrp;
         int   seedID, formationID;
     protected:
 
