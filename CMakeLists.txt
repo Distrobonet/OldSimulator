@@ -31,7 +31,8 @@ rosbuild_gensrv()
 rosbuild_genmsg()
 
 rosbuild_add_executable(Simulator src/Simulator.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
-#rosbuild_add_executable(cell_node nodes/cell_node.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
-#rosbuild_add_executable(environment_node nodes/environment_node.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
+rosbuild_add_executable(cell_node nodes/cell_node.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
+rosbuild_add_executable(environment_node nodes/environment_node.cpp src/Formation.cpp src/Behavior.cpp src/Cell.cpp src/Circle.cpp src/Object.cpp src/Environment.cpp src/Neighborhood.cpp src/Robot.cpp src/Vector.cpp)
 
-#target_link_libraries(robotDriver)
+target_link_libraries(Simulator)
+
