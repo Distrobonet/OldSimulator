@@ -31,6 +31,12 @@ Cell::Cell(const float dx, const float dy, const float dz, const float theta) :
 	init(dx, dy, dz, theta);
 	ID = nCells++;
 	numBids = 0;
+
+
+    // Service stuff
+    int argc = 0;
+    char **argv = 0;
+    ros::init(argc, argv, "formation_index_client");
 }
 
 // Copy constructor that copies the contents of
@@ -1050,6 +1056,34 @@ bool Cell::init(const float dx, const float dy, const float dz,
 	leftNbr = rightNbr = NULL;
 	auctionStepCount = 0;
 	return true;
+}
+
+// Sets the Formation from the Formation service
+bool Cell::setFormationFromService()
+{
+	ROS_INFO("Trying to access the formation message");
+
+	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
+
+	ros::NodeHandle clientNode;
+	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
+
+	spinner.start();
+
+	if (formationClient.call(srv))
+	{
+		//ROS_INFO("formation: %ld", (long int)srv.response.formation);//TODO: fix this
+		spinner.stop();
+		clientNode.shutdown();
+		return true;
+	}
+	else
+	{
+		ROS_ERROR("Failed to call service formation");
+		spinner.stop();
+		clientNode.shutdown();
+		return false;
+	}
 }
 
 //void Cell::settleAuction() {

@@ -47,8 +47,7 @@ void terminate(int retVal);
 void displayMenu();
 void keyboardInput();
 void clearScreen();
-bool initEnv(const int formationIndex);
-bool deinitEnv();
+//bool deinitEnv();
 bool changeFormation(const int index, const Vector gradient = Vector());
 bool changeFormationSim(const int index, const Vector gradient = Vector());
 const char  CHAR_ESCAPE             = char(27);    // 'ESCAPE' character key
@@ -112,8 +111,8 @@ double angleChange1 = 0.0l;
 float xValue = 0.0l;
 float yValue = 0.0l;
 
-double getYValue(double xValue);
-bool initEnv(const int nRobots, const int formationIndex);
+//double getYValue(double xValue);
+//bool initEnv(const int nRobots, const int formationIndex);
 
 
 
@@ -198,32 +197,10 @@ int main(int argc, char **argv)
 //  // output the ID of every cell
 //	for(int i = 1; i <= g_environment->getNumberOfCells(); i++)
 //		cout << "Cell " << i << " ID: "<< g_environment->getCell(i)->getID() << endl;
-//	cout << "cell " << 0 << " ID: "<< g_environment->getCell(0)->getID() << endl;
-//	cout << "cell " << 1 << " ID: "<< g_environment->getCell(1)->getID() << endl;
-//	cout << "cell " << 2 << " ID: "<< g_environment->getCell(2)->getID() << endl;
-//	cout << "cell " << 3 << " ID: "<< g_environment->getCell(3)->getID() << endl;
-//	cout << "cell " << 4 << " ID: "<< g_environment->getCell(4)->getID() << endl;
-//	cout << "cell " << 5 << " ID: "<< g_environment->getCell(5)->getID() << endl;
-//	cout << "cell " << 6 << " ID: "<< g_environment->getCell(6)->getID() << endl;
-//	cout << "cell " << 7 << " ID: "<< g_environment->getCell(7)->getID() << endl;
-//	cout << "cell " << 8 << " ID: "<< g_environment->getCell(8)->getID() << endl;
-//	cout << "\nnumber of robots: " <<g_environment->getRobots().size() << endl;
 //	//output the ID of every robot
 //	for(uint i = 0; i < g_environment->getRobots().size(); i++)
 //		cout << "robot " << i << " ID: "<< g_environment->getRobots()[i]->getID() << endl;
-//	cout << "robot " << 0 << " ID: "<< g_environment->getRobot(0)->getID() << endl;
-//	cout << "robot " << 1 << " ID: "<< g_environment->getRobot(1)->getID() << endl;
-//	cout << "robot " << 2 << " ID: "<< g_environment->getRobot(2)->getID() << endl;
-//	cout << "robot " << 3 << " ID: "<< g_environment->getRobot(3)->getID() << endl;
-//	cout << "robot " << 4 << " ID: "<< g_environment->getRobot(4)->getID() << endl;
-//	cout << "robot " << 5 << " ID: "<< g_environment->getRobot(5)->getID() << endl;
-//	cout << "robot " << 6 << " ID: "<< g_environment->getRobot(6)->getID() << endl;
-//	cout << "robot " << 7 << " ID: "<< g_environment->getRobot(7)->getID() << endl;
-//	cout << "robot " << 8 << " ID: "<< g_environment->getRobot(8)->getID() << endl;
-//	cout << "robot " << 9 << " ID: "<< g_environment->getRobot(9)->getID() << endl;
-//	cout << "robot " << 10 << " ID: "<< g_environment->getRobot(10)->getID() << endl;
-//	g_environment->getRobot(1)->commandVelocity.linear.x = 5;
-//	cout << "distance from 0,0 to robot(1): " << g_environment->distanceToRobot(0, 0, g_environment->getRobot(1)) << endl;
+
 
 
 	// Primary ROS loop
@@ -247,7 +224,7 @@ int main(int argc, char **argv)
 		loop_rate.sleep();
 	}
 
-  deinitEnv();
+  //deinitEnv();
   return 0;
 }
 
@@ -342,7 +319,7 @@ void displayMenu()
 void terminate(int retVal)
 {
   signal(SIGINT, SIG_IGN);
-  deinitEnv();
+  //deinitEnv();
   signal(SIGINT, SIG_DFL);
   exit(retVal);
 }
@@ -372,15 +349,15 @@ void terminate(int retVal)
 
 // Attempts to deinitialize the environment,
 // returning true if successful, false otherwise.
-bool deinitEnv()
-{
-  if (g_environment != NULL)
-  {
-    delete g_environment;
-    g_environment = NULL;
-  }
-  return g_environment == NULL;
-}
+//bool deinitEnv()
+//{
+//  if (g_environment != NULL)
+//  {
+//    delete g_environment;
+//    g_environment = NULL;
+//  }
+//  return g_environment == NULL;
+//}
 
 
 // Attempts to change the current formation,
@@ -573,7 +550,7 @@ void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
 //      break;
 
     case CHAR_ESCAPE: 
-    	deinitEnv(); 
+    	//deinitEnv();
     	exit(0);
   }
 }

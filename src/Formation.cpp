@@ -49,10 +49,6 @@ Formation::Formation(vector<Function> f,
     setHeading(theta);
 
 
-    // Service stuff
-    int argc = 0;
-    char **argv = 0;
-    ros::init(argc, argv, "formation_index_client");
 }
 
 
@@ -173,35 +169,6 @@ bool Formation::setHeading(const float theta)
     heading = scaleDegrees(theta);
     return true;
 }
-
-// Sets the Formation Index from the FormationIndex service
-bool Formation::setFormationFromService()
-{
-	ROS_INFO("Trying to access the formation message");
-
-	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
-
-	ros::NodeHandle clientNode;
-	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
-
-	spinner.start();
-
-	if (formationClient.call(srv))
-	{
-		//ROS_INFO("formation: %ld", (long int)srv.response.formation);//TODO: fix this
-		spinner.stop();
-		clientNode.shutdown();
-		return true;
-	}
-	else
-	{
-		ROS_ERROR("Failed to call service formation");
-		spinner.stop();
-		clientNode.shutdown();
-		return false;
-	}
-}
-
 
 // Returns the function at the parameterized position in this formation.
 Function Formation::getFunction(const int pos) const

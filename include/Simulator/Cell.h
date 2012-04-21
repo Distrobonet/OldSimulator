@@ -20,6 +20,12 @@
 #include <Simulator/Neighborhood.h>
 #include <Simulator/Robot.h>
 #include "std_msgs/String.h"
+
+#include <ros/ros.h>	// Used for service to get Formation
+
+#include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
+#include "../srv_gen/cpp/include/Simulator/CurrentFormation.h"
+
 using namespace std;
 
 
@@ -124,6 +130,10 @@ class Cell: public State, public Neighborhood, public Robot
         virtual Cell& operator =(const State &s);
         virtual Cell& operator =(const Neighborhood &nh);
         virtual Cell& operator =(const Robot &r);
+
+        bool setFormationFromService();
+		ros::ServiceClient formationClient;
+		Simulator::CurrentFormation srv;
 
     protected:
 

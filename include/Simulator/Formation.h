@@ -8,15 +8,14 @@
 #ifndef FORMATION_H
 #define FORMATION_H
 #include <vector>
-#include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
-#include "../srv_gen/cpp/include/Simulator/CurrentFormation.h"
+
 
 
 
 #include <Simulator/Relationship.h>
 using namespace std;
 
-#include <ros/ros.h>	// Used for service to get FormationIndex
+
 
 // mathematical functional type redefinition -  A Function is a function that takes a float and returns a float
 typedef float (*Function)(const float);
@@ -67,9 +66,7 @@ class Formation: protected vector<Function>
         bool setFormationID(const int fID = -1);
         bool setHeading(const float theta = 0.0f);
 
-        bool setFormationFromService();
-        ros::ServiceClient formationClient;
-        Simulator::CurrentFormation srv;
+
 
         // <public accessor functions>
         Function         getFunction(const int pos = 0) const;
