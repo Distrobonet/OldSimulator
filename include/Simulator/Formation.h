@@ -7,10 +7,12 @@
 // preprocessor directives
 #ifndef FORMATION_H
 #define FORMATION_H
-
-#include"Simulator/FormationIndex.h"
-
 #include <vector>
+#include"../msg_gen/cpp/include/Simulator/FormationMessage.h"
+#include <../srv_gen/cpp/include/Simulator/CurrentFormation.h>
+
+
+
 #include <Simulator/Relationship.h>
 using namespace std;
 
@@ -66,8 +68,8 @@ class Formation: protected vector<Function>
         bool setHeading(const float theta = 0.0f);
 
         bool setFormationIndexFromService();
-        ros::ServiceClient client;
-        Simulator::FormationIndex srv;
+        ros::ServiceClient formationClient;
+        Simulator::CurrentFormation srv;
 
         // <public accessor functions>
         Function         getFunction(const int pos = 0) const;
