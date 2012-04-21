@@ -44,6 +44,20 @@ Cell::Cell(const Cell &c) :	State(c), Neighborhood(c) {
 Cell::~Cell() {
 }
 
+void Cell::update(bool doSpin)
+{
+	while(ros::ok())
+	{
+		//TODO: update the cell
+		//cell.spin();
+
+		if(doSpin)
+			ros::spinOnce();
+	}
+}
+
+
+
 // Attempts to set the state to the parameterized state,
 // returning true if successful, false otherwise.
 bool Cell::setState(const State &s) {

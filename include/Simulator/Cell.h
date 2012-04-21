@@ -23,12 +23,6 @@
 using namespace std;
 
 
-
-//
-
-
-
-
 // message type index values
 enum MessageType
 {
@@ -77,6 +71,8 @@ class Cell: public State, public Neighborhood, public Robot
 
         // <destructors>
         virtual ~Cell();
+
+        void update(bool doSpin);
 
         ros::NodeHandle stateNode;
         ros::Publisher state_pub;
