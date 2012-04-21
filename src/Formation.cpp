@@ -25,7 +25,7 @@ Formation::Formation(const Function f,
 {
     setFunction(f);
     setRadius(r);
-    setSeedGradient(sGrad);
+    setSeedFrp(sGrad);
     setSeedID(sID);
     setFormationID(fID);
     setHeading(theta);
@@ -43,7 +43,7 @@ Formation::Formation(vector<Function> f,
 {
     setFunctions(f);
     setRadius(r);
-    setSeedGradient(sGrad);
+    setSeedFrp(sGrad);
     setSeedID(sID);
     setFormationID(fID);
     setHeading(theta);
@@ -135,9 +135,9 @@ bool Formation::setRadius(const float r)
 // Attempts to set the seed gradient
 // to the parameterized seed gradient,
 // returning true if successful, false otherwise.
-bool Formation::setSeedGradient(const Vector sGrad)
+bool Formation::setSeedFrp(const Vector sGrad)
 {
-    seedGradient = sGrad;
+	seedFrp = sGrad;
     return true;
 }
 
@@ -196,7 +196,7 @@ float Formation::getRadius() const
 // Returns the seed gradient of this formation.
 Vector Formation::getSeedGradient() const
 {
-    return seedGradient;
+    return seedFrp;
 }
 
 
@@ -288,7 +288,7 @@ Formation& Formation::operator =(const Formation &f)
 {
     setFunctions(f);
     setRadius(f.radius);
-    setSeedGradient(f.seedGradient);
+    setSeedFrp(f.seedFrp);
     setSeedID(f.seedID);
     setFormationID(f.formationID);
     setHeading(f.heading);

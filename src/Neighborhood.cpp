@@ -317,7 +317,7 @@ Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
     for (unsigned i = 0; i < size(); ++i)
     {
         currNbr = at(i);
-        if (currNbr.gradient == grad) return &at(i);
+        if (currNbr.frp == grad) return &at(i);
     }
     return NULL;
 }
@@ -334,7 +334,7 @@ Neighbor* Neighborhood::nbrWithMinGradient(const Vector v)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
-            (((currGrad = (currNbr.gradient - v).magnitude())
+            (((currGrad = (currNbr.frp - v).magnitude())
               < minGrad) || (minIndex == ID_NO_NBR)))
         {
             minGrad   = currGrad;
@@ -357,7 +357,7 @@ Neighbor* Neighborhood::nbrWithMaxGradient(const Vector v)
     {
         currNbr = at(i);
         if ((currNbr.ID != ID_NO_NBR) &&
-            (((currGrad = (currNbr.gradient - v).magnitude())
+            (((currGrad = (currNbr.frp - v).magnitude())
               > maxGrad) || (maxIndex == ID_NO_NBR)))
         {
             maxGrad   = currGrad;
@@ -429,8 +429,8 @@ void Neighborhood::sortByGradient(const Vector v)
 {
     for (unsigned i = 0; i < size() - 1; ++i)
         for (unsigned j = i; j < size(); ++j)
-            if ((getNbr(i)->gradient - v).magnitude() >
-                (getNbr(j)->gradient - v).magnitude())
+            if ((getNbr(i)->frp - v).magnitude() >
+                (getNbr(j)->frp - v).magnitude())
             	swapNbrs(i, j);
 }
 
