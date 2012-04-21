@@ -308,7 +308,7 @@ void Cell::updateState()
 }
 
 
-void stateCallback(const Cell::State &state)
+void Cell::stateCallback(const Simulator::StateMessage &state)
 {
 	// TODO: to be fleshed out when after a publisher is defined
 }

@@ -111,7 +111,7 @@ class Cell: public State, public Neighborhood, public Robot
         virtual void updateState();
 
         //TODO: fix this input data type
-        void stateCallback(const Cell::State &state);
+        void stateCallback(const Simulator::StateMessage &state);
 
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,
