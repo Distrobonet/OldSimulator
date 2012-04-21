@@ -15,9 +15,10 @@
 
 // Default constructor that initializes
 // this environment to the parameterized values.
-Environment::Environment(int numRobots, const Formation formation)
+Environment::Environment(int numRobots)
 {
-	if (!init(formation))
+	//TODO: service call for formation index
+	if (!init())
 	{
 		cout << "\nfailed to initialize environment\n";
 		clear();
@@ -30,8 +31,7 @@ Environment::Environment(int numRobots, const Formation formation)
 //	for(int i = 0; i < numOfRobots; i++){
 //		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, robots[i]));
 //		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
-	}
-
+//	}
 }   // Environment(const int, const Formation, const Color)
 
 
@@ -131,16 +131,16 @@ bool Environment::step()
 
 // Initializes the environment to the parameterized values,
 // returning true if successful, false otherwise.
-bool Environment::init(const Formation f)
+bool Environment::init()
 {
-	formation    = f;
-	formation.setFormationID(0);
-	formationID  = 0;
+//	formation    = f;
+//	formation.setFormationID(0);
+//	formationID  = 0;
 	bool result = true;
 	startFormation = false;
-	initCells(f);
+	//initCells(f);
 	Robot::numOfRobots--;
-	initRobots();
+	//initRobots();
 
 	if (VERBOSE)
 		cout << "finished initCells()\n";
@@ -165,6 +165,7 @@ bool Environment::initCells(const Formation f)
 {
 	Cell *c  = new Cell;
 	std::stringstream converter;
+	
 	for (int i = 0; i < numOfRobots; i++)
 	{
 //		if (!cells.getHead(c))
@@ -848,7 +849,7 @@ Robot* Environment::getRobot(int id)
 
 void Environment::settleAuction(Cell* auctionCell,int rID)
 {
-  //cout << "entering env->settleAuction()" << endl;
+	//TODO: this will need a serice call in the future to get fomation
 
   if(robots.size() > 0)
   {

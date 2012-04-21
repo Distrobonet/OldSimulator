@@ -51,7 +51,7 @@ class Environment
 		vector<ros::Subscriber> subRobots;
 
         // <constructors>
-        Environment(int numRobots, const Formation f          = Formation());
+        Environment(int numRobots);
         Environment(const Environment &e);
 
         // <destructors>
@@ -162,7 +162,7 @@ class Environment
         int                numOfRobots;
 
         // <virtual protected utility functions>
-        virtual bool init(const Formation f = Formation());
+        virtual bool init();
         virtual bool initCells(const Formation f = Formation());
         virtual bool initNbrs(const int nNbrs = 0);
 		virtual bool initRobots();

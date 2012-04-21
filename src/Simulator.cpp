@@ -181,11 +181,11 @@ int main(int argc, char **argv)
 	}
 
 	// initialize and execute the robot cell environment
-	if (!initEnv(CURRENT_SELECTION))
-	{
-		cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
-		return 1;
-	}
+//	if (!initEnv(CURRENT_SELECTION))
+//	{
+//		cerr << ">> ERROR: Unable to initialize simulation environment...\n\n";
+//		return 1;
+//	}
 
 
 //** Testing Stuff **//
@@ -351,27 +351,23 @@ void terminate(int retVal)
 // Attempts to initialize the environment based on
 // the parameterized values, returning true if successful,
 // false otherwise.
+//bool initEnv(const int formationIndex)
+//{
+//  if (g_environment != NULL)
+//  {
+//    delete g_environment;
+//    g_environment = NULL;
+//  }
 //
-// Parameters:
-//      nRobots       in      the number of robots
-//      formationIndex        in      the index of the initial formation
-bool initEnv(const int formationIndex)
-{
-  if (g_environment != NULL)
-  {
-    delete g_environment;
-    g_environment = NULL;
-  }
-
-  Formation formation(formations[formationIndex], g_formationRadius, Vector(),
-		  	  	  g_seedID, ++g_formationID, g_formationHeading);
-
-  if ((g_environment = new Environment(formation)) == NULL)
-  {
-	  return false;
-  }
-  return true;
-}
+//  Formation formation(formations[formationIndex], g_formationRadius, Vector(),
+//		  	  	  g_seedID, ++g_formationID, g_formationHeading);
+//
+//  if ((g_environment = new Environment(CURRENT_SELECTION)) == NULL)
+//  {
+//	  return false;
+//  }
+//  return true;
+//}
 
 
 // Attempts to deinitialize the environment,
@@ -394,6 +390,8 @@ bool deinitEnv()
 //      index   in      the index of the formation to change to
 bool changeFormation(const int index, const Vector gradient)
 {
+	//TODO: create service call to formationService
+
   g_formationIndex = index;
   if (!g_environment->startFormation)
   {
