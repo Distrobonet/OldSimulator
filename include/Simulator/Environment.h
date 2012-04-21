@@ -58,6 +58,8 @@ class Environment
         // <destructors>
         virtual ~Environment();
 
+        void update(bool doSpin);
+
         // <virtual public mutator functions>
 //        virtual bool setColor(const float r,
 //                              const float g,

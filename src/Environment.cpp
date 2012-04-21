@@ -57,6 +57,19 @@ void Environment::clear()
 }
 
 
+void Environment::update(bool doSpin)
+{
+	// ROS loop
+	while(ros::ok())
+	{
+		for(int i = 0; i < cells.size(); i++)
+			Cell temp = cells.at(i)->update(doSpin);
+
+		ros::spinOnce();
+	}
+}
+
+
 // Executes the next step in each cell in the environment
 // and forwards all sent packets to their destinations.
 bool Environment::step()
