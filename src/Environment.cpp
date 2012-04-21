@@ -8,32 +8,50 @@
 #include <time.h>
 #include <ctime>
 #include <stdlib.h>
+#include <angles/angles.h>
 
 #define AUCTION_STEP_COUNT (3)
 
-
+Environment::Environment()
+{}
 
 // Default constructor that initializes
 // this environment to the parameterized values.
 Environment::Environment(int numRobots)
 {
-	//TODO: service call for formation index
-	if (!init())
-	{
-		cout << "\nfailed to initialize environment\n";
-		clear();
-	}
+	// TODO: service call for relationship
+	// TODO: create service that holds absolute positions of all robots
+	// TODO: figure out if you need to init anything else for environment
 
 	numOfRobots = numRobots;
+	initOverloardSubscribers();
 
-//	ros::NodeHandle envNode;
-//
-//	for(int i = 0; i < numOfRobots; i++){
-//		subRobots.push_back(envNode.subscribe(generateSubMessage(SUBSCRIBER), 1000, &Robot::callBackRobot, robots[i]));
-//		odomMsg.header.frame_id = generateSubMessage(ROBOT_LABEL);
-//	}
-}   // Environment(const int, const Formation, const Color)
+}
 
+void Environment::initOverloardSubscribers()
+{
+	Environment env;
+
+	ros::NodeHandle overLord;
+	ros::Subscriber subRobot0 = overLord.subscribe("/robot_0/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+	ros::Subscriber subRobot1 = overLord.subscribe("/robot_1/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+	ros::Subscriber subRobot2 = overLord.subscribe("/robot_2/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+	ros::Subscriber subRobot3 = overLord.subscribe("/robot_3/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+	ros::Subscriber subRobot4 = overLord.subscribe("/robot_4/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+	ros::Subscriber subRobot5 = overLord.subscribe("/robot_5/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+	ros::Subscriber subRobot6 = overLord.subscribe("/robot_6/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+}
+
+void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
+{
+	btScalar yaw = 0.0l;
+
+	this->robotY = odom-> pose.pose.position.x;
+	this->robotX = -odom-> pose.pose.position.y;
+	this->robotTheta = angles::normalize_angle(yaw + M_PI / 2.0l);
+
+	ros::spinOnce();
+}
 
 // Copy constructor that copies the contents of
 // the parameterized environment into this environment.

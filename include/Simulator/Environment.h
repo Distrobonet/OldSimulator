@@ -51,12 +51,14 @@ class Environment
 		vector<ros::Subscriber> subRobots;
 
         // <constructors>
+		Environment();
         Environment(int numRobots);
         Environment(const Environment &e);
 
         // <destructors>
         virtual ~Environment();
 
+        void initOverloardSubscribers();
         void update(bool doSpin);
 
         // <virtual public mutator functions>
