@@ -26,6 +26,9 @@
 #include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
 #include "../srv_gen/cpp/include/Simulator/CurrentFormation.h"
 
+#include "../msg_gen/cpp/include/Simulator/StateMessage.h"
+#include "../srv_gen/cpp/include/Simulator/State.h"
+
 using namespace std;
 
 
@@ -131,16 +134,32 @@ class Cell: public State, public Neighborhood, public Robot
         virtual Cell& operator =(const Neighborhood &nh);
         virtual Cell& operator =(const Robot &r);
 
+        // Service stuff
+        // Formation service client
         bool setFormationFromService();
 		ros::ServiceClient formationClient;
-		Simulator::CurrentFormation srv;
+		Simulator::CurrentFormation formationSrv;
 
+		// State service client
+		bool getNeighborState(bool leftOrRight);
+		ros::ServiceClient stateClient;
+		Simulator::CurrentFormation stateSrv;
+
+		// State service server
+		void startStateServiceServer();
+		void setStateMessage(Simulator::State::Request  &req,
+				Simulator::State::Response &res );
+
+		Formation currentFormation;
+
+
+		int           index;
     protected:
 
         // <protected data members>
 //        vector<Bid *> bids;
         Neighbor     *leftNbr, *rightNbr;
-        int           index;
+
         int           numBids;
         int           auctionStepCount;
 

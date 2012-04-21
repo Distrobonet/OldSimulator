@@ -27,16 +27,13 @@ int Cell::nCells = 0;
 // Default constructor that initializes
 // this cell to the parameterized values.
 Cell::Cell(const float dx, const float dy, const float dz, const float theta) :
-		State(), Neighborhood() {
+		State(), Neighborhood()
+{
 	init(dx, dy, dz, theta);
 	ID = nCells++;
 	numBids = 0;
 
 
-    // Service stuff
-    int argc = 0;
-    char **argv = 0;
-    ros::init(argc, argv, "formation_index_client");
 }
 
 // Copy constructor that copies the contents of
@@ -66,21 +63,24 @@ void Cell::update(bool doSpin)
 
 // Attempts to set the state to the parameterized state,
 // returning true if successful, false otherwise.
-bool Cell::setState(const State &s) {
+bool Cell::setState(const State &s)
+{
 	*this = s;
 	return true;
 }
 
 // Attempts to set the neighborhood to the parameterized neighborhood,
 // returning true if successful, false otherwise.
-bool Cell::setNbrs(Neighborhood &nh) {
+bool Cell::setNbrs(Neighborhood &nh)
+{
 	*this = nh;
 	return true;
 }
 
 // Attempts to set the robot to the parameterized robot,
 // returning true if successful, false otherwise.
-bool Cell::setRobot(const Robot &r) {
+bool Cell::setRobot(const Robot &r)
+{
 	//if(VERBOSE) printf("in setRobot() ============\n");
 
 	//changed to  cast *this as a Robot variable
@@ -89,30 +89,35 @@ bool Cell::setRobot(const Robot &r) {
 	return true;
 } // setRobot(const Robot &)
 
-bool Cell::setRobotP(Robot *r) {
+bool Cell::setRobotP(Robot *r)
+{
 	//(Robot *)this = r;
 	return true;
 }
 
 // Returns the state of this cell.
-State Cell::getState() const {
+State Cell::getState() const
+{
 	return (State) *this;
 }
 
 // Returns the neighborhood of this cell.
-Neighborhood Cell::getNbrs() const {
+Neighborhood Cell::getNbrs() const
+{
 	return (Neighborhood) *this;
 }
 
 // Returns the robot of this cell.
-Robot Cell::getRobot() const {
+Robot Cell::getRobot() const
+{
 	return (Robot) *this;
 }
 
 
 // Processes packets received and updates the state of the cell,
 // which is then broadcast within the neighborhood of the cell.
-Cell* Cell::cStep() {
+Cell* Cell::cStep()
+{
 	Cell* answer = NULL;
 	// there are any movement instructions to be processed
 	//TODO:Figure out the lower if statement
@@ -172,7 +177,8 @@ Cell* Cell::cStep() {
 
 // Updates the state of the cell based upon the
 // current states of the neighbors of the cell.
-void Cell::updateState() {
+void Cell::updateState()
+{
 	if ((getNNbrs() == 0) || (nbrWithMinStep()->tStep < tStep)
 			|| ((formation.getSeedID() != ID)
 					&& (nbrWithMaxStep()->tStep == tStep)))
@@ -1051,7 +1057,8 @@ Cell& Cell::operator =(const Robot &r) {
 // Initializes the cell to the parameterized values,
 // returning true if successful, false otherwise.
 bool Cell::init(const float dx, const float dy, const float dz,
-		const float theta) {
+		const float theta)
+{
 //	showFilled = DEFAULT_CELL_SHOW_FILLED;
 	leftNbr = rightNbr = NULL;
 	auctionStepCount = 0;
@@ -1070,7 +1077,7 @@ bool Cell::setFormationFromService()
 
 	spinner.start();
 
-	if (formationClient.call(srv))
+	if (formationClient.call(formationSrv))
 	{
 		//ROS_INFO("formation: %ld", (long int)srv.response.formation);//TODO: fix this
 		spinner.stop();
@@ -1084,6 +1091,35 @@ bool Cell::setFormationFromService()
 		clientNode.shutdown();
 		return false;
 	}
+}
+
+// Sets the cell state from the State service
+bool Cell::getNeighborState(bool leftOrRight)
+{return false;//TODO: do this function
+}
+
+// Starts the cell's state service server
+void Cell::startStateServiceServer()
+{
+	string state_name = "state_client_" + index;
+
+
+	ros::NodeHandle StateServerNode;
+	//ros::ServiceServer stateService = StateServerNode.advertiseService("state", Cell::setStateMessage);
+	state_name = "Now serving the " + state_name;
+	ROS_INFO("Now serving the state client");
+	//ros::spin();
+	ros::spinOnce();
+}
+
+// TODO: what the f does this do
+void Cell::setStateMessage(Simulator::State::Request  &req,
+		Simulator::State::Response &res )
+{
+  	//res.state.heat
+	//ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
+	ROS_INFO("sending back response with state info");
+	return;
 }
 
 //void Cell::settleAuction() {
