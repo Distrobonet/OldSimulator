@@ -221,7 +221,7 @@ Cell* Cell::cStep()
 		cout << "transError = " << transError.magnitude() << endl;
 		cout << "behavior.getStatus() = " << behavior.getStatus() << endl;
 		cout << "seedID = " << formation.getSeedID() << endl;
-		cout << "gradient = " << gradient << endl;
+		cout << "FRP = " << frp << endl;
 		cout << "formationID = " << formation.getFormationID() << endl;
 	}
 
@@ -283,7 +283,7 @@ void Cell::updateState()
 	// reference the neighbor with the minimum gradient
 	// to establish the correct position in formation
 	if (getNNbrs() > 0) {
-		Neighbor *refNbr = nbrWithMinGradient(formation.getSeedGradient());
+		Neighbor *refNbr = nbrWithMinFrp(formation.getSeedFrp());
 		Relationship *nbrRelToMe = relWithID(refNbr->rels, ID);
 		if ((formation.getSeedID() != ID) && (refNbr != NULL)
 				&& (nbrRelToMe != NULL)) {
@@ -417,7 +417,7 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	formation = f;
 
 	if (formation.getSeedID() == ID) {
-		gradient = formation.getSeedGradient();
+		frp = formation.getSeedFrp();
 		transError = Vector();
 		rotError = 0.0f;
 	}
@@ -428,12 +428,12 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 			return false;
 
 		nbrRelToMe->relDesired.rotateRelative(n.formation.getHeading());
-		gradient = n.gradient + nbrRelToMe->relDesired;
+		frp = n.frp + nbrRelToMe->relDesired;
 		transError = Vector();
 		rotError = 0.0f;
 	}
 
-	vector<Vector> r = formation.getRelationships(gradient);
+	vector<Vector> r = formation.getRelationships(frp);
 
 	/*--ROSS--
 	 float currDist        = 0.0f, closestDist = float(RAND_MAX);
@@ -1147,9 +1147,11 @@ bool Cell::setFormationFromService()
 	}
 }
 
-// Sets the cell state from the State service
+// Sets the cell state from the State service//TODO: do this function
 bool Cell::getNeighborState(bool leftOrRight)
-{return false;//TODO: do this function
+{
+
+	return false;
 }
 
 // Starts the cell's state service server
@@ -1166,12 +1168,40 @@ void Cell::startStateServiceServer()
 	ros::spinOnce();
 }
 
-// TODO: what the f does this do
+// Sets the state message to this state's info
 void Cell::setStateMessage(Simulator::State::Request  &req,
 		Simulator::State::Response &res )
 {
-  	//res.state.heat
-	//ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
+  	res.state.formation.radius = formation.radius;
+  	res.state.formation.heading = formation.heading;
+
+  	res.state.formation.seed_frp.x = formation.seedFrp.x;
+  	res.state.formation.seed_frp.y = formation.seedFrp.y;
+
+  	res.state.formation.seed_id = formation.seedID;
+  	res.state.formation.formation_id = formation.formationID;
+
+	res.state.frp.x = frp.x;
+ 	res.state.frp.y = frp.y;
+
+ 	for(uint i = 0; i < rels.size(); i++)
+ 	{
+ 		res.state.relationships[i].id = rels[i].ID;
+ 		res.state.relationships[i].actual.x = rels[i].relActual.x;
+ 		res.state.relationships[i].actual.x = rels[i].relActual.x;
+ 		res.state.relationships[i].desired.x = rels[i].relDesired.x;
+ 		res.state.relationships[i].desired.x = rels[i].relDesired.x;
+ 	}
+
+	res.state.linear_error.x = transError.x;
+	res.state.linear_error.y = transError.y;
+
+	res.state.angular_error = rotError;
+	res.state.timestep = tStep;
+	res.state.reference_id = refID;
+	res.state.temperature = temperature;
+	res.state.heat = heat;
+
 	ROS_INFO("sending back response with state info");
 	return;
 }
