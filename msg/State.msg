@@ -1,6 +1,6 @@
-Formation formation
+#Formation formation
 Vector frp
-Relationship[] relationships
+#Relationship[] relationships
 Vector linear_error
 float64 angular_error
 int32 timestep
