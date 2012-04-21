@@ -33,7 +33,7 @@ struct State
     int                  refID;         // the ID of the reference nbr
     float                temperature;   // the current temperature
     float                heat;          // the current heat
-    State 				 getStateMsgAsObject(Simulator::StateMessage stateMsg);
+//    State 				 getStateMsgAsObject(Simulator::StateMessage stateMsg);
 
     // Default constructor that initializes
     // this state to the parameterized values.
@@ -54,8 +54,8 @@ struct State
 
 
 
-    State getStateAsMsg(Simulator::StateMessage stateMsg)
-    {
+//    State getStateAsMsg(Simulator::StateMessage stateMsg)
+//    {
     	//Cant have *
 //    	State *stateObject = new State();
     	//Those 4 cannot not be set using equals
@@ -70,7 +70,7 @@ struct State
 //    	stateObject->temperature = stateMsg.temperature;
 //    	stateObject->heat = stateMsg.heat;
 //    	return stateObject;
-    }
+//    }
 
 };
 
