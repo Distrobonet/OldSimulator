@@ -1046,7 +1046,7 @@ Cell& Cell::operator =(const Robot &r) {
 // returning true if successful, false otherwise.
 bool Cell::init(const float dx, const float dy, const float dz,
 		const float theta) {
-	showFilled = DEFAULT_CELL_SHOW_FILLED;
+//	showFilled = DEFAULT_CELL_SHOW_FILLED;
 	leftNbr = rightNbr = NULL;
 	auctionStepCount = 0;
 	return true;
