@@ -13,7 +13,7 @@
 #include <Simulator/Formation.h>
 #include <Simulator/Vector.h>
 #include <ros/serialization.h>
-//#include <ros/message_traits.h>
+#include <../msg_gen/cpp/include/Simulator/StateMessage.h>
 
 using namespace std;
 
@@ -33,18 +33,7 @@ struct State
     int                  refID;         // the ID of the reference nbr
     float                temperature;   // the current temperature
     float                heat;          // the current heat
-    static const string __s_getMD5Sum() { return "4a842b65f413084dc2b10fb484ea7f17"; }
-    static const string __getMD5Sum() { return "4a842b65f413084dc2b10fb484ea7f17"; }
-    static const string __s_getDataType() { return "Simulator/State"; }
-    static const string __getDataType() { return "Simulator/State"; }
-    static const string __s_getMessageDefinition() { return "A state messsge"; }
-
-//    vector<PropMsg>      props;         // maintaining responses of the
-                                        // from the request msgs sent
-
-
-    // <constructors>
-
+    State 				 getStateMsgAsObject(Simulator::StateMessage stateMsg);
 
     // Default constructor that initializes
     // this state to the parameterized values.
@@ -65,16 +54,23 @@ struct State
 
 
 
-    // TODO: this needs to be fixed
-//    StateMsg getStateAsMsg()
-//    {
-//    	StateMsg s;
-//    	s.formation = formation;
-//    	s.frp = frp;
-//    	s.relationship = relationships;
-//    	...
-//    	return s;
-//    }
+    State getStateAsMsg(Simulator::StateMessage stateMsg)
+    {
+    	//Cant have *
+//    	State *stateObject = new State();
+    	//Those 4 cannot not be set using equals
+//    	stateObject.formation = stateMsg.formation;
+//    	stateObject.gradient = stateMsg.frp;
+//    	stateObject.rels = stateMsg.relationships;
+//    	stateObject.transError = stateMsg.linear_error;
+    	//These can
+//    	stateObject->rotError = stateMsg.angular_error;
+//    	stateObject->tStep = stateMsg.timestep;
+//    	stateObject->refID = stateMsg.reference_id;
+//    	stateObject->temperature = stateMsg.temperature;
+//    	stateObject->heat = stateMsg.heat;
+//    	return stateObject;
+    }
 
 };
 
