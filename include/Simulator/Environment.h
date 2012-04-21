@@ -51,7 +51,7 @@ class Environment
 		vector<ros::Subscriber> subRobots;
 
         // <constructors>
-        Environment(const Formation f          = Formation());
+        Environment(int numRobots, const Formation f          = Formation());
         Environment(const Environment &e);
 
         // <destructors>
@@ -148,6 +148,7 @@ class Environment
 
         //brntbeer added for prop_ops
         friend bool changeFormationSim(const int index, const Vector gradient);
+
 
     protected:
 
