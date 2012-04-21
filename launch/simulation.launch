@@ -1,10 +1,10 @@
 <launch>
-	<node pkg="Simulator" type="environment_msg" name="environment" args="7 1"/>
-	<node pkg="Simulator" type="cell_msg" name="cell0"/>
-	<node pkg="Simulator" type="cell_msg" name="cell1"/>
-	<node pkg="Simulator" type="cell_msg" name="cell2"/>
-	<node pkg="Simulator" type="cell_msg" name="cell3"/>
-	<node pkg="Simulator" type="cell_msg" name="cell4"/>
-	<node pkg="Simulator" type="cell_msg" name="cell5"/>
-	<node pkg="Simulator" type="cell_msg" name="cell6"/>
+	<node pkg="Simulator" type="environment_node" name="environment" args="7 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell0" args="0 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell1" args="1 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell2" args="2 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell3" args="3 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell4" args="4 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell5" args="5 1"/>
+	<node pkg="Simulator" type="cell_node" name="cell6" args="6 1"/>
 </launch>
