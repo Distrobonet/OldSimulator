@@ -35,13 +35,7 @@
 
 #include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
 
-#define SUBSCRIBER 0
-#define PUBLISHER 1
-
 using namespace std;
-class Robot;
-class OverLord;
-
 
 // define SIGPIPE if not defined (compatibility for win32)
 #ifndef SIGPIPE
@@ -124,13 +118,17 @@ bool initEnv(const int nRobots, const int formationIndex);
 
 
 // Service utility function to set the formationIndex being served to the CURRENT_SELECTION
-bool setFormation(Simulator::CurrentFormation::Request  &req,
+bool setFormationFromMessage(Simulator::CurrentFormation::Request  &req,
 		Simulator::CurrentFormation::Response &res )
 {
-  //res.sum = req.a + req.b;
-	//res.formation = CURRENT_SELECTION;		//TODO: fix this
+  	res.formation.radius = 0;
+  	res.formation.heading = 0;
+  	res.formation.seed_frp.x = 0;
+  	res.formation.seed_frp.y = 0;
+  	res.formation.seed_id = 0;
+  	res.formation.formation_id = CURRENT_SELECTION;
 	//ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
-	//ROS_INFO("sending back response: [%ld]", (long int)res.formation);//TODO: fix this
+	ROS_INFO("sending back response with formation info");
 	return true;
 }
 
@@ -144,7 +142,7 @@ int main(int argc, char **argv)
 	// Service
 	ros::init(argc, argv, "formation_server");
 	ros::NodeHandle serverNode;
-	ros::ServiceServer service = serverNode.advertiseService("formation", setFormation);
+	ros::ServiceServer service = serverNode.advertiseService("formation", setFormationFromMessage);
 	ROS_INFO("Now serving the formation.");
 	//ros::spin();
 	ros::spinOnce();
