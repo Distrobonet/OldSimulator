@@ -70,15 +70,15 @@ class Neighborhood: public vector<Neighbor>
 
         // <public single neighbor property member functions>
         Neighbor* nbrWithID(const int id);
-        Neighbor* nbrWithGradient(const Vector grad);
-        Neighbor* nbrWithMinGradient(const Vector c = Vector());
-        Neighbor* nbrWithMaxGradient(const Vector c = Vector());
+        Neighbor* nbrWithFrp(const Vector grad);
+        Neighbor* nbrWithMinFrp(const Vector c = Vector());
+        Neighbor* nbrWithMaxFrp(const Vector c = Vector());
         Neighbor* nbrWithMinStep();
         Neighbor* nbrWithMaxStep();
 
         // <public neighbor list member functions>
         void sortByID();
-        void sortByGradient(const Vector c = Vector());
+        void sortByFrp(const Vector c = Vector());
         void sortByDistance(const Vector c = Vector());
         void sortByAngle(const Vector c = Vector());
         void sortByAbsAngle(const Vector c = Vector());

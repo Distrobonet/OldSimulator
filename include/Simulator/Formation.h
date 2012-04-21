@@ -72,7 +72,7 @@ class Formation: protected vector<Function>
         Function         getFunction(const int pos = 0) const;
         vector<Function> getFunctions()                   const;
         float            getRadius()                      const;
-        Vector           getSeedGradient()                const;
+        Vector           getSeedFrp()                const;
         int              getSeedID()                      const;
         int              getFormationID()                 const;
         float            getHeading()                     const;

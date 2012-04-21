@@ -310,8 +310,8 @@ Neighbor* Neighborhood::nbrWithID(const int id)
 }
 
 
-// Returns the neighbor (in this neighborhood) with the parameterized gradient.
-Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
+// Returns the neighbor (in this neighborhood) with the parameterized frp.
+Neighbor* Neighborhood::nbrWithFrp(const Vector grad)
 {
     Neighbor currNbr;
     for (unsigned i = 0; i < size(); ++i)
@@ -323,7 +323,7 @@ Neighbor* Neighborhood::nbrWithGradient(const Vector grad)
 }
 
 
-// Returns the neighbor (in this neighborhood) with the minimum gradient
+// Returns the neighbor (in this neighborhood) with the minimum frp
 // distance as determined by the parameterized difference vector.
 Neighbor* Neighborhood::nbrWithMinFrp(const Vector v)
 {
@@ -346,9 +346,9 @@ Neighbor* Neighborhood::nbrWithMinFrp(const Vector v)
 }
 
 
-// Returns the neighbor (in this neighborhood) with the maximum gradient
+// Returns the neighbor (in this neighborhood) with the maximum frp
 // distance as determined by the parameterized difference vector.
-Neighbor* Neighborhood::nbrWithMaxGradient(const Vector v)
+Neighbor* Neighborhood::nbrWithMaxFrp(const Vector v)
 {
     Neighbor currNbr;
     float  maxGrad  = 0.0f, currGrad = 0.0f;
@@ -423,9 +423,9 @@ void Neighborhood::sortByID()
 }
 
 
-// Sorts the neighborhood based upon neighbor gradient
+// Sorts the neighborhood based upon neighbor frp
 // as determined by the parameterized difference vector.
-void Neighborhood::sortByGradient(const Vector v)
+void Neighborhood::sortByFrp(const Vector v)
 {
     for (unsigned i = 0; i < size() - 1; ++i)
         for (unsigned j = i; j < size(); ++j)
