@@ -59,12 +59,13 @@ void Environment::clear()
 
 void Environment::update(bool doSpin)
 {
-	// ROS loop
+	Cell *temp = NULL;
+
 	while(ros::ok())
 	{
 		for(uint i = 0; i < cells.size(); i++)
 		{
-			Cell *temp = cells.at(i);
+			temp = cells.at(i);
 			temp->update(doSpin);
 		}
 
