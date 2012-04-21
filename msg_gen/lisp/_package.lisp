@@ -1,0 +1,13 @@
+(cl:defpackage Simulator-msg
+  (:use )
+  (:export
+   "<FORMATIONMESSAGE>"
+   "FORMATIONMESSAGE"
+   "<STATEMESSAGE>"
+   "STATEMESSAGE"
+   "<RELATIONSHIPMESSAGE>"
+   "RELATIONSHIPMESSAGE"
+   "<VECTORMESSAGE>"
+   "VECTORMESSAGE"
+  ))
+
