@@ -82,6 +82,7 @@ class Cell: public State, public Neighborhood, public Robot
         virtual ~Cell();
 
         void update(bool doSpin);
+        bool initNbrs(int currentRobotsID);
 
         ros::NodeHandle stateNode;
         ros::Publisher state_pub;

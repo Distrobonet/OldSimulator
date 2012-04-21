@@ -20,18 +20,17 @@ int main(int argc, char **argv)
 	thisCell.index = atoi(argv[1]);
 
 	// TODO: initialize x & y from the "base_pose_ground_truth"?
-	thisCell.x = 0.0f;
-	thisCell.y = 0.0f;
+	thisCell.x = atoi(argv[2]);
+	thisCell.y = atoi(argv[3]);
 	thisCell.setHeading(90.0f);	// default heading
+	thisCell.initNbrs(atoi(argv[1]));
 
-	thisCell.update(argv[2]);
-
+	thisCell.update(argv[4]);
 
 	// testing formation client for cell
 	cout << thisCell.formation.formationID;
 	thisCell.setFormationFromService();
 	cout << thisCell.formation.formationID;
-
 
 	return 0;
 }

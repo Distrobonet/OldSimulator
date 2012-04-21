@@ -60,6 +60,60 @@ void Cell::update(bool doSpin)
 }
 
 
+// Initializes the neighborhood of each cell,
+// returning true if successful, false otherwise.
+bool Cell::initNbrs(int currentRobotsID)
+{
+	Cell *c = this;
+	string cellSubName;
+	std::stringstream converter;
+
+		int leftNbrID, rightNbrID;
+
+		switch (currentRobotsID) {
+			case 0:
+				leftNbrID = currentRobotsID + 1;
+				rightNbrID = currentRobotsID + 2;
+				break;
+			case 1:
+				leftNbrID = currentRobotsID + 2;
+				rightNbrID = currentRobotsID - 1;
+				break;
+			case 2:
+				leftNbrID = currentRobotsID - 1;
+				rightNbrID = currentRobotsID + 2;
+				break;
+			default:
+				leftNbrID = currentRobotsID + 2;
+				rightNbrID = currentRobotsID - 2;
+				break;
+		}
+
+		if ((currentRobotsID >= 0) && (c->addNbr(leftNbrID)))
+		{
+			c->leftNbr  = c->nbrWithID(leftNbrID);
+			cellSubName = "robot_";
+			converter << leftNbrID;
+			cellSubName.append(converter.str());
+			cellSubName.append("/state");
+			c->leftNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
+		}
+
+		if ((currentRobotsID < nCells) && (c->addNbr(rightNbrID)))
+		{
+			c->rightNbr = c->nbrWithID(currentRobotsID + rightNbrID);
+			cellSubName = "robot_";
+			converter << leftNbrID;
+			cellSubName.append(converter.str());
+			cellSubName.append("/state");
+			c->rightNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
+		}
+
+	if(VERBOSE)
+		printf("finished initNbrs()\n");
+	return true;
+}
+
 
 // Attempts to set the state to the parameterized state,
 // returning true if successful, false otherwise.
