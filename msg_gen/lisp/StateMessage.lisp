@@ -168,10 +168,10 @@
   "199c3c439236ac8d1a99f8080aafbf52")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<StateMessage>)))
   "Returns full string definition for message of type '<StateMessage>"
-  (cl:format cl:nil "#Formation formation~%#Vector frp~%#Relationship[] relationships~%#Vector linear_error~%float64 angular_error~%int32 timestep~%int32 reference_id~%float64 temperature~%float64 heat~%~%"))
+  (cl:format cl:nil "#FormationMessage formation~%#VectorMessage frp~%#Relationship[] relationships~%#VectorMessage linear_error~%float64 angular_error~%int32 timestep~%int32 reference_id~%float64 temperature~%float64 heat~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'StateMessage)))
   "Returns full string definition for message of type 'StateMessage"
-  (cl:format cl:nil "#Formation formation~%#Vector frp~%#Relationship[] relationships~%#Vector linear_error~%float64 angular_error~%int32 timestep~%int32 reference_id~%float64 temperature~%float64 heat~%~%"))
+  (cl:format cl:nil "#FormationMessage formation~%#VectorMessage frp~%#Relationship[] relationships~%#VectorMessage linear_error~%float64 angular_error~%int32 timestep~%int32 reference_id~%float64 temperature~%float64 heat~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <StateMessage>))
   (cl:+ 0
      8

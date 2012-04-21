@@ -18,7 +18,6 @@
 
 
 
-#include "Simulator/State.h"
 
 namespace Simulator
 {
@@ -50,7 +49,7 @@ public:
   ROS_DEPRECATED const std::string __getMD5Sum() const { return __s_getMD5Sum_(); }
 
 private:
-  static const char* __s_getServerMD5Sum_() { return "61a15d5433964315f98db047a12b8384"; }
+  static const char* __s_getServerMD5Sum_() { return "d41d8cd98f00b204e9800998ecf8427e"; }
 public:
   ROS_DEPRECATED static const std::string __s_getServerMD5Sum() { return __s_getServerMD5Sum_(); }
 
@@ -98,17 +97,12 @@ struct StateResponse_ {
   typedef StateResponse_<ContainerAllocator> Type;
 
   StateResponse_()
-  : state()
   {
   }
 
   StateResponse_(const ContainerAllocator& _alloc)
-  : state(_alloc)
   {
   }
-
-  typedef  ::Simulator::State_<ContainerAllocator>  _state_type;
-   ::Simulator::State_<ContainerAllocator>  state;
 
 
 private:
@@ -119,50 +113,23 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "61a15d5433964315f98db047a12b8384"; }
+  static const char* __s_getMD5Sum_() { return "d41d8cd98f00b204e9800998ecf8427e"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
   ROS_DEPRECATED const std::string __getMD5Sum() const { return __s_getMD5Sum_(); }
 
 private:
-  static const char* __s_getServerMD5Sum_() { return "61a15d5433964315f98db047a12b8384"; }
+  static const char* __s_getServerMD5Sum_() { return "d41d8cd98f00b204e9800998ecf8427e"; }
 public:
   ROS_DEPRECATED static const std::string __s_getServerMD5Sum() { return __s_getServerMD5Sum_(); }
 
   ROS_DEPRECATED const std::string __getServerMD5Sum() const { return __s_getServerMD5Sum_(); }
 
 private:
-  static const char* __s_getMessageDefinition_() { return "State state\n\
+  static const char* __s_getMessageDefinition_() { return "\n\
 \n\
 \n\
-================================================================================\n\
-MSG: Simulator/State\n\
-Formation formation\n\
-Vector frp\n\
-Relationship[] relationships\n\
-Vector linear_error\n\
-float64 angular_error\n\
-int32 timestep\n\
-int32 reference_id\n\
-float64 temperature\n\
-float64 heat\n\
-================================================================================\n\
-MSG: Simulator/Formation\n\
-float64 radius\n\
-float64 heading\n\
-Vector  seed_frp\n\
-int32   seed_id\n\
-int32   formation_id\n\
-================================================================================\n\
-MSG: Simulator/Vector\n\
-float64 x\n\
-float64 y\n\
-================================================================================\n\
-MSG: Simulator/Relationship\n\
-Vector desired\n\
-Vector actual\n\
-int32 id\n\
 "; }
 public:
   ROS_DEPRECATED static const std::string __s_getMessageDefinition() { return __s_getMessageDefinition_(); }
@@ -172,21 +139,18 @@ public:
   ROS_DEPRECATED virtual uint8_t *serialize(uint8_t *write_ptr, uint32_t seq) const
   {
     ros::serialization::OStream stream(write_ptr, 1000000000);
-    ros::serialization::serialize(stream, state);
     return stream.getData();
   }
 
   ROS_DEPRECATED virtual uint8_t *deserialize(uint8_t *read_ptr)
   {
     ros::serialization::IStream stream(read_ptr, 1000000000);
-    ros::serialization::deserialize(stream, state);
     return stream.getData();
   }
 
   ROS_DEPRECATED virtual uint32_t serializationLength() const
   {
     uint32_t size = 0;
-    size += ros::serialization::serializationLength(state);
     return size;
   }
 
@@ -267,12 +231,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::Simulator::StateResponse_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "61a15d5433964315f98db047a12b8384";
+    return "d41d8cd98f00b204e9800998ecf8427e";
   }
 
   static const char* value(const  ::Simulator::StateResponse_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0x61a15d5433964315ULL;
-  static const uint64_t static_value2 = 0xf98db047a12b8384ULL;
+  static const uint64_t static_value1 = 0xd41d8cd98f00b204ULL;
+  static const uint64_t static_value2 = 0xe9800998ecf8427eULL;
 };
 
 template<class ContainerAllocator>
@@ -289,42 +253,16 @@ template<class ContainerAllocator>
 struct Definition< ::Simulator::StateResponse_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "State state\n\
+    return "\n\
 \n\
 \n\
-================================================================================\n\
-MSG: Simulator/State\n\
-Formation formation\n\
-Vector frp\n\
-Relationship[] relationships\n\
-Vector linear_error\n\
-float64 angular_error\n\
-int32 timestep\n\
-int32 reference_id\n\
-float64 temperature\n\
-float64 heat\n\
-================================================================================\n\
-MSG: Simulator/Formation\n\
-float64 radius\n\
-float64 heading\n\
-Vector  seed_frp\n\
-int32   seed_id\n\
-int32   formation_id\n\
-================================================================================\n\
-MSG: Simulator/Vector\n\
-float64 x\n\
-float64 y\n\
-================================================================================\n\
-MSG: Simulator/Relationship\n\
-Vector desired\n\
-Vector actual\n\
-int32 id\n\
 ";
   }
 
   static const char* value(const  ::Simulator::StateResponse_<ContainerAllocator> &) { return value(); } 
 };
 
+template<class ContainerAllocator> struct IsFixedSize< ::Simulator::StateResponse_<ContainerAllocator> > : public TrueType {};
 } // namespace message_traits
 } // namespace ros
 
@@ -354,7 +292,6 @@ template<class ContainerAllocator> struct Serializer< ::Simulator::StateResponse
 {
   template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
   {
-    stream.next(m.state);
   }
 
   ROS_DECLARE_ALLINONE_SERIALIZER;
@@ -370,7 +307,7 @@ template<>
 struct MD5Sum<Simulator::State> {
   static const char* value() 
   {
-    return "61a15d5433964315f98db047a12b8384";
+    return "d41d8cd98f00b204e9800998ecf8427e";
   }
 
   static const char* value(const Simulator::State&) { return value(); } 
@@ -390,7 +327,7 @@ template<class ContainerAllocator>
 struct MD5Sum<Simulator::StateRequest_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "61a15d5433964315f98db047a12b8384";
+    return "d41d8cd98f00b204e9800998ecf8427e";
   }
 
   static const char* value(const Simulator::StateRequest_<ContainerAllocator> &) { return value(); } 
@@ -410,7 +347,7 @@ template<class ContainerAllocator>
 struct MD5Sum<Simulator::StateResponse_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "61a15d5433964315f98db047a12b8384";
+    return "d41d8cd98f00b204e9800998ecf8427e";
   }
 
   static const char* value(const Simulator::StateResponse_<ContainerAllocator> &) { return value(); } 

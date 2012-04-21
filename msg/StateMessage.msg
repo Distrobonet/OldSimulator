@@ -1,7 +1,7 @@
-#Formation formation
-#Vector frp
+#FormationMessage formation
+#VectorMessage frp
 #Relationship[] relationships
-#Vector linear_error
+#VectorMessage linear_error
 float64 angular_error
 int32 timestep
 int32 reference_id

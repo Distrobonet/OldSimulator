@@ -32,10 +32,10 @@
   "Simulator/CurrentFormationRequest")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<CurrentFormation-request>)))
   "Returns md5sum for a message object of type '<CurrentFormation-request>"
-  "e0d015d319b7f776fa4954ca0514784f")
+  "1b8c322a6316abec4738c71c0df103d8")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'CurrentFormation-request)))
   "Returns md5sum for a message object of type 'CurrentFormation-request"
-  "e0d015d319b7f776fa4954ca0514784f")
+  "1b8c322a6316abec4738c71c0df103d8")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<CurrentFormation-request>)))
   "Returns full string definition for message of type '<CurrentFormation-request>"
   (cl:format cl:nil "~%~%~%"))
@@ -88,16 +88,16 @@
   "Simulator/CurrentFormationResponse")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<CurrentFormation-response>)))
   "Returns md5sum for a message object of type '<CurrentFormation-response>"
-  "e0d015d319b7f776fa4954ca0514784f")
+  "1b8c322a6316abec4738c71c0df103d8")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'CurrentFormation-response)))
   "Returns md5sum for a message object of type 'CurrentFormation-response"
-  "e0d015d319b7f776fa4954ca0514784f")
+  "1b8c322a6316abec4738c71c0df103d8")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<CurrentFormation-response>)))
   "Returns full string definition for message of type '<CurrentFormation-response>"
-  (cl:format cl:nil "FormationMessage formation~%~%================================================================================~%MSG: Simulator/FormationMessage~%float64 radius~%float64 heading~%#Vector  seed_frp~%int32   seed_id~%int32   formation_id~%~%"))
+  (cl:format cl:nil "FormationMessage formation~%~%================================================================================~%MSG: Simulator/FormationMessage~%float64 radius~%float64 heading~%VectorMessage  seed_frp~%int32   seed_id~%int32   formation_id~%================================================================================~%MSG: Simulator/VectorMessage~%float64 x~%float64 y~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'CurrentFormation-response)))
   "Returns full string definition for message of type 'CurrentFormation-response"
-  (cl:format cl:nil "FormationMessage formation~%~%================================================================================~%MSG: Simulator/FormationMessage~%float64 radius~%float64 heading~%#Vector  seed_frp~%int32   seed_id~%int32   formation_id~%~%"))
+  (cl:format cl:nil "FormationMessage formation~%~%================================================================================~%MSG: Simulator/FormationMessage~%float64 radius~%float64 heading~%VectorMessage  seed_frp~%int32   seed_id~%int32   formation_id~%================================================================================~%MSG: Simulator/VectorMessage~%float64 x~%float64 y~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <CurrentFormation-response>))
   (cl:+ 0
      (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'formation))

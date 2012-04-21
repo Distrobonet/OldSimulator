@@ -14,6 +14,7 @@
 
 #include "ros/assert.h"
 
+#include "Simulator/VectorMessage.h"
 
 namespace Simulator
 {
@@ -24,6 +25,7 @@ struct FormationMessage_ {
   FormationMessage_()
   : radius(0.0)
   , heading(0.0)
+  , seed_frp()
   , seed_id(0)
   , formation_id(0)
   {
@@ -32,6 +34,7 @@ struct FormationMessage_ {
   FormationMessage_(const ContainerAllocator& _alloc)
   : radius(0.0)
   , heading(0.0)
+  , seed_frp(_alloc)
   , seed_id(0)
   , formation_id(0)
   {
@@ -42,6 +45,9 @@ struct FormationMessage_ {
 
   typedef double _heading_type;
   double heading;
+
+  typedef  ::Simulator::VectorMessage_<ContainerAllocator>  _seed_frp_type;
+   ::Simulator::VectorMessage_<ContainerAllocator>  seed_frp;
 
   typedef int32_t _seed_id_type;
   int32_t seed_id;
@@ -58,7 +64,7 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "bd72cb9b2bb0c98007298d13c50d1bb0"; }
+  static const char* __s_getMD5Sum_() { return "8954046ccbe1a10ea7eb252baf2abe9d"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
@@ -67,9 +73,13 @@ public:
 private:
   static const char* __s_getMessageDefinition_() { return "float64 radius\n\
 float64 heading\n\
-#Vector  seed_frp\n\
+VectorMessage  seed_frp\n\
 int32   seed_id\n\
 int32   formation_id\n\
+================================================================================\n\
+MSG: Simulator/VectorMessage\n\
+float64 x\n\
+float64 y\n\
 "; }
 public:
   ROS_DEPRECATED static const std::string __s_getMessageDefinition() { return __s_getMessageDefinition_(); }
@@ -81,6 +91,7 @@ public:
     ros::serialization::OStream stream(write_ptr, 1000000000);
     ros::serialization::serialize(stream, radius);
     ros::serialization::serialize(stream, heading);
+    ros::serialization::serialize(stream, seed_frp);
     ros::serialization::serialize(stream, seed_id);
     ros::serialization::serialize(stream, formation_id);
     return stream.getData();
@@ -91,6 +102,7 @@ public:
     ros::serialization::IStream stream(read_ptr, 1000000000);
     ros::serialization::deserialize(stream, radius);
     ros::serialization::deserialize(stream, heading);
+    ros::serialization::deserialize(stream, seed_frp);
     ros::serialization::deserialize(stream, seed_id);
     ros::serialization::deserialize(stream, formation_id);
     return stream.getData();
@@ -101,6 +113,7 @@ public:
     uint32_t size = 0;
     size += ros::serialization::serializationLength(radius);
     size += ros::serialization::serializationLength(heading);
+    size += ros::serialization::serializationLength(seed_frp);
     size += ros::serialization::serializationLength(seed_id);
     size += ros::serialization::serializationLength(formation_id);
     return size;
@@ -134,12 +147,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::Simulator::FormationMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "bd72cb9b2bb0c98007298d13c50d1bb0";
+    return "8954046ccbe1a10ea7eb252baf2abe9d";
   }
 
   static const char* value(const  ::Simulator::FormationMessage_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0xbd72cb9b2bb0c980ULL;
-  static const uint64_t static_value2 = 0x07298d13c50d1bb0ULL;
+  static const uint64_t static_value1 = 0x8954046ccbe1a10eULL;
+  static const uint64_t static_value2 = 0xa7eb252baf2abe9dULL;
 };
 
 template<class ContainerAllocator>
@@ -158,9 +171,13 @@ struct Definition< ::Simulator::FormationMessage_<ContainerAllocator> > {
   {
     return "float64 radius\n\
 float64 heading\n\
-#Vector  seed_frp\n\
+VectorMessage  seed_frp\n\
 int32   seed_id\n\
 int32   formation_id\n\
+================================================================================\n\
+MSG: Simulator/VectorMessage\n\
+float64 x\n\
+float64 y\n\
 ";
   }
 
@@ -182,6 +199,7 @@ template<class ContainerAllocator> struct Serializer< ::Simulator::FormationMess
   {
     stream.next(m.radius);
     stream.next(m.heading);
+    stream.next(m.seed_frp);
     stream.next(m.seed_id);
     stream.next(m.formation_id);
   }
@@ -205,6 +223,9 @@ struct Printer< ::Simulator::FormationMessage_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.radius);
     s << indent << "heading: ";
     Printer<double>::stream(s, indent + "  ", v.heading);
+    s << indent << "seed_frp: ";
+s << std::endl;
+    Printer< ::Simulator::VectorMessage_<ContainerAllocator> >::stream(s, indent + "  ", v.seed_frp);
     s << indent << "seed_id: ";
     Printer<int32_t>::stream(s, indent + "  ", v.seed_id);
     s << indent << "formation_id: ";

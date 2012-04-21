@@ -95,7 +95,7 @@ import struct
 import Simulator.msg
 
 class CurrentFormationResponse(roslib.message.Message):
-  _md5sum = "e0d015d319b7f776fa4954ca0514784f"
+  _md5sum = "1b8c322a6316abec4738c71c0df103d8"
   _type = "Simulator/CurrentFormationResponse"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """FormationMessage formation
@@ -104,9 +104,13 @@ class CurrentFormationResponse(roslib.message.Message):
 MSG: Simulator/FormationMessage
 float64 radius
 float64 heading
-#Vector  seed_frp
+VectorMessage  seed_frp
 int32   seed_id
 int32   formation_id
+================================================================================
+MSG: Simulator/VectorMessage
+float64 x
+float64 y
 """
   __slots__ = ['formation']
   _slot_types = ['Simulator/FormationMessage']
@@ -147,7 +151,7 @@ int32   formation_id
     """
     try:
       _x = self
-      buff.write(_struct_2d2i.pack(_x.formation.radius, _x.formation.heading, _x.formation.seed_id, _x.formation.formation_id))
+      buff.write(_struct_4d2i.pack(_x.formation.radius, _x.formation.heading, _x.formation.seed_frp.x, _x.formation.seed_frp.y, _x.formation.seed_id, _x.formation.formation_id))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -163,8 +167,8 @@ int32   formation_id
       end = 0
       _x = self
       start = end
-      end += 24
-      (_x.formation.radius, _x.formation.heading, _x.formation.seed_id, _x.formation.formation_id,) = _struct_2d2i.unpack(str[start:end])
+      end += 40
+      (_x.formation.radius, _x.formation.heading, _x.formation.seed_frp.x, _x.formation.seed_frp.y, _x.formation.seed_id, _x.formation.formation_id,) = _struct_4d2i.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
@@ -180,7 +184,7 @@ int32   formation_id
     """
     try:
       _x = self
-      buff.write(_struct_2d2i.pack(_x.formation.radius, _x.formation.heading, _x.formation.seed_id, _x.formation.formation_id))
+      buff.write(_struct_4d2i.pack(_x.formation.radius, _x.formation.heading, _x.formation.seed_frp.x, _x.formation.seed_frp.y, _x.formation.seed_id, _x.formation.formation_id))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -198,16 +202,16 @@ int32   formation_id
       end = 0
       _x = self
       start = end
-      end += 24
-      (_x.formation.radius, _x.formation.heading, _x.formation.seed_id, _x.formation.formation_id,) = _struct_2d2i.unpack(str[start:end])
+      end += 40
+      (_x.formation.radius, _x.formation.heading, _x.formation.seed_frp.x, _x.formation.seed_frp.y, _x.formation.seed_id, _x.formation.formation_id,) = _struct_4d2i.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
-_struct_2d2i = struct.Struct("<2d2i")
+_struct_4d2i = struct.Struct("<4d2i")
 class CurrentFormation(roslib.message.ServiceDefinition):
   _type          = 'Simulator/CurrentFormation'
-  _md5sum = 'e0d015d319b7f776fa4954ca0514784f'
+  _md5sum = '1b8c322a6316abec4738c71c0df103d8'
   _request_class  = CurrentFormationRequest
   _response_class = CurrentFormationResponse

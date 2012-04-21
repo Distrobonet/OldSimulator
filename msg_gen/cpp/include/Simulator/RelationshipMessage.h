@@ -50,8 +50,8 @@ public:
   ROS_DEPRECATED const std::string __getMD5Sum() const { return __s_getMD5Sum_(); }
 
 private:
-  static const char* __s_getMessageDefinition_() { return "#Vector desired\n\
-#Vector actual\n\
+  static const char* __s_getMessageDefinition_() { return "#VectorMessage desired\n\
+#VectorMessage actual\n\
 int32 id\n\
 "; }
 public:
@@ -130,8 +130,8 @@ template<class ContainerAllocator>
 struct Definition< ::Simulator::RelationshipMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "#Vector desired\n\
-#Vector actual\n\
+    return "#VectorMessage desired\n\
+#VectorMessage actual\n\
 int32 id\n\
 ";
   }

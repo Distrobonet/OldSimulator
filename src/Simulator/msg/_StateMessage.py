@@ -7,10 +7,10 @@ class StateMessage(roslib.message.Message):
   _md5sum = "199c3c439236ac8d1a99f8080aafbf52"
   _type = "Simulator/StateMessage"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """#Formation formation
-#Vector frp
+  _full_text = """#FormationMessage formation
+#VectorMessage frp
 #Relationship[] relationships
-#Vector linear_error
+#VectorMessage linear_error
 float64 angular_error
 int32 timestep
 int32 reference_id

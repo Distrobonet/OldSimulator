@@ -92,45 +92,17 @@ _struct_I = roslib.message.struct_I
 import roslib.message
 import struct
 
-import Simulator.msg
 
 class StateResponse(roslib.message.Message):
-  _md5sum = "61a15d5433964315f98db047a12b8384"
+  _md5sum = "d41d8cd98f00b204e9800998ecf8427e"
   _type = "Simulator/StateResponse"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """State state
+  _full_text = """
 
 
-================================================================================
-MSG: Simulator/State
-Formation formation
-Vector frp
-Relationship[] relationships
-Vector linear_error
-float64 angular_error
-int32 timestep
-int32 reference_id
-float64 temperature
-float64 heat
-================================================================================
-MSG: Simulator/Formation
-float64 radius
-float64 heading
-Vector  seed_frp
-int32   seed_id
-int32   formation_id
-================================================================================
-MSG: Simulator/Vector
-float64 x
-float64 y
-================================================================================
-MSG: Simulator/Relationship
-Vector desired
-Vector actual
-int32 id
 """
-  __slots__ = ['state']
-  _slot_types = ['Simulator/State']
+  __slots__ = []
+  _slot_types = []
 
   def __init__(self, *args, **kwds):
     """
@@ -140,7 +112,7 @@ int32 id
     changes.  You cannot mix in-order arguments and keyword arguments.
     
     The available fields are:
-       state
+       
     
     @param args: complete set of field values, in .msg order
     @param kwds: use keyword arguments corresponding to message field names
@@ -148,11 +120,6 @@ int32 id
     """
     if args or kwds:
       super(StateResponse, self).__init__(*args, **kwds)
-      #message fields cannot be None, assign default values for those that are
-      if self.state is None:
-        self.state = Simulator.msg.State()
-    else:
-      self.state = Simulator.msg.State()
 
   def _get_types(self):
     """
@@ -167,20 +134,7 @@ int32 id
     @type  buff: StringIO
     """
     try:
-      _x = self
-      buff.write(_struct_4d2i2d.pack(_x.state.formation.radius, _x.state.formation.heading, _x.state.formation.seed_frp.x, _x.state.formation.seed_frp.y, _x.state.formation.seed_id, _x.state.formation.formation_id, _x.state.frp.x, _x.state.frp.y))
-      length = len(self.state.relationships)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.state.relationships:
-        _v1 = val1.desired
-        _x = _v1
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        _v2 = val1.actual
-        _x = _v2
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        buff.write(_struct_i.pack(val1.id))
-      _x = self
-      buff.write(_struct_3d2i2d.pack(_x.state.linear_error.x, _x.state.linear_error.y, _x.state.angular_error, _x.state.timestep, _x.state.reference_id, _x.state.temperature, _x.state.heat))
+      pass
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -191,37 +145,7 @@ int32 id
     @type  str: str
     """
     try:
-      if self.state is None:
-        self.state = Simulator.msg.State()
       end = 0
-      _x = self
-      start = end
-      end += 56
-      (_x.state.formation.radius, _x.state.formation.heading, _x.state.formation.seed_frp.x, _x.state.formation.seed_frp.y, _x.state.formation.seed_id, _x.state.formation.formation_id, _x.state.frp.x, _x.state.frp.y,) = _struct_4d2i2d.unpack(str[start:end])
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.state.relationships = []
-      for i in range(0, length):
-        val1 = Simulator.msg.Relationship()
-        _v3 = val1.desired
-        _x = _v3
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        _v4 = val1.actual
-        _x = _v4
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        start = end
-        end += 4
-        (val1.id,) = _struct_i.unpack(str[start:end])
-        self.state.relationships.append(val1)
-      _x = self
-      start = end
-      end += 48
-      (_x.state.linear_error.x, _x.state.linear_error.y, _x.state.angular_error, _x.state.timestep, _x.state.reference_id, _x.state.temperature, _x.state.heat,) = _struct_3d2i2d.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
@@ -236,20 +160,7 @@ int32 id
     @type  numpy module
     """
     try:
-      _x = self
-      buff.write(_struct_4d2i2d.pack(_x.state.formation.radius, _x.state.formation.heading, _x.state.formation.seed_frp.x, _x.state.formation.seed_frp.y, _x.state.formation.seed_id, _x.state.formation.formation_id, _x.state.frp.x, _x.state.frp.y))
-      length = len(self.state.relationships)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.state.relationships:
-        _v5 = val1.desired
-        _x = _v5
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        _v6 = val1.actual
-        _x = _v6
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        buff.write(_struct_i.pack(val1.id))
-      _x = self
-      buff.write(_struct_3d2i2d.pack(_x.state.linear_error.x, _x.state.linear_error.y, _x.state.angular_error, _x.state.timestep, _x.state.reference_id, _x.state.temperature, _x.state.heat))
+      pass
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -262,48 +173,14 @@ int32 id
     @type  numpy: module
     """
     try:
-      if self.state is None:
-        self.state = Simulator.msg.State()
       end = 0
-      _x = self
-      start = end
-      end += 56
-      (_x.state.formation.radius, _x.state.formation.heading, _x.state.formation.seed_frp.x, _x.state.formation.seed_frp.y, _x.state.formation.seed_id, _x.state.formation.formation_id, _x.state.frp.x, _x.state.frp.y,) = _struct_4d2i2d.unpack(str[start:end])
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.state.relationships = []
-      for i in range(0, length):
-        val1 = Simulator.msg.Relationship()
-        _v7 = val1.desired
-        _x = _v7
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        _v8 = val1.actual
-        _x = _v8
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        start = end
-        end += 4
-        (val1.id,) = _struct_i.unpack(str[start:end])
-        self.state.relationships.append(val1)
-      _x = self
-      start = end
-      end += 48
-      (_x.state.linear_error.x, _x.state.linear_error.y, _x.state.angular_error, _x.state.timestep, _x.state.reference_id, _x.state.temperature, _x.state.heat,) = _struct_3d2i2d.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
-_struct_2d = struct.Struct("<2d")
-_struct_i = struct.Struct("<i")
-_struct_3d2i2d = struct.Struct("<3d2i2d")
-_struct_4d2i2d = struct.Struct("<4d2i2d")
 class State(roslib.message.ServiceDefinition):
   _type          = 'Simulator/State'
-  _md5sum = '61a15d5433964315f98db047a12b8384'
+  _md5sum = 'd41d8cd98f00b204e9800998ecf8427e'
   _request_class  = StateRequest
   _response_class = StateResponse

@@ -7,8 +7,8 @@ class RelationshipMessage(roslib.message.Message):
   _md5sum = "c5e4a7d59c68f74eabcec876a00216aa"
   _type = "Simulator/RelationshipMessage"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """#Vector desired
-#Vector actual
+  _full_text = """#VectorMessage desired
+#VectorMessage actual
 int32 id
 """
   __slots__ = ['id']

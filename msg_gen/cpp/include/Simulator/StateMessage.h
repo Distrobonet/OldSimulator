@@ -70,10 +70,10 @@ public:
   ROS_DEPRECATED const std::string __getMD5Sum() const { return __s_getMD5Sum_(); }
 
 private:
-  static const char* __s_getMessageDefinition_() { return "#Formation formation\n\
-#Vector frp\n\
+  static const char* __s_getMessageDefinition_() { return "#FormationMessage formation\n\
+#VectorMessage frp\n\
 #Relationship[] relationships\n\
-#Vector linear_error\n\
+#VectorMessage linear_error\n\
 float64 angular_error\n\
 int32 timestep\n\
 int32 reference_id\n\
@@ -168,10 +168,10 @@ template<class ContainerAllocator>
 struct Definition< ::Simulator::StateMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "#Formation formation\n\
-#Vector frp\n\
+    return "#FormationMessage formation\n\
+#VectorMessage frp\n\
 #Relationship[] relationships\n\
-#Vector linear_error\n\
+#VectorMessage linear_error\n\
 float64 angular_error\n\
 int32 timestep\n\
 int32 reference_id\n\

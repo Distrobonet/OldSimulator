@@ -59,10 +59,10 @@
   "c5e4a7d59c68f74eabcec876a00216aa")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<RelationshipMessage>)))
   "Returns full string definition for message of type '<RelationshipMessage>"
-  (cl:format cl:nil "#Vector desired~%#Vector actual~%int32 id~%~%"))
+  (cl:format cl:nil "#VectorMessage desired~%#VectorMessage actual~%int32 id~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'RelationshipMessage)))
   "Returns full string definition for message of type 'RelationshipMessage"
-  (cl:format cl:nil "#Vector desired~%#Vector actual~%int32 id~%~%"))
+  (cl:format cl:nil "#VectorMessage desired~%#VectorMessage actual~%int32 id~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <RelationshipMessage>))
   (cl:+ 0
      4

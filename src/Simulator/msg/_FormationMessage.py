@@ -2,19 +2,24 @@
 import roslib.message
 import struct
 
+import Simulator.msg
 
 class FormationMessage(roslib.message.Message):
-  _md5sum = "bd72cb9b2bb0c98007298d13c50d1bb0"
+  _md5sum = "8954046ccbe1a10ea7eb252baf2abe9d"
   _type = "Simulator/FormationMessage"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """float64 radius
 float64 heading
-#Vector  seed_frp
+VectorMessage  seed_frp
 int32   seed_id
 int32   formation_id
+================================================================================
+MSG: Simulator/VectorMessage
+float64 x
+float64 y
 """
-  __slots__ = ['radius','heading','seed_id','formation_id']
-  _slot_types = ['float64','float64','int32','int32']
+  __slots__ = ['radius','heading','seed_frp','seed_id','formation_id']
+  _slot_types = ['float64','float64','Simulator/VectorMessage','int32','int32']
 
   def __init__(self, *args, **kwds):
     """
@@ -24,7 +29,7 @@ int32   formation_id
     changes.  You cannot mix in-order arguments and keyword arguments.
     
     The available fields are:
-       radius,heading,seed_id,formation_id
+       radius,heading,seed_frp,seed_id,formation_id
     
     @param args: complete set of field values, in .msg order
     @param kwds: use keyword arguments corresponding to message field names
@@ -37,6 +42,8 @@ int32   formation_id
         self.radius = 0.
       if self.heading is None:
         self.heading = 0.
+      if self.seed_frp is None:
+        self.seed_frp = Simulator.msg.VectorMessage()
       if self.seed_id is None:
         self.seed_id = 0
       if self.formation_id is None:
@@ -44,6 +51,7 @@ int32   formation_id
     else:
       self.radius = 0.
       self.heading = 0.
+      self.seed_frp = Simulator.msg.VectorMessage()
       self.seed_id = 0
       self.formation_id = 0
 
@@ -61,7 +69,7 @@ int32   formation_id
     """
     try:
       _x = self
-      buff.write(_struct_2d2i.pack(_x.radius, _x.heading, _x.seed_id, _x.formation_id))
+      buff.write(_struct_4d2i.pack(_x.radius, _x.heading, _x.seed_frp.x, _x.seed_frp.y, _x.seed_id, _x.formation_id))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -72,11 +80,13 @@ int32   formation_id
     @type  str: str
     """
     try:
+      if self.seed_frp is None:
+        self.seed_frp = Simulator.msg.VectorMessage()
       end = 0
       _x = self
       start = end
-      end += 24
-      (_x.radius, _x.heading, _x.seed_id, _x.formation_id,) = _struct_2d2i.unpack(str[start:end])
+      end += 40
+      (_x.radius, _x.heading, _x.seed_frp.x, _x.seed_frp.y, _x.seed_id, _x.formation_id,) = _struct_4d2i.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
@@ -92,7 +102,7 @@ int32   formation_id
     """
     try:
       _x = self
-      buff.write(_struct_2d2i.pack(_x.radius, _x.heading, _x.seed_id, _x.formation_id))
+      buff.write(_struct_4d2i.pack(_x.radius, _x.heading, _x.seed_frp.x, _x.seed_frp.y, _x.seed_id, _x.formation_id))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -105,14 +115,16 @@ int32   formation_id
     @type  numpy: module
     """
     try:
+      if self.seed_frp is None:
+        self.seed_frp = Simulator.msg.VectorMessage()
       end = 0
       _x = self
       start = end
-      end += 24
-      (_x.radius, _x.heading, _x.seed_id, _x.formation_id,) = _struct_2d2i.unpack(str[start:end])
+      end += 40
+      (_x.radius, _x.heading, _x.seed_frp.x, _x.seed_frp.y, _x.seed_id, _x.formation_id,) = _struct_4d2i.unpack(str[start:end])
       return self
     except struct.error as e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
-_struct_2d2i = struct.Struct("<2d2i")
+_struct_4d2i = struct.Struct("<4d2i")

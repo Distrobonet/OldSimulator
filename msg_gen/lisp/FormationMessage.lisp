@@ -17,6 +17,11 @@
     :initarg :heading
     :type cl:float
     :initform 0.0)
+   (seed_frp
+    :reader seed_frp
+    :initarg :seed_frp
+    :type Simulator-msg:VectorMessage
+    :initform (cl:make-instance 'Simulator-msg:VectorMessage))
    (seed_id
     :reader seed_id
     :initarg :seed_id
@@ -47,6 +52,11 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader Simulator-msg:heading-val is deprecated.  Use Simulator-msg:heading instead.")
   (heading m))
 
+(cl:ensure-generic-function 'seed_frp-val :lambda-list '(m))
+(cl:defmethod seed_frp-val ((m <FormationMessage>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader Simulator-msg:seed_frp-val is deprecated.  Use Simulator-msg:seed_frp instead.")
+  (seed_frp m))
+
 (cl:ensure-generic-function 'seed_id-val :lambda-list '(m))
 (cl:defmethod seed_id-val ((m <FormationMessage>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader Simulator-msg:seed_id-val is deprecated.  Use Simulator-msg:seed_id instead.")
@@ -76,6 +86,7 @@
     (cl:write-byte (cl:ldb (cl:byte 8 40) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 48) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 56) bits) ostream))
+  (roslisp-msg-protocol:serialize (cl:slot-value msg 'seed_frp) ostream)
   (cl:let* ((signed (cl:slot-value msg 'seed_id)) (unsigned (cl:if (cl:< signed 0) (cl:+ signed 4294967296) signed)))
     (cl:write-byte (cl:ldb (cl:byte 8 0) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) unsigned) ostream)
@@ -111,6 +122,7 @@
       (cl:setf (cl:ldb (cl:byte 8 48) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 56) bits) (cl:read-byte istream))
     (cl:setf (cl:slot-value msg 'heading) (roslisp-utils:decode-double-float-bits bits)))
+  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'seed_frp) istream)
     (cl:let ((unsigned 0))
       (cl:setf (cl:ldb (cl:byte 8 0) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) unsigned) (cl:read-byte istream))
@@ -133,20 +145,21 @@
   "Simulator/FormationMessage")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<FormationMessage>)))
   "Returns md5sum for a message object of type '<FormationMessage>"
-  "bd72cb9b2bb0c98007298d13c50d1bb0")
+  "8954046ccbe1a10ea7eb252baf2abe9d")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'FormationMessage)))
   "Returns md5sum for a message object of type 'FormationMessage"
-  "bd72cb9b2bb0c98007298d13c50d1bb0")
+  "8954046ccbe1a10ea7eb252baf2abe9d")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<FormationMessage>)))
   "Returns full string definition for message of type '<FormationMessage>"
-  (cl:format cl:nil "float64 radius~%float64 heading~%#Vector  seed_frp~%int32   seed_id~%int32   formation_id~%~%"))
+  (cl:format cl:nil "float64 radius~%float64 heading~%VectorMessage  seed_frp~%int32   seed_id~%int32   formation_id~%================================================================================~%MSG: Simulator/VectorMessage~%float64 x~%float64 y~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'FormationMessage)))
   "Returns full string definition for message of type 'FormationMessage"
-  (cl:format cl:nil "float64 radius~%float64 heading~%#Vector  seed_frp~%int32   seed_id~%int32   formation_id~%~%"))
+  (cl:format cl:nil "float64 radius~%float64 heading~%VectorMessage  seed_frp~%int32   seed_id~%int32   formation_id~%================================================================================~%MSG: Simulator/VectorMessage~%float64 x~%float64 y~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <FormationMessage>))
   (cl:+ 0
      8
      8
+     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'seed_frp))
      4
      4
 ))
@@ -155,6 +168,7 @@
   (cl:list 'FormationMessage
     (cl:cons ':radius (radius msg))
     (cl:cons ':heading (heading msg))
+    (cl:cons ':seed_frp (seed_frp msg))
     (cl:cons ':seed_id (seed_id msg))
     (cl:cons ':formation_id (formation_id msg))
 ))
