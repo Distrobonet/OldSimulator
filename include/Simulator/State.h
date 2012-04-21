@@ -1,9 +1,6 @@
 //
 // Filename:        "State.h"
 //
-// Programmer:      Ross Mead
-// Last modified:   13Apr2011
-//
 // Description:     This structure defines a robot cell state.
 //
 
@@ -25,7 +22,7 @@ struct State
 
     // <data members>
     Formation            formation;     // the current formation
-    Vector               gradient;      // the formation gradient
+    Vector               frp;      // the formation gradient
     vector<Relationship> rels;          // the formation relationships
     Vector               transError;    // the summed translational error
     float                rotError;      // the summed rotational error
@@ -38,7 +35,7 @@ struct State
     // Default constructor that initializes
     // this state to the parameterized values.
     State(const Formation            f      = Formation(),
-          const Vector               grad   = Vector(),
+          const Vector               formationrelativepos   = Vector(),
           const vector<Relationship> r      = vector<Relationship>(),
           const Vector               tError = Vector(),
           const float                rError = 0.0f,
@@ -46,7 +43,7 @@ struct State
           const int                  rID    = -1,
           const float                temp   = 0.0f,
           const float                h      = 0.0f)
-          : formation(f),       gradient(grad),   rels(r),
+          : formation(f),       frp(formationrelativepos),   rels(r),
             transError(tError), rotError(rError), tStep(ts), refID(rID),
             temperature(temp),  heat(h)
     {
