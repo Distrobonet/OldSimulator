@@ -63,6 +63,19 @@ struct State
     {
     }   // State(const..{Formation, Vector, LL<Relationship>, Vector, int,int})
 
+
+
+    // TODO: this needs to be fixed
+//    StateMsg getStateAsMsg()
+//    {
+//    	StateMsg s;
+//    	s.formation = formation;
+//    	s.frp = frp;
+//    	s.relationship = relationships;
+//    	...
+//    	return s;
+//    }
+
 };
 
 
