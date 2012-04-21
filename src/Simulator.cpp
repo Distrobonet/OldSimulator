@@ -33,7 +33,7 @@
 #include <Simulator/Environment.h>
 #include <Simulator/Robot.h>
 
-#include"Simulator/FormationIndex.h"
+#include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
 
 #define SUBSCRIBER 0
 #define PUBLISHER 1
@@ -124,13 +124,13 @@ bool initEnv(const int nRobots, const int formationIndex);
 
 
 // Service utility function to set the formationIndex being served to the CURRENT_SELECTION
-bool setFormation(Simulator::FormationIndex::Request  &req,
-		Simulator::FormationIndex::Response &res )
+bool setFormation(Simulator::CurrentFormation::Request  &req,
+		Simulator::CurrentFormation::Response &res )
 {
   //res.sum = req.a + req.b;
-	res.formationIndex = CURRENT_SELECTION;
+	//res.formation = CURRENT_SELECTION;		//TODO: fix this
 	//ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
-	ROS_INFO("sending back response: [%ld]", (long int)res.formationIndex);
+	//ROS_INFO("sending back response: [%ld]", (long int)res.formation);//TODO: fix this
 	return true;
 }
 
@@ -142,10 +142,10 @@ bool setFormation(Simulator::FormationIndex::Request  &req,
 int main(int argc, char **argv)
 {
 	// Service
-	ros::init(argc, argv, "formation_index_server");
+	ros::init(argc, argv, "formation_server");
 	ros::NodeHandle serverNode;
-	ros::ServiceServer service = serverNode.advertiseService("formation_index", setFormation);
-	ROS_INFO("Now serving the formation index.");
+	ros::ServiceServer service = serverNode.advertiseService("formation", setFormation);
+	ROS_INFO("Now serving the formation.");
 	//ros::spin();
 	ros::spinOnce();
 

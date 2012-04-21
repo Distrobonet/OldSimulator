@@ -177,25 +177,25 @@ bool Formation::setHeading(const float theta)
 // Sets the Formation Index from the FormationIndex service
 bool Formation::setFormationIndexFromService()
 {
-	ROS_INFO("Trying to access the formationIndex");
+	ROS_INFO("Trying to access the formation message");
 
 	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
 
 	ros::NodeHandle clientNode;
-	client = clientNode.serviceClient<Simulator::FormationIndex>("formation_index");
+	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
 
 	spinner.start();
 
-	if (client.call(srv))
+	if (formationClient.call(srv))
 	{
-		ROS_INFO("formation index: %ld", (long int)srv.response.formationIndex);
+		//ROS_INFO("formation: %ld", (long int)srv.response.formation);//TODO: fix this
 		spinner.stop();
 		clientNode.shutdown();
 		return true;
 	}
 	else
 	{
-		ROS_ERROR("Failed to call service formation_index");
+		ROS_ERROR("Failed to call service formation");
 		spinner.stop();
 		clientNode.shutdown();
 		return false;
