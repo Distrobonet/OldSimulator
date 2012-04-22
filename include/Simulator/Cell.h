@@ -92,6 +92,7 @@ class Cell: public State, public Neighborhood
         ros::NodeHandle stateNode;
         ros::Publisher state_pub;
 		geometry_msgs::Twist commandVelocity;
+
 		ros::Publisher cmd_velPub;
         ros::Subscriber leftNeighborState;
         ros::Subscriber rightNeighborState;

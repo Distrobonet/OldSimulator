@@ -58,6 +58,32 @@ void Cell::update(bool doSpin)
 
 		//TODO: update the cell
 		//cell.spin();
+		Simulator::StateMessage state;
+	  	state.formation.radius = formation.radius;
+	  	state.formation.heading = formation.heading;
+	  	state.formation.seed_frp.x = formation.seedFrp.x;
+	  	state.formation.seed_frp.y = formation.seedFrp.y;
+	  	state.formation.seed_id = formation.seedID;
+	  	state.formation.formation_id = formation.formationID;
+		state.frp.x = frp.x;
+	 	state.frp.y = frp.y;
+
+	 	for(uint i = 0; i < rels.size(); i++)
+	 	{
+	 		state.relationships[i].id = rels[i].ID;
+	 		state.relationships[i].actual.x = rels[i].relActual.x;
+	 		state.relationships[i].actual.x = rels[i].relActual.x;
+	 		state.relationships[i].desired.x = rels[i].relDesired.x;
+	 		state.relationships[i].desired.x = rels[i].relDesired.x;
+	 	}
+
+		state.linear_error.x = transError.x;
+		state.linear_error.y = transError.y;
+		state.angular_error = rotError;
+		state.timestep = tStep;
+		state.reference_id = refID;
+		state.temperature = temperature;
+		state.heat = heat;
 
 		commandVelocity.linear.x = behavior.getTransVel();
 		commandVelocity.angular.z = behavior.getRotVel();
@@ -524,9 +550,9 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
  	{
  		res.state.relationships[i].id = rels[i].ID;
  		res.state.relationships[i].actual.x = rels[i].relActual.x;
- 		res.state.relationships[i].actual.x = rels[i].relActual.x;
+ 		res.state.relationships[i].actual.y = rels[i].relActual.x;
  		res.state.relationships[i].desired.x = rels[i].relDesired.x;
- 		res.state.relationships[i].desired.x = rels[i].relDesired.x;
+ 		res.state.relationships[i].desired.y = rels[i].relDesired.x;
  	}
 
 	res.state.linear_error.x = transError.x;
