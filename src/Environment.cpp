@@ -421,7 +421,7 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 {
 //	if ((toCell == NULL) || (fromCell == NULL))
 //	  return Vector();
-//
+////
 //	Vector temp   = *toCell - *fromCell;
 //	temp.rotateRelative(-fromCell->getHeading());
 
@@ -437,7 +437,8 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 
 	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
 
-	float theta = 0;
+	float theta = subRobotVels[req.OriginID][3];
+	theta = degreesToRadians(theta);
 	//theta =
 	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
 	tempVector.x = tempVector.x * cos(theta) - tempVector.y * sin(theta);
