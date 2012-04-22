@@ -36,12 +36,6 @@ class Environment
     public:
 
         // <public data members>
-        bool    startFormation;
-        int     formationID;
-        Vector  centroid;
-        float   radius;
-        Vector  distance;
-
         double robotX;
 		double robotY;
 		double robotTheta;
@@ -60,40 +54,9 @@ class Environment
         void initOverloardSubscribers(Environment *e);
         void update(bool doSpin);
 
-        // <virtual public mutator functions>
-//        virtual bool setColor(const float r,
-//                              const float g,
-//                              const float b);
-//        virtual bool setColor(const float clr[3]);
-//        virtual bool setColor(const Color colorIndex = DEFAULT_VECTOR_COLOR);
-
-        // <public mutator functions>
-        bool addCell(Cell *c = NULL);
-        bool removeCell();
-        bool removeCell(Cell *c);
-        bool addRobot(float x = 0.0f, float y = 0.0f, float z = 0.0f, float theta = 0.0f);
-		bool addObject(float dx = 0.0f, float dy = 0.0f, float dz = 0.0f);
-		bool addObject(Object *o = NULL);
-		bool removeObject();
-        bool removeObject(Object *o);
-
-        // <public accessor functions>
-        Cell*               getCell(int pos) const;
-		Object*             getObject(int index) const;
-        vector<Cell *>      getCells();    // BAD!!!
-		vector<Object *>    getObjects();  // BAD!!!
-        int                 getNumberOfCells() const;
-        int                 getNumberOfFreeRobots() const;
-		int                 getNObjects() const;
-
-
-        // <virtual public utility functions>
-//        virtual bool step();
-        virtual void clear();
 
         //functions for the subscribers for all robots
-        string generateSubMessage(bool msgType);
-		void updatePosition(int robotID);
+        string generateSubMessage(int cellID);
 		void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom);
 
 		float getDistanceTo(const int fromID, const int toID) const;
@@ -103,42 +66,7 @@ class Environment
         Vector  getRelationship(const int toID, const int fromID);
         float   getDistanceTo(const int id)   const;
         float   getAngleTo(const int id)      const;
-        //brntbeer added for Prop_ops
-        void    getCentroid( Vector v);
-        void    getRadius(float rad);
-        void    getDistance(Vector dist);
-		//removed const from parameters
-        bool    sendMsg(const Message &msg = NULL,
-                        const int    toID   = ID_BROADCAST,
-                        const int    fromID = ID_OPERATOR,
-                        const int    type   = HEARTBEAT);
 
-		//removed const
-        bool    sendPacket(const Packet &p = Packet());
-        vector<Cell *>  getCellVector();
-
-        // <public sensor functions>
-
-		//removed const
-        bool    forwardPacket(const Packet &p);
-        bool    forwardPackets();
-
-        // <public utility cell functions>
-        bool    showLine(const bool show);
-        bool    showHead(const bool show);
-        bool    showPos(const bool show);
-        bool    showHeading(const bool show);
-
-        // <public utility auctioning functions>
-        //bool    auctionPosition(Cell* a);
-        void    formUp();
-        void    formFromClick(float x,float y);
-        bool    changeFormation(Formation &f);
-        bool    changeFormationSeed(Formation &f, int id);
-        void    settleAuction(Cell* c,int rID);
-
-        //brntbeer added for prop_ops
-        friend bool changeFormationSim(const int index, const Vector frp);
 
         // Relationship service server
 		ros::ServiceServer relationshipService;
@@ -155,11 +83,6 @@ class Environment
         Formation          formation;
         int                numOfRobots;
 
-        // <virtual protected utility functions>
-        virtual bool init();
-        virtual bool initCells(const Formation f = Formation());
-        virtual bool initNbrs(const int nNbrs = 0);
-//		virtual bool initRobots();
 };  // Environment
 
 #endif
