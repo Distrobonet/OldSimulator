@@ -304,9 +304,35 @@ void Cell::setID(int cellID)
 //}
 
 
-void Cell::stateCallback(const Simulator::StateMessage &state)
+void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 {
-	// TODO: to be fleshed out when after a publisher is defined
+	Cell::State currentState;
+	currentState.formation.radius = incomingState.formation.radius;
+	currentState.formation.heading = incomingState.formation.heading;
+	currentState.formation.seedFrp.x = incomingState.formation.seed_frp.x;
+	currentState.formation.seedFrp.y = incomingState.formation.seed_frp.y;
+	currentState.formation.seedID = incomingState.formation.seed_id;
+	currentState.formation.formationID = incomingState.formation.formation_id;
+	currentState.frp.x = frp.x;
+	currentState.frp.y = frp.y;
+
+	for(uint i = 0; i < rels.size(); i++)
+	{
+		currentState.rels[i].ID = incomingState.relationships[i].id;
+		currentState.rels[i].relActual.x = incomingState.relationships[i].actual.x;
+		currentState.rels[i].relActual.y = incomingState.relationships[i].actual.y;
+		currentState.rels[i].relDesired.x = incomingState.relationships[i].desired.x;
+		currentState.rels[i].relDesired.y = incomingState.relationships[i].desired.y;
+	}
+
+	currentState.transError.x = incomingState.linear_error.x;
+	currentState.transError.y= incomingState.linear_error.y;
+	currentState.rotError = incomingState.angular_error;
+	currentState.tStep = incomingState.timestep;
+	currentState.refID = incomingState.reference_id;
+	currentState.temperature = incomingState.temperature;
+	currentState.heat = incomingState.heat;
+	setState(currentState);
 }
 
 // Attempts to change the formation of the cell,
@@ -377,7 +403,6 @@ Behavior Cell::moveErrorBehavior(const Vector tError, const float rError)
 // returning the appropriate robot behavior.
 Behavior Cell::move(const Vector &target)
 {
-	// TODO: Need call to cmd_vel subscriber
 	float theta    		= target.angle();
 	float phi     		= this->heading.angle();
 	float delta   		= degreesToRadians(theta);
@@ -503,6 +528,9 @@ bool Cell::setFormationFromService()
 bool Cell::getNeighborState(bool leftOrRight)
 {
 	//TODO: do this function
+	if(leftOrRight){
+		int nrbId = this->leftNbr->ID;
+	}
 	return false;
 }
 

@@ -123,6 +123,7 @@ void Environment::update(bool doSpin)
 	while(ros::ok())
 	{
 		// TODO update base_pose_gnd_truth
+		//ROS handles this for us with the call back function
 
 		ros::spinOnce();
 	}
