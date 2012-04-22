@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     // sets dx, dy, dz = 0.0f, theta (heading = 90.0f[default], cellID
     Cell thisCell = Cell(atoi(argv[1]));
 	thisCell.setID(atoi(argv[1]));
-	thisCell.initNbrs(atoi(argv[1]));
+	thisCell.initNbrs(&thisCell, atoi(argv[1]));
 
 	// Start the state service server for this cell
 	ros_name = "state_server_";

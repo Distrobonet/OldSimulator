@@ -62,6 +62,7 @@ static const int    NEIGHBORHOOD_SIZE        = 2;
 static const float  MAX_TRANSLATIONAL_ERROR  = 0.02f;
 static const float  FACTOR_MAX_SPEED         = 0.3f;
 static const float  FACTOR_THRESHOLD         = 1.0f;
+static const Behavior DEFAULT_ROBOT_BEHAVIOR     = Behavior();
 
 
 
@@ -80,12 +81,13 @@ class Cell: public State, public Neighborhood
         virtual ~Cell();
 
         void update(bool doSpin);
-        bool initNbrs(int currentRobotsID);
+        bool initNbrs(Cell *cell, int currentRobotsID);
 
         ros::NodeHandle stateNode;
         ros::Publisher state_pub;
         ros::Subscriber leftNeighborState;
         ros::Subscriber rightNeighborState;
+
 
         // <public mutator functions>
         bool setState(const State &s);
@@ -158,6 +160,7 @@ class Cell: public State, public Neighborhood
         Formation currentFormation;
         Neighbor    *leftNbr, *rightNbr;
         Vector		heading;
+        Behavior    behavior;         // behavior of robot
         int			cellX;
         int			cellTheta;
         int			ID;
