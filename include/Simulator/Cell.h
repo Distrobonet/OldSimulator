@@ -18,7 +18,7 @@
 #include <vector>
 #include <Simulator/Auctioning.h>
 #include <Simulator/Neighborhood.h>
-#include <Simulator/Robot.h>
+#include <Simulator/Behavior.h>
 #include "std_msgs/String.h"
 
 #include <ros/ros.h>	// Used for service to get Formation
@@ -55,30 +55,26 @@ enum MessageType
 
 
 // global constants
-static const Color   DEFAULT_CELL_COLOR       = WHITE;
-static const bool    DEFAULT_CELL_SHOW_FILLED = true;
-static const int   LEFT_NBR_INDEX           = 0;
-static const int   RIGHT_NBR_INDEX          = 1;
-static const int   NEIGHBORHOOD_SIZE        = 2;
-static const float MAX_TRANSLATIONAL_ERROR  = 0.02f;
+static const Color  DEFAULT_CELL_COLOR       = WHITE;
+static const bool   DEFAULT_CELL_SHOW_FILLED = true;
+static const int    LEFT_NBR_INDEX           = 0;
+static const int    RIGHT_NBR_INDEX          = 1;
+static const int    NEIGHBORHOOD_SIZE        = 2;
+static const float  MAX_TRANSLATIONAL_ERROR  = 0.02f;
+static const float  FACTOR_MAX_SPEED         = 0.3f;
 
 
 
 // describes a robot cell
-class Cell: public State, public Neighborhood, public Robot
+class Cell: public State, public Neighborhood
 {
     friend class Environment;
 
     public:
 
         // <constructors>
-        Cell(const float dx         = 0.0f,
-             const float dy         = 0.0f,
-             const float dz         = 0.0f,
-             const float theta      = 0.0f,
-             const int ID			= 0);
+        Cell(const int ID = 0);
         Cell(const Cell &r);
-//        Cell(const char ID = '0');
 
         // <destructors>
         virtual ~Cell();
@@ -94,22 +90,18 @@ class Cell: public State, public Neighborhood, public Robot
         // <public mutator functions>
         bool setState(const State &s);
         bool setNbrs(Neighborhood &nh);
-        bool setRobot(const Robot &r);
-        bool setRobotP(Robot *r);
         bool setAuctionStepCount(const int& asc);
 
         // <public accessor functions>
         State        getState() const;
         Neighborhood getNbrs()  const;
-        Robot        getRobot() const;
         int          getNBids() const;
         int          getAuctionStepCount() const;
+        int 		 getID() const;
 
 
 
         // <virtual public utility functions>
-        Cell* cStep();
-        //virtual  step();
         virtual void updateState();
 
         //TODO: fix this input data type
@@ -120,22 +112,25 @@ class Cell: public State, public Neighborhood, public Robot
                                      Neighbor         n = Neighbor());
         virtual bool sendStateToNbrs();
         virtual bool sendState(const int);
-//        virtual bool processPackets();
-//        virtual bool processPacket(Packet &p);
-//        virtual bool processNCell(Packet &p);
-//        virtual bool processFcntr(Packet &p);
-//        virtual bool processFRad(Packet &p);
-//        virtual bool processFSeed(Packet &p);
 
         // <public primitive behaviors>
         Behavior moveError();
         Behavior moveError(const Vector tError, const float rError);
         Behavior moveErrorBehavior(const Vector tError, const float rError);
 
+        Behavior move(const Vector &target);
+        Behavior move(const float t, const float r);
+        Behavior moveStop();
+
+        float maxSpeed() const;
+        float threshold() const;
+        float angThreshold() const;
+        bool setHeading(const float theta);
+
         // <virtual overloaded operators>
         virtual Cell& operator =(const State &s);
         virtual Cell& operator =(const Neighborhood &nh);
-        virtual Cell& operator =(const Robot &r);
+//        virtual Cell& operator =(const Robot &r);
 
         // Service stuff
         // Formation service client
@@ -161,12 +156,11 @@ class Cell: public State, public Neighborhood, public Robot
     protected:
 
         // <protected data members>
-//        vector<Bid *> bids;
-        Neighbor     *leftNbr, *rightNbr;
-
-
-        int           numBids;
-        int           auctionStepCount;
+        Neighbor    *leftNbr, *rightNbr;
+        Vector		heading;
+        int			cellX;
+        int			cellTheta;
+        int			ID;
 
         // <protected static data members>
         static int nCells;
@@ -175,11 +169,7 @@ class Cell: public State, public Neighborhood, public Robot
         void settleAuction();
 
         // <virtual protected utility functions>
-        virtual bool init(const float dx         = 0.0f,
-                          const float dy         = 0.0f,
-                          const float dz         = 0.0f,
-                          const float theta      = 0.0f,
-                          const int ID			 = 0);
+        virtual bool init(const int ID = 0);
 };  // Cell
 
 #endif
