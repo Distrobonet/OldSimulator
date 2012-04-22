@@ -55,7 +55,6 @@ enum MessageType
 
 
 // global constants
-static const Color  DEFAULT_CELL_COLOR       = WHITE;
 static const bool   DEFAULT_CELL_SHOW_FILLED = true;
 static const int    LEFT_NBR_INDEX           = 0;
 static const int    RIGHT_NBR_INDEX          = 1;
@@ -149,7 +148,7 @@ class Cell: public State, public Neighborhood
 
 		// State service server
 		ros::ServiceServer stateService;
-		bool setStateMessage(Simulator::State::Request  &req, Simulator::State::Response &res );
+		bool setStateMessage(Simulator::State::Request  &req, Simulator::State::Response &res);
 		void startStateServiceServer();
 
 
