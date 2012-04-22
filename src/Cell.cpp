@@ -47,6 +47,10 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
+		setFormationFromService();
+		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
+
+
 		behavior.getTransVel();
 
 		Simulator::StateMessage state;
@@ -63,9 +67,9 @@ void Cell::update(bool doSpin)
 	 	{
 	 		state.relationships[i].id = rels[i].ID;
 	 		state.relationships[i].actual.x = rels[i].relActual.x;
-	 		state.relationships[i].actual.x = rels[i].relActual.x;
+	 		state.relationships[i].actual.y = rels[i].relActual.y;
 	 		state.relationships[i].desired.x = rels[i].relDesired.x;
-	 		state.relationships[i].desired.x = rels[i].relDesired.x;
+	 		state.relationships[i].desired.y = rels[i].relDesired.y;
 	 	}
 
 		state.linear_error.x = transError.x;
@@ -88,8 +92,7 @@ void Cell::update(bool doSpin)
 		cmd_velPub.publish(commandVelocity);
 
 
-		setFormationFromService();
-		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
+
 
 		if(doSpin)
 			ros::spinOnce();
