@@ -2,8 +2,6 @@
 
 int main(int argc, char **argv)
 {
-
-	// TODO: this needs to be fixed
 	// initialize ROS stuff
 	ros::init(argc, argv, "environment");
 	ros::NodeHandle base_pose;
@@ -18,8 +16,6 @@ int main(int argc, char **argv)
 	// Relationship Service server stuff
 	ros::init(argc, argv, "relationship_server");
 	env.startRelationshipServiceServer();
-
-
 
 	return 0;
 }
