@@ -17,10 +17,8 @@ int main(int argc, char **argv)
 	//TODO: this needs to be finished
 
     // sets dx, dy, dz = 0.0f, theta (heading = 90.0f[default], cellID
-    cout << "Robot ID (cell_node): " << atoi(argv[1]) << endl;
-    Cell thisCell = Cell(atoi(argv[2]), atoi(argv[3]), 0.0f, 90.0f, atoi(argv[1]));
+    Cell thisCell = Cell(atoi(argv[1]));
 	thisCell.ID = atoi(argv[1]);
-
 	thisCell.initNbrs(atoi(argv[1]));
 
 	// Start the state service server for this cell
