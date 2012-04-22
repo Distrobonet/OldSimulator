@@ -86,6 +86,10 @@ void Cell::update(bool doSpin)
 		state.heat = heat;
 		state_pub.publish(state);
 
+		State cellState = getState();
+		Vector vectorToNbr = Vector(transError.x, transError.y, rotError);
+		behavior = move(vectorToNbr);
+
 		commandVelocity.linear.x = behavior.getTransVel();
 		commandVelocity.angular.z = behavior.getRotVel();
 		cmd_velPub.publish(commandVelocity);
