@@ -84,6 +84,7 @@ void Cell::update(bool doSpin)
 		state.reference_id = refID;
 		state.temperature = temperature;
 		state.heat = heat;
+		state_pub.publish(state);
 
 		commandVelocity.linear.x = behavior.getTransVel();
 		commandVelocity.angular.z = behavior.getRotVel();
