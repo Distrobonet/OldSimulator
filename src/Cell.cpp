@@ -136,16 +136,16 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 				break;
 		}
 
-		if ((currentRobotsID >= 0) && (cell->addNbr(leftNbrID)))
+		if (cell->addNbr(leftNbrID))
 		{
 			cell->leftNbr  = cell->nbrWithID(leftNbrID);
 			cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
 
 		}
 
-		if ((currentRobotsID < nCells) && (cell->addNbr(rightNbrID)))
+		if (cell->addNbr(rightNbrID))
 		{
-			cell->rightNbr = cell->nbrWithID(currentRobotsID + rightNbrID);
+			cell->rightNbr = cell->nbrWithID(rightNbrID);
 			cell->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, cell);
 		}
 
