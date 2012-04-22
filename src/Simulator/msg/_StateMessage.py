@@ -5,7 +5,7 @@ import struct
 import Simulator.msg
 
 class StateMessage(roslib.message.Message):
-  _md5sum = "5719d4b054f34dae3ad68ebff33db700"
+  _md5sum = "e71196bfd2b7e047442fbda49a14842e"
   _type = "Simulator/StateMessage"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """FormationMessage formation
@@ -30,8 +30,8 @@ float64 x
 float64 y
 ================================================================================
 MSG: Simulator/RelationshipMessage
-#VectorMessage desired
-#VectorMessage actual
+VectorMessage desired
+VectorMessage actual
 int32 id
 """
   __slots__ = ['formation','frp','relationships','linear_error','angular_error','timestep','reference_id','temperature','heat']
@@ -101,6 +101,12 @@ int32 id
       length = len(self.relationships)
       buff.write(_struct_I.pack(length))
       for val1 in self.relationships:
+        _v1 = val1.desired
+        _x = _v1
+        buff.write(_struct_2d.pack(_x.x, _x.y))
+        _v2 = val1.actual
+        _x = _v2
+        buff.write(_struct_2d.pack(_x.x, _x.y))
         buff.write(_struct_i.pack(val1.id))
       _x = self
       buff.write(_struct_3d2i2d.pack(_x.linear_error.x, _x.linear_error.y, _x.angular_error, _x.timestep, _x.reference_id, _x.temperature, _x.heat))
@@ -131,6 +137,16 @@ int32 id
       self.relationships = []
       for i in range(0, length):
         val1 = Simulator.msg.RelationshipMessage()
+        _v3 = val1.desired
+        _x = _v3
+        start = end
+        end += 16
+        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
+        _v4 = val1.actual
+        _x = _v4
+        start = end
+        end += 16
+        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
         start = end
         end += 4
         (val1.id,) = _struct_i.unpack(str[start:end])
@@ -158,6 +174,12 @@ int32 id
       length = len(self.relationships)
       buff.write(_struct_I.pack(length))
       for val1 in self.relationships:
+        _v5 = val1.desired
+        _x = _v5
+        buff.write(_struct_2d.pack(_x.x, _x.y))
+        _v6 = val1.actual
+        _x = _v6
+        buff.write(_struct_2d.pack(_x.x, _x.y))
         buff.write(_struct_i.pack(val1.id))
       _x = self
       buff.write(_struct_3d2i2d.pack(_x.linear_error.x, _x.linear_error.y, _x.angular_error, _x.timestep, _x.reference_id, _x.temperature, _x.heat))
@@ -190,6 +212,16 @@ int32 id
       self.relationships = []
       for i in range(0, length):
         val1 = Simulator.msg.RelationshipMessage()
+        _v7 = val1.desired
+        _x = _v7
+        start = end
+        end += 16
+        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
+        _v8 = val1.actual
+        _x = _v8
+        start = end
+        end += 16
+        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
         start = end
         end += 4
         (val1.id,) = _struct_i.unpack(str[start:end])
@@ -203,6 +235,7 @@ int32 id
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
+_struct_2d = struct.Struct("<2d")
 _struct_i = struct.Struct("<i")
 _struct_3d2i2d = struct.Struct("<3d2i2d")
 _struct_4d2i2d = struct.Struct("<4d2i2d")

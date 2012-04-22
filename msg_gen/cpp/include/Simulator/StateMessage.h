@@ -91,7 +91,7 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "5719d4b054f34dae3ad68ebff33db700"; }
+  static const char* __s_getMD5Sum_() { return "e71196bfd2b7e047442fbda49a14842e"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
@@ -120,8 +120,8 @@ float64 x\n\
 float64 y\n\
 ================================================================================\n\
 MSG: Simulator/RelationshipMessage\n\
-#VectorMessage desired\n\
-#VectorMessage actual\n\
+VectorMessage desired\n\
+VectorMessage actual\n\
 int32 id\n\
 "; }
 public:
@@ -202,12 +202,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::Simulator::StateMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "5719d4b054f34dae3ad68ebff33db700";
+    return "e71196bfd2b7e047442fbda49a14842e";
   }
 
   static const char* value(const  ::Simulator::StateMessage_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0x5719d4b054f34daeULL;
-  static const uint64_t static_value2 = 0x3ad68ebff33db700ULL;
+  static const uint64_t static_value1 = 0xe71196bfd2b7e047ULL;
+  static const uint64_t static_value2 = 0x442fbda49a14842eULL;
 };
 
 template<class ContainerAllocator>
@@ -246,8 +246,8 @@ float64 x\n\
 float64 y\n\
 ================================================================================\n\
 MSG: Simulator/RelationshipMessage\n\
-#VectorMessage desired\n\
-#VectorMessage actual\n\
+VectorMessage desired\n\
+VectorMessage actual\n\
 int32 id\n\
 ";
   }
