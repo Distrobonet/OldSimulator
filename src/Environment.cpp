@@ -238,35 +238,35 @@ bool Environment::initRobots()
 // returning true if successful, false otherwise.
 bool Environment::initCells(const Formation f)
 {
-	Cell *c  = new Cell;
-	std::stringstream converter;
-	
-	for (int i = 0; i < numOfRobots; i++)
-	{
-//		if (!cells.getHead(c))
-//			return false;
-		c->x = formation.getRadius() * ((float)i - (float)(getNumberOfCells() - 1) / 2.0f);
-		c->y = 0.0f;
-		c->setHeading(formation.getHeading());
-		//TODO:Add this is when the number of cells we have is actually correct
-//		string cellName = "robot_";
-//		converter<<i;
-//		cellName.append(converter.str());
-//		cellName.append("/state");
-//		c->state_pub = c->stateNode.advertise < Cell::State > (cellName, 1);
-		cells.push_back(c);
-
-		if(VERBOSE)
-			printf("iterating through cells...\n");
-	}
-
-	
-	// initialize cell's neighborhoods
-	if (!initNbrs())
-		return false;
-	newestCell = c;
-	return (getNumberOfCells() == numOfRobots)
-			&& sendMsg(new Formation(formation), formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
+//	Cell *c  = new Cell;
+//	std::stringstream converter;
+//
+//	for (int i = 0; i < numOfRobots; i++)
+//	{
+////		if (!cells.getHead(c))
+////			return false;
+//		c->x = formation.getRadius() * ((float)i - (float)(getNumberOfCells() - 1) / 2.0f);
+//		c->y = 0.0f;
+//		c->setHeading(formation.getHeading());
+//		//TODO:Add this is when the number of cells we have is actually correct
+////		string cellName = "robot_";
+////		converter<<i;
+////		cellName.append(converter.str());
+////		cellName.append("/state");
+////		c->state_pub = c->stateNode.advertise < Cell::State > (cellName, 1);
+//		cells.push_back(c);
+//
+//		if(VERBOSE)
+//			printf("iterating through cells...\n");
+//	}
+//
+//
+//	// initialize cell's neighborhoods
+//	if (!initNbrs())
+//		return false;
+//	newestCell = c;
+//	return (getNumberOfCells() == numOfRobots)
+//			&& sendMsg(new Formation(formation), formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
 }
 
 
@@ -340,14 +340,14 @@ bool Environment::initNbrs(const int nNbrs)
 // returning true if successful, false otherwise.
 bool Environment::addCell(Cell *cell)
 {
-  if ((cell == NULL) && ((cell = new Cell()) == NULL))
-	  return false;
-
-  cell-> setEnvironment(this);
-
-  // attempt to add this cell to the cell list
-  cells.push_back(cell);
-  return true;
+//  if ((cell == NULL) && ((cell = new Cell()) == NULL))
+//	  return false;
+//
+//  cell-> setEnvironment(this);
+//
+//  // attempt to add this cell to the cell list
+//  cells.push_back(cell);
+//  return true;
 }
 
 
@@ -539,13 +539,14 @@ int Environment::getNObjects() const
 // with the parameterized ID's.
 Vector Environment::getRelationship(const int toID, const int fromID)
 {
+	// TODO: call to base_pose_ground_truth for the asbolute location
   Cell  *toCell = getCell(toID), *fromCell = getCell(fromID);
 
   if ((toCell == NULL) || (fromCell == NULL))
 	  return Vector();
 
   Vector temp   = *toCell - *fromCell;
-  temp.rotateRelative(-fromCell->getHeading());
+  //temp.rotateRelative(-fromCell->getHeading());
 
   return temp;
 }
@@ -635,15 +636,15 @@ bool Environment::sendPacket(const Packet &packet)
 // returning true if successful, false otherwise.
 bool Environment::forwardPacket(const Packet &packet)
 {
-  Cell *cell;
-  if(!packet.fromBroadcast())
-	  cell = getCell(packet.toID);
-
-  int to = packet.toID;
-  if (cell != NULL)
-  {
-    cell->msgQueue.push(packet);
-    return true;
+//  Cell *cell;
+//  if(!packet.fromBroadcast())
+//	  cell = getCell(packet.toID);
+//
+//  int to = packet.toID;
+//  if (cell != NULL)
+//  {
+//    cell->msgQueue.push(packet);
+//    return true;
   }
   //if (c == NULL) printf("CELL is NULL!\n");
   //if p.msg != NULL
@@ -736,8 +737,8 @@ bool Environment::showHead(const bool show)
 // returning true if successful, false otherwise.
 bool Environment::showPos(const bool show)
 {
-  for (int i = 0; i < getNumberOfCells(); i++)
-	  cells[i]->showPos = show;
+//  for (int i = 0; i < getNumberOfCells(); i++)
+//	  cells[i]->showPos = show;
 
   return true;
 }
@@ -747,10 +748,10 @@ bool Environment::showPos(const bool show)
 // returning true if successful, false otherwise.
 bool Environment::showHeading(const bool show)
 {
-  for (int i = 0; i < getNumberOfCells(); i++)
-	  cells[i]->showHeading = show;
-
-  return true;
+//  for (int i = 0; i < getNumberOfCells(); i++)
+//	  cells[i]->showHeading = show;
+//
+//  return true;
 }
 
 
@@ -806,10 +807,10 @@ Robot * Environment::getNearestRobot(float x, float y)
 
 float Environment::distanceToRobot(Cell *cell,Robot *robot)
 {
-  float x = 0, y = 0;
-  x = fabs(robot-> x - cell-> x);
-  y = fabs(robot-> y - cell-> y);
-  return sqrt(pow(x, 2) + pow(y, 2));
+//  float x = 0, y = 0;
+//  x = fabs(robot-> x - cell-> x);
+//  y = fabs(robot-> y - cell-> y);
+//  return sqrt(pow(x, 2) + pow(y, 2));
 }
 
 float Environment::distanceToRobot(float xx,float yy, Robot* robot)
@@ -876,19 +877,19 @@ void Environment::formUp()
 //get the nearest robot, turn it into a cell, and start the formation
 void Environment::formFromClick(float x, float y)
 {
-  addCell();
-  Cell *cell  = cells[0];
-  Robot* robot = getNearestRobot(x,y);
-  cell-> x = robot-> x;
-  cell-> y = robot-> y;
-
-  for(unsigned i = 0; i < robots.size(); i++)
-  {
-    if(robot == robots[i])
-    {
-      robots.erase(robots.begin() + i);
-      break;
-    }
+//  addCell();
+//  Cell *cell  = cells[0];
+//  Robot* robot = getNearestRobot(x,y);
+//  cell-> x = robot-> x;
+//  cell-> y = robot-> y;
+//
+//  for(unsigned i = 0; i < robots.size(); i++)
+//  {
+//    if(robot == robots[i])
+//    {
+//      robots.erase(robots.begin() + i);
+//      break;
+//    }
   }
 
   //c->setColor(MAGENTA);
@@ -922,67 +923,67 @@ Robot* Environment::getRobot(int id)
   return(NULL);
 }
 
-void Environment::settleAuction(Cell* auctionCell,int rID)
-{
-	//TODO: this will need a serice call in the future to get fomation
 
-  if(robots.size() > 0)
-  {
-    Cell* cell;
-    cell = new Cell();
-    if(!addCell(cell))
-    {
-      cout << "addCell() failed!" << endl;
-      system("PAUSE");
-    }
-
-    Robot *robot = getRobot(rID);
-    if (robot == NULL)
-    {
-      cout << ">> ERROR: Robot[" << rID << "] not found!\n\n";
-      return;
-    }
-    //cout <<"Robot should be "<< rID << " but env->settleAuction() is # "<< r->getID()<<endl;
-
-    cell->x = robot->x;
-    cell->y = robot->y;
-    for(unsigned i = 0; i < robots.size(); i++)
-    {
-      if(robot->getID() == robots[i]->getID())
-      {
-        robots.erase(robots.begin() + i);
-        break;
-      }
-    }
-    //c->setColor(MAGENTA);
-    cell->clearNbrs();
-    cell->leftNbr = cell->rightNbr = NULL;
-    cell->addNbr(auctionCell->getID());
-    auctionCell->addNbr(cell->getID());
-
-    if(auctionCell->rightNbr == NULL)
-    {
-      cell->leftNbr  = cell->nbrWithID(auctionCell->getID());
-      auctionCell->rightNbr = auctionCell->nbrWithID(cell->getID());
-      //cout << "a->rightNbr = " << a->rightNbr->ID << endl;
-      newestCell  = cell;
-    }
-    else if(auctionCell->leftNbr == NULL)
-    {
-      cell->rightNbr = cell->nbrWithID(auctionCell->getID());
-      auctionCell->leftNbr  = auctionCell->nbrWithID(cell->getID());
-      //cout << "a->leftNbr = " << a->leftNbr->ID << endl;
-      newestCell  = cell;
-    }
-    formation.setFormationID(++formationID);
-    sendMsg(new Formation(formation),
-        formation.getSeedID(),
-        ID_OPERATOR,
-        CHANGE_FORMATION);
-    //getCell(formation.getSeedID())->sendStateToNbrs();
-    //system("PAUSE");
-  }
-}
+//void Environment::settleAuction(Cell* auctionCell,int rID)
+//{
+//
+//  if(robots.size() > 0)
+//  {
+//    Cell* cell;
+//    cell = new Cell();
+//    if(!addCell(cell))
+//    {
+//      cout << "addCell() failed!" << endl;
+//      system("PAUSE");
+//    }
+//
+//    Robot *robot = getRobot(rID);
+//    if (robot == NULL)
+//    {
+//      cout << ">> ERROR: Robot[" << rID << "] not found!\n\n";
+//      return;
+//    }
+//    //cout <<"Robot should be "<< rID << " but env->settleAuction() is # "<< r->getID()<<endl;
+//
+//    cell->x = robot->x;
+//    cell->y = robot->y;
+//    for(unsigned i = 0; i < robots.size(); i++)
+//    {
+//      if(robot->getID() == robots[i]->getID())
+//      {
+//        robots.erase(robots.begin() + i);
+//        break;
+//      }
+//    }
+//    //c->setColor(MAGENTA);
+//    cell->clearNbrs();
+//    cell->leftNbr = cell->rightNbr = NULL;
+//    cell->addNbr(auctionCell->getID());
+//    auctionCell->addNbr(cell->getID());
+//
+//    if(auctionCell->rightNbr == NULL)
+//    {
+//      cell->leftNbr  = cell->nbrWithID(auctionCell->getID());
+//      auctionCell->rightNbr = auctionCell->nbrWithID(cell->getID());
+//      //cout << "a->rightNbr = " << a->rightNbr->ID << endl;
+//      newestCell  = cell;
+//    }
+//    else if(auctionCell->leftNbr == NULL)
+//    {
+//      cell->rightNbr = cell->nbrWithID(auctionCell->getID());
+//      auctionCell->leftNbr  = auctionCell->nbrWithID(cell->getID());
+//      //cout << "a->leftNbr = " << a->leftNbr->ID << endl;
+//      newestCell  = cell;
+//    }
+//    formation.setFormationID(++formationID);
+//    sendMsg(new Formation(formation),
+//        formation.getSeedID(),
+//        ID_OPERATOR,
+//        CHANGE_FORMATION);
+//    //getCell(formation.getSeedID())->sendStateToNbrs();
+//    //system("PAUSE");
+//  }
+//}
 
 
 // Attempts to remove a robot from the environment,

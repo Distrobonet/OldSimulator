@@ -216,10 +216,10 @@ void Neighborhood::clearNbrs()
 // Returns a random neighbor in this neighborhood.
 Neighbor* Neighborhood::anyNbr()
 {
-    srand(time(NULL));
-    if (!empty())
-    	return &at(irand(0, size()));
-    return NULL;
+//    srand(time(NULL));
+//    if (!empty())
+//    	return &at(irand(0, size()));
+//    return NULL;
 }
 
 
