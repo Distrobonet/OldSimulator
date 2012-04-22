@@ -61,7 +61,11 @@ void Cell::update(bool doSpin)
 
 		//TODO: update the cell
 		//cell.spin();
-		behavior.getTransVel();
+
+		commandVelocity.linear.x = behavior.getTransVel();
+		commandVelocity.angular.z = behavior.getRotVel();
+		cmd_velPub.publish(commandVelocity);
+
 
 
 		if(doSpin)
@@ -149,6 +153,17 @@ string Cell::generateSubMessage(int cellID)
 	ss << (cellID);//add number to the stream
 	string  nbrID = ss.str();
 	string subString = "/robot_/state";
+
+	subString.insert(7, nbrID);
+	return subString;
+}
+
+string Cell::generatePubMessage(int cellID)
+{
+	stringstream ss;//create a stringstream
+	ss << (cellID);//add number to the stream
+	string  nbrID = ss.str();
+	string subString = "/robot_/cmd_vel";
 
 	subString.insert(7, nbrID);
 	return subString;

@@ -85,6 +85,8 @@ class Cell: public State, public Neighborhood
 
         ros::NodeHandle stateNode;
         ros::Publisher state_pub;
+		geometry_msgs::Twist commandVelocity;
+		ros::Publisher cmd_velPub;
         ros::Subscriber leftNeighborState;
         ros::Subscriber rightNeighborState;
 
@@ -110,6 +112,7 @@ class Cell: public State, public Neighborhood
         //TODO: fix this input data type
         void stateCallback(const Simulator::StateMessage &state);
         string generateSubMessage(int cellID);
+        string generatePubMessage(int cellID);
 
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,
@@ -161,8 +164,8 @@ class Cell: public State, public Neighborhood
         Neighbor    *leftNbr, *rightNbr;
         Vector		heading;
         Behavior    behavior;         // behavior of robot
-        int			cellX;
-        int			cellTheta;
+        float		cellX;
+        float		cellTheta;
         int			ID;
 
         // <protected static data members>

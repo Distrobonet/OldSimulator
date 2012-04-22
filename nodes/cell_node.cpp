@@ -20,10 +20,11 @@ int main(int argc, char **argv)
 
 
     // Initilize cell
-    ros::Publisher chatter_pub = state_pub.advertise<std_msgs::String>("state", 1000);
     Cell thisCell = Cell(atoi(argv[1]));
 	thisCell.setID(atoi(argv[1]));
 	thisCell.initNbrs(&thisCell, atoi(argv[1]));
+    thisCell.state_pub = thisCell.stateNode.advertise<Simulator::StateMessage>(thisCell.generateSubMessage(thisCell.getID()), 1);
+    thisCell.cmd_velPub = thisCell.stateNode.advertise<geometry_msgs::Twist>(thisCell.generatePubMessage(thisCell.getID()), 1);
 
 	// Start the state service server for this cell
 	ros_name = "state_server_";
