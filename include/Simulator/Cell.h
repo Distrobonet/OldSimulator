@@ -147,9 +147,9 @@ class Cell: public State, public Neighborhood, public Robot
 		Simulator::CurrentFormation stateSrv;
 
 		// State service server
+		bool setStateMessage(Simulator::State::Request  &req, Simulator::State::Response &res );
 		void startStateServiceServer();
-		void setStateMessage(Simulator::State::Request  &req,
-				Simulator::State::Response &res );
+
 
 		Formation currentFormation;
 

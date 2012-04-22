@@ -51,11 +51,21 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
+		// Update the formation according to this cell
+		//ROS_INFO("Trying to access the formation");
+
+
+
 		//TODO: update the cell
 		//cell.spin();
 
 		if(doSpin)
 			ros::spinOnce();
+
+
+		setFormationFromService();
+		cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
+
 	}
 }
 
@@ -1119,30 +1129,33 @@ bool Cell::init(const float dx, const float dy, const float dz,
 	return true;
 }
 
-// Sets the Formation from the Formation service
+// Sets this cell's formation object from the Formation service
 bool Cell::setFormationFromService()
 {
-	ROS_INFO("Trying to access the formation message");
-
+	//ROS_INFO("Trying to access the formation message");
 	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
+	spinner.start();
 
 	ros::NodeHandle clientNode;
 	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
 
-	spinner.start();
-
 	if (formationClient.call(formationSrv))
 	{
-		//ROS_INFO("formation: %ld", (long int)srv.response.formation);//TODO: fix this
-		spinner.stop();
+		formation.formationID = formationSrv.response.formation.formation_id;
+		formation.heading = formationSrv.response.formation.heading;
+		formation.radius = formationSrv.response.formation.radius;
+		formation.seedFrp.x = formationSrv.response.formation.seed_frp.x;
+		formation.seedFrp.y = formationSrv.response.formation.seed_frp.y;
+		formation.seedID = formationSrv.response.formation.seed_id;
 		clientNode.shutdown();
+		spinner.stop();
 		return true;
 	}
 	else
 	{
 		ROS_ERROR("Failed to call service formation");
-		spinner.stop();
 		clientNode.shutdown();
+		spinner.stop();
 		return false;
 	}
 }
@@ -1159,9 +1172,8 @@ void Cell::startStateServiceServer()
 {
 	string state_name = "state_client_" + index;
 
-
 	ros::NodeHandle StateServerNode;
-	//ros::ServiceServer stateService = StateServerNode.advertiseService("state", Cell::setStateMessage);
+	ros::ServiceServer stateService = StateServerNode.advertiseService("state", &Cell::setStateMessage, this);
 	state_name = "Now serving the " + state_name;
 	ROS_INFO("Now serving the state client");
 	//ros::spin();
@@ -1169,8 +1181,7 @@ void Cell::startStateServiceServer()
 }
 
 // Sets the state message to this state's info
-void Cell::setStateMessage(Simulator::State::Request  &req,
-		Simulator::State::Response &res )
+bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Response &res )
 {
   	res.state.formation.radius = formation.radius;
   	res.state.formation.heading = formation.heading;
@@ -1203,7 +1214,7 @@ void Cell::setStateMessage(Simulator::State::Request  &req,
 	res.state.heat = heat;
 
 	ROS_INFO("sending back response with state info");
-	return;
+	return true;
 }
 
 //void Cell::settleAuction() {
