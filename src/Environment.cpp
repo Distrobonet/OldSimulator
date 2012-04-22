@@ -413,6 +413,49 @@ string Environment::generateSubMessage(bool msgType)
 	return subString;
 }
 
+
+// sets the response(relationship vector) based on the requests(IDs).  This is a callback.
+bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req, Simulator::Relationship::Response &res )
+{
+//	if ((toCell == NULL) || (fromCell == NULL))
+//	  return Vector();
+//
+//	Vector temp   = *toCell - *fromCell;
+//	temp.rotateRelative(-fromCell->getHeading());
+
+	//return temp;
+
+
+
+
+	//target - original
+	Vector tempVector;
+	tempVector.x = subRobotVels[req.OriginID][0] - subRobotVels[req.TargetID][0];
+	tempVector.y = subRobotVels[req.OriginID][1] - subRobotVels[req.TargetID][1];
+
+	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
+
+
+//	res.theRelationship.actual.x = subRobotVels[req.OriginID][0] - subRobotVels[req.TargetID][0];
+//	res.theRelationship.actual.y = subRobotVels[req.OriginID][1] - subRobotVels[req.TargetID][1];
+	return true;
+}
+
+
+// Starts the environment's relationship service server
+void Environment::startRelationshipServiceServer()
+{
+	ros::NodeHandle RelationshipServerNode;
+
+	relationshipService = RelationshipServerNode.advertiseService("relationship", &Environment::setRelationshipMessage, this);
+	//cout << "Now serving the " << stateService.getService() << " service!\n";
+
+	ros::spinOnce();
+
+	RelationshipServerNode.shutdown();
+}
+
+
 // Attempts to add an object to the environment
 // at the parameterized position, returning
 // true if successful, false otherwise.
