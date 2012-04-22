@@ -1,6 +1,4 @@
 //
-// Filename:        "Cell.cpp"
-//
 // Description:     This class implements a robot cell.
 //
 
@@ -31,7 +29,6 @@ int Cell::nCells = 0;
 Cell::Cell(const int cellID) :
 		State(), Neighborhood()
 {
-	cout << "Robot ID (Cell()): " << cellID << endl;
 	init(cellID);
 }
 
@@ -51,13 +48,8 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-		// Update the formation according to this cell
-		//ROS_INFO("Trying to access the formation");
+		behavior.getTransVel();
 
-
-
-		//TODO: update the cell
-		//cell.spin();
 		Simulator::StateMessage state;
 	  	state.formation.radius = formation.radius;
 	  	state.formation.heading = formation.heading;
@@ -86,23 +78,22 @@ void Cell::update(bool doSpin)
 		state.heat = heat;
 		state_pub.publish(state);
 
+		// publish state
 		State cellState = getState();
 		Vector vectorToNbr = Vector(transError.x, transError.y, rotError);
 		behavior = move(vectorToNbr);
 
+		// publish cmd_vel
 		commandVelocity.linear.x = behavior.getTransVel();
 		commandVelocity.angular.z = behavior.getRotVel();
 		cmd_velPub.publish(commandVelocity);
 
 
-
-		if(doSpin)
-			ros::spinOnce();
-
-
 		setFormationFromService();
 		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
 
+		if(doSpin)
+			ros::spinOnce();
 	}
 }
 
@@ -128,44 +119,34 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 
 		switch (currentRobotsID) {
 			case 0:
-				leftNbrID = currentRobotsID + 1;
-				rightNbrID = currentRobotsID + 2;
+				leftNbrID = currentRobotsID + 2;
+				rightNbrID = currentRobotsID + 1;
 				break;
 			case 1:
-				leftNbrID = currentRobotsID + 2;
-				rightNbrID = currentRobotsID - 1;
-				break;
-			case 2:
 				leftNbrID = currentRobotsID - 1;
 				rightNbrID = currentRobotsID + 2;
 				break;
-			default:
+			case 2:
 				leftNbrID = currentRobotsID + 2;
 				rightNbrID = currentRobotsID - 2;
+				break;
+			default:
+				leftNbrID = currentRobotsID - 2;
+				rightNbrID = currentRobotsID + 2;
 				break;
 		}
 
 		if ((currentRobotsID >= 0) && (cell->addNbr(leftNbrID)))
 		{
 			cell->leftNbr  = cell->nbrWithID(leftNbrID);
-
-			cellSubName = "robot_";
-			converter << leftNbrID;
-			cellSubName.append(converter.str());
-			cellSubName.append("/state");
-			cell->leftNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, cell);
+			cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
 
 		}
 
 		if ((currentRobotsID < nCells) && (cell->addNbr(rightNbrID)))
 		{
 			cell->rightNbr = cell->nbrWithID(currentRobotsID + rightNbrID);
-			cellSubName = "robot_";
-			converter << leftNbrID;
-			cellSubName.append(converter.str());
-			cellSubName.append("/state");
-			cell->rightNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, cell);
-
+			cell->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, cell);
 		}
 
 	if(VERBOSE)
@@ -241,85 +222,85 @@ void Cell::setID(int cellID)
 }
 
 
-// Updates the state of the cell based upon the
-// current states of the neighbors of the cell.
-void Cell::updateState()
-{
-	if ((getNNbrs() == 0) || (nbrWithMinStep()->tStep < tStep)
-			|| ((formation.getSeedID() != ID)
-					&& (nbrWithMaxStep()->tStep == tStep)))
-		return;
-
-	// update actual relationships to neighbors
-	Neighbor *currNbr = NULL;
-	for (unsigned int i = 0; i < size(); i++) {
-		currNbr = getNbr(i);
-		if (currNbr == NULL)
-			break;
-
-		// change formation if a neighbor has changed formation
-		if (currNbr->formation.getFormationID() > formation.getFormationID())
-			changeFormation(currNbr->formation, *currNbr);
-
-		// TODO: Service call for reationship
-		//currNbr->relActual = getRelationship(ID);
-	}
-	rels = getRelationships();
-
-	// update temperature
-	float m = 1.0f; // mass
-	//float C    = 2.11f;  // specific heat
-	//float K    = 2.0f;  // thermal conductivity (of material)
-	//float A    = PI * getRadius();  // area of contact
-	float C = 1.0f; // specific heat
-	float K = 1.0f; // thermal conductivity (of material)
-	float A = 1.0f; // area of contact
-	float dT = 0.0f; // difference in temperature
-	float d = 0.0f; // distance
-	float q = 0.0f; // heat
-	float qSum = 0.0f; // accumulated heat
-	for (unsigned int i = 0; i < size(); i++) {
-		currNbr = getNbr(i);
-		if (currNbr == NULL)
-			break;
-
-		dT = currNbr->temperature - temperature;
-		d = currNbr->relActual.magnitude();
-		q = K * A * dT / d;
-		qSum += q;
-	}
-	// FACTOR IN ROOM TEMPERATURE!!!
-	//temperature = ((qSum - heat) + m * C * temperature) / (m * C);
-	temperature = (qSum + m * C * temperature) / (m * C);
-	heat = qSum;
-	//printf("T[%d] = %.4f\n", ID, temperature);
-
-	// reference the neighbor with the minimum gradient
-	// to establish the correct position in formation
-	if (getNNbrs() > 0) {
-		Neighbor *refNbr = nbrWithMinFrp(formation.getSeedFrp());
-		Relationship *nbrRelToMe = relWithID(refNbr->rels, ID);
-		if ((formation.getSeedID() != ID) && (refNbr != NULL)
-				&& (nbrRelToMe != NULL)) {
-
-			// error (state) is based upon the
-			// accumulated error in the formation
-			Vector nbrRelToMeDesired = nbrRelToMe->relDesired;
-			nbrRelToMeDesired.rotateRelative(-refNbr->rotError);
-			float theta = scaleDegrees(
-					nbrRelToMe->relActual.angle()
-							- (-refNbr->relActual).angle());
-			rotError = scaleDegrees(theta + refNbr->rotError);
-			transError = nbrRelToMeDesired - nbrRelToMe->relActual
-					+ refNbr->transError;
-			transError.rotateRelative(-theta);
-			//set the state variable of refID  = ID of the reference nbr.
-			refID = refNbr->ID;
-		}
-	}
-
-	tStep = max(tStep + 1, nbrWithMaxStep()->tStep);
-}
+//// Updates the state of the cell based upon the
+//// current states of the neighbors of the cell.
+//void Cell::updateState()
+//{
+//	if ((getNNbrs() == 0) || (nbrWithMinStep()->tStep < tStep)
+//			|| ((formation.getSeedID() != ID)
+//					&& (nbrWithMaxStep()->tStep == tStep)))
+//		return;
+//
+//	// update actual relationships to neighbors
+//	Neighbor *currNbr = NULL;
+//	for (unsigned int i = 0; i < size(); i++) {
+//		currNbr = getNbr(i);
+//		if (currNbr == NULL)
+//			break;
+//
+//		// change formation if a neighbor has changed formation
+//		if (currNbr->formation.getFormationID() > formation.getFormationID())
+//			changeFormation(currNbr->formation, *currNbr);
+//
+//		// TODO: Service call for reationship
+//		//currNbr->relActual = getRelationship(ID);
+//	}
+//	rels = getRelationships();
+//
+//	// update temperature
+//	float m = 1.0f; // mass
+//	//float C    = 2.11f;  // specific heat
+//	//float K    = 2.0f;  // thermal conductivity (of material)
+//	//float A    = PI * getRadius();  // area of contact
+//	float C = 1.0f; // specific heat
+//	float K = 1.0f; // thermal conductivity (of material)
+//	float A = 1.0f; // area of contact
+//	float dT = 0.0f; // difference in temperature
+//	float d = 0.0f; // distance
+//	float q = 0.0f; // heat
+//	float qSum = 0.0f; // accumulated heat
+//	for (unsigned int i = 0; i < size(); i++) {
+//		currNbr = getNbr(i);
+//		if (currNbr == NULL)
+//			break;
+//
+//		dT = currNbr->temperature - temperature;
+//		d = currNbr->relActual.magnitude();
+//		q = K * A * dT / d;
+//		qSum += q;
+//	}
+//	// FACTOR IN ROOM TEMPERATURE!!!
+//	//temperature = ((qSum - heat) + m * C * temperature) / (m * C);
+//	temperature = (qSum + m * C * temperature) / (m * C);
+//	heat = qSum;
+//	//printf("T[%d] = %.4f\n", ID, temperature);
+//
+//	// reference the neighbor with the minimum gradient
+//	// to establish the correct position in formation
+//	if (getNNbrs() > 0) {
+//		Neighbor *refNbr = nbrWithMinFrp(formation.getSeedFrp());
+//		Relationship *nbrRelToMe = relWithID(refNbr->rels, ID);
+//		if ((formation.getSeedID() != ID) && (refNbr != NULL)
+//				&& (nbrRelToMe != NULL)) {
+//
+//			// error (state) is based upon the
+//			// accumulated error in the formation
+//			Vector nbrRelToMeDesired = nbrRelToMe->relDesired;
+//			nbrRelToMeDesired.rotateRelative(-refNbr->rotError);
+//			float theta = scaleDegrees(
+//					nbrRelToMe->relActual.angle()
+//							- (-refNbr->relActual).angle());
+//			rotError = scaleDegrees(theta + refNbr->rotError);
+//			transError = nbrRelToMeDesired - nbrRelToMe->relActual
+//					+ refNbr->transError;
+//			transError.rotateRelative(-theta);
+//			//set the state variable of refID  = ID of the reference nbr.
+//			refID = refNbr->ID;
+//		}
+//	}
+//
+//	tStep = max(tStep + 1, nbrWithMaxStep()->tStep);
+//}
 
 
 void Cell::stateCallback(const Simulator::StateMessage &state)

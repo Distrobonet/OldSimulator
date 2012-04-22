@@ -114,7 +114,7 @@ class Cell: public State, public Neighborhood
 
 
         // <virtual public utility functions>
-        virtual void updateState();
+//        virtual void updateState();
 
         //TODO: fix this input data type
         void stateCallback(const Simulator::StateMessage &state);
