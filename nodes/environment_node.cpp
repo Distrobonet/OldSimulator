@@ -14,6 +14,13 @@ int main(int argc, char **argv)
 	int numOfRobots = atoi(argv[1]);
 	Environment env(numOfRobots);
 	env.update(argv[2]);
+
+	// Relationship Service server stuff
+	ros::init(argc, argv, "relationship_server");
+	env.startRelationshipServiceServer();
+
+
+
 	return 0;
 }
 

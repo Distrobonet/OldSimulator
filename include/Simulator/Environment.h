@@ -25,8 +25,8 @@ using namespace std;
 
 #define VERBOSE (0)
 
-// type redefinition
-//typedef Circle Object;
+#include "../msg_gen/cpp/include/Simulator/RelationshipMessage.h"
+#include "../srv_gen/cpp/include/Simulator/Relationship.h"
 
 
 
@@ -150,8 +150,12 @@ class Environment
         void    settleAuction(Cell* c,int rID);
 
         //brntbeer added for prop_ops
-        friend bool changeFormationSim(const int index, const Vector gradient);
+        friend bool changeFormationSim(const int index, const Vector frp);
 
+        // Relationship service server
+		ros::ServiceServer relationshipService;
+		bool setRelationshipMessage(Simulator::Relationship::Request  &req, Simulator::Relationship::Response &res );
+        void startRelationshipServiceServer();
 
     protected:
 
