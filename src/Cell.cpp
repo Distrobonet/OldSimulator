@@ -15,6 +15,7 @@
 
 #include<iostream>
 // preprocessor directives
+#include <stdlib.h>
 #include <stdio.h>
 #include <Simulator/Cell.h>
 #include <Simulator/Environment.h>
@@ -44,15 +45,16 @@ Cell::Cell(const float dx, const float dy, const float dz, const float theta, co
 
 // Copy constructor that copies the contents of
 // the parameterized cell into this cell.
-Cell::Cell(const Cell &c) :	State(c), Neighborhood(c) {
+Cell::Cell(const Cell &c) :	State(c), Neighborhood(c)
+{
 	leftNbr = c.leftNbr;
 	rightNbr = c.rightNbr;
 }
 
 // Destructor that clears this cell.
-Cell::~Cell() {
-}
+Cell::~Cell() {}
 
+// Updates the cell
 void Cell::update(bool doSpin)
 {
 	while(ros::ok())
@@ -70,7 +72,7 @@ void Cell::update(bool doSpin)
 
 
 		setFormationFromService();
-		cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
+		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
 
 	}
 }
@@ -1136,7 +1138,7 @@ Cell& Cell::operator =(const Robot &r) {
 }
 
 
-// Sets this cell's formation object from the Formation service
+// Sets this cell's formation object from the response from the Formation service
 bool Cell::setFormationFromService()
 {
 	//ROS_INFO("Trying to access the formation message");
@@ -1177,28 +1179,27 @@ bool Cell::getNeighborState(bool leftOrRight)
 // Starts the cell's state service server
 void Cell::startStateServiceServer()
 {
-	string state_name = "state_client_" + index;
-
 	ros::NodeHandle StateServerNode;
-	ros::ServiceServer stateService = StateServerNode.advertiseService("state", &Cell::setStateMessage, this);
-	state_name = "Now serving the " + state_name;
-	ROS_INFO("Now serving the state client");
-	//ros::spin();
+	string name = "cell_state_";
+	name = name + boost::lexical_cast<std::string>(index);	// add the index to the name string
+
+	stateService = StateServerNode.advertiseService(name, &Cell::setStateMessage, this);
+	//cout << "Now serving the " << stateService.getService() << " service!\n";
+
 	ros::spinOnce();
+
+	StateServerNode.shutdown();
 }
 
-// Sets the state message to this state's info
+// Sets the state message to this state's info.  This is the callback for the state service.
 bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Response &res )
 {
   	res.state.formation.radius = formation.radius;
   	res.state.formation.heading = formation.heading;
-
   	res.state.formation.seed_frp.x = formation.seedFrp.x;
   	res.state.formation.seed_frp.y = formation.seedFrp.y;
-
   	res.state.formation.seed_id = formation.seedID;
   	res.state.formation.formation_id = formation.formationID;
-
 	res.state.frp.x = frp.x;
  	res.state.frp.y = frp.y;
 
@@ -1213,7 +1214,6 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 
 	res.state.linear_error.x = transError.x;
 	res.state.linear_error.y = transError.y;
-
 	res.state.angular_error = rotError;
 	res.state.timestep = tStep;
 	res.state.reference_id = refID;
