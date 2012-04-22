@@ -1194,7 +1194,7 @@ bool Cell::setFormationFromService()
 	}
 }
 
-// Sets the cell state from the State service
+// Get a neighbor's state from the State service//TODO: do this function
 bool Cell::getNeighborState(bool leftOrRight)
 {
 	//TODO: do this function
