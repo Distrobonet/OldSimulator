@@ -23,11 +23,17 @@
 
 #include <ros/ros.h>	// Used for service to get Formation
 
+// Formation service
 #include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
 #include "../srv_gen/cpp/include/Simulator/CurrentFormation.h"
 
+// State service
 #include "../msg_gen/cpp/include/Simulator/StateMessage.h"
 #include "../srv_gen/cpp/include/Simulator/State.h"
+
+// Relationship service
+#include "../msg_gen/cpp/include/Simulator/RelationshipMessage.h"
+#include "../srv_gen/cpp/include/Simulator/Relationship.h"
 
 using namespace std;
 
@@ -155,6 +161,11 @@ class Cell: public State, public Neighborhood
 		ros::ServiceServer stateService;
 		bool setStateMessage(Simulator::State::Request  &req, Simulator::State::Response &res);
 		void startStateServiceServer();
+
+		// Relationship service client
+		bool getRelationship(int targetID);
+		ros::ServiceClient relationshipClient;
+		Simulator::CurrentFormation relationshipSrv;
 
 
     protected:

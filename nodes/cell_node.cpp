@@ -14,9 +14,16 @@ int main(int argc, char **argv)
     ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 
+	// Relationship service
+    ros_name = "relationship_client_";
+    ros_name.append(argv[1]);
+    ros::init(argc, argv, ros_name);
+
     // State publisher
     ros::init(argc, argv, "state");
     ros::NodeHandle state_pub;
+
+
 
 
     // Initilize cell

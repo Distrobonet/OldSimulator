@@ -1,9 +1,6 @@
 //
 // Filename:        "Cell.cpp"
 //
-// Programmer:      Ross Mead
-// Last modified:   13Apr2011
-//
 // Description:     This class implements a robot cell.
 //
 
@@ -542,4 +539,33 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 
 	ROS_INFO("sending back response with state info");
 	return true;
+}
+
+// Relationship client, sends its ID and a target ID as requests and gets a relationship vector response
+bool Cell::getRelationship(int targetID)
+{
+	ROS_INFO("Trying to access the Relationship message");
+	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
+	spinner.start();
+
+	ros::NodeHandle clientNode;
+	relationshipClient = clientNode.serviceClient<Simulator::Relationship>("relationship");
+
+	if (relationshipClient.call(relationshipSrv))
+	{
+		// TODO: relationship stuff in cell is done here
+
+//		formation.formationID = formationSrv.response.formation.formation_id;
+
+		clientNode.shutdown();
+		spinner.stop();
+		return true;
+	}
+	else
+	{
+		ROS_ERROR("Failed to call relationship service");
+		clientNode.shutdown();
+		spinner.stop();
+		return false;
+	}
 }

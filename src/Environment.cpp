@@ -158,13 +158,8 @@ string Environment::generateSubMessage(int cellID)
 // sets the response(relationship vector) based on the requests(IDs).  This is a callback.
 bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req, Simulator::Relationship::Response &res )
 {
-//	if ((toCell == NULL) || (fromCell == NULL))
-//	  return Vector();
-////
 //	Vector temp   = *toCell - *fromCell;
 //	temp.rotateRelative(-fromCell->getHeading());
-
-	//return temp;
 
 	//target - original
 	Vector tempVector;
