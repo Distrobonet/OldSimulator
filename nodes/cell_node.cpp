@@ -4,7 +4,7 @@ int main(int argc, char **argv)
 {
     // Service stuff
 	string ros_name;
-	ros_name = "formation_client";
+	ros_name = "formation_client_";
 	ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 
@@ -21,12 +21,21 @@ int main(int argc, char **argv)
     Cell *thisCell = new Cell(atoi(argv[2]), atoi(argv[3]), 0.0f, 90.0f, atoi(argv[1]));
 	thisCell->index = atoi(argv[1]);
 
+
+	// Start the state service server for this cell
+	ros_name = "state_server_";
+	ros_name += thisCell.index;
+	ros::init(argc, argv, ros_name);
+	thisCell.startStateServiceServer();
+
+
 //	// TODO: initialize x & y from the "base_pose_ground_truth"?
 //	thisCell->x = atoi(argv[2]);
 //	thisCell->y = atoi(argv[3]);
 //	thisCell->setHeading(90.0f);	// default heading
 	thisCell->initNbrs(atoi(argv[1]));
 
+	// Update this cell
 	thisCell->update(argv[4]);
 
 
