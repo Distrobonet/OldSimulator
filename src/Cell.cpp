@@ -13,6 +13,10 @@
 #define CELL_INFO_VIEW     (0)
 #define AUCTION_STEP_COUNT (3)
 
+// created for future
+#define RADIUS			   (1.0)
+#define Z_VALUE 		   (0)
+
 #include<iostream>
 // preprocessor directives
 #include <stdlib.h>
@@ -27,13 +31,11 @@ int Cell::nCells = 0;
 
 // Default constructor that initializes
 // this cell to the parameterized values.
-Cell::Cell(const float dx, const float dy, const float dz, const float theta, const int cellID) :
+Cell::Cell(const int cellID) :
 		State(), Neighborhood()
 {
-	ID = nCells++;
 	cout << "Robot ID (Cell()): " << cellID << endl;
-	init(dx, dy, dz, theta, cellID);
-	numBids = 0;
+	init(cellID);
 }
 
 //Cell::Cell(const char ID) : State(), Neighborhood()
@@ -80,12 +82,10 @@ void Cell::update(bool doSpin)
 
 // Initializes the cell to the parameterized values,
 // returning true if successful, false otherwise.
-bool Cell::init(const float dx, const float dy, const float dz,
-		const float theta, const int ID)
+bool Cell::init(const int cellID)
 {
-//	showFilled = DEFAULT_CELL_SHOW_FILLED;
 	leftNbr = rightNbr = NULL;
-	auctionStepCount = 0;
+	ID = cellID;
 	return true;
 }
 
@@ -118,6 +118,7 @@ bool Cell::initNbrs(int currentRobotsID)
 				break;
 		}
 
+		// TODO: This is a problem
 		if ((currentRobotsID >= 0) && (c->addNbr(leftNbrID)))
 		{
 			c->leftNbr  = c->nbrWithID(leftNbrID);
@@ -160,23 +161,23 @@ bool Cell::setNbrs(Neighborhood &nh)
 	return true;
 }
 
-// Attempts to set the robot to the parameterized robot,
-// returning true if successful, false otherwise.
-bool Cell::setRobot(const Robot &r)
-{
-	//if(VERBOSE) printf("in setRobot() ============\n");
+//// Attempts to set the robot to the parameterized robot,
+//// returning true if successful, false otherwise.
+//bool Cell::setRobot(const Robot &r)
+//{
+//	//if(VERBOSE) printf("in setRobot() ============\n");
+//
+//	//changed to  cast *this as a Robot variable
+//	(Robot) *this = r;
+//	//if(VERBOSE) printf("robot set============\n");
+//	return true;
+//} // setRobot(const Robot &)
 
-	//changed to  cast *this as a Robot variable
-	(Robot) *this = r;
-	//if(VERBOSE) printf("robot set============\n");
-	return true;
-} // setRobot(const Robot &)
-
-bool Cell::setRobotP(Robot *r)
-{
-	//(Robot *)this = r;
-	return true;
-}
+//bool Cell::setRobotP(Robot *r)
+//{
+//	//(Robot *)this = r;
+//	return true;
+//}
 
 // Returns the state of this cell.
 State Cell::getState() const
@@ -190,73 +191,19 @@ Neighborhood Cell::getNbrs() const
 	return (Neighborhood) *this;
 }
 
-// Returns the robot of this cell.
-Robot Cell::getRobot() const
+//// Returns the robot of this cell.
+//Robot Cell::getRobot() const
+//{
+//	return (Robot) *this;
+//}
+
+
+// Returns the ID of this robot.
+int Cell::getID() const
 {
-	return (Robot) *this;
+    return ID;
 }
 
-
-// Processes packets received and updates the state of the cell,
-// which is then broadcast within the neighborhood of the cell.
-Cell* Cell::cStep()
-{
-	Cell* answer = NULL;
-	// there are any movement instructions to be processed
-	//TODO:Figure out the lower if statement
-//	if (processPackets()) {
-//		// only update state and nbrs if there are any
-//		if (getNNbrs() > 0) {
-//			updateState();
-//			sendStateToNbrs();
-//		}
-//		moveError();
-//	}
-
-//	if (auctionStepCount > 0)
-//		auctionStepCount++;
-//
-//	if ((AUTONOMOUS_INIT) && (env->getRobots().size() > 0)) {
-//		if ((getNNbrs() < NEIGHBORHOOD_SIZE) && (bids.size() == 0)) {
-//			if (((getState().transError.magnitude() > 0)
-//					|| (getID() == formation.getSeedID()))
-//					&& (getState().transError.magnitude()
-//							< MAX_TRANSLATIONAL_ERROR)) {
-//				if (auctionStepCount == 0)
-//					answer = this;
-//			}
-//		}
-//	}
-	if (CELL_INFO_VIEW) {
-		cout << "=============================" << endl;
-		cout << "cell.getID() = " << getID() << endl;
-		cout << "cell.getNNbrs() = " << getNNbrs() << endl;
-		cout << "cell.rightNbr->getID() = ";
-
-		if (rightNbr != NULL)
-			cout << rightNbr->ID << endl;
-
-		else
-			cout << " NULL " << endl;
-
-		cout << "cell.leftNbr->getID() = ";
-		if (leftNbr != NULL)
-			cout << leftNbr->ID << endl;
-
-		else
-			cout << " NULL " << endl;
-
-		cout << "rotError = " << rotError << endl;
-		cout << "transError = " << transError.magnitude() << endl;
-		cout << "behavior.getStatus() = " << behavior.getStatus() << endl;
-		cout << "seedID = " << formation.getSeedID() << endl;
-		cout << "FRP = " << frp << endl;
-		cout << "formationID = " << formation.getFormationID() << endl;
-	}
-
-	Robot::step();
-	return answer;
-}
 
 // Updates the state of the cell based upon the
 // current states of the neighbors of the cell.
@@ -277,7 +224,9 @@ void Cell::updateState()
 		// change formation if a neighbor has changed formation
 		if (currNbr->formation.getFormationID() > formation.getFormationID())
 			changeFormation(currNbr->formation, *currNbr);
-		currNbr->relActual = getRelationship(currNbr->ID);
+
+		// TODO: Service call for reationship
+		//currNbr->relActual = getRelationship(ID);
 	}
 	rels = getRelationships();
 
@@ -599,18 +548,20 @@ bool Cell::sendStateToNbrs() {
 	return true;
 }
 
+
 // Attempts to send the state of the cell
 // to the neighbor with the parameterized ID,
 // returning true if successful, false otherwise.
 bool Cell::sendState(const int toID) {
-	//printf("in sendState()\n");
-	State *s = new State(*this);
-	//printf("number of relations of %d is %d \n",toID,s->rels.getSize());
-	//printf("calling cell = %d\n", this->ID);
-	//printf("number of relations of %d is %d \n",this->ID,this->rels.getSize());
-	bool answer = sendMsg(s, toID, STATE);
-	//printf("leaving sendState()\n");
-	return answer;
+	//TODO: Publish State Here
+//	//printf("in sendState()\n");
+//	State *s = new State(*this);
+//	//printf("number of relations of %d is %d \n",toID,s->rels.getSize());
+//	//printf("calling cell = %d\n", this->ID);
+//	//printf("number of relations of %d is %d \n",this->ID,this->rels.getSize());
+//	bool answer = sendMsg(s, toID, STATE);
+//	//printf("leaving sendState()\n");
+//	return answer;
 }
 
 // Attempts to process all packets received by the cell,
@@ -1098,15 +1049,17 @@ bool Cell::sendState(const int toID) {
 // Moves the robot cell using the current translational and
 // rotational errors, activating and returning the appropriate
 // robot behavior.
-Behavior Cell::moveError() {
-	return behavior = moveErrorBehavior(transError, rotError);
+Behavior Cell::moveError()
+{
+	return moveErrorBehavior(transError, rotError);
 }
 
 // Moves the robot cell using the parameterized translational and
 // rotational errors, activating and returning the appropriate
 // robot behavior.
-Behavior Cell::moveError(const Vector tError, const float rError) {
-	return behavior = moveErrorBehavior(tError, rError);
+Behavior Cell::moveError(const Vector tError, const float rError)
+{
+	return moveErrorBehavior(tError, rError);
 }
 
 // Moves the robot using the parameterized translational and
@@ -1114,13 +1067,90 @@ Behavior Cell::moveError(const Vector tError, const float rError) {
 Behavior Cell::moveErrorBehavior(const Vector tError, const float rError)
 {
 	if (transError.magnitude() > threshold())
-		return moveArc(transError);
+		return move(transError);
 
 	else if (abs(rotError) > angThreshold())
-		return moveArc(0.0, degreesToRadians(-rotError));
+		return move(0.0, degreesToRadians(-rotError));
 
 	return moveStop();
 }
+
+// Moves the robot using the parameterized movement vector,
+// returning the appropriate robot behavior.
+Behavior Cell::move(const Vector &target)
+{
+	// TODO: Need call to cmd_vel subscriber
+	float theta    		= target.angle();
+	float phi     		= this->heading.angle();
+	float delta   		= degreesToRadians(theta);
+	float cosDelta 		= cos(delta);
+	float sinDelta 		= sin(delta);
+	float t       		= cosDelta * cosDelta * sign(cosDelta);
+	float r       		= sinDelta * sinDelta * sign(sinDelta);
+	Behavior behavior	= Behavior(ACTIVE, t, r, maxSpeed());
+
+	if (abs(theta) < 90.0f)
+	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
+    else
+        behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));
+
+	return behavior;
+/*
+    float r     = target.magnitude();
+    if (r <= threshold()) return moveStop();
+    float theta = degreesToRadians(target.angle());
+    if (theta == 0.0f)    return moveForwardBehavior(r);
+    else return moveArcBehavior((abs(theta) >
+                                degreesToRadians(angThreshold())) ?
+                                0.0f :
+                                r * velocityTheta / sin(theta), getDiameter() * theta);
+*/
+}
+
+
+// Returns the minimum angular movement threshold of this robot.
+float Robot::angThreshold() const
+{
+    return 0.5f * FACTOR_THRESHOLD * maxAngSpeed();
+}
+
+
+// Returns the minimum movement threshold of this robot.
+float Robot::threshold() const
+{
+    return FACTOR_THRESHOLD * maxSpeed();
+}
+
+
+// Stops the robot from moving,
+// returning the appropriate robot behavior.
+Behavior Cell::moveStop()
+{
+    return move(0.0f, 0.0f);
+}
+
+
+// Moves the robot using the parameterized translational
+// and rotational velocities, returning the appropriate robot behavior.
+Behavior Cell::move(const float t, const float r)
+{
+    return Behavior(t, r, maxSpeed());
+}
+
+
+// Returns the max speed of this robot.
+float Robot::maxSpeed() const
+{
+    return FACTOR_MAX_SPEED * radius;
+}
+
+// Attempts to set the heading to the parameterized heading,
+// returning true if successful, false otherwise.
+bool Cell::setHeading(const float theta)
+{
+    return heading.setPolar(RADIUS + VECTOR_HEAD_HEIGHT, theta, Z_VALUE);
+}
+
 
 // Copies the contents of the parameterized state into this cell.
 Cell& Cell::operator =(const State &s) {
@@ -1130,11 +1160,6 @@ Cell& Cell::operator =(const State &s) {
 // Copies the contents of the parameterized neighborhood into this cell.
 Cell& Cell::operator =(const Neighborhood &nh) {
 	return *this = nh;
-}
-
-// Copies the contents of the parameterized robot into this cell.
-Cell& Cell::operator =(const Robot &r) {
-	return *this = r;
 }
 
 
@@ -1169,10 +1194,10 @@ bool Cell::setFormationFromService()
 	}
 }
 
-// Sets the cell state from the State service//TODO: do this function
+// Sets the cell state from the State service
 bool Cell::getNeighborState(bool leftOrRight)
 {
-
+	//TODO: do this function
 	return false;
 }
 
@@ -1245,12 +1270,12 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 //int Cell::getNBids() const {
 //	return bids.size();
 //}
-
-int Cell::getAuctionStepCount() const {
-	return auctionStepCount;
-}
-
-bool Cell::setAuctionStepCount(const int& asc) {
-	auctionStepCount = asc;
-	return true;
-}
+//
+//int Cell::getAuctionStepCount() const {
+//	return auctionStepCount;
+//}
+//
+//bool Cell::setAuctionStepCount(const int& asc) {
+//	auctionStepCount = asc;
+//	return true;
+//}
