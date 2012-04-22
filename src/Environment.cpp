@@ -24,31 +24,86 @@ Environment::Environment(int numRobots)
 	// TODO: figure out if you need to init anything else for environment
 
 	numOfRobots = numRobots;
-	initOverloardSubscribers();
+	initOverloardSubscribers(this);
+
 
 }
 
-void Environment::initOverloardSubscribers()
+void Environment::initOverloardSubscribers(Environment *e)
 {
-	Environment env;
-
 	ros::NodeHandle overLord;
-	ros::Subscriber subRobot0 = overLord.subscribe("/robot_0/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
-	ros::Subscriber subRobot1 = overLord.subscribe("/robot_1/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
-	ros::Subscriber subRobot2 = overLord.subscribe("/robot_2/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
-	ros::Subscriber subRobot3 = overLord.subscribe("/robot_3/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
-	ros::Subscriber subRobot4 = overLord.subscribe("/robot_4/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
-	ros::Subscriber subRobot5 = overLord.subscribe("/robot_5/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
-	ros::Subscriber subRobot6 = overLord.subscribe("/robot_6/base_pose_ground_truth", 1000, &Environment::callBackRobot, &env);
+
+	vector<double> subRobot0Vel;
+	subRobot0Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot0Vel.push_back(0);
+	subRobot0Vel.push_back(0);
+	subRobotVels.push_back(subRobot0Vel);
+
+	vector<double> subRobot1Vel;
+	subRobot1Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot1Vel.push_back(0);
+	subRobot1Vel.push_back(0);
+	subRobotVels.push_back(subRobot1Vel);
+
+	vector<double> subRobot2Vel;
+	subRobot2Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot2Vel.push_back(0);
+	subRobot2Vel.push_back(0);
+	subRobotVels.push_back(subRobot2Vel);
+
+	vector<double> subRobot3Vel;
+	subRobot3Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot3Vel.push_back(0);
+	subRobot3Vel.push_back(0);
+	subRobotVels.push_back(subRobot3Vel);
+
+	vector<double> subRobot4Vel;
+	subRobot4Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot4Vel.push_back(0);
+	subRobot4Vel.push_back(0);
+	subRobotVels.push_back(subRobot4Vel);
+
+	vector<double> subRobot5Vel;
+	subRobot5Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot5Vel.push_back(0);
+	subRobot5Vel.push_back(0);
+	subRobotVels.push_back(subRobot5Vel);
+
+	vector<double> subRobot6Vel;
+	subRobot6Vel.push_back(0); //Sets up 3 spots for the x,y,theta
+	subRobot6Vel.push_back(0);
+	subRobot6Vel.push_back(0);
+	subRobotVels.push_back(subRobot6Vel);
+
+	ros::Subscriber subRobot0 = overLord.subscribe("/robot_0/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot0);
+	ros::Subscriber subRobot1 = overLord.subscribe("/robot_1/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot1);
+	ros::Subscriber subRobot2 = overLord.subscribe("/robot_2/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot2);
+	ros::Subscriber subRobot3 = overLord.subscribe("/robot_3/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot3);
+	ros::Subscriber subRobot4 = overLord.subscribe("/robot_4/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot4);
+	ros::Subscriber subRobot5 = overLord.subscribe("/robot_5/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot5);
+	ros::Subscriber subRobot6 = overLord.subscribe("/robot_6/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	subRobots.push_back(subRobot6);
 }
 
 void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
 	btScalar yaw = 0.0l;
 
-	this->robotY = odom-> pose.pose.position.x;
-	this->robotX = -odom-> pose.pose.position.y;
-	this->robotTheta = angles::normalize_angle(yaw + M_PI / 2.0l);
+	double currentY = odom-> pose.pose.position.x;
+	double currentX = -odom-> pose.pose.position.y;
+	double currentTheta = angles::normalize_angle(yaw + M_PI / 2.0l);
+	string ID = odom->header.frame_id.substr(7,1);
+	int IDNumber = atoi(ID.c_str());
+
+	subRobotVels.at(IDNumber).at(0) = currentX;
+	subRobotVels.at(IDNumber).at(1) = currentY;
+	subRobotVels.at(IDNumber).at(2) = currentTheta;
 
 	ros::spinOnce();
 }
@@ -81,6 +136,7 @@ void Environment::clear()
 void Environment::update(bool doSpin)
 {
 	Cell *temp = NULL;
+	ros::Rate loop_rate(10);
 
 	while(ros::ok())
 	{
@@ -88,6 +144,7 @@ void Environment::update(bool doSpin)
 		{
 			temp = cells.at(i);
 			temp->update(doSpin);
+//			cout<<subRobots.at(i).getTopic()<<endl;
 		}
 
 		ros::spinOnce();

@@ -49,6 +49,7 @@ class Environment
 		double robotTheta;
 		nav_msgs::Odometry odomMsg;
 		vector<ros::Subscriber> subRobots;
+		vector< vector<double> > subRobotVels;
 
         // <constructors>
 		Environment();
@@ -58,7 +59,7 @@ class Environment
         // <destructors>
         virtual ~Environment();
 
-        void initOverloardSubscribers();
+        void initOverloardSubscribers(Environment *e);
         void update(bool doSpin);
 
         // <virtual public mutator functions>

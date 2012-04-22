@@ -106,7 +106,7 @@ bool Cell::initNbrs(int currentRobotsID)
 			converter << leftNbrID;
 			cellSubName.append(converter.str());
 			cellSubName.append("/state");
-			c->leftNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
+//			c->leftNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
 		}
 
 		if ((currentRobotsID < nCells) && (c->addNbr(rightNbrID)))
@@ -116,7 +116,7 @@ bool Cell::initNbrs(int currentRobotsID)
 			converter << leftNbrID;
 			cellSubName.append(converter.str());
 			cellSubName.append("/state");
-			c->rightNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
+//			c->rightNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
 		}
 
 	if(VERBOSE)
