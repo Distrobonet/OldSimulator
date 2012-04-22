@@ -8,6 +8,8 @@
 #include <string.h>
 #include <iostream>
 
+#include"Simulator/Environment.h"
+
 // Used for non-blocking user input
 #include <termios.h>
 #include <unistd.h>
@@ -17,21 +19,6 @@
 #include <stdlib.h>
 
 #include <ros/ros.h>
-#include "std_msgs/String.h"
-#include <nav_msgs/Odometry.h>
-#include <geometry_msgs/Twist.h>
-#include <angles/angles.h>
-#include <tf/transform_listener.h>
-
-#include <LinearMath/btQuaternion.h>
-#include <LinearMath/btMatrix3x3.h>
-
-#include <sensor_msgs/LaserScan.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <tf/transform_listener.h>
-
-#include <Simulator/Environment.h>
-#include <Simulator/Robot.h>
 
 #include "../msg_gen/cpp/include/Simulator/FormationMessage.h"
 
@@ -47,17 +34,11 @@ void terminate(int retVal);
 void displayMenu();
 void keyboardInput();
 void clearScreen();
-//bool deinitEnv();
-bool changeFormation(const int index, const Vector gradient = Vector());
-bool changeFormationSim(const int index, const Vector gradient = Vector());
+
+//bool changeFormation(const int index, const Vector gradient = Vector());
+//bool changeFormationSim(const int index, const Vector gradient = Vector());
 const char  CHAR_ESCAPE             = char(27);    // 'ESCAPE' character key
 
-
-// OpenGL function prototypes
-void display();
-void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY);
-//void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY);
-//void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY);
 
 // formation-testing function prototypes
 float  line(const float x);
@@ -72,6 +53,7 @@ float  condSqrt(const float x);
 float  sine(const float x);
 float  xRoot3(const float x);
 float  negXRoot3(const float x);
+
 Function formations[] = {line,        x,       absX,     negHalfX,
 						negAbsHalfX, negAbsX, parabola, cubic,
 						condSqrt,    sine,    xRoot3,   negXRoot3};
@@ -80,43 +62,10 @@ Function formations[] = {line,        x,       absX,     negHalfX,
 // Menu Global variable
 int CURRENT_SELECTION = -1;
 
-// simulation global constants
-const float   SELECT_RADIUS     = 1.5f * DEFAULT_ROBOT_RADIUS;
-const int     N_CELLS           = 0;
-const int     MIDDLE_CELL       = 0;//(N_CELLS - 1) / 2;
-
 // A formation is a vector of Functions, which are functions that take floats and return floats
-const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
+//const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
 
-
-// simulation global variables
-Environment *g_environment       = NULL;
-int        g_nRobots             = 7;
-float      g_formationRadius     = DEFAULT_FORMATION.getRadius();
-int        g_seedID              = DEFAULT_FORMATION.getSeedID();
-int        g_formationID         = DEFAULT_FORMATION.getFormationID();
-float      g_formationHeading    = DEFAULT_FORMATION.getHeading();
-int        g_formationIndex      = 0;
-int        g_selectedIndex       = g_seedID;
-int        g_dTime               = 50;    // time interval (in milliseconds)
-bool       g_prop_toggle         = false;
-
-// Global variables
-double distanceToTarget = 0.0l;
-double angleChange = 0.0l;
-
-double distanceToTarget1 = 0.0l;
-double angleChange1 = 0.0l;
-
-float xValue = 0.0l;
-float yValue = 0.0l;
-
-//double getYValue(double xValue);
-//bool initEnv(const int nRobots, const int formationIndex);
-
-
-
-// Service utility function to set the formationIndex being served to the CURRENT_SELECTION
+// Service utility function to set the formation being served based on CURRENT_SELECTION
 bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
 		Simulator::CurrentFormation::Response &res )
 {
@@ -126,8 +75,7 @@ bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
   	res.formation.seed_frp.y = 0;
   	res.formation.seed_id = 0;
   	res.formation.formation_id = CURRENT_SELECTION;
-	//ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
-	ROS_INFO("sending back response with formation info");
+	//ROS_INFO("sending back response with formation info");
 	return true;
 }
 
@@ -138,58 +86,35 @@ bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
 
 int main(int argc, char **argv)
 {
-	// Service
-	ros::init(argc, argv, "formation_server");
-	ros::NodeHandle FormationServerNode;
-	ros::ServiceServer formationService = FormationServerNode.advertiseService("formation", setFormationMessage);
-	ROS_INFO("Now serving the formation.");
-	//ros::spin();
-	ros::spinOnce();
-
-	// Service Client - blank request, gets formationIndex response
-//	ros::init(argc, argv, "formation_index_client");
-//	ros::NodeHandle clientNode;
-//	ros::ServiceClient client = clientNode.serviceClient<Simulator::FormationIndex>("formation_index");
-//	Simulator::FormationIndex srv;
-////	srv.request.a = atoll(argv[1]);
-////	srv.request.b = atoll(argv[2]);
-//	ROS_INFO("Trying to access the formationIndex");
-//
-//	// Uses an asynchronous spinner to account for the blocking service client call
-//	ros::AsyncSpinner spinner(1);
-//	spinner.start();
-//
-//	if (client.call(srv))
-//		ROS_INFO("formation index: %ld", (long int)srv.response.formationIndex);
-//	else
-//		ROS_ERROR("Failed to call service formation_index");
-//
-//	spinner.stop();
-
-
 	ros::init(argc, argv, "robot_driver");
 
 	displayMenu();
 
-	// Only continue program once a selection has been made
-	while(CURRENT_SELECTION == -1)
+	// Only continue program once valid a selection has been made
+	while(CURRENT_SELECTION < 0 || CURRENT_SELECTION > 9)
 	{
 		keyboardInput();
 	}
 
-//** Testing Stuff **//
-//	// Test FormationIndex service
-//	if(g_environment->getCell(0) != NULL)
-//		cout << g_environment->getCell(0)->formation.setFormationIndexFromService();
-//	else
-//		cout << "no el worko!\n";
-//	cout << "\nnumber of cells: " << g_environment->getNumberOfCells() << endl;
-//  // output the ID of every cell
-//	for(int i = 1; i <= g_environment->getNumberOfCells(); i++)
-//		cout << "Cell " << i << " ID: "<< g_environment->getCell(i)->getID() << endl;
-//	//output the ID of every robot
-//	for(uint i = 0; i < g_environment->getRobots().size(); i++)
-//		cout << "robot " << i << " ID: "<< g_environment->getRobots()[i]->getID() << endl;
+	// Formation Service server
+	ros::init(argc, argv, "formation_server");
+	ros::NodeHandle FormationServerNode;
+	ros::ServiceServer formationService = FormationServerNode.advertiseService("formation", setFormationMessage);
+	//cout << "Now serving the formation: " << CURRENT_SELECTION << endl;
+	ros::spinOnce();
+
+
+	// create handler for interrupts (i.e., ^C)
+	if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
+	signal(SIGPIPE, SIG_IGN);
+
+	// Simulator infinite loop.
+	while(ros::ok)
+	{
+		ros::spinOnce();
+
+		keyboardInput();
+	}
 
   return 0;
 }
@@ -233,13 +158,13 @@ void keyboardInput()
 	{
 		keyPressed=getchar();
 
-		int keyNum = atoi(&keyPressed);
+		//int keyNum = atoi(&keyPressed);
 		cout << "\nKey pressed: " << keyPressed;
 
-		if(keyNum >= 0 && keyNum <= 9)
+		if(keyPressed >= '0' && keyPressed <= '9')
 		{
-			cout << " - Setting to " << keyPressed <<endl;
-			CURRENT_SELECTION = keyNum;
+			CURRENT_SELECTION = keyPressed-48;	// convert from ascii char to int
+			cout << " - Setting CURRENT_SELECTION to " << CURRENT_SELECTION <<endl;
 		}
 		else
 			cout << " - Not a valid input.";
@@ -247,12 +172,6 @@ void keyboardInput()
 		displayMenu();
 	}
 
-}
-
-// A simple and basic way to clear the screen for the menu refresh
-void clearScreen()
-{
-	std::cout << "\n\n\n\n\n";
 }
 
 
@@ -280,6 +199,11 @@ void displayMenu()
 		<< "Please enter your selection: ";
 }
 
+// A simple and basic way to clear the screen for the menu refresh
+void clearScreen()
+{
+	std::cout << "\n\n\n\n\n";
+}
 
 // Terminates the program on interrupt (i.e., ^C).
 void terminate(int retVal)
@@ -290,348 +214,46 @@ void terminate(int retVal)
   exit(retVal);
 }
 
-
-// Attempts to initialize the environment based on
-// the parameterized values, returning true if successful,
-// false otherwise.
-//bool initEnv(const int formationIndex)
-//{
-//  if (g_environment != NULL)
-//  {
-//    delete g_environment;
-//    g_environment = NULL;
-//  }
-//
-//  Formation formation(formations[formationIndex], g_formationRadius, Vector(),
-//		  	  	  g_seedID, ++g_formationID, g_formationHeading);
-//
-//  if ((g_environment = new Environment(CURRENT_SELECTION)) == NULL)
-//  {
-//	  return false;
-//  }
-//  return true;
-//}
-
-
-// Attempts to deinitialize the environment,
-// returning true if successful, false otherwise.
-//bool deinitEnv()
-//{
-//  if (g_environment != NULL)
-//  {
-//    delete g_environment;
-//    g_environment = NULL;
-//  }
-//  return g_environment == NULL;
-//}
-
-
 // Attempts to change the current formation,
 // returning true if successful, false otherwise.
 //
 // Parameters:
 //      index   in      the index of the formation to change to
-bool changeFormation(const int index, const Vector gradient)
-{
-	//TODO: create service call to formationService
-
-  g_formationIndex = index;
-  if (!g_environment->startFormation)
-  {
-    g_environment->startFormation = true;
-  }
-  // determine if a new seed has been selected
-  if (g_selectedIndex != -1)
-  {
-    g_environment->getCell(g_seedID)->setColor(DEFAULT_CELL_COLOR);
-    g_seedID = g_selectedIndex;
-  }
-  Formation f(formations[index], g_formationRadius,     gradient,
-      g_seedID,           ++g_environment->formationID, g_formationHeading);
-
-  return g_environment->changeFormation(f);
-}
+//bool changeFormation(const int index, const Vector frp)
+//{
+//
+//  g_formationIndex = index;
+//  if (!g_environment->startFormation)
+//  {
+//    g_environment->startFormation = true;
+//  }
+//  // determine if a new seed has been selected
+//  if (g_selectedIndex != -1)
+//  {
+//    g_environment->getCell(g_seedID)->setColor(DEFAULT_CELL_COLOR);
+//    g_seedID = g_selectedIndex;
+//  }
+//  Formation f(formations[index], g_formationRadius,     frp,
+//      g_seedID,           ++g_environment->formationID, g_formationHeading);
+//
+//  return g_environment->changeFormation(f);
+//}
 
 
 // called by environment, passes the location of a new calculated cell index.
 // parameters:   index in the index of the formation to change to
-bool changeFormationSim(const int index, const Vector gradient)
-{
-  if(g_selectedIndex > -1)
-  {
-    g_environment->getCell(g_seedID)->setColor(DEFAULT_CELL_COLOR);
-    g_selectedIndex = index;
-    return changeFormation(g_formationIndex,gradient);
-  }
-  else return false;
-}
-
-//
-//bool sendNCellRequest()
+//bool changeFormationSim(const int index, const Vector frp)
 //{
-//  PropMsg *ncell = new PropMsg();
-//  return g_environment->sendMsg(ncell, g_seedID,ID_OPERATOR, NCELL_REQUEST);
-//}
-//
-//
-//bool sendFcntrRequest()
-//{
-//  PropMsg *fcntr = new PropMsg();
-//  return g_environment->sendMsg(fcntr, g_seedID,ID_OPERATOR, FCNTR_REQUEST);
-//}
-//
-//
-//bool sendFRadRequest()
-//{
-//  PropMsg *frad = new PropMsg();
-//  return g_environment->sendMsg(frad, g_seedID,ID_OPERATOR, FRAD_REQUEST);
-//}
-//
-//
-//bool sendFSeedRequest()
-//{
-//  PropMsg *fseed = new PropMsg();
-//  return g_environment->sendMsg(fseed, g_seedID,ID_OPERATOR, FSEED_REQUEST);
-//}
-
-
-// Clears the frame buffer and draws the simulated cells within the window.
-void display()
-{
-  // draws environment robot cells
-  if (g_environment->getCells().size() > 0)
-  {
-    g_environment->getCell(g_seedID)->setColor(GREEN);
-    for(int i = 0; i < g_environment->getNumberOfCells(); ++i)
-    {
-      if(g_environment->getCell(i) != g_environment->getCell(g_seedID))
-      {
-        if(g_environment->getCell(i) == g_environment->getCell(g_selectedIndex))
-          g_environment->getCell(i)->setColor(RED);
-        else
-          g_environment->getCell(i)->setColor(DEFAULT_CELL_COLOR);
-      }
-    }
-  }
-  //g_environment->draw();
-}
-
-
-// Handles the keyboard input (ASCII Characters).
-void keyboardPress(unsigned char keyPressed, int mouseX, int mouseY)
-{
-  if ((keyPressed >= '0') && (keyPressed <= '9'))
-  {
-    if (g_environment->getNumberOfCells() > 0)
-    {
-      char cIndex = keyPressed;
-      changeFormation(atoi(&cIndex));
-    }
-  }
-  else switch (keyPressed)
-  {
-
-    // change formation heading
-    case '<': case ',':
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_formationHeading += g_environment->getCell(g_seedID)->maxAngSpeed();
-        changeFormation(g_formationIndex);
-        g_environment->getCell(g_seedID)->rotateRelative(
-            g_environment->getCell(g_seedID)->maxAngSpeed());
-        //min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
-      }
-      break;
-
-    case '>': case '.':
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_formationHeading -= g_environment->getCell(g_seedID)->maxAngSpeed();
-        changeFormation(g_formationIndex);
-        g_environment->getCell(g_seedID)->rotateRelative(
-            -g_environment->getCell(g_seedID)->maxAngSpeed());
-        //-min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
-      }
-      break;
-
-      // change formation scale
-    case '+': case '=':
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_formationRadius += 0.01f;
-        changeFormation(g_formationIndex);
-      }
-      break;
-
-    case '-': case '_':
-      if (g_environment->getNumberOfCells() > 0)
-      {
-        g_formationRadius -= 0.01f;
-        g_formationRadius  = max(g_formationRadius,
-            g_environment->getCell(g_seedID)->collisionRadius());
-        changeFormation(g_formationIndex);
-      }
-      break;
-
-    case 'h': case 'H':
-      if (g_environment->getNumberOfCells() > 0)
-        g_environment->showHeading(!g_environment->getCell(g_seedID)->showHeading);
-      break;
-
-    case 'l': case 'L':
-      if (g_environment->getNumberOfCells() > 0)
-        g_environment->showLine(!g_environment->getCell(g_seedID)->heading.showLine);
-      break;
-
-    case 'p': case 'P':
-      if (g_environment->getNumberOfCells() > 0)
-        g_environment->showPos(!g_environment->getCell(g_seedID)->showPos);
-
-      break;
-
-    case 't': case 'T':
-      if (g_environment->getNumberOfCells() > 0)
-        g_environment->showHead(!g_environment->getCell(g_seedID)->heading.showHead);
-      break;
-
-//    case 'n': case 'N':
-//      if (g_environment->getNumberOfCells() > 0)
-//        //g_prop_toggle = !g_prop_toggle;
-//        sendNCellRequest();
-//      break;
-//
-//    case 'c': case 'C':
-//      if (g_environment->getNumberOfCells() > 0)
-//        sendFcntrRequest();
-//      break;
-//
-//    case 'r': case 'R':
-//      if (g_environment->getNumberOfCells() > 0)
-//        sendFRadRequest();
-//      break;
-//
-//    case 's': case 'S':
-//      if (g_environment->getNumberOfCells()> 0)
-//        sendFSeedRequest();
-//      break;
-
-    case CHAR_ESCAPE: 
-    	//deinitEnv();
-    	exit(0);
-  }
-}
-
-
-// Handles the keyboard input (non-ASCII Characters).
-//void keyboardPressSpecial(int keyPressed, int mouseX, int mouseY)
-//{
-//  switch (keyPressed)
+//  if(g_selectedIndex > -1)
 //  {
-//    case GLUT_KEY_LEFT:
-//      if (g_environment->getNumberOfCells() > 0)
-//      {
-//        g_environment->getCell(g_seedID)->rotError =
-//          -(1.0001f * g_environment->getCell(g_seedID)->angThreshold());
-//        //g_environment->getCell(g_seedID)->rotateRelative(
-//        //    min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
-//      }
-//      break;
-//
-//    case GLUT_KEY_UP:
-//      if (g_environment->getNumberOfCells() > 0)
-//      {
-//        g_environment->getCell(g_seedID)->transError.x =
-//          1.0001f * g_environment->getCell(g_seedID)->threshold();
-//        //g_environment->getCell(g_seedID)->translateRelative(
-//        //    min(0.001f, g_environment->getCell(g_sID)->maxSpeed()));
-//      }
-//      break;
-//
-//    case GLUT_KEY_RIGHT:
-//      if (g_environment->getNumberOfCells() > 0)
-//      {
-//        g_environment->getCell(g_seedID)->rotError =
-//          1.0001f * g_environment->getCell(g_seedID)->angThreshold();
-//        //g_environment->getCell(g_seedID)->rotateRelative(
-//        //    -min(1.0f, g_environment->getCell(g_sID)->maxAngSpeed()));
-//      }
-//      break;
-//
-//    case GLUT_KEY_DOWN:
-//      if (g_environment->getNumberOfCells() > 0)
-//      {
-//        g_environment->getCell(g_seedID)->transError.x =
-//          -(1.0001f * g_environment->getCell(g_seedID)->threshold());
-//        //g_environment->getCell(g_seedID)->translateRelative(
-//        //    -min(0.001f, g_environment->getCell(g_sID)->maxSpeed()));
-//      }
-//      break;
-//
-//    default: break;
+//    g_environment->getCell(g_seedID)->setColor(DEFAULT_CELL_COLOR);
+//    g_selectedIndex = index;
+//    return changeFormation(g_formationIndex,frp);
 //  }
+//  else return false;
 //}
 
 
-// Handles the keyboard input (non-ASCII Characters).
-//void keyboardReleaseSpecial(int keyReleased, int mouseX, int mouseY)
-//{
-//  switch (keyReleased)
-//  {
-//    case GLUT_KEY_LEFT: case GLUT_KEY_RIGHT:
-//      if (g_environment->getNumberOfCells() > 0)
-//        g_environment->getCell(g_seedID)->rotError = 0.0f;
-//      break;
-//
-//    case GLUT_KEY_UP: case GLUT_KEY_DOWN:
-//      if (g_environment->getNumberOfCells() > 0)
-//        g_environment->getCell(g_seedID)->transError.x = 0.0f;
-//      break;
-//
-//    default:
-//    	break;
-//  }
-//}
-
-
-// This function does all the actual computation depending on which function the user has selected
-double getYValue(double xValue)
-{
-	double yValue = -9999.0l;
-	switch(CURRENT_SELECTION)
-	{
-		case 0:
-			yValue = 0.0l;
-		break;
-		case 1:
-			yValue = xValue;
-		break;
-		case 2:
-			yValue = abs(xValue);
-		break;
-		case 3:
-			yValue = -0.5f * xValue;
-		break;
-		case 4:
-			yValue = -abs(0.5f * xValue);
-		break;
-		case 5:
-			yValue = -abs(xValue);
-		break;
-		case 6:
-			yValue = xValue*xValue;
-		break;
-		case 7:
-			yValue = xValue*xValue*xValue;
-		break;
-		case 8:
-			yValue = sqrt(abs(0.5f * xValue)) * ((xValue >= 0) ? 1.0f : -1.0f);
-		break;
-		case 9:
-			yValue = 0.05f * sin(10.0f * xValue);;
-		break;
-	}
-	return yValue;
-}
 
 
 // <test formation functions>

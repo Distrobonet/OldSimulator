@@ -27,10 +27,7 @@ int main(int argc, char **argv)
 
 	thisCell.update(argv[4]);
 
-	// testing formation client for cell
-	cout << thisCell.formation.formationID;
-	thisCell.setFormationFromService();
-	cout << thisCell.formation.formationID;
+
 
 	return 0;
 }
