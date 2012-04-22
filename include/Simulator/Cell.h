@@ -75,8 +75,10 @@ class Cell: public State, public Neighborhood, public Robot
         Cell(const float dx         = 0.0f,
              const float dy         = 0.0f,
              const float dz         = 0.0f,
-             const float theta      = 0.0f);
+             const float theta      = 0.0f,
+             const int ID			= 0);
         Cell(const Cell &r);
+//        Cell(const char ID = '0');
 
         // <destructors>
         virtual ~Cell();
@@ -174,7 +176,8 @@ class Cell: public State, public Neighborhood, public Robot
         virtual bool init(const float dx         = 0.0f,
                           const float dy         = 0.0f,
                           const float dz         = 0.0f,
-                          const float theta      = 0.0f);
+                          const float theta      = 0.0f,
+                          const int ID			 = 0);
 };  // Cell
 
 #endif

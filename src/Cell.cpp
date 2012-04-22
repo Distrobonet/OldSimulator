@@ -26,15 +26,21 @@ int Cell::nCells = 0;
 
 // Default constructor that initializes
 // this cell to the parameterized values.
-Cell::Cell(const float dx, const float dy, const float dz, const float theta) :
+Cell::Cell(const float dx, const float dy, const float dz, const float theta, const int cellID) :
 		State(), Neighborhood()
 {
-	init(dx, dy, dz, theta);
 	ID = nCells++;
+	cout << "Robot ID (Cell()): " << cellID << endl;
+	init(dx, dy, dz, theta, cellID);
 	numBids = 0;
-
-
 }
+
+//Cell::Cell(const char ID) : State(), Neighborhood()
+//{
+//	const float dx = 0.0f, dy = 0.0f, dz = 0.0f, theta = 0.0f;
+//	init(dx, dy, dz, theta, ID);
+//
+//}
 
 // Copy constructor that copies the contents of
 // the parameterized cell into this cell.
@@ -69,6 +75,17 @@ void Cell::update(bool doSpin)
 	}
 }
 
+
+// Initializes the cell to the parameterized values,
+// returning true if successful, false otherwise.
+bool Cell::init(const float dx, const float dy, const float dz,
+		const float theta, const int ID)
+{
+//	showFilled = DEFAULT_CELL_SHOW_FILLED;
+	leftNbr = rightNbr = NULL;
+	auctionStepCount = 0;
+	return true;
+}
 
 // Initializes the neighborhood of each cell,
 // returning true if successful, false otherwise.
@@ -1118,16 +1135,6 @@ Cell& Cell::operator =(const Robot &r) {
 	return *this = r;
 }
 
-// Initializes the cell to the parameterized values,
-// returning true if successful, false otherwise.
-bool Cell::init(const float dx, const float dy, const float dz,
-		const float theta)
-{
-//	showFilled = DEFAULT_CELL_SHOW_FILLED;
-	leftNbr = rightNbr = NULL;
-	auctionStepCount = 0;
-	return true;
-}
 
 // Sets this cell's formation object from the Formation service
 bool Cell::setFormationFromService()
