@@ -19,15 +19,10 @@ Environment::Environment()
 // this environment to the parameterized values.
 Environment::Environment(int numRobots)
 {
-	// TODO: service call for relationship
-	// TODO: create service that holds absolute positions of all robots
-	// TODO: figure out if you need to init anything else for environment
-
 	numOfRobots = numRobots;
 	initOverloardSubscribers(this);
-
-
 }
+
 
 void Environment::initOverloardSubscribers(Environment *e)
 {
@@ -91,6 +86,7 @@ void Environment::initOverloardSubscribers(Environment *e)
 	subRobots.push_back(subRobot6);
 }
 
+
 void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
 	btScalar yaw = 0.0l;
@@ -111,8 +107,6 @@ void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 // Copy constructor that copies the contents of
 // the parameterized environment into this environment.
   Environment::Environment(const Environment &env)
-: cells(env.cells), objects(env.objects),  // BAD!!!
-  msgQueue(env.msgQueue)
 {}
 
 
@@ -121,22 +115,14 @@ Environment::~Environment()
 {}
 
 
+// updates the environment using spin
 void Environment::update(bool doSpin)
 {
-	Cell *temp = NULL;
-//	ros::init(argc, argv, "message_listener");
-	ros::NodeHandle rosNode;
 	ros::Rate loop_rate(10);
 
 	while(ros::ok())
 	{
-		for(uint i = 0; i < cells.size(); i++)
-		{
-//			ros::Subscriber sub = rosNode.subscribe("/robot_0/cmd_vel", 10, chatterCallback);
-			temp = cells.at(i);
-			temp->update(doSpin);
-//			cout<<subRobots.at(i).getTopic()<<endl;
-		}
+		// TODO update base_pose_gnd_truth
 
 		ros::spinOnce();
 	}

@@ -21,8 +21,7 @@
 
 using namespace std;
 
-// <protected static data members>
-int Cell::nCells = 0;
+
 
 // Default constructor that initializes
 // this cell to the parameterized values.
@@ -242,7 +241,6 @@ void Cell::setID(int cellID)
 //		if (currNbr->formation.getFormationID() > formation.getFormationID())
 //			changeFormation(currNbr->formation, *currNbr);
 //
-//		// TODO: Service call for reationship
 //		//currNbr->relActual = getRelationship(ID);
 //	}
 //	rels = getRelationships();
@@ -498,7 +496,7 @@ bool Cell::setFormationFromService()
 	}
 }
 
-// Get a neighbor's state from the State service//TODO: do this function
+// Get a neighbor's state from the State service
 bool Cell::getNeighborState(bool leftOrRight)
 {
 	//TODO: do this function

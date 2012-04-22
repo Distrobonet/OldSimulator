@@ -180,9 +180,6 @@ class Cell: public State, public Neighborhood
         float		cellTheta;
         int			ID;
 
-        // <protected static data members>
-        static int nCells;
-
         // <protected utility functions>
         void settleAuction();
 

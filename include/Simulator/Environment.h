@@ -19,7 +19,6 @@
 #include <queue>
 #include <vector>
 #include <Simulator/Cell.h>
-#include <Simulator/Object.h>
 
 using namespace std;
 
@@ -77,9 +76,6 @@ class Environment
 
         // <protected data members>
         vector<Cell *>     cells;
-		vector<Object *>   objects;
-        queue<Packet>      msgQueue;
-        Cell              *newestCell;
         Formation          formation;
         int                numOfRobots;
 

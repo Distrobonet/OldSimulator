@@ -4,26 +4,20 @@ int main(int argc, char **argv)
 {
 	string ros_name;
 
-	// Formation Service
+	// Formation Service Client
 	ros_name = "formation_client_";
 	ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 
-    // State Service
+    // State Service Client
     ros_name = "state_client_";
     ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 
-	// Relationship service
+	// Relationship Service Client
     ros_name = "relationship_client_";
     ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
-
-    // State publisher
-    ros::init(argc, argv, "state");
-    ros::NodeHandle state_pub;
-
-
 
 
     // Initilize cell
@@ -41,7 +35,6 @@ int main(int argc, char **argv)
 
 	// Update this cell
 	thisCell.update(argv[4]);
-
 
 	return 0;
 }
