@@ -30,8 +30,7 @@ class Behavior
     public:
 
         // <constructors>
-        Behavior(const Status  s     = INACTIVE,
-                 const float t     = 0.0f,
+        Behavior(const float t     = 0.0f,
                  const float r     = 0.0f,
                  const float speed = 1.0f);
         Behavior(const Behavior &beh);
