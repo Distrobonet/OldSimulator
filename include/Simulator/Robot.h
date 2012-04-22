@@ -67,7 +67,7 @@ class Robot: public Circle
         double robotTheta;
 
 
-        string generateSubPubMessage(bool subOrPub);
+        string generateSubPubMessage(bool subOrPub, int ID);
         void updatePosition(int robotID);
         void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom);
 
@@ -75,7 +75,8 @@ class Robot: public Circle
         Robot(const float dx         = 0.0f,
               const float dy         = 0.0f,
               const float dz         = 0.0f,
-              const float theta      = 0.0f);
+              const float theta      = 0.0f,
+              const int ID			 = 0);
         Robot(const Robot &robot);
 
         // <destructors>
@@ -182,7 +183,8 @@ class Robot: public Circle
         virtual bool init(const float dx         = 0.0f,
                           const float dy         = 0.0f,
                           const float dz         = 0.0f,
-                          const float theta      = 0.0f);
+                          const float theta      = 0.0f,
+                          const int ID			 = 0);
 
 };  // Robot
 

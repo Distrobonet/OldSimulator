@@ -52,16 +52,16 @@ void Robot::updatePosition(int robot)
 // Default constructor that initializes
 // this robot to the parameterized values.
 Robot::Robot(const float dx,    const float dy, const float dz,
-             const float theta)
+             const float theta, const int ID)
 {
-    init(dx, dy, dz, theta);
-    ID = numOfRobots++;
+    init(dx, dy, dz, theta, ID);
+    cout << "THIS JUST HAPPENDED" << endl;
 }
 
 
 // Initializes the robot to the parameterized values,
 // returning true if successful, false otherwise.
-bool Robot::init(const float dx, const float dy, const float dz, const float theta)
+bool Robot::init(const float dx, const float dy, const float dz, const float theta, const int ID)
 {
     Circle::init(dx, dy, dz, DEFAULT_ROBOT_RADIUS);
     setHeading(theta);
@@ -76,12 +76,13 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
 	robotX = velocityX;
 	robotY = velocityY;
 	robotTheta = velocityTheta;
-	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER), 1);
+	cout << "Robot ID (Robot.init): " << ID << endl;
+	pub_cmd_vel = aNode.advertise < geometry_msgs::Twist > (generateSubPubMessage(PUBLISHER, ID), 1);
 	geometry_msgs::Twist commandVelocity;
 
 	// odom message
 	odomMsg.header.stamp = current_time = ros::Time::now();
-	odomMsg.header.frame_id = generateSubPubMessage(ROBOT_LABEL);
+	odomMsg.header.frame_id = generateSubPubMessage(ROBOT_LABEL, ID);
 
     setEnvironment(NULL);
     return true;
@@ -90,18 +91,19 @@ bool Robot::init(const float dx, const float dy, const float dz, const float the
 
 // This method will generate the appropriate Subscriber/Publisher message for a new robot
 // using the current number of robots + 1
-string Robot::generateSubPubMessage(bool subOrPub)
+string Robot::generateSubPubMessage(bool subOrPub, int cellID)
 {
+	cout << "Robot ID (generateSubPubMsg): " << cellID << endl;
 	stringstream ss;//create a stringstream
-	ss << (numOfRobots);//add number to the stream
+	ss << (cellID);//add number to the stream
 	string numRobots = ss.str();
-
 
 	// Subscriber
 	if(subOrPub == SUBSCRIBER)
 	{
 		string subString = "/robot_/odom";
 		subString.insert(7, numRobots);
+		cout << "subString: " << subString << endl;
 		return subString;
 
 	}
@@ -109,9 +111,10 @@ string Robot::generateSubPubMessage(bool subOrPub)
 	// Robot label
 	else if(subOrPub == ROBOT_LABEL)
 	{
-		string subString = "";
-		subString.insert(0, numRobots);
-		return subString;
+		string robotLabel = "";
+		robotLabel.insert(0, numRobots);
+		cout << "robotLabel: " << robotLabel << endl;
+		return robotLabel;
 	}
 
 	// Publisher
@@ -119,6 +122,7 @@ string Robot::generateSubPubMessage(bool subOrPub)
 	{
 		string pubString = "/robot_/cmd_vel";
 		pubString.insert(7, numRobots);
+		cout << "pubString: " << pubString << endl;
 		return pubString;
 	}
 }
