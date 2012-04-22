@@ -12,14 +12,12 @@
 #define VECTOR_H
 #include <cmath>
 #include <iostream>
-#include <Simulator/Color.h>
 #include <Simulator/Utils.h>
 using namespace std;
 
 
 
 // global constants
-static const Color   DEFAULT_VECTOR_COLOR        = WHITE;
 static const float DEFAULT_VECTOR_TRANSLATE[3] = {0.0f, 0.0f, 0.0f};
 static const float DEFAULT_VECTOR_ROTATE[3]    = {0.0f, 0.0f, 0.0f};
 static const float DEFAULT_VECTOR_SCALE[3]     = {1.0f, 1.0f, 1.0f};
@@ -38,14 +36,13 @@ class Vector
 
         // <public data members>
         float x,        y,            z;
-        float color[3], translate[3], rotate[3], scale[3];
+        float translate[3], rotate[3], scale[3];
         bool    showLine, showHead;
         
         // <constructors>
         Vector(const float dx         = 0.0f,
                const float dy         = 0.0f,
-               const float dz         = 0.0f,
-               const Color   colorIndex = DEFAULT_VECTOR_COLOR);
+               const float dz         = 0.0f);
         Vector(const Vector &v);
 
         // <destructors>
@@ -56,11 +53,6 @@ class Vector
                          const float dy = 0.0f,
                          const float dz = 0.0f);
         virtual bool set(const Vector &v);
-        virtual bool setColor(const float r,
-                              const float g,
-                              const float b);
-        virtual bool setColor(const float clr[3]);
-        virtual bool setColor(const Color colorIndex = DEFAULT_VECTOR_COLOR);
         virtual void translated(const float dx,
                                 const float dy,
                                 const float dz);
@@ -115,8 +107,7 @@ class Vector
         // <virtual protected utility functions>
         virtual bool init(const float dx         = 0.0f,
                           const float dy         = 0.0f,
-                          const float dz         = 0.0f,
-                          const Color   colorIndex = DEFAULT_VECTOR_COLOR);
+                          const float dz         = 0.0f);
 };  // Vector
 
 #endif

@@ -8,9 +8,9 @@
 #include <Simulator/Vector.h>
 
 // Default constructor that initializes the vector to the parameterized values.
-Vector::Vector(const float dx, const float dy, const float dz, const Color colorIndex)
+Vector::Vector(const float dx, const float dy, const float dz)
 {
-    init(dx, dy, dz, colorIndex);
+    init(dx, dy, dz);
 }   // Vector(const float, const float, const float, const Color)
 
 
@@ -18,10 +18,10 @@ Vector::Vector(const float dx, const float dy, const float dz, const Color color
 // the parameterized vector into this vector.
 Vector::Vector(const Vector &v)
 {
-    init(v.x, v.y, v.z, DEFAULT_VECTOR_COLOR);
+    init(v.x, v.y, v.z);
     *this = v;
 
-    setColor(v.color);
+    //setColor(v.color);
     for (int i = 0; i < 3; ++i)
     {
         translate[i] = v.translate[i];
@@ -57,39 +57,6 @@ bool Vector::set(const Vector &v)
 {
     return set(v.x, v.y, v.z);
 }   // set(const Vector &v)
-
-
-
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-bool Vector::setColor(const float r, const float g, const float b)
-{
-//    color[GLUT_RED]   = r;
-//    color[GLUT_GREEN] = g;
-//    color[GLUT_BLUE]  = b;
-    return true;
-}   // setColor(const float, const float, const float)
-
-
-
-
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-bool Vector::setColor(const float clr[3])
-{
-//    return setColor(clr[GLUT_RED], clr[GLUT_GREEN], clr[GLUT_BLUE]);
-	return true;
-}   // setColor(const float [])
-
-
-
-// Attempts to set the color to the parameterized RGB color values,
-// returning true if successful, false otherwise.
-bool Vector::setColor(const Color colorIndex)
-{
-    return setColor(COLOR[(int)colorIndex]);
-}   // setColor(const Color)
-
 
 
 // Translates the vector display based on the
@@ -252,7 +219,7 @@ float Vector::perpDot(const Vector &v) const
 Vector& Vector::operator =(const Vector &v)
 {
     set(v.x, v.y, v.z);
-    setColor(v.color);
+    //setColor(v.color);
     for (int i = 0; i < 3; ++i)
     {
         translate[i] = v.translate[i];
@@ -391,8 +358,7 @@ float angle(const Vector &v1, const Vector &v2)
 
 
 // Initializes the vector to the parameterized values, returning true if successful, false otherwise.
-bool Vector::init(const float dx, const float dy, const float dz,
-                  const Color   colorIndex)
+bool Vector::init(const float dx, const float dy, const float dz)
 {
     set(dx, dy, dz);
     for (int i = 0; i < 3; ++i)

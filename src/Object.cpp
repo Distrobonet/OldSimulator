@@ -14,10 +14,9 @@ int Object::nObjects = 0;   // initializes the number of objects to 0
 
 // Default constructor that initializes this object to the parameterized values.
 Object::Object(const float dx, const float dy, const float dz,
-               const float r,
-               const Color   colorIndex)
+               const float r)
 {
-    init(dx, dy, dz, r, colorIndex);
+    init(dx, dy, dz, r);
     ID = ++nObjects;
 }   // Object(const float, const float, const float, const Color)
 
@@ -26,18 +25,18 @@ Object::Object(const float dx, const float dy, const float dz,
 // the parameterized object into this object.
 Object::Object(const Object &obj)
 {
-    init(obj.x, obj.y, obj.z, DEFAULT_OBJECT_COLOR);
-    setColor(obj.color);
-    for (int i = 0; i < 3; ++i)
-    {
-        translate[i] = obj.translate[i];
-        rotate[i]    = obj.rotate[i];
-        scale[i]     = obj.scale[i];
-    }
-    showFilled  = obj.showFilled;
-    showPos     = obj.showPos;
-    ID          = obj.ID;
-    env         = obj.env;
+//    init(obj.x, obj.y, obj.z);
+//    //setColor(obj.color);
+//    for (int i = 0; i < 3; ++i)
+//    {
+//        translate[i] = obj.translate[i];
+//        rotate[i]    = obj.rotate[i];
+//        scale[i]     = obj.scale[i];
+//    }
+//    showFilled  = obj.showFilled;
+//    showPos     = obj.showPos;
+//    ID          = obj.ID;
+//    env         = obj.env;
 }   // Object(const Object &)
 
 
@@ -49,7 +48,7 @@ Object::~Object(){}
 // returning true if successful, false otherwise.
 bool Object::setRadius(const float r)
 {
-  return Circle::setRadius(r);
+  //return Circle::setRadius(r);
 }   // setRadius(const float)
 
 
@@ -83,11 +82,10 @@ int Object::getID() const
 // Initializes the object to the parameterized values,
 // returning true if successful, false otherwise.
 bool Object::init(const float dx, const float dy, const float dz,
-                  const float r,
-                  const Color   colorIndex)
+                  const float r)
 {
-    Circle::init(dx, dy, dz, r, colorIndex);
-    showFilled = DEFAULT_OBJECT_SHOW_FILLED;
+    //Circle::init(dx, dy, dz, r);
+    //showFilled = DEFAULT_OBJECT_SHOW_FILLED;
     setEnvironment(NULL);
     return true;
 }   // init(const float..<4>, const Color)

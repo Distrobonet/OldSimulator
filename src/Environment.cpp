@@ -437,15 +437,15 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 
 	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
 
-	float theta = subRobotVels[req.OriginID][3];
+	float theta = -subRobotVels[req.OriginID][3];
 	theta = degreesToRadians(theta);
 	//theta =
 	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
 	tempVector.x = tempVector.x * cos(theta) - tempVector.y * sin(theta);
 	tempVector.y = tempVector.x * sin(theta) + tempVector.y * cos(theta);
 
-//	res.theRelationship.actual.x = subRobotVels[req.OriginID][0] - subRobotVels[req.TargetID][0];
-//	res.theRelationship.actual.y = subRobotVels[req.OriginID][1] - subRobotVels[req.TargetID][1];
+	res.theRelationship.actual.x = tempVector.x;
+	res.theRelationship.actual.y = tempVector.y;
 	return true;
 }
 

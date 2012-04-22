@@ -36,12 +36,10 @@ class Environment
     public:
 
         // <public data members>
-        float   color[3];
         bool    startFormation;
         int     formationID;
         Vector  centroid;
         float   radius;
-        Circle  circle;
         Vector  distance;
 
         double robotX;

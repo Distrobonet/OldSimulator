@@ -18,7 +18,7 @@ struct PropMsg
 
   // <data members>
   int 		toID;      //ID of the robot the message was sent to.
-  Vector 	gradient;  //count of the number of responses summed up so far.
+  Vector 	frp;  //count of the number of responses summed up so far.
   Vector 	distance;  //distance of the cell who is currently closest to the FCNTR
   float 	radius;
   int 		count;
@@ -35,7 +35,7 @@ struct PropMsg
           const float   rad        = 0.0f,
           const int     num        = 0,
           const bool      answer     = false)
-          : toID(to), gradient(grad),distance(dist) ,radius(rad),
+          : toID(to), frp(grad),distance(dist) ,radius(rad),
           count(num), response(answer)
   {
   }//PropMsg(const..{int, int,bool})

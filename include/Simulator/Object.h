@@ -7,15 +7,13 @@
 // preprocessor directives
 #ifndef OBJECT_H
 #define OBJECT_H
-#include <Simulator/Circle.h>
 
 using namespace std;
 
 
 
 // global constants
-static const Color    DEFAULT_OBJECT_COLOR        = DEFAULT_CIRCLE_COLOR;
-static const float  DEFAULT_OBJECT_RADIUS       = 0.03f;
+static const float    DEFAULT_OBJECT_RADIUS       = 0.03f;
 static const bool     DEFAULT_OBJECT_SHOW_FILLED  = false;
 static const Behavior DEFAULT_OBJECT_BEHAVIOR = Behavior();
 
@@ -26,7 +24,7 @@ class Environment;
 
 
 // describes a 2-dimensional object
-class Object: public Circle
+class Object
 {
 
     public:
@@ -35,8 +33,7 @@ class Object: public Circle
         Object(const float dx         = 0.0f,
                const float dy         = 0.0f,
                const float dz         = 0.0f,
-               const float r          = DEFAULT_OBJECT_RADIUS,
-               const Color   colorIndex = DEFAULT_OBJECT_COLOR);
+               const float r          = DEFAULT_OBJECT_RADIUS);
         Object(const Object &obj);
 
         // <destructors>
@@ -65,8 +62,7 @@ class Object: public Circle
         virtual bool init(const float dx         = 0.0f,
                           const float dy         = 0.0f,
                           const float dz         = 0.0f,
-                          const float r          = DEFAULT_OBJECT_RADIUS,
-                          const Color   colorIndex = DEFAULT_OBJECT_COLOR);
+                          const float r          = DEFAULT_OBJECT_RADIUS);
 };  // Object
 
 #endif

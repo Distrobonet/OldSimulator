@@ -93,7 +93,7 @@ bool Formation::addFunction(const Function f)
 // returning true if successful, false otherwise.
 bool Formation::addFunctions(const vector<Function> &f)
 {
-    for (int i = 0; i < f.size(); ++i)
+    for (uint i = 0; i < f.size(); ++i)
         if (!addFunction(f[i]))
         	return false;
     return true;
@@ -229,7 +229,7 @@ vector<Vector> Formation::getRelationships(const Vector c)
     if (empty()) return vector<Vector>();
     vector<Vector> rels;
     Function       curr = NULL;
-    for (int i = 0; i < size(); ++i)
+    for (uint i = 0; i < size(); ++i)
     {
         curr = at(i);
         rels.push_back(getRelationship(curr, -radius, c, heading));
