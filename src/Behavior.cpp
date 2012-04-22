@@ -28,14 +28,12 @@
 //      r       in      the rotational velocity of the behavior (default 0)
 //      speed   in      the maximum speed of the behavior (default 1)
 //
-Behavior::Behavior(const Status  s,
-                   const float t,
+Behavior::Behavior(const float t,
                    const float r,
                    const float speed)
 {
     setMaxSpeed(speed);
     setVelocity(t, r);
-    setStatus(s);
 }   // Behavior(const Status, const float, const float, const float)
 
 
@@ -389,8 +387,7 @@ Behavior subsumeBehaviors(const Behavior behLow, const Behavior behHigh)
 //
 Behavior sumBehaviors(const Behavior beh1, const Behavior beh2)
 {
-    return Behavior (max(beh1.status, beh2.status),
-                     beh1.transVel + beh2.transVel,
+    return Behavior (beh1.transVel + beh2.transVel,
                      beh1.rotVel   + beh2.rotVel,
                      min(beh1.maxSpeed, beh2.maxSpeed));
 }   // subsumeBehaviors(const Behavior, const Behavior)

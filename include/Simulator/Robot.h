@@ -103,7 +103,7 @@ class Robot: public Circle
         float getVelocity()  const;
         float getArcRadius() const;
 
-        virtual void step();
+//        virtual void step();
 
         // <public utility functions>
         Vector getRelationship(Vector &target) const;

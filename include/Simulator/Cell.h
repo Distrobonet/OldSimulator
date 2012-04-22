@@ -62,6 +62,7 @@ static const int    RIGHT_NBR_INDEX          = 1;
 static const int    NEIGHBORHOOD_SIZE        = 2;
 static const float  MAX_TRANSLATIONAL_ERROR  = 0.02f;
 static const float  FACTOR_MAX_SPEED         = 0.3f;
+static const float  FACTOR_THRESHOLD         = 1.0f;
 
 
 
@@ -73,7 +74,7 @@ class Cell: public State, public Neighborhood
     public:
 
         // <constructors>
-        Cell(const int ID = 0);
+        Cell(const int cellID);
         Cell(const Cell &r);
 
         // <destructors>
@@ -98,6 +99,7 @@ class Cell: public State, public Neighborhood
         int          getNBids() const;
         int          getAuctionStepCount() const;
         int 		 getID() const;
+        void 		 setID(int cellID);
 
 
 
@@ -110,8 +112,8 @@ class Cell: public State, public Neighborhood
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,
                                      Neighbor         n = Neighbor());
-        virtual bool sendStateToNbrs();
-        virtual bool sendState(const int);
+//        virtual bool sendStateToNbrs();
+//        virtual bool sendState(const int);
 
         // <public primitive behaviors>
         Behavior moveError();
@@ -126,6 +128,7 @@ class Cell: public State, public Neighborhood
         float threshold() const;
         float angThreshold() const;
         bool setHeading(const float theta);
+        float maxAngSpeed() const;
 
         // <virtual overloaded operators>
         virtual Cell& operator =(const State &s);
@@ -149,13 +152,10 @@ class Cell: public State, public Neighborhood
 		void startStateServiceServer();
 
 
-		Formation currentFormation;
-
-		int			  ID;
-
     protected:
 
         // <protected data members>
+        Formation currentFormation;
         Neighbor    *leftNbr, *rightNbr;
         Vector		heading;
         int			cellX;

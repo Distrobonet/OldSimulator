@@ -74,8 +74,6 @@ class Environment
         bool removeCell();
         bool removeCell(Cell *c);
         bool addRobot(float x = 0.0f, float y = 0.0f, float z = 0.0f, float theta = 0.0f);
-        bool removeRobot();
-        bool removeRobot(Robot *r);
 		bool addObject(float dx = 0.0f, float dy = 0.0f, float dz = 0.0f);
 		bool addObject(Object *o = NULL);
 		bool removeObject();
@@ -83,10 +81,8 @@ class Environment
 
         // <public accessor functions>
         Cell*               getCell(int pos) const;
-        Robot*              getRobot(int id);
 		Object*             getObject(int index) const;
         vector<Cell *>      getCells();    // BAD!!!
-        vector<Robot *>     getRobots();   // BAD!!!
 		vector<Object *>    getObjects();  // BAD!!!
         int                 getNumberOfCells() const;
         int                 getNumberOfFreeRobots() const;
@@ -94,7 +90,7 @@ class Environment
 
 
         // <virtual public utility functions>
-        virtual bool step();
+//        virtual bool step();
         virtual void clear();
 
         //functions for the subscribers for all robots
@@ -122,10 +118,8 @@ class Environment
 		//removed const
         bool    sendPacket(const Packet &p = Packet());
         vector<Cell *>  getCellVector();
-        vector<Robot *> getRobotVector();
 
         // <public sensor functions>
-		vector<Vector> getObjectRelationships(const int fromID, const float maxDist = SENSOR_RANGE);
 
 		//removed const
         bool    forwardPacket(const Packet &p);
@@ -139,10 +133,6 @@ class Environment
 
         // <public utility auctioning functions>
         //bool    auctionPosition(Cell* a);
-        Robot*  getNearestRobot(Cell *c);
-        Robot*  getNearestRobot(float x, float y);
-        float   distanceToRobot(Cell *c,Robot *r);
-        float   distanceToRobot(float x,float y,Robot *r);
         void    formUp();
         void    formFromClick(float x,float y);
         bool    changeFormation(Formation &f);
@@ -161,7 +151,6 @@ class Environment
 
         // <protected data members>
         vector<Cell *>     cells;
-        vector<Robot *>    robots;
 		vector<Object *>   objects;
         queue<Packet>      msgQueue;
         Cell              *newestCell;
@@ -172,7 +161,7 @@ class Environment
         virtual bool init();
         virtual bool initCells(const Formation f = Formation());
         virtual bool initNbrs(const int nNbrs = 0);
-		virtual bool initRobots();
+//		virtual bool initRobots();
 };  // Environment
 
 #endif

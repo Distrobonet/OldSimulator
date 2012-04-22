@@ -111,7 +111,7 @@ void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 // Copy constructor that copies the contents of
 // the parameterized environment into this environment.
   Environment::Environment(const Environment &env)
-: cells(env.cells), robots(env.robots), objects(env.objects),  // BAD!!!
+: cells(env.cells), objects(env.objects),  // BAD!!!
   msgQueue(env.msgQueue)
 {
 }
@@ -128,7 +128,6 @@ Environment::~Environment()
 void Environment::clear()
 {
    while (removeCell());
-   while (removeRobot());
 //   while (removeObject());
 }
 
@@ -136,12 +135,15 @@ void Environment::clear()
 void Environment::update(bool doSpin)
 {
 	Cell *temp = NULL;
+//	ros::init(argc, argv, "message_listener");
+	ros::NodeHandle rosNode;
 	ros::Rate loop_rate(10);
 
 	while(ros::ok())
 	{
 		for(uint i = 0; i < cells.size(); i++)
 		{
+//			ros::Subscriber sub = rosNode.subscribe("/robot_0/cmd_vel", 10, chatterCallback);
 			temp = cells.at(i);
 			temp->update(doSpin);
 //			cout<<subRobots.at(i).getTopic()<<endl;
@@ -152,56 +154,56 @@ void Environment::update(bool doSpin)
 }
 
 
-// Executes the next step in each cell in the environment
-// and forwards all sent packets to their destinations.
-bool Environment::step()
-{
-//  vector<Cell*> auctionCalls;
-//  Cell *auctionCall = NULL;
-//  Cell *currCell = NULL;
-//  Robot *r = NULL;
-
-//  for (int i = 0; i < getNumberOfCells(); i++)
-//  {
-//    auctionCall = cells[i]->cStep();
-//    if((auctionCall != NULL)&&(startFormation))
-//      auctionCalls.push_back(auctionCall);
-//  }
-
-//  if(startFormation)
-//  {
-//    for(unsigned i = 0; i < auctionCalls.size(); i++)
-//    {
-//      Cell* a = auctionCalls[i];
-//      State s = a->getState() ;
-//      Formation f = formation;
-//      bool dir;
+//// Executes the next step in each cell in the environment
+//// and forwards all sent packets to their destinations.
+//bool Environment::step()
+//{
+////  vector<Cell*> auctionCalls;
+////  Cell *auctionCall = NULL;
+////  Cell *currCell = NULL;
+////  Robot *r = NULL;
 //
-//      if (a->rightNbr == NULL)
-//    	  dir = true;
-//      else
-//    	  dir = false;
+////  for (int i = 0; i < getNumberOfCells(); i++)
+////  {
+////    auctionCall = cells[i]->cStep();
+////    if((auctionCall != NULL)&&(startFormation))
+////      auctionCalls.push_back(auctionCall);
+////  }
 //
-//      Auction_Announcement* aa = new Auction_Announcement(a->getState().gradient, s, dir);
-//      sendMsg((Message)aa, ID_BROADCAST, a->getID(), AUCTION_ANNOUNCEMENT);
-//      a->setAuctionStepCount(1);
-//    }
-
-    for(unsigned i = 0; i < robots.size(); i++)
-    {
-//      robots[i]->processPackets();
-      robots[i]->step();
-    }
-    forwardPackets();
-//    auctionCalls.clear();
-//    for(int i=0; i<getNumberOfCells(); i++)
-//    {
-//      if(cells[i]->getAuctionStepCount() >= AUCTION_STEP_COUNT)
-//    	  cells[i]->settleAuction();
-//    }
-//  }
-  return true;
-}
+////  if(startFormation)
+////  {
+////    for(unsigned i = 0; i < auctionCalls.size(); i++)
+////    {
+////      Cell* a = auctionCalls[i];
+////      State s = a->getState() ;
+////      Formation f = formation;
+////      bool dir;
+////
+////      if (a->rightNbr == NULL)
+////    	  dir = true;
+////      else
+////    	  dir = false;
+////
+////      Auction_Announcement* aa = new Auction_Announcement(a->getState().gradient, s, dir);
+////      sendMsg((Message)aa, ID_BROADCAST, a->getID(), AUCTION_ANNOUNCEMENT);
+////      a->setAuctionStepCount(1);
+////    }
+//
+////    for(unsigned i = 0; i < robots.size(); i++)
+////    {
+////      robots[i]->processPackets();
+////      robots[i]->step();
+////    }
+//    forwardPackets();
+////    auctionCalls.clear();
+////    for(int i=0; i<getNumberOfCells(); i++)
+////    {
+////      if(cells[i]->getAuctionStepCount() >= AUCTION_STEP_COUNT)
+////    	  cells[i]->settleAuction();
+////    }
+////  }
+//  return true;
+//}
 
 
 // Initializes the environment to the parameterized values,
@@ -214,7 +216,7 @@ bool Environment::init()
 	bool result = true;
 	startFormation = false;
 	//initCells(f);
-	Robot::numOfRobots--;
+//	Robot::numOfRobots--;
 	//initRobots();
 
 	if (VERBOSE)
@@ -223,15 +225,15 @@ bool Environment::init()
 }   // init(const int, const Formation)
 
 
-bool Environment::initRobots()
-{
-  for (int i = 0; i < numOfRobots; i++)
-    addRobot(randSign() * frand(),
-        randSign() * frand(),
-        0.0f,
-        randSign() * frand(0.0f, 180.0f));
-  return true;
-}
+//bool Environment::initRobots()
+//{
+//  for (int i = 0; i < numOfRobots; i++)
+//    addRobot(randSign() * frand(),
+//        randSign() * frand(),
+//        0.0f,
+//        randSign() * frand(0.0f, 180.0f));
+//  return true;
+//}
 
 
 // Initializes each cell to the parameterized values,
@@ -544,11 +546,11 @@ vector<Cell *> Environment::getCells()
 } 
 
 
-// Returns all of the [free] robots in the environment.
-vector<Robot *> Environment::getRobots()
-{
-  return robots;
-}
+//// Returns all of the [free] robots in the environment.
+//vector<Robot *> Environment::getRobots()
+//{
+//  return robots;
+//}
 
 // Returns all of the objects in the environment.
 //vector<Object *> Environment::getObjects()
@@ -564,11 +566,11 @@ int Environment::getNumberOfCells() const
 }
 
 
-// Returns the number of [free] robots in the environment.
-int Environment::getNumberOfFreeRobots() const
-{
-  return robots.size();
-}
+//// Returns the number of [free] robots in the environment.
+//int Environment::getNumberOfFreeRobots() const
+//{
+//  return robots.size();
+//}
 
 
 // Returns the number of objects in the environment.
@@ -588,10 +590,10 @@ Vector Environment::getRelationship(const int toID, const int fromID)
   if ((toCell == NULL) || (fromCell == NULL))
 	  return Vector();
 
-  Vector temp   = *toCell - *fromCell;
+//  Vector temp   = *toCell - *fromCell;
   //temp.rotateRelative(-fromCell->getHeading());
 
-  return temp;
+  return Vector();
 }
 
 
@@ -621,137 +623,136 @@ void Environment::getDistance(Vector dist)
       Formation formationCopy = formation;
       formationCopy.setSeedID(cells[i]->ID);
       formationCopy.setFormationID(++formationID);
-      changeFormation(formationCopy);
+//      changeFormation(formationCopy);
       break;
     }
   }
 }
 
 
-// Attempts to send a packet to its destination
-// based upon the given parameters, returning
-// true if successful, false otherwise.
-bool Environment::sendMsg(const Message &msg,
-    const int    toID,
-    const int    fromID,
-    const int    type)
-{
-  Message msg_c = msg;
-  bool answer = sendPacket(Packet(msg_c, toID, fromID, type));
-  //if(VERBOSE)printf("Received sendPacket answer\n");
-  return answer;
-}
+//// Attempts to send a packet to its destination
+//// based upon the given parameters, returning
+//// true if successful, false otherwise.
+//bool Environment::sendMsg(const Message &msg,
+//    const int    toID,
+//    const int    fromID,
+//    const int    type)
+//{
+//  Message msg_c = msg;
+//  bool answer = sendPacket(Packet(msg_c, toID, fromID, type));
+//  //if(VERBOSE)printf("Received sendPacket answer\n");
+//  return answer;
+//}
 
 
-// Attempts to send a packet to its destination,
-// returning true if successful, false otherwise.
-bool Environment::sendPacket(const Packet &packet)
-{
-  // discrete message passing
-  //if (msgQueue.enqueue(p)) return true;
-
-  // continuous message passing
-  //if(p.type==AUCTION_ANNOUNCEMENT)printf("auctionannouncement in sendPacket()\n");
-  if (forwardPacket(packet)) return true;
-  //if(VERBOSE)printf("just before delete p.msg;\n");
-  //(cast as message type -- delete (state *)
-  if(packet.msg != NULL)
-  {
-    if(packet.type==STATE)
-    {
-      //if(VERBOSE) printf("attempting to delete STATE message\n");
-      delete (State *)packet.msg;
-      //if(VERBOSE) printf("successfully deleted STATE message\n");
-    }else if(packet.type==CHANGE_FORMATION)
-    {
-      //if(VERBOSE) printf("attempting to delete CHANGE_FORMATION message\n");
-      delete (Formation *)packet.msg;
-    }
-  }
-  //p.msg = NULL;
-  if(VERBOSE)
-	  cout << "finished sendPacket()\n";
-  return false;
-}
-
-
-// Attempts to forward a packet to its destination,
-// returning true if successful, false otherwise.
-bool Environment::forwardPacket(const Packet &packet)
-{
-//  Cell *cell;
-//  if(!packet.fromBroadcast())
-//	  cell = getCell(packet.toID);
+//// Attempts to send a packet to its destination,
+//// returning true if successful, false otherwise.
+//bool Environment::sendPacket(const Packet &packet)
+//{
+//  // discrete message passing
+//  //if (msgQueue.enqueue(p)) return true;
 //
-//  int to = packet.toID;
-//  if (cell != NULL)
+//  // continuous message passing
+//  //if(p.type==AUCTION_ANNOUNCEMENT)printf("auctionannouncement in sendPacket()\n");
+////  if (forwardPacket(packet)) return true;
+//  //if(VERBOSE)printf("just before delete p.msg;\n");
+//  //(cast as message type -- delete (state *)
+//  if(packet.msg != NULL)
 //  {
-//    cell->msgQueue.push(packet);
-//    return true;
-  }
-  //if (c == NULL) printf("CELL is NULL!\n");
-  //if p.msg != NULL
-  //if(p.msg != NULL) delete p.msg;
-  if(packet.msg != NULL)
-  {
-    if(packet.type==STATE)
-    	delete (State *)packet.msg;
-
-    else if(packet.type==CHANGE_FORMATION)
-    	delete (Formation *)packet.msg;
-
-    else if(packet.type == AUCTION_ANNOUNCEMENT)
-    {
-      //Robot* r;
-      for(unsigned i = 0; i < robots.size(); i++)
-    	  robots[i]->msgQueue.push(packet);
-    }
-
-    else if(packet.type == NCELL_REQUEST)
-    {
-    	// WTF?
-    }
-  }
-
-  if(VERBOSE)
-	  cout << "finished forwarding Packet to %d\n" << to;
-  return false;
-}
+//    if(packet.type==STATE)
+//    {
+//      //if(VERBOSE) printf("attempting to delete STATE message\n");
+//      delete (State *)packet.msg;
+//      //if(VERBOSE) printf("successfully deleted STATE message\n");
+//    }else if(packet.type==CHANGE_FORMATION)
+//    {
+//      //if(VERBOSE) printf("attempting to delete CHANGE_FORMATION message\n");
+//      delete (Formation *)packet.msg;
+//    }
+//  }
+//  //p.msg = NULL;
+//  if(VERBOSE)
+//	  cout << "finished sendPacket()\n";
+//  return false;
+//}
 
 
-// Attempts to forward all packets to their destinations,
-// returning true if successful, false otherwise.
-bool Environment::forwardPackets()
-{
-  Packet packet;
-  while (!msgQueue.empty())
-  {
-    packet = msgQueue.front();
-    msgQueue.pop();
-    if (!forwardPacket(packet)) return false;
-  }
-  return true;
-}
+//// Attempts to forward a packet to its destination,
+//// returning true if successful, false otherwise.
+//bool Environment::forwardPacket(const Packet &packet)
+//{
+////  Cell *cell;
+////  if(!packet.fromBroadcast())
+////	  cell = getCell(packet.toID);
+////
+////  int to = packet.toID;
+////  if (cell != NULL)
+////  {
+////    cell->msgQueue.push(packet);
+////    return true;
+//  }
+//  //if (c == NULL) printf("CELL is NULL!\n");
+//  //if p.msg != NULL
+//  //if(p.msg != NULL) delete p.msg;
+//  if(packet.msg != NULL)
+//  {
+//    if(packet.type==STATE)
+//    	delete (State *)packet.msg;
+//
+//    else if(packet.type==CHANGE_FORMATION)
+//    	delete (Formation *)packet.msg;
+//
+//    else if(packet.type == AUCTION_ANNOUNCEMENT)
+//    {
+//      //Robot* r;
+//      for(unsigned i = 0; i < robots.size(); i++)
+//    	  robots[i]->msgQueue.push(packet);
+//    }
+//
+//    else if(packet.type == NCELL_REQUEST)
+//    {
+//    	// WTF?
+//    }
+//  }
+//
+//  if(VERBOSE)
+//	  cout << "finished forwarding Packet to %d\n" << to;
+//  return false;
+//}
 
 
-// Returns the relationships between the robot with
-// parameterized ID and all objects in the environment.
-vector<Vector> Environment::getObjectRelationships(const int   fromID,
-                                                   const float maxDistance)
-{
-  Cell *fromCell = getCell(fromID);
-  int numberOfObjects = getNObjects();
-  if ((fromCell == NULL) || (numberOfObjects == 0)) return vector<Vector>();
+//// Attempts to forward all packets to their destinations,
+//// returning true if successful, false otherwise.
+//bool Environment::forwardPackets()
+//{
+//  Packet packet;
+//  while (!msgQueue.empty())
+//  {
+//    packet = msgQueue.front();
+//    msgQueue.pop();
+//    if (!forwardPacket(packet)) return false;
+//  }
+//  return true;
+//}
 
-  vector<Vector> relationships;
-  for (int i = 0; i < numberOfObjects; i++)
-  {
-	Vector relationship = *objects[i] - *fromCell;
-	if (relationship.magnitude() <= maxDistance)
-		relationships.push_back(relationship);
-  }
-  return relationships;
-}
+
+//// Returns the relationships between the robot with
+//// parameterized ID and all objects in the environment.
+//vector<Vector> Environment::getObjectRelationships(const int fromID, const float maxDistance)
+//{
+//  Cell *fromCell = getCell(fromID);
+//  int numberOfObjects = getNObjects();
+//  if ((fromCell == NULL) || (numberOfObjects == 0)) return vector<Vector>();
+//
+//  vector<Vector> relationships;
+//  for (int i = 0; i < numberOfObjects; i++)
+//  {
+//	Vector relationship = *objects[i] - *fromCell;
+//	if (relationship.magnitude() <= maxDistance)
+//		relationships.push_back(relationship);
+//  }
+//  return relationships;
+//}
 
 
 // Attempts to display the line of the heading vector of each cell,
@@ -798,71 +799,71 @@ bool Environment::showHeading(const bool show)
 }
 
 
-bool Environment::addRobot(float x, float y, float z, float theta)
-{
-	if (VERBOSE)
-		cout << "new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n" <<  x << y << z << theta;
-
-	Robot *robot = new Robot(x, y, z, theta);
-	robot-> setEnvironment(this);
-	robots.push_back(robot);
-	return true;
-}
-
-
-Robot * Environment::getNearestRobot(Cell *cell)
-{
-	Robot *robot = robots[0];
-	float minDistance = distanceToRobot(cell,robots[0]), distance;
-
-	for (int i = 0; i < getNumberOfFreeRobots(); i++)
-	{
-		distance = distanceToRobot(cell,robots[i]);
-		if(minDistance > distance)
-		{
-		  robot = robots[i];
-		  minDistance = distance;
-		}
-	}
-	//printf("minDistance = %f\n",minDistance);
-	return robot;
-}
-
-Robot * Environment::getNearestRobot(float x, float y)
-{
-	Robot *robot = robots[0];
-	float minDistance = distanceToRobot(x,y,robots[0]), distance;
-	distance = minDistance;
-
-	for (int i = 0; i < getNumberOfFreeRobots(); i++)
-	{
-		distance = distanceToRobot(x,y,robots[i]);
-		if(minDistance> distance)
-		{
-		  robot = robots[i];
-		  minDistance = distance;
-		}
-	}
-	//printf("minDistance = %f\n",minDistance);
-	return robot;
-}
+//bool Environment::addRobot(float x, float y, float z, float theta)
+//{
+//	if (VERBOSE)
+//		cout << "new Robot(x = %.2f, y = %.2f, z = %.2f, theta = %.2f)\n" <<  x << y << z << theta;
+//
+//	Robot *robot = new Robot(x, y, z, theta);
+//	robot-> setEnvironment(this);
+//	robots.push_back(robot);
+//	return true;
+//}
 
 
-float Environment::distanceToRobot(Cell *cell,Robot *robot)
-{
+//Robot * Environment::getNearestRobot(Cell *cell)
+//{
+//	Robot *robot = robots[0];
+//	float minDistance = distanceToRobot(cell,robots[0]), distance;
+//
+//	for (int i = 0; i < getNumberOfFreeRobots(); i++)
+//	{
+//		distance = distanceToRobot(cell,robots[i]);
+//		if(minDistance > distance)
+//		{
+//		  robot = robots[i];
+//		  minDistance = distance;
+//		}
+//	}
+//	//printf("minDistance = %f\n",minDistance);
+//	return robot;
+//}
+
+//Robot * Environment::getNearestRobot(float x, float y)
+//{
+//	Robot *robot = robots[0];
+//	float minDistance = distanceToRobot(x,y,robots[0]), distance;
+//	distance = minDistance;
+//
+//	for (int i = 0; i < getNumberOfFreeRobots(); i++)
+//	{
+//		distance = distanceToRobot(x,y,robots[i]);
+//		if(minDistance> distance)
+//		{
+//		  robot = robots[i];
+//		  minDistance = distance;
+//		}
+//	}
+//	//printf("minDistance = %f\n",minDistance);
+//	return robot;
+//}
+
+
+//float Environment::distanceToRobot(Cell *cell,Robot *robot)
+//{
 //  float x = 0, y = 0;
 //  x = fabs(robot-> x - cell-> x);
 //  y = fabs(robot-> y - cell-> y);
 //  return sqrt(pow(x, 2) + pow(y, 2));
-}
+//}
 
-float Environment::distanceToRobot(float xx,float yy, Robot* robot)
-{
-  float x = 0, y = 0;
-  x = fabs(robot-> x - xx);
-  y = fabs(robot-> y - yy);
-  return sqrt(pow(x, 2) + pow(y, 2));
-}
+//float Environment::distanceToRobot(float xx,float yy, Robot* robot)
+//{
+//  float x = 0, y = 0;
+//  x = fabs(robot-> x - xx);
+//  y = fabs(robot-> y - yy);
+//  return sqrt(pow(x, 2) + pow(y, 2));
+//}
 
 /*bool Environment::auctionPosition(Cell * a)
   {
@@ -917,54 +918,54 @@ void Environment::formUp()
 
 }
 
-//get the nearest robot, turn it into a cell, and start the formation
-void Environment::formFromClick(float x, float y)
-{
-//  addCell();
-//  Cell *cell  = cells[0];
-//  Robot* robot = getNearestRobot(x,y);
-//  cell-> x = robot-> x;
-//  cell-> y = robot-> y;
+////get the nearest robot, turn it into a cell, and start the formation
+//void Environment::formFromClick(float x, float y)
+//{
+////  addCell();
+////  Cell *cell  = cells[0];
+////  Robot* robot = getNearestRobot(x,y);
+////  cell-> x = robot-> x;
+////  cell-> y = robot-> y;
+////
+////  for(unsigned i = 0; i < robots.size(); i++)
+////  {
+////    if(robot == robots[i])
+////    {
+////      robots.erase(robots.begin() + i);
+////      break;
+////    }
+//  }
 //
+//  //c->setColor(MAGENTA);
+////  cell->setHeading(formation.getHeading());
+////  newestCell = cell;
+////  sendMsg(new Formation(formation), formation.getSeedID(),
+////      ID_OPERATOR,      CHANGE_FORMATION);
+//}
+
+////used by Simulator object to pass user formation change commands to the formation
+//bool Environment::changeFormation(Formation &f)
+//{
+//  formation = f;
+//  return sendMsg(&formation, formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
+//}
+//bool Environment::changeFormationSeed(Formation &f, int id)
+//{
+//  formation = f;
+//  return sendMsg(&formation, id, ID_OPERATOR,CHANGE_FORMATION);
+//}
+
+////return a pointer to the robot with the matching id
+//Robot* Environment::getRobot(int id)
+//{
 //  for(unsigned i = 0; i < robots.size(); i++)
 //  {
-//    if(robot == robots[i])
-//    {
-//      robots.erase(robots.begin() + i);
-//      break;
-//    }
-  }
-
-  //c->setColor(MAGENTA);
-  cell->setHeading(formation.getHeading());
-  newestCell = cell;
-  sendMsg(new Formation(formation), formation.getSeedID(),
-      ID_OPERATOR,      CHANGE_FORMATION);
-}
-
-//used by Simulator object to pass user formation change commands to the formation
-bool Environment::changeFormation(Formation &f)
-{
-  formation = f;
-  return sendMsg(&formation, formation.getSeedID(), ID_OPERATOR, CHANGE_FORMATION);
-}
-bool Environment::changeFormationSeed(Formation &f, int id)
-{
-  formation = f;
-  return sendMsg(&formation, id, ID_OPERATOR,CHANGE_FORMATION);
-}
-
-//return a pointer to the robot with the matching id
-Robot* Environment::getRobot(int id)
-{
-  for(unsigned i = 0; i < robots.size(); i++)
-  {
-    if(robots[i]->getID() == id)
-    	return robots[i];
-  }
-
-  return(NULL);
-}
+//    if(robots[i]->getID() == id)
+//    	return robots[i];
+//  }
+//
+//  return(NULL);
+//}
 
 
 //void Environment::settleAuction(Cell* auctionCell,int rID)
@@ -1032,33 +1033,33 @@ Robot* Environment::getRobot(int id)
 // Attempts to remove a robot from the environment,
 // returning true if successful, false otherwise.
 //
-bool Environment::removeRobot()
-{
-  if (robots.size() == 0)
-	  return false;
+//bool Environment::removeRobot()
+//{
+//  if (robots.size() == 0)
+//	  return false;
+//
+//  Robot *robot = robots[robots.size()-1];
+//  if (!removeRobot(robot)) return false;
+//  	  delete robot;
+//
+//  return true;
+//}   // removeRobot()
 
-  Robot *robot = robots[robots.size()-1];
-  if (!removeRobot(robot)) return false;
-  	  delete robot;
-
-  return true;
-}   // removeRobot()
 
 
-
-// remove a robot form the environment
-bool Environment::removeRobot(Robot *robot)
-{
-  for(unsigned i = 0; i < robots.size(); i++)
-  {
-    if(robot == robots[i])
-    {
-      robots.erase(robots.begin() + i);
-      return true;
-    }
-  }	
-  return false;
-}   // removeRobot(Robot *)
+//// remove a robot form the environment
+//bool Environment::removeRobot(Robot *robot)
+//{
+//  for(unsigned i = 0; i < robots.size(); i++)
+//  {
+//    if(robot == robots[i])
+//    {
+//      robots.erase(robots.begin() + i);
+//      return true;
+//    }
+//  }
+//  return false;
+//}   // removeRobot(Robot *)
 
 
 
@@ -1071,8 +1072,8 @@ vector<Cell *> Environment::getCellVector()
 
 
 //
-vector<Robot *> Environment::getRobotVector()
-{
-  return robots;
-}   // getRobotVector()
+//vector<Robot *> Environment::getRobotVector()
+//{
+//  return robots;
+//}   // getRobotVector()
 

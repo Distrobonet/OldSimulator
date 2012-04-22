@@ -205,6 +205,13 @@ int Cell::getID() const
 }
 
 
+// Sets the ID of this robot.
+void Cell::setID(int cellID)
+{
+    ID = cellID;
+}
+
+
 // Updates the state of the cell based upon the
 // current states of the neighbors of the cell.
 void Cell::updateState()
@@ -524,36 +531,36 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	return true;
 }
 
-// Attempts to broadcast the state of the cell
-// to the neighborhood of the cell, returning
-// true if successful, false otherwise.
-bool Cell::sendStateToNbrs() {
-	Neighbor curr;
-	if (VERBOSE)
-		cout << "cellID=%d\n", getID();
+//// Attempts to broadcast the state of the cell
+//// to the neighborhood of the cell, returning
+//// true if successful, false otherwise.
+//bool Cell::sendStateToNbrs() {
+//	Neighbor curr;
+//	if (VERBOSE)
+//		cout << "cellID=%d\n", getID();
+//
+//	for (int i = 0; i < getNNbrs(); i++) {
+//		if (VERBOSE)
+//			cout << "sending state to id= %d\n", getNbr(i)->ID;
+//
+//		//if((getNbr(i)->ID)==NULL
+//		//if(VERBOSE)printf("
+//
+//		if (!sendState(getNbr(i)->ID)) {
+//			//printf("sendState returned false\n");
+//			return false;
+//		}
+//	}
+//	//printf("leaving sendStateToNbrs()\n");
+//	return true;
+//}
 
-	for (int i = 0; i < getNNbrs(); i++) {
-		if (VERBOSE)
-			cout << "sending state to id= %d\n", getNbr(i)->ID;
 
-		//if((getNbr(i)->ID)==NULL
-		//if(VERBOSE)printf("
-
-		if (!sendState(getNbr(i)->ID)) {
-			//printf("sendState returned false\n");
-			return false;
-		}
-	}
-	//printf("leaving sendStateToNbrs()\n");
-	return true;
-}
-
-
-// Attempts to send the state of the cell
-// to the neighbor with the parameterized ID,
-// returning true if successful, false otherwise.
-bool Cell::sendState(const int toID) {
-	//TODO: Publish State Here
+//// Attempts to send the state of the cell
+//// to the neighbor with the parameterized ID,
+//// returning true if successful, false otherwise.
+//bool Cell::sendState(const int toID) {
+//	//TODO: Publish State Here
 //	//printf("in sendState()\n");
 //	State *s = new State(*this);
 //	//printf("number of relations of %d is %d \n",toID,s->rels.getSize());
@@ -562,7 +569,7 @@ bool Cell::sendState(const int toID) {
 //	bool answer = sendMsg(s, toID, STATE);
 //	//printf("leaving sendState()\n");
 //	return answer;
-}
+//}
 
 // Attempts to process all packets received by the cell,
 // returning true if successful, false otherwise.
@@ -1087,7 +1094,7 @@ Behavior Cell::move(const Vector &target)
 	float sinDelta 		= sin(delta);
 	float t       		= cosDelta * cosDelta * sign(cosDelta);
 	float r       		= sinDelta * sinDelta * sign(sinDelta);
-	Behavior behavior	= Behavior(ACTIVE, t, r, maxSpeed());
+	Behavior behavior	= Behavior(t, r, maxSpeed());
 
 	if (abs(theta) < 90.0f)
 	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
@@ -1109,16 +1116,23 @@ Behavior Cell::move(const Vector &target)
 
 
 // Returns the minimum angular movement threshold of this robot.
-float Robot::angThreshold() const
+float Cell::angThreshold() const
 {
     return 0.5f * FACTOR_THRESHOLD * maxAngSpeed();
 }
 
 
 // Returns the minimum movement threshold of this robot.
-float Robot::threshold() const
+float Cell::threshold() const
 {
     return FACTOR_THRESHOLD * maxSpeed();
+}
+
+
+// Returns the max angular speed of this robot.
+float Cell::maxAngSpeed() const
+{
+    return radiansToDegrees(maxSpeed() / RADIUS);
 }
 
 
@@ -1139,9 +1153,9 @@ Behavior Cell::move(const float t, const float r)
 
 
 // Returns the max speed of this robot.
-float Robot::maxSpeed() const
+float Cell::maxSpeed() const
 {
-    return FACTOR_MAX_SPEED * radius;
+    return FACTOR_MAX_SPEED * RADIUS;
 }
 
 // Attempts to set the heading to the parameterized heading,
