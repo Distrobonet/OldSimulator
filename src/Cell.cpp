@@ -1181,7 +1181,7 @@ void Cell::startStateServiceServer()
 {
 	ros::NodeHandle StateServerNode;
 	string name = "cell_state_";
-	name = name + boost::lexical_cast<std::string>(index);	// add the index to the name string
+	name = name + boost::lexical_cast<std::string>(ID);	// add the index to the name string
 
 	stateService = StateServerNode.advertiseService(name, &Cell::setStateMessage, this);
 	//cout << "Now serving the " << stateService.getService() << " service!\n";

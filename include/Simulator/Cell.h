@@ -156,14 +156,13 @@ class Cell: public State, public Neighborhood, public Robot
 
 		Formation currentFormation;
 
-
-		int           index;
     protected:
 
         // <protected data members>
 //        vector<Bid *> bids;
         Neighbor     *leftNbr, *rightNbr;
 
+        int			  ID;
         int           numBids;
         int           auctionStepCount;
 
