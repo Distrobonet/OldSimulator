@@ -118,30 +118,34 @@ bool Cell::initNbrs(int currentRobotsID)
 				break;
 		}
 
-		// TODO: This is a problem
 		if ((currentRobotsID >= 0) && (c->addNbr(leftNbrID)))
 		{
 			c->leftNbr  = c->nbrWithID(leftNbrID);
-			cellSubName = "robot_";
-			converter << leftNbrID;
-			cellSubName.append(converter.str());
-			cellSubName.append("/state");
-//			c->leftNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
+			c->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, &*c);
 		}
 
 		if ((currentRobotsID < nCells) && (c->addNbr(rightNbrID)))
 		{
-			c->rightNbr = c->nbrWithID(currentRobotsID + rightNbrID);
-			cellSubName = "robot_";
-			converter << leftNbrID;
-			cellSubName.append(converter.str());
-			cellSubName.append("/state");
-//			c->rightNeighborState = stateNode.subscribe(cellSubName, 1000, &Cell::stateCallback, &*c);
+			c->rightNbr = c->nbrWithID(rightNbrID);
+			c->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, &*c);
 		}
 
 	if(VERBOSE)
 		printf("finished initNbrs()\n");
 	return true;
+}
+
+
+// create correct string for state subscriber
+string Cell::generateSubMessage(int cellID)
+{
+	stringstream ss;//create a stringstream
+	ss << (cellID);//add number to the stream
+	string  nbrID = ss.str();
+	string subString = "/robot_/state";
+
+	subString.insert(7, nbrID);
+	return subString;
 }
 
 

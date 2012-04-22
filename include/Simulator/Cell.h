@@ -108,6 +108,7 @@ class Cell: public State, public Neighborhood
 
         //TODO: fix this input data type
         void stateCallback(const Simulator::StateMessage &state);
+        string generateSubMessage(int cellID);
 
         // <virtual public neighborhood functions>
         virtual bool changeFormation(const Formation &f,
