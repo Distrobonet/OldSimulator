@@ -19,6 +19,10 @@ Environment::Environment()
 // this environment to the parameterized values.
 Environment::Environment(int numRobots)
 {
+	int argc = 0;
+	char **argv = 0;
+	ros::init(argc, argv, "relationship_server");
+
 	numOfRobots = numRobots;
 	initOverloardSubscribers(this);
 }

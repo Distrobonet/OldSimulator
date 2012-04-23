@@ -12,7 +12,6 @@ int main(int argc, char **argv)
 	env.update(argv[2]);
 
 	// Relationship Service
-	ros::init(argc, argv, "relationship_server");
 	env.startRelationshipServiceServer();
 
 	return 0;
