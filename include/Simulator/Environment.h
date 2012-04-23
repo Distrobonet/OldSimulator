@@ -58,13 +58,8 @@ class Environment
         string generateSubMessage(int cellID);
 		void callBackRobot(const nav_msgs::Odometry::ConstPtr& odom);
 
-		float getDistanceTo(const int fromID, const int toID) const;
-		float getAngleTo(const int fromID, const int toID) const;
-
         // <public utility functions>
         Vector  getRelationship(const int toID, const int fromID);
-        float   getDistanceTo(const int id)   const;
-        float   getAngleTo(const int id)      const;
 
 
         // Relationship service server
