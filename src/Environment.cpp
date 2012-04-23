@@ -23,7 +23,6 @@ Environment::Environment(int numRobots)
 	initOverloardSubscribers(this);
 }
 
-
 void Environment::initOverloardSubscribers(Environment *e)
 {
 	ros::NodeHandle overLord;
@@ -86,7 +85,6 @@ void Environment::initOverloardSubscribers(Environment *e)
 	subRobots.push_back(subRobot6);
 }
 
-
 void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
 	btScalar yaw = 0.0l;
@@ -107,6 +105,8 @@ void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 // Copy constructor that copies the contents of
 // the parameterized environment into this environment.
   Environment::Environment(const Environment &env)
+: cells(env.cells), objects(env.objects),  // BAD!!!
+  msgQueue(env.msgQueue)
 {}
 
 
@@ -115,9 +115,11 @@ Environment::~Environment()
 {}
 
 
-// updates the environment using spin
 void Environment::update(bool doSpin)
 {
+	Cell *temp = NULL;
+//	ros::init(argc, argv, "message_listener");
+	ros::NodeHandle rosNode;
 	ros::Rate loop_rate(10);
 
 	while(ros::ok())

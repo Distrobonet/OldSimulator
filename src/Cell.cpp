@@ -47,11 +47,10 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-		setFormationFromService();
+		 setFormationFromService();
 		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
 
-
-		behavior.getTransVel();
+		 behavior.getTransVel();
 
 		Simulator::StateMessage state;
 	  	state.formation.radius = formation.radius;
@@ -90,9 +89,6 @@ void Cell::update(bool doSpin)
 		commandVelocity.linear.x = behavior.getTransVel();
 		commandVelocity.angular.z = behavior.getRotVel();
 		cmd_velPub.publish(commandVelocity);
-
-
-
 
 		if(doSpin)
 			ros::spinOnce();
@@ -306,34 +302,35 @@ void Cell::setID(int cellID)
 
 void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 {
-	Cell::State currentState;
-	currentState.formation.radius = incomingState.formation.radius;
-	currentState.formation.heading = incomingState.formation.heading;
-	currentState.formation.seedFrp.x = incomingState.formation.seed_frp.x;
-	currentState.formation.seedFrp.y = incomingState.formation.seed_frp.y;
-	currentState.formation.seedID = incomingState.formation.seed_id;
-	currentState.formation.formationID = incomingState.formation.formation_id;
-	currentState.frp.x = frp.x;
-	currentState.frp.y = frp.y;
+        Cell::State currentState;
+        currentState.formation.radius = incomingState.formation.radius;
+        currentState.formation.heading = incomingState.formation.heading;
+        currentState.formation.seedFrp.x = incomingState.formation.seed_frp.x;
+        currentState.formation.seedFrp.y = incomingState.formation.seed_frp.y;
+        currentState.formation.seedID = incomingState.formation.seed_id;
+        currentState.formation.formationID = incomingState.formation.formation_id;
+        currentState.frp.x = frp.x;
+        currentState.frp.y = frp.y;
 
-	for(uint i = 0; i < rels.size(); i++)
-	{
-		currentState.rels[i].ID = incomingState.relationships[i].id;
-		currentState.rels[i].relActual.x = incomingState.relationships[i].actual.x;
-		currentState.rels[i].relActual.y = incomingState.relationships[i].actual.y;
-		currentState.rels[i].relDesired.x = incomingState.relationships[i].desired.x;
-		currentState.rels[i].relDesired.y = incomingState.relationships[i].desired.y;
-	}
+        for(uint i = 0; i < rels.size(); i++)
+        {
+                currentState.rels[i].ID = incomingState.relationships[i].id;
+                currentState.rels[i].relActual.x = incomingState.relationships[i].actual.x;
+                currentState.rels[i].relActual.y = incomingState.relationships[i].actual.y;
+                currentState.rels[i].relDesired.x = incomingState.relationships[i].desired.x;
+                currentState.rels[i].relDesired.y = incomingState.relationships[i].desired.y;
+        }
 
-	currentState.transError.x = incomingState.linear_error.x;
-	currentState.transError.y= incomingState.linear_error.y;
-	currentState.rotError = incomingState.angular_error;
-	currentState.tStep = incomingState.timestep;
-	currentState.refID = incomingState.reference_id;
-	currentState.temperature = incomingState.temperature;
-	currentState.heat = incomingState.heat;
-	setState(currentState);
+        currentState.transError.x = incomingState.linear_error.x;
+        currentState.transError.y= incomingState.linear_error.y;
+        currentState.rotError = incomingState.angular_error;
+        currentState.tStep = incomingState.timestep;
+        currentState.refID = incomingState.reference_id;
+        currentState.temperature = incomingState.temperature;
+        currentState.heat = incomingState.heat;
+        setState(currentState);
 }
+
 
 // Attempts to change the formation of the cell,
 // returning true if successful, false otherwise.
