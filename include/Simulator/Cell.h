@@ -78,68 +78,89 @@ class Cell: public State, public Neighborhood
     friend class Environment;
 
     public:
-    Cell(const int cellID);
-    Cell(const Cell & r);
-    virtual ~Cell();
-    void update(bool doSpin);
-    bool initNbrs(Cell *cell, int currentRobotsID);
-    ros::NodeHandle stateNode;
-    ros::Publisher state_pub;
-    geometry_msgs::Twist commandVelocity;
-    ros::Publisher cmd_velPub;
-    ros::Subscriber leftNeighborState;
-    ros::Subscriber rightNeighborState;
-    bool setState(const State & s);
-    bool setNbrs(Neighborhood & nh);
-    bool setAuctionStepCount(const int & asc);
-    State getState() const;
-    Neighborhood getNbrs() const;
-    int getNBids() const;
-    int getAuctionStepCount() const;
-    int getID() const;
-    void setID(int cellID);
-    void stateCallback(const Simulator::StateMessage & state);
-    string generateSubMessage(int cellID);
-    string generatePubMessage(int cellID);
-    virtual bool changeFormation(const Formation & f, Neighbor n = Neighbor());
-    Behavior moveError();
-    Behavior moveError(const Vector tError, const float rError);
-    Behavior moveErrorBehavior(const Vector tError, const float rError);
-    Behavior move(const Vector & target);
-    Behavior move(const float t, const float r);
-    Behavior moveStop();
-    float maxSpeed() const;
-    float threshold() const;
-    float angThreshold() const;
-    bool setHeading(const float theta);
-    float maxAngSpeed() const;
-    virtual Cell & operator =(const State & s);
-    virtual Cell & operator =(const Neighborhood & nh);
-    bool setFormationFromService();
-    ros::ServiceClient formationClient;
-    Simulator::CurrentFormation formationSrv;
-    bool getNeighborState(bool leftOrRight);
-    ros::ServiceClient stateClient;
-    Simulator::CurrentFormation stateSrv;
-    ros::ServiceServer stateService;
-    bool setStateMessage(Simulator::State::Request & req, Simulator::State::Response & res);
-    void startStateServiceServer();
-    bool getRelationship(int targetID);
-    ros::ServiceClient relationshipClient;
-    Simulator::CurrentFormation relationshipSrv;
-protected:
-    Formation currentFormation;
-    Neighbor leftNbr, rightNbr;
-    Vector heading;
-    Behavior behavior;
-    float cellX;
-    float cellTheta;
-    int ID;
-    bool stateChanged;
-    void settleAuction();
-    virtual bool init(const int ID = 0);
-private:
-    void publishState();
+		Cell(const int cellID);
+		Cell(const Cell & r);
+
+		virtual ~Cell();
+
+		void update(bool doSpin);
+		bool initNbrs(Cell *cell, int currentRobotsID);
+
+		ros::NodeHandle stateNode;
+		ros::Publisher state_pub;
+		geometry_msgs::Twist commandVelocity;
+		ros::Publisher cmd_velPub;
+		ros::Subscriber leftNeighborState;
+		ros::Subscriber rightNeighborState;
+
+		bool setState(const State & s);
+		bool setNbrs(Neighborhood & nh);
+		bool setAuctionStepCount(const int & asc);
+
+		State getState() const;
+		Neighborhood getNbrs() const;
+
+		int getNBids() const;
+		int getAuctionStepCount() const;
+		int getID() const;
+		void setID(int cellID);
+		void stateCallback(const Simulator::StateMessage & state);
+		string generateSubMessage(int cellID);
+		string generatePubMessage(int cellID);
+
+		virtual bool changeFormation(const Formation & f, Neighbor n = Neighbor());
+		Behavior moveError();
+		Behavior moveError(const Vector tError, const float rError);
+		Behavior moveErrorBehavior(const Vector tError, const float rError);
+		Behavior move(const Vector & target);
+		Behavior move(const float t, const float r);
+		Behavior moveStop();
+
+		float maxSpeed() const;
+		float threshold() const;
+		float angThreshold() const;
+		bool setHeading(const float theta);
+		float maxAngSpeed() const;
+
+		virtual Cell & operator =(const State & s);
+		virtual Cell & operator =(const Neighborhood & nh);
+
+		bool setFormationFromService();
+
+		// Formation service
+		ros::ServiceClient formationClient;
+		Simulator::CurrentFormation formationSrv;
+
+		// State service client
+		bool getNeighborState(bool leftOrRight);
+		ros::ServiceClient stateClient;
+		Simulator::CurrentFormation stateSrv;
+
+		// State service server
+		ros::ServiceServer stateService;
+		bool setStateMessage(Simulator::State::Request & req, Simulator::State::Response & res);
+		void startStateServiceServer();
+
+		// Relationship service client
+		bool getRelationship(int targetID);
+		ros::ServiceClient relationshipClient;
+		Simulator::CurrentFormation relationshipSrv;
+
+    protected:
+		Formation currentFormation;
+		Neighbor leftNbr, rightNbr;
+		Vector heading;
+		Behavior behavior;
+		float cellX;
+		float cellTheta;
+		int ID;
+		bool stateChanged;
+
+		void settleAuction();
+		virtual bool init(const int ID = 0);
+
+    private:
+		void publishState();
 };  // Cell
 
 #endif
