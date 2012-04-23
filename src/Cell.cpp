@@ -87,7 +87,9 @@ void Cell::update(bool doSpin)
 
 	    Formation temp = Formation();
 	    Vector currentCellPos = Vector(0,0,0);
-		this->rels.at(0).relDesired = temp.getRelationships(currentCellPos);
+	    //TODO: Need to get this working to get the desired
+//		this->rels.at(0).relDesired = temp.getRelationships(currentCellPos).at(0);//positive
+//		this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
 		Vector vectorToNbr = Vector(transError.x, transError.y, rotError);
 
 
@@ -145,14 +147,16 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 
 		if (cell->addNbr(leftNbrID))
 		{
-			cell->leftNbr  = cell->nbrWithID(leftNbrID);
+			Neighbor *nbrWithId = nbrWithID(leftNbrID);
+			cell->leftNbr = *nbrWithId;
 			cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
 
 		}
 
 		if (cell->addNbr(rightNbrID))
 		{
-			cell->rightNbr = cell->nbrWithID(rightNbrID);
+		    Neighbor *nbrWithId = nbrWithID(rightNbrID);
+		    cell->rightNbr = *nbrWithId;
 			cell->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, cell);
 		}
 
@@ -372,11 +376,11 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	vector<Vector> r = formation.getRelationships(frp);
 
 
-	if (leftNbr != NULL)
-		leftNbr->relDesired = r[LEFT_NBR_INDEX];
+	if (leftNbr.ID != NULL)
+		leftNbr.relDesired = r[LEFT_NBR_INDEX];
 
-	if (rightNbr != NULL)
-		rightNbr->relDesired = r[RIGHT_NBR_INDEX];
+	if (rightNbr.ID != NULL)
+		rightNbr.relDesired = r[RIGHT_NBR_INDEX];
 
 	return true;
 }
@@ -541,7 +545,7 @@ bool Cell::getNeighborState(bool leftOrRight)
 {
 	//TODO: do this function
 	if(leftOrRight){
-		int nrbId = this->leftNbr->ID;
+		int nrbId = this->leftNbr.ID;
 	}
 	return false;
 }

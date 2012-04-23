@@ -129,7 +129,7 @@ class Cell: public State, public Neighborhood
     Simulator::CurrentFormation relationshipSrv;
 protected:
     Formation currentFormation;
-    Neighbor *leftNbr, *rightNbr;
+    Neighbor leftNbr, rightNbr;
     Vector heading;
     Behavior behavior;
     float cellX;
