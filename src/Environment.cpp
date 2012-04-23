@@ -105,8 +105,6 @@ void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 // Copy constructor that copies the contents of
 // the parameterized environment into this environment.
   Environment::Environment(const Environment &env)
-: cells(env.cells), objects(env.objects),  // BAD!!!
-  msgQueue(env.msgQueue)
 {}
 
 

@@ -2,7 +2,11 @@
 
 int main(int argc, char **argv)
 {
-	// Initialize the environment
+	// initialize ROS stuff
+	ros::init(argc, argv, "environment");
+	ros::NodeHandle base_pose;
+
+	// Initialize Environment
 	int numOfRobots = atoi(argv[1]);
 	Environment env(numOfRobots);
 	env.update(argv[2]);
