@@ -77,6 +77,11 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
+
+	    // Testing relationship service from environment
+	    //getRelationship(rightNbr.ID);
+
+
 	    Formation temp = Formation();
 	    Vector currentCellPos = Vector(0,0,0);
 	    //TODO: Need to get this working to get the desired
@@ -628,7 +633,8 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 // Relationship client, sends its ID and a target ID as requests and gets a relationship vector response
 bool Cell::getRelationship(int targetID)
 {
-	ROS_INFO("Trying to access the Relationship message");
+	//ROS_INFO("Trying to access the Relationship message");
+    //cout << "Relationship client called for cell " << ID << " targeting cell " << targetID <<  endl;
 	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
 	spinner.start();
 
@@ -647,7 +653,7 @@ bool Cell::getRelationship(int targetID)
 	}
 	else
 	{
-		ROS_ERROR("Failed to call relationship service");
+		//ROS_ERROR("Failed to call relationship service");
 		clientNode.shutdown();
 		spinner.stop();
 		return false;
