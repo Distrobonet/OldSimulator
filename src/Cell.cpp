@@ -21,7 +21,7 @@
 
 using namespace std;
 
-
+int NUM_OF_CELLS = 7;
 
 // Default constructor that initializes
 // this cell to the parameterized values.
@@ -77,22 +77,18 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-
-		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
-		// publish state
-	    if(this->stateChanged == true){
-	    	publishState();
-	    }
-
 	    Formation temp = Formation();
 	    Vector currentCellPos = Vector(0,0,0);
 	    //TODO: Need to get this working to get the desired
 //		this->rels.at(0).relDesired = temp.getRelationships(currentCellPos).at(0);//positive
 //		this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
 		Vector vectorToNbr = Vector(transError.x, transError.y, rotError);
-
-
 		behavior = move(vectorToNbr);
+
+		// publish state
+	    if(this->stateChanged == true){
+	    	publishState();
+	    }
 
 		// publish cmd_vel
 		commandVelocity.linear.x = behavior.getTransVel();
@@ -147,15 +143,18 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 				break;
 		}
 
-		if (cell->addNbr(leftNbrID))
+		if(leftNbrID > NUM_OF_CELLS)
+			cell->leftNbr = NULL;
+		else (cell->addNbr(leftNbrID))
 		{
 			Neighbor *nbrWithId = nbrWithID(leftNbrID);
 			cell->leftNbr = *nbrWithId;
 			cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
-
 		}
 
-		if (cell->addNbr(rightNbrID))
+		if(rightNbrID > NUM_OF_CELLS)
+			cell->rightNbr = NULL;
+		else (cell->addNbr(rightNbrID))
 		{
 		    Neighbor *nbrWithId = nbrWithID(rightNbrID);
 		    cell->rightNbr = *nbrWithId;
@@ -519,6 +518,8 @@ bool Cell::setFormationFromService()
 
 	ros::NodeHandle clientNode;
 	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
+//	cout << "Cell ID: "<< ID << endl;
+//	cout << "formationID: " << formation.formationID << endl;
 
 	//if (formationSrv.response.formation.formation_id == 0 && formationClient.call(formationSrv))
 	if (ID == 0 && formationClient.call(formationSrv))
@@ -554,10 +555,20 @@ bool Cell::setFormationFromService()
 bool Cell::getNeighborState(bool leftOrRight)
 {
 	//TODO: do this function
-	if(leftOrRight){
-		int nrbId = this->leftNbr.ID;
+	if(ID == 0)
+		return true;
+	if(ID%2 == 0)
+	{
+		formation.formationID = this->leftNbr.formation.formationID;
+		return true;
 	}
-	return false;
+	else if(ID%2 == 1)
+	{
+		formation.formationID = this->rightNbr.formation.formationID;
+		return true;
+	}
+	else
+		return false;
 }
 
 // Starts the cell's state service server
