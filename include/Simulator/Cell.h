@@ -38,10 +38,6 @@
 using namespace std;
 
 
-
-
-
-
 // message type index values
 enum MessageType
 {
@@ -73,7 +69,6 @@ static const float  MAX_TRANSLATIONAL_ERROR  = 0.02f;
 static const float  FACTOR_MAX_SPEED         = 0.3f;
 static const float  FACTOR_THRESHOLD         = 1.0f;
 static const Behavior DEFAULT_ROBOT_BEHAVIOR     = Behavior();
-
 
 
 

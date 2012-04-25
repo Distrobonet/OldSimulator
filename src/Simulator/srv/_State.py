@@ -95,7 +95,7 @@ import struct
 import Simulator.msg
 
 class StateResponse(roslib.message.Message):
-  _md5sum = "1f83d934d3a0ac3b6cca4ef9902343db"
+  _md5sum = "61a15d5433964315f98db047a12b8384"
   _type = "Simulator/StateResponse"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """StateMessage state
@@ -105,8 +105,7 @@ class StateResponse(roslib.message.Message):
 MSG: Simulator/StateMessage
 FormationMessage formation
 VectorMessage frp
-RelationshipMessage[] actual_relationships
-RelationshipMessage[] desired_relationships
+RelationshipMessage[] relationships
 VectorMessage linear_error
 float64 angular_error
 int32 timestep
@@ -170,24 +169,14 @@ int32 id
     try:
       _x = self
       buff.write(_struct_4d2i2d.pack(_x.state.formation.radius, _x.state.formation.heading, _x.state.formation.seed_frp.x, _x.state.formation.seed_frp.y, _x.state.formation.seed_id, _x.state.formation.formation_id, _x.state.frp.x, _x.state.frp.y))
-      length = len(self.state.actual_relationships)
+      length = len(self.state.relationships)
       buff.write(_struct_I.pack(length))
-      for val1 in self.state.actual_relationships:
+      for val1 in self.state.relationships:
         _v1 = val1.desired
         _x = _v1
         buff.write(_struct_2d.pack(_x.x, _x.y))
         _v2 = val1.actual
         _x = _v2
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        buff.write(_struct_i.pack(val1.id))
-      length = len(self.state.desired_relationships)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.state.desired_relationships:
-        _v3 = val1.desired
-        _x = _v3
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        _v4 = val1.actual
-        _x = _v4
         buff.write(_struct_2d.pack(_x.x, _x.y))
         buff.write(_struct_i.pack(val1.id))
       _x = self
@@ -212,43 +201,23 @@ int32 id
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.state.actual_relationships = []
+      self.state.relationships = []
       for i in range(0, length):
         val1 = Simulator.msg.RelationshipMessage()
-        _v5 = val1.desired
-        _x = _v5
+        _v3 = val1.desired
+        _x = _v3
         start = end
         end += 16
         (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        _v6 = val1.actual
-        _x = _v6
+        _v4 = val1.actual
+        _x = _v4
         start = end
         end += 16
         (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
         start = end
         end += 4
         (val1.id,) = _struct_i.unpack(str[start:end])
-        self.state.actual_relationships.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.state.desired_relationships = []
-      for i in range(0, length):
-        val1 = Simulator.msg.RelationshipMessage()
-        _v7 = val1.desired
-        _x = _v7
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        _v8 = val1.actual
-        _x = _v8
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        start = end
-        end += 4
-        (val1.id,) = _struct_i.unpack(str[start:end])
-        self.state.desired_relationships.append(val1)
+        self.state.relationships.append(val1)
       _x = self
       start = end
       end += 48
@@ -269,24 +238,14 @@ int32 id
     try:
       _x = self
       buff.write(_struct_4d2i2d.pack(_x.state.formation.radius, _x.state.formation.heading, _x.state.formation.seed_frp.x, _x.state.formation.seed_frp.y, _x.state.formation.seed_id, _x.state.formation.formation_id, _x.state.frp.x, _x.state.frp.y))
-      length = len(self.state.actual_relationships)
+      length = len(self.state.relationships)
       buff.write(_struct_I.pack(length))
-      for val1 in self.state.actual_relationships:
-        _v9 = val1.desired
-        _x = _v9
+      for val1 in self.state.relationships:
+        _v5 = val1.desired
+        _x = _v5
         buff.write(_struct_2d.pack(_x.x, _x.y))
-        _v10 = val1.actual
-        _x = _v10
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        buff.write(_struct_i.pack(val1.id))
-      length = len(self.state.desired_relationships)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.state.desired_relationships:
-        _v11 = val1.desired
-        _x = _v11
-        buff.write(_struct_2d.pack(_x.x, _x.y))
-        _v12 = val1.actual
-        _x = _v12
+        _v6 = val1.actual
+        _x = _v6
         buff.write(_struct_2d.pack(_x.x, _x.y))
         buff.write(_struct_i.pack(val1.id))
       _x = self
@@ -313,43 +272,23 @@ int32 id
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.state.actual_relationships = []
+      self.state.relationships = []
       for i in range(0, length):
         val1 = Simulator.msg.RelationshipMessage()
-        _v13 = val1.desired
-        _x = _v13
+        _v7 = val1.desired
+        _x = _v7
         start = end
         end += 16
         (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        _v14 = val1.actual
-        _x = _v14
+        _v8 = val1.actual
+        _x = _v8
         start = end
         end += 16
         (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
         start = end
         end += 4
         (val1.id,) = _struct_i.unpack(str[start:end])
-        self.state.actual_relationships.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.state.desired_relationships = []
-      for i in range(0, length):
-        val1 = Simulator.msg.RelationshipMessage()
-        _v15 = val1.desired
-        _x = _v15
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        _v16 = val1.actual
-        _x = _v16
-        start = end
-        end += 16
-        (_x.x, _x.y,) = _struct_2d.unpack(str[start:end])
-        start = end
-        end += 4
-        (val1.id,) = _struct_i.unpack(str[start:end])
-        self.state.desired_relationships.append(val1)
+        self.state.relationships.append(val1)
       _x = self
       start = end
       end += 48
@@ -365,6 +304,6 @@ _struct_3d2i2d = struct.Struct("<3d2i2d")
 _struct_4d2i2d = struct.Struct("<4d2i2d")
 class State(roslib.message.ServiceDefinition):
   _type          = 'Simulator/State'
-  _md5sum = '1f83d934d3a0ac3b6cca4ef9902343db'
+  _md5sum = '61a15d5433964315f98db047a12b8384'
   _request_class  = StateRequest
   _response_class = StateResponse

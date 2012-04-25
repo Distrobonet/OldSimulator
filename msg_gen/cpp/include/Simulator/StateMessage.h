@@ -17,7 +17,6 @@
 #include "Simulator/FormationMessage.h"
 #include "Simulator/VectorMessage.h"
 #include "Simulator/RelationshipMessage.h"
-#include "Simulator/RelationshipMessage.h"
 #include "Simulator/VectorMessage.h"
 
 namespace Simulator
@@ -29,8 +28,7 @@ struct StateMessage_ {
   StateMessage_()
   : formation()
   , frp()
-  , actual_relationships()
-  , desired_relationships()
+  , relationships()
   , linear_error()
   , angular_error(0.0)
   , timestep(0)
@@ -43,8 +41,7 @@ struct StateMessage_ {
   StateMessage_(const ContainerAllocator& _alloc)
   : formation(_alloc)
   , frp(_alloc)
-  , actual_relationships(_alloc)
-  , desired_relationships(_alloc)
+  , relationships(_alloc)
   , linear_error(_alloc)
   , angular_error(0.0)
   , timestep(0)
@@ -60,11 +57,8 @@ struct StateMessage_ {
   typedef  ::Simulator::VectorMessage_<ContainerAllocator>  _frp_type;
    ::Simulator::VectorMessage_<ContainerAllocator>  frp;
 
-  typedef std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other >  _actual_relationships_type;
-  std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other >  actual_relationships;
-
-  typedef std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other >  _desired_relationships_type;
-  std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other >  desired_relationships;
+  typedef std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other >  _relationships_type;
+  std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other >  relationships;
 
   typedef  ::Simulator::VectorMessage_<ContainerAllocator>  _linear_error_type;
    ::Simulator::VectorMessage_<ContainerAllocator>  linear_error;
@@ -85,14 +79,10 @@ struct StateMessage_ {
   double heat;
 
 
-  ROS_DEPRECATED uint32_t get_actual_relationships_size() const { return (uint32_t)actual_relationships.size(); }
-  ROS_DEPRECATED void set_actual_relationships_size(uint32_t size) { actual_relationships.resize((size_t)size); }
-  ROS_DEPRECATED void get_actual_relationships_vec(std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other > & vec) const { vec = this->actual_relationships; }
-  ROS_DEPRECATED void set_actual_relationships_vec(const std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other > & vec) { this->actual_relationships = vec; }
-  ROS_DEPRECATED uint32_t get_desired_relationships_size() const { return (uint32_t)desired_relationships.size(); }
-  ROS_DEPRECATED void set_desired_relationships_size(uint32_t size) { desired_relationships.resize((size_t)size); }
-  ROS_DEPRECATED void get_desired_relationships_vec(std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other > & vec) const { vec = this->desired_relationships; }
-  ROS_DEPRECATED void set_desired_relationships_vec(const std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other > & vec) { this->desired_relationships = vec; }
+  ROS_DEPRECATED uint32_t get_relationships_size() const { return (uint32_t)relationships.size(); }
+  ROS_DEPRECATED void set_relationships_size(uint32_t size) { relationships.resize((size_t)size); }
+  ROS_DEPRECATED void get_relationships_vec(std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other > & vec) const { vec = this->relationships; }
+  ROS_DEPRECATED void set_relationships_vec(const std::vector< ::Simulator::RelationshipMessage_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::Simulator::RelationshipMessage_<ContainerAllocator> >::other > & vec) { this->relationships = vec; }
 private:
   static const char* __s_getDataType_() { return "Simulator/StateMessage"; }
 public:
@@ -101,7 +91,7 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "0e1c8e8e9431cd24fe07dcd0f9d615be"; }
+  static const char* __s_getMD5Sum_() { return "e71196bfd2b7e047442fbda49a14842e"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
@@ -110,8 +100,7 @@ public:
 private:
   static const char* __s_getMessageDefinition_() { return "FormationMessage formation\n\
 VectorMessage frp\n\
-RelationshipMessage[] actual_relationships\n\
-RelationshipMessage[] desired_relationships\n\
+RelationshipMessage[] relationships\n\
 VectorMessage linear_error\n\
 float64 angular_error\n\
 int32 timestep\n\
@@ -145,8 +134,7 @@ public:
     ros::serialization::OStream stream(write_ptr, 1000000000);
     ros::serialization::serialize(stream, formation);
     ros::serialization::serialize(stream, frp);
-    ros::serialization::serialize(stream, actual_relationships);
-    ros::serialization::serialize(stream, desired_relationships);
+    ros::serialization::serialize(stream, relationships);
     ros::serialization::serialize(stream, linear_error);
     ros::serialization::serialize(stream, angular_error);
     ros::serialization::serialize(stream, timestep);
@@ -161,8 +149,7 @@ public:
     ros::serialization::IStream stream(read_ptr, 1000000000);
     ros::serialization::deserialize(stream, formation);
     ros::serialization::deserialize(stream, frp);
-    ros::serialization::deserialize(stream, actual_relationships);
-    ros::serialization::deserialize(stream, desired_relationships);
+    ros::serialization::deserialize(stream, relationships);
     ros::serialization::deserialize(stream, linear_error);
     ros::serialization::deserialize(stream, angular_error);
     ros::serialization::deserialize(stream, timestep);
@@ -177,8 +164,7 @@ public:
     uint32_t size = 0;
     size += ros::serialization::serializationLength(formation);
     size += ros::serialization::serializationLength(frp);
-    size += ros::serialization::serializationLength(actual_relationships);
-    size += ros::serialization::serializationLength(desired_relationships);
+    size += ros::serialization::serializationLength(relationships);
     size += ros::serialization::serializationLength(linear_error);
     size += ros::serialization::serializationLength(angular_error);
     size += ros::serialization::serializationLength(timestep);
@@ -216,12 +202,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::Simulator::StateMessage_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "0e1c8e8e9431cd24fe07dcd0f9d615be";
+    return "e71196bfd2b7e047442fbda49a14842e";
   }
 
   static const char* value(const  ::Simulator::StateMessage_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0x0e1c8e8e9431cd24ULL;
-  static const uint64_t static_value2 = 0xfe07dcd0f9d615beULL;
+  static const uint64_t static_value1 = 0xe71196bfd2b7e047ULL;
+  static const uint64_t static_value2 = 0x442fbda49a14842eULL;
 };
 
 template<class ContainerAllocator>
@@ -240,8 +226,7 @@ struct Definition< ::Simulator::StateMessage_<ContainerAllocator> > {
   {
     return "FormationMessage formation\n\
 VectorMessage frp\n\
-RelationshipMessage[] actual_relationships\n\
-RelationshipMessage[] desired_relationships\n\
+RelationshipMessage[] relationships\n\
 VectorMessage linear_error\n\
 float64 angular_error\n\
 int32 timestep\n\
@@ -284,8 +269,7 @@ template<class ContainerAllocator> struct Serializer< ::Simulator::StateMessage_
   {
     stream.next(m.formation);
     stream.next(m.frp);
-    stream.next(m.actual_relationships);
-    stream.next(m.desired_relationships);
+    stream.next(m.relationships);
     stream.next(m.linear_error);
     stream.next(m.angular_error);
     stream.next(m.timestep);
@@ -315,21 +299,13 @@ s << std::endl;
     s << indent << "frp: ";
 s << std::endl;
     Printer< ::Simulator::VectorMessage_<ContainerAllocator> >::stream(s, indent + "  ", v.frp);
-    s << indent << "actual_relationships[]" << std::endl;
-    for (size_t i = 0; i < v.actual_relationships.size(); ++i)
+    s << indent << "relationships[]" << std::endl;
+    for (size_t i = 0; i < v.relationships.size(); ++i)
     {
-      s << indent << "  actual_relationships[" << i << "]: ";
+      s << indent << "  relationships[" << i << "]: ";
       s << std::endl;
       s << indent;
-      Printer< ::Simulator::RelationshipMessage_<ContainerAllocator> >::stream(s, indent + "    ", v.actual_relationships[i]);
-    }
-    s << indent << "desired_relationships[]" << std::endl;
-    for (size_t i = 0; i < v.desired_relationships.size(); ++i)
-    {
-      s << indent << "  desired_relationships[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::Simulator::RelationshipMessage_<ContainerAllocator> >::stream(s, indent + "    ", v.desired_relationships[i]);
+      Printer< ::Simulator::RelationshipMessage_<ContainerAllocator> >::stream(s, indent + "    ", v.relationships[i]);
     }
     s << indent << "linear_error: ";
 s << std::endl;
