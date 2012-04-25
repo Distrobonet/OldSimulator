@@ -23,7 +23,8 @@ struct State
     // <data members>
     Formation            formation;     // the current formation
     Vector               frp;     		// the formation gradient
-    vector<Relationship> rels;          // the formation relationships
+    vector<Relationship> actualRels;    // the formation relationships
+    vector<Relationship> desiredRels;
     Vector               transError;    // the summed translational error
     float                rotError;      // the summed rotational error
     int                  tStep;         // the time step in the formation
@@ -36,14 +37,15 @@ struct State
     // this state to the parameterized values.
     State(const Formation            f      = Formation(),
           const Vector               formationrelativepos   = Vector(),
-          const vector<Relationship> r      = vector<Relationship>(),
+          const vector<Relationship> relreal      = vector<Relationship>(),
+          const vector<Relationship> reldesired      = vector<Relationship>(),
           const Vector               tError = Vector(),
           const float                rError = 0.0f,
           const int                  ts     = 0,
           const int                  rID    = -1,
           const float                temp   = 0.0f,
           const float                h      = 0.0f)
-          : formation(f),       frp(formationrelativepos),   rels(r),
+          : formation(f),       frp(formationrelativepos),   actualRels(relreal), desiredRels(reldesired),
             transError(tError), rotError(rError), tStep(ts), refID(rID),
             temperature(temp),  heat(h)
     {

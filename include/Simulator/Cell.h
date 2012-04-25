@@ -38,6 +38,10 @@
 using namespace std;
 
 
+
+
+
+
 // message type index values
 enum MessageType
 {
@@ -72,6 +76,7 @@ static const Behavior DEFAULT_ROBOT_BEHAVIOR     = Behavior();
 
 
 
+
 // describes a robot cell
 class Cell: public State, public Neighborhood
 {
@@ -99,6 +104,9 @@ class Cell: public State, public Neighborhood
 
 		State getState() const;
 		Neighborhood getNbrs() const;
+
+
+		Function userFormations[12];
 
 		int getNBids() const;
 		int getAuctionStepCount() const;
@@ -145,6 +153,7 @@ class Cell: public State, public Neighborhood
 		bool getRelationship(int targetID);
 		ros::ServiceClient relationshipClient;
 		Simulator::CurrentFormation relationshipSrv;
+
 
     protected:
 		//Formation currentFormation;

@@ -40,30 +40,11 @@ void clearScreen();
 const char  CHAR_ESCAPE             = char(27);    // 'ESCAPE' character key
 
 
-// formation-testing function prototypes
-float  line(const float x);
-float  x(const float x);
-float  absX(const float x);
-float  negHalfX(const float x);
-float  negAbsHalfX(const float x);
-float  negAbsX(const float x);
-float  parabola(const float x);
-float  cubic(const float x);
-float  condSqrt(const float x);
-float  sine(const float x);
-float  xRoot3(const float x);
-float  negXRoot3(const float x);
-
-Function formations[] = {line,        x,       absX,     negHalfX,
-						negAbsHalfX, negAbsX, parabola, cubic,
-						condSqrt,    sine,    xRoot3,   negXRoot3};
-
-
 // Menu Global variable
 int CURRENT_SELECTION = -1;
 
 // A formation is a vector of Functions, which are functions that take floats and return floats
-//const Formation DEFAULT_FORMATION = Formation(formations[0], DEFAULT_ROBOT_RADIUS * FACTOR_COLLISION_RADIUS, Vector(), MIDDLE_CELL, 0,  90.0f);
+//const Formation DEFAULT_FORMATION = Formation(formations[0], 1 , Vector(), 0, 0,  0.0f);
 
 // Service utility function to set the formation being served based on CURRENT_SELECTION
 bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
@@ -256,90 +237,3 @@ void terminate(int retVal)
 
 
 
-// <test formation functions>
-
-// Returns formation function definition f(x) = 0.
-float line(const float x)
-{
-  return 0.0f;
-}
-
-
-// Returns formation function definition f(x) = x.
-float x(const float x)
-{
-  return x;
-}
-
-
-// Returns formation function definition f(x) = |x|.
-float absX(const float x)
-{
-  return abs(x);
-}
-
-
-// Returns formation function definition f(x) = -0.5 x.
-float negHalfX(const float x)
-{
-  return -0.5f * x;
-}
-
-
-// Returns formation function definition f(x) = -|0.5 x|.
-float negAbsHalfX(const float x)
-{
-  return -abs(0.5f * x);
-}
-
-
-// Returns formation function definition f(x) = -|x|.
-float negAbsX(const float x)
-{
-  return -abs(x);
-}
-
-
-// Returns formation function definition f(x) = x^2.
-float parabola(const float x)
-{
-  return x * x;
-  //return pow(x, 2.0f);
-}
-
-
-// Returns formation function definition f(x) = x^3.
-float cubic(const float x)
-{
-  return x * x * x;
-  //return pow(x, 3.0f);
-}
-
-
-// Returns formation function definition
-// f(x) = {sqrt(x),  x = 0 | -sqrt|x|, x < 0}.
-float condSqrt(const float x)
-{
-  return sqrt(abs(0.5f * x)) * ((x >= 0) ? 1.0f : -1.0f);
-}
-
-
-// Returns formation function definition f(x) = 0.05 sin(10 x).
-float sine(const float x)
-{
-  return 0.2f * sin(10.0f * x);
-}
-
-
-// Returns formation function definition f(x) = x sqrt(3).
-float xRoot3(const float x)
-{
-  return x * sqrt(3.0f);
-}
-
-
-// Returns formation function definition f(x) = -x sqrt(3).
-float negXRoot3(const float x)
-{
-  return -x * sqrt(3.0f);
-}

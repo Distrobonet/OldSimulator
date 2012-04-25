@@ -31,7 +31,7 @@ static const int    X_N_ITERATIONS             = 100;
 
 
 // describes a formation as a vector of functions
-class Formation: protected vector<Function>
+class Formation: public vector<Function>
 {
 
     public:
