@@ -145,20 +145,26 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 
 		if(leftNbrID > NUM_OF_CELLS)
 			cell->leftNbr = NULL;
-		else (cell->addNbr(leftNbrID))
+		else
 		{
-			Neighbor *nbrWithId = nbrWithID(leftNbrID);
-			cell->leftNbr = *nbrWithId;
-			cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
+			if(cell->addNbr(leftNbrID))
+			{
+				Neighbor *nbrWithId = nbrWithID(leftNbrID);
+				cell->leftNbr = *nbrWithId;
+				cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
+			}
 		}
 
 		if(rightNbrID > NUM_OF_CELLS)
 			cell->rightNbr = NULL;
-		else (cell->addNbr(rightNbrID))
+		else
 		{
-		    Neighbor *nbrWithId = nbrWithID(rightNbrID);
-		    cell->rightNbr = *nbrWithId;
-			cell->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, cell);
+			if(cell->addNbr(rightNbrID))
+			{
+				Neighbor *nbrWithId = nbrWithID(rightNbrID);
+		    	cell->rightNbr = *nbrWithId;
+		    	cell->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, cell);
+			}
 		}
 
 	if(VERBOSE)
