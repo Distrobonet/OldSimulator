@@ -34,19 +34,6 @@ Cell::Cell(const int cellID) :
 	behavior           = DEFAULT_ROBOT_BEHAVIOR;
 	stateChanged 	   = false;
 
-	formation.addFunction(line);
-	formation.addFunction(x);
-	formation.addFunction(absX);
-	formation.addFunction(negHalfX);
-	formation.addFunction(negAbsHalfX);
-	formation.addFunction(negAbsX);
-	formation.addFunction(parabola);
-	formation.addFunction(cubic);
-	formation.addFunction(condSqrt);
-	formation.addFunction(sine);
-	formation.addFunction(xRoot3);
-	formation.addFunction(negXRoot3);
-
 	initNbrs();
 }
 
@@ -73,12 +60,12 @@ void Cell::publishState()
     state.formation.formation_id = formation.formationID;
     state.frp.x = frp.x;
     state.frp.y = frp.y;
-    for(uint i = 0;i < actualRels.size();i++){
-        state.actual_relationships[i].id = actualRels[i].ID;
-        state.actual_relationships[i].actual.x = actualRels[i].relActual.x;
-        state.actual_relationships[i].actual.y = actualRels[i].relActual.y;
-        state.desired_relationships[i].desired.x = desiredRels[i].relDesired.x;
-        state.desired_relationships[i].desired.y = desiredRels[i].relDesired.y;
+    for(uint i = 0;i < rels.size();i++){
+        state.relationships[i].id = rels[i].ID;
+        state.relationships[i].actual.x = rels[i].relActual.x;
+        state.relationships[i].actual.y = rels[i].relActual.y;
+        state.relationships[i].desired.x = rels[i].relDesired.x;
+        state.relationships[i].desired.y = rels[i].relDesired.y; 
     }
     state.linear_error.x = transError.x;
     state.linear_error.y = transError.y;
@@ -94,29 +81,25 @@ void Cell::publishState()
 // Updates the cell
 void Cell::update(bool doSpin)
 {
-
-
 	while(ros::ok())
 	{
 
 	    // Testing relationship service from environment
 	    //getRelationship(rightNbr.ID);
-
-
 	    Formation temp = Formation();
 	    Vector currentCellPos = Vector(1,1,0);
 
-		desiredRels.push_back(formation.getRelationship(this->formation.getFunction(this->formation.formationID), 1, currentCellPos, 0.0));//positive
-		desiredRels.push_back(formation.getRelationship(this->formation.getFunction(this->formation.formationID), -1, currentCellPos, 0.0));//positive
-		cout<<"Cell Id "<<ID<<endl;
-		cout<<"X "<<desiredRels.at(0).relDesired.x<<endl;
-		cout<<"Y "<<desiredRels.at(0).relDesired.y<<endl;
-		cout<<"Z "<<desiredRels.at(0).relDesired.z<<endl;
-		//this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
-		Vector vectorToNbr = Vector(heading.x, heading.y, rotError);
-
-
-		behavior = move(vectorToNbr);
+//		rels.at(0).relDesired = (formation.getRelationship(this->formation.getFunction(this->formation.formationID), 1, currentCellPos, 0.0));//positive
+//		rels.at(1).relDesired = (formation.getRelationship(this->formation.getFunction(this->formation.formationID), -1, currentCellPos, 0.0));//positive
+//		cout<<"Cell Id "<<ID<<endl;
+//		cout<<"X "<<rels.at(0).relDesired.x<<endl;
+//		cout<<"Y "<<rels.at(0).relDesired.y<<endl;
+//		cout<<"Z "<<rels.at(0).relDesired.z<<endl;
+//		//this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
+//		Vector vectorToNbr = Vector(rels.at(0).relDesired.x, rels.at(0).relDesired.y, rotError);
+//
+//
+//		behavior = move(vectorToNbr);
 
 		// publish state
 	    if(getNeighborState())
@@ -140,6 +123,30 @@ void Cell::update(bool doSpin)
 	}
 }
 
+
+// Initializes the cell to the parameterized values,
+// returning true if successful, false otherwise.
+bool Cell::init(const int cellID)
+{
+	leftNbr = rightNbr = NULL;
+	ID  			   = cellID;
+	behavior           = DEFAULT_ROBOT_BEHAVIOR;
+	stateChanged 	   = false;
+	formation.addFunction(line);
+	formation.addFunction(x);
+	formation.addFunction(absX);
+	formation.addFunction(negHalfX);
+	formation.addFunction(negAbsHalfX);
+	formation.addFunction(negAbsX);
+	formation.addFunction(parabola);
+	formation.addFunction(cubic);
+	formation.addFunction(condSqrt);
+	formation.addFunction(sine);
+	formation.addFunction(xRoot3);
+	formation.addFunction(negXRoot3);
+
+	return true;
+}
 
 // Initializes the neighborhood of each cell,
 // returning true if successful, false otherwise.
@@ -321,7 +328,7 @@ void Cell::setID(int cellID)
 //	heat = qSum;
 //	//printf("T[%d] = %.4f\n", ID, temperature);
 //
-//	// reference the bneighbor with the minimum gradient
+//	// reference the neighbor with the minimum gradient
 //	// to establish the correct position in formation
 //	if (getNNbrs() > 0) {
 //		Neighbor *refNbr = nbrWithMinFrp(formation.getSeedFrp());
@@ -364,13 +371,13 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 		currentState.frp.x = frp.x;
 		currentState.frp.y = frp.y;
 
-		for(uint i = 0; i < actualRels.size(); i++)
+		for(uint i = 0; i < rels.size(); i++)
 		{
-			currentState.actualRels[i].ID = incomingState.actual_relationships[i].id;
-			currentState.actualRels[i].relActual.x = incomingState.actual_relationships[i].actual.x;
-			currentState.actualRels[i].relActual.y = incomingState.actual_relationships[i].actual.y;
-			currentState.desiredRels[i].relDesired.x = incomingState.desired_relationships[i].desired.x;
-			currentState.desiredRels[i].relDesired.y = incomingState.desired_relationships[i].desired.y;
+			currentState.rels[i].ID = incomingState.relationships[i].id;
+			currentState.rels[i].relActual.x = incomingState.relationships[i].actual.x;
+			currentState.rels[i].relActual.y = incomingState.relationships[i].actual.y;
+			currentState.rels[i].relDesired.x = incomingState.relationships[i].desired.x;
+			currentState.rels[i].relDesired.y = incomingState.relationships[i].desired.y;
 		}
 
 		currentState.transError.x = incomingState.linear_error.x;
@@ -399,7 +406,7 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	}
 
 	else {
-		Relationship *nbrRelToMe = relWithID(n.actualRels, ID);
+		Relationship *nbrRelToMe = relWithID(n.rels, ID);
 		if (nbrRelToMe == NULL)
 			return false;
 
@@ -633,13 +640,13 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 	res.state.frp.x = frp.x;
  	res.state.frp.y = frp.y;
 
- 	for(uint i = 0; i < actualRels.size(); i++)
+ 	for(uint i = 0; i < rels.size(); i++)
  	{
-        res.state.actual_relationships[i].id = actualRels[i].ID;
-        res.state.actual_relationships[i].actual.x = actualRels[i].relActual.x;
-        res.state.actual_relationships[i].actual.y = actualRels[i].relActual.y;
-        res.state.desired_relationships[i].desired.x = desiredRels[i].relDesired.x;
-        res.state.desired_relationships[i].desired.y = desiredRels[i].relDesired.y;
+ 		res.state.relationships[i].id = rels[i].ID;
+ 		res.state.relationships[i].actual.x = rels[i].relActual.x;
+ 		res.state.relationships[i].actual.y = rels[i].relActual.x;
+ 		res.state.relationships[i].desired.x = rels[i].relDesired.x;
+ 		res.state.relationships[i].desired.y = rels[i].relDesired.x;
  	}
 
 	res.state.linear_error.x = transError.x;
