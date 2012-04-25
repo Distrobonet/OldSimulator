@@ -19,16 +19,10 @@ Environment::Environment()
 // this environment to the parameterized values.
 Environment::Environment(int numRobots)
 {
-	int argc = 0;
-	char **argv = 0;
-	ros::init(argc, argv, "relationship_server");
-
-
+	startRelationshipServiceServer();
 
 	numOfRobots = numRobots;
 	initOverlordSubscribers(this);
-
-	startRelationshipServiceServer();
 }
 
 void Environment::initOverlordSubscribers(Environment *e)
@@ -153,6 +147,7 @@ string Environment::generateSubMessage(int cellID)
 // sets the response(relationship vector) based on the requests(IDs).  This is a callback.
 bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req, Simulator::Relationship::Response &res )
 {
+	//cout << "\nsetRelationshipMessage has been called\n";
 //	Vector temp   = *toCell - *fromCell;
 //	temp.rotateRelative(-fromCell->getHeading());
 
@@ -179,13 +174,17 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 // Starts the environment's relationship service server
 void Environment::startRelationshipServiceServer()
 {
+	int argc = 0;
+	char **argv = 0;
+	ros::init(argc, argv, "relationship_server");
+
 	ros::NodeHandle RelationshipServerNode;
 
 	relationshipService = RelationshipServerNode.advertiseService("relationship", &Environment::setRelationshipMessage, this);
-	cout << "Now serving the " << relationshipService.getService() << " service!\n";
+	cout << "Now serving the " << relationshipService.getService() << " service from the environment\n";
 
 	ros::spinOnce();
 
-	RelationshipServerNode.shutdown();
+	//RelationshipServerNode.shutdown();
 }
 
