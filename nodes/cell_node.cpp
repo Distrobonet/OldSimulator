@@ -5,17 +5,17 @@ int main(int argc, char **argv)
 	string ros_name;
 
 	// Formation Service Client
-	ros_name = "formation_client_";
+	ros_name = "formation_client_cell_";
 	ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 
     // State Service Client
-    ros_name = "state_client_";
+    ros_name = "state_client_cell_";
     ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 
 	// Relationship Service Client
-    ros_name = "relationship_client_";
+    ros_name = "relationship_client_cell_";
     ros_name.append(argv[1]);
     ros::init(argc, argv, ros_name);
 

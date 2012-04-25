@@ -50,7 +50,7 @@ class Environment
         // <destructors>
         virtual ~Environment();
 
-        void initOverloardSubscribers(Environment *e);
+        void initOverlordSubscribers(Environment *e);
         void update(bool doSpin);
 
 

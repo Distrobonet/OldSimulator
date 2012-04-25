@@ -70,7 +70,7 @@ bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
 		Simulator::CurrentFormation::Response &res )
 {
   	res.formation.radius = 1.0f;
-  	res.formation.heading = 90.0f;
+  	res.formation.heading = 0.0f;
   	res.formation.seed_frp.x = 0;
   	res.formation.seed_frp.y = 0;
   	res.formation.seed_id = 0;

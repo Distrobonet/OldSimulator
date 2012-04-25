@@ -23,11 +23,15 @@ Environment::Environment(int numRobots)
 	char **argv = 0;
 	ros::init(argc, argv, "relationship_server");
 
+
+
 	numOfRobots = numRobots;
-	initOverloardSubscribers(this);
+	initOverlordSubscribers(this);
+
+	startRelationshipServiceServer();
 }
 
-void Environment::initOverloardSubscribers(Environment *e)
+void Environment::initOverlordSubscribers(Environment *e)
 {
 	ros::NodeHandle overLord;
 
@@ -178,7 +182,7 @@ void Environment::startRelationshipServiceServer()
 	ros::NodeHandle RelationshipServerNode;
 
 	relationshipService = RelationshipServerNode.advertiseService("relationship", &Environment::setRelationshipMessage, this);
-	//cout << "Now serving the " << stateService.getService() << " service!\n";
+	cout << "Now serving the " << relationshipService.getService() << " service!\n";
 
 	ros::spinOnce();
 
