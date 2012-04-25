@@ -89,7 +89,7 @@ class Cell: public State, public Neighborhood
 		virtual ~Cell();
 
 		void update(bool doSpin);
-		bool initNbrs(Cell *cell, int currentRobotsID);
+		bool initNbrs();
 
 		ros::NodeHandle stateNode;
 		ros::Publisher state_pub;
@@ -135,14 +135,14 @@ class Cell: public State, public Neighborhood
 
 		bool setFormationFromService();
 
-		// Formation service
+		// Formation service client
 		ros::ServiceClient formationClient;
 		Simulator::CurrentFormation formationSrv;
 
 		// State service client
 		bool getNeighborState();
 		ros::ServiceClient stateClient;
-		Simulator::CurrentFormation stateSrv;
+		Simulator::State stateSrv;
 
 		// State service server
 		ros::ServiceServer stateService;
@@ -152,7 +152,7 @@ class Cell: public State, public Neighborhood
 		// Relationship service client
 		bool getRelationship(int targetID);
 		ros::ServiceClient relationshipClient;
-		Simulator::CurrentFormation relationshipSrv;
+		Simulator::Relationship relationshipSrv;
 
 
     protected:
@@ -166,7 +166,6 @@ class Cell: public State, public Neighborhood
 		bool stateChanged;
 
 		void settleAuction();
-		virtual bool init(const int ID = 0);
 
     private:
 		void publishState();

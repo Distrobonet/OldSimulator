@@ -20,6 +20,7 @@ using namespace std;
 struct State
 {
 
+public:
     // <data members>
     Formation            formation;     // the current formation
     Vector               frp;     		// the formation gradient

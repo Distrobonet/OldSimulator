@@ -24,10 +24,8 @@ int main(int argc, char **argv)
     ros::NodeHandle state_pub;
     
     
-    // Initilize cell
+    // Initilize cell, giving it the ID of the parameterized value
     Cell thisCell = Cell(atoi(argv[1]));
-	thisCell.setID(atoi(argv[1]));
-	thisCell.initNbrs(&thisCell, atoi(argv[1]));
     thisCell.state_pub = thisCell.stateNode.advertise<Simulator::StateMessage>(thisCell.generateSubMessage(thisCell.getID()), 1);
     thisCell.cmd_velPub = thisCell.stateNode.advertise<geometry_msgs::Twist>(thisCell.generatePubMessage(thisCell.getID()), 1);
 

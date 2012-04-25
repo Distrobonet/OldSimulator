@@ -29,7 +29,12 @@ int NUM_OF_CELLS = 7;
 Cell::Cell(const int cellID) :
 		State(), Neighborhood()
 {
-	init(cellID);
+	leftNbr = rightNbr = NULL;
+	ID  			   = cellID;
+	behavior           = DEFAULT_ROBOT_BEHAVIOR;
+	stateChanged 	   = false;
+
+	initNbrs();
 }
 
 // Copy constructor that copies the contents of
@@ -80,12 +85,15 @@ void Cell::update(bool doSpin)
 
 	while(ros::ok())
 	{
+<<<<<<< .mine
+=======
 
 
 	    // Testing relationship service from environment
 	    //getRelationship(rightNbr.ID);
 
 
+>>>>>>> .r353
 	    Formation temp = Formation();
 	    Vector currentCellPos = Vector(1,1,0);
 
@@ -114,7 +122,12 @@ void Cell::update(bool doSpin)
 			ros::spinOnce();
 
 		//Only updates formation if seed node, takes it from the nbr's state otherwise
-		setFormationFromService();
+		//setFormationFromService();
+
+
+		// Testing relationship service from environment
+		if(ID == 1)
+			getRelationship(rightNbr.ID);
 	}
 }
 
@@ -145,55 +158,56 @@ bool Cell::init(const int cellID)
 
 // Initializes the neighborhood of each cell,
 // returning true if successful, false otherwise.
-bool Cell::initNbrs(Cell *cell, int currentRobotsID)
+bool Cell::initNbrs()
 {
 	string cellSubName;
 	std::stringstream converter;
 
 		int leftNbrID, rightNbrID;
 
-		switch (currentRobotsID) {
+		switch (ID)
+		{
 			case 0:
-				leftNbrID = currentRobotsID + 2;
-				rightNbrID = currentRobotsID + 1;
+				leftNbrID = ID + 2;
+				rightNbrID = ID + 1;
 				break;
 			case 1:
-				leftNbrID = currentRobotsID - 1;
-				rightNbrID = currentRobotsID + 2;
+				leftNbrID = ID - 1;
+				rightNbrID = ID + 2;
 				break;
 			case 2:
 			case 4:
 			case 6:
-				leftNbrID = currentRobotsID + 2;
-				rightNbrID = currentRobotsID - 2;
+				leftNbrID = ID + 2;
+				rightNbrID = ID - 2;
 				break;
 			default:
-				leftNbrID = currentRobotsID - 2;
-				rightNbrID = currentRobotsID + 2;
+				leftNbrID = ID - 2;
+				rightNbrID = ID + 2;
 				break;
 		}
 
 		if(leftNbrID > NUM_OF_CELLS)
-			cell->leftNbr.ID = NULL;
+			leftNbr.ID = NULL;
 		else
 		{
-			if(cell->addNbr(leftNbrID))
+			if(addNbr(leftNbrID))
 			{
 				Neighbor *nbrWithId = nbrWithID(leftNbrID);
-				cell->leftNbr = *nbrWithId;
-				cell->leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, cell);
+				leftNbr = *nbrWithId;
+				leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, this);
 			}
 		}
 
 		if(rightNbrID > NUM_OF_CELLS)
-			cell->rightNbr.ID = NULL;
+			rightNbr.ID = NULL;
 		else
 		{
-			if(cell->addNbr(rightNbrID))
+			if(addNbr(rightNbrID))
 			{
 				Neighbor *nbrWithId = nbrWithID(rightNbrID);
-		    	cell->rightNbr = *nbrWithId;
-		    	cell->rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, cell);
+		    	rightNbr = *nbrWithId;
+		    	rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, this);
 			}
 		}
 
@@ -568,20 +582,20 @@ bool Cell::setFormationFromService()
 		formation.seedFrp.y = formationSrv.response.formation.seed_frp.y;
 		formation.seedID = formationSrv.response.formation.seed_id;
 		this->stateChanged = true;
-		clientNode.shutdown();
+		//clientNode.shutdown();
 		spinner.stop();
 		return true;
 	}
 	else if(ID != 0)
 	{
-		clientNode.shutdown();
+		//clientNode.shutdown();
 		spinner.stop();
 		return false;
 	}
 	else
 	{
 		ROS_ERROR("Failed to call service formation");
-		clientNode.shutdown();
+		//clientNode.shutdown();
 		spinner.stop();
 		return false;
 
@@ -619,7 +633,7 @@ void Cell::startStateServiceServer()
 
 	ros::spinOnce();
 
-	StateServerNode.shutdown();
+	//StateServerNode.shutdown();
 }
 
 // Sets the state message to this state's info.  This is the callback for the state service.
@@ -658,28 +672,35 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 // Relationship client, sends its ID and a target ID as requests and gets a relationship vector response
 bool Cell::getRelationship(int targetID)
 {
-	//ROS_INFO("Trying to access the Relationship message");
-    //cout << "Relationship client called for cell " << ID << " targeting cell " << targetID <<  endl;
+    cout << "Relationship client called for cell " << ID << " targeting cell " << targetID <<  endl;
 	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
 	spinner.start();
 
 	ros::NodeHandle clientNode;
 	relationshipClient = clientNode.serviceClient<Simulator::Relationship>("relationship");
 
+
+	//Set the request values to the service
+	relationshipSrv.request.OriginID = ID;
+	relationshipSrv.request.TargetID = targetID;
+
+
 	if (relationshipClient.call(relationshipSrv))
 	{
 		// TODO: relationship stuff in cell is done here
+		cout << "The relationship call for cell " << ID << " targeting cell " << targetID << " was successful!\n";
 
 //		formation.formationID = formationSrv.response.formation.formation_id;
 
-		clientNode.shutdown();
+		//clientNode.shutdown();
 		spinner.stop();
 		return true;
 	}
 	else
 	{
 		//ROS_ERROR("Failed to call relationship service");
-		clientNode.shutdown();
+		cout << "failed to call " << relationshipClient.getService() << " service\n";
+		//clientNode.shutdown();
 		spinner.stop();
 		return false;
 	}
