@@ -144,7 +144,7 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 		}
 
 		if(leftNbrID > NUM_OF_CELLS)
-			cell->leftNbr = NULL;
+			cell->leftNbr.ID = NULL;
 		else
 		{
 			if(cell->addNbr(leftNbrID))
@@ -156,7 +156,7 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 		}
 
 		if(rightNbrID > NUM_OF_CELLS)
-			cell->rightNbr = NULL;
+			cell->rightNbr.ID = NULL;
 		else
 		{
 			if(cell->addNbr(rightNbrID))
