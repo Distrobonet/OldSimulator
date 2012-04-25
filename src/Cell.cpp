@@ -34,6 +34,19 @@ Cell::Cell(const int cellID) :
 	behavior           = DEFAULT_ROBOT_BEHAVIOR;
 	stateChanged 	   = false;
 
+	formation.addFunction(line);
+	formation.addFunction(x);
+	formation.addFunction(absX);
+	formation.addFunction(negHalfX);
+	formation.addFunction(negAbsHalfX);
+	formation.addFunction(negAbsX);
+	formation.addFunction(parabola);
+	formation.addFunction(cubic);
+	formation.addFunction(condSqrt);
+	formation.addFunction(sine);
+	formation.addFunction(xRoot3);
+	formation.addFunction(negXRoot3);
+
 	initNbrs();
 }
 
@@ -85,15 +98,11 @@ void Cell::update(bool doSpin)
 
 	while(ros::ok())
 	{
-<<<<<<< .mine
-=======
-
 
 	    // Testing relationship service from environment
 	    //getRelationship(rightNbr.ID);
 
 
->>>>>>> .r353
 	    Formation temp = Formation();
 	    Vector currentCellPos = Vector(1,1,0);
 
@@ -131,30 +140,6 @@ void Cell::update(bool doSpin)
 	}
 }
 
-
-// Initializes the cell to the parameterized values,
-// returning true if successful, false otherwise.
-bool Cell::init(const int cellID)
-{
-	leftNbr = rightNbr = NULL;
-	ID  			   = cellID;
-	behavior           = DEFAULT_ROBOT_BEHAVIOR;
-	stateChanged 	   = false;
-	formation.addFunction(line);
-	formation.addFunction(x);
-	formation.addFunction(absX);
-	formation.addFunction(negHalfX);
-	formation.addFunction(negAbsHalfX);
-	formation.addFunction(negAbsX);
-	formation.addFunction(parabola);
-	formation.addFunction(cubic);
-	formation.addFunction(condSqrt);
-	formation.addFunction(sine);
-	formation.addFunction(xRoot3);
-	formation.addFunction(negXRoot3);
-
-	return true;
-}
 
 // Initializes the neighborhood of each cell,
 // returning true if successful, false otherwise.
