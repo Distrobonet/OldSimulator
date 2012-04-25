@@ -147,7 +147,7 @@ class Cell: public State, public Neighborhood
 		Simulator::CurrentFormation relationshipSrv;
 
     protected:
-		Formation currentFormation;
+		//Formation currentFormation;
 		Neighbor leftNbr, rightNbr;
 		Vector heading;
 		Behavior behavior;

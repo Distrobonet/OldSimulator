@@ -22,7 +22,7 @@ struct State
 
     // <data members>
     Formation            formation;     // the current formation
-    Vector               frp;      // the formation gradient
+    Vector               frp;     		// the formation gradient
     vector<Relationship> rels;          // the formation relationships
     Vector               transError;    // the summed translational error
     float                rotError;      // the summed rotational error

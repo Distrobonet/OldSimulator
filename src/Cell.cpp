@@ -77,8 +77,7 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-		//Only updates formation if seed node, takes it from the nbr's state otherwise
-		setFormationFromService();
+
 		//cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
 		// publish state
 	    if(this->stateChanged == true){
@@ -102,6 +101,9 @@ void Cell::update(bool doSpin)
 
 		if(doSpin)
 			ros::spinOnce();
+
+		//Only updates formation if seed node, takes it from the nbr's state otherwise
+		setFormationFromService();
 	}
 }
 
@@ -518,7 +520,8 @@ bool Cell::setFormationFromService()
 	ros::NodeHandle clientNode;
 	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
 
-	if (formationSrv.response.formation.formation_id == 0 && formationClient.call(formationSrv))
+	//if (formationSrv.response.formation.formation_id == 0 && formationClient.call(formationSrv))
+	if (ID == 0 && formationClient.call(formationSrv))
 	{
 		formation.formationID = formationSrv.response.formation.formation_id;
 		formation.heading = formationSrv.response.formation.heading;
@@ -531,12 +534,19 @@ bool Cell::setFormationFromService()
 		spinner.stop();
 		return true;
 	}
+	else if(ID != 0)
+	{
+		clientNode.shutdown();
+		spinner.stop();
+		return false;
+	}
 	else
 	{
 		ROS_ERROR("Failed to call service formation");
 		clientNode.shutdown();
 		spinner.stop();
 		return false;
+
 	}
 }
 
