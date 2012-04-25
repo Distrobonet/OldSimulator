@@ -91,9 +91,8 @@ void Cell::update(bool doSpin)
 		behavior = move(vectorToNbr);
 
 		// publish state
-	    if(this->stateChanged == true){
+	    if(getNeighborState())
 	    	publishState();
-	    }
 
 		// publish cmd_vel
 		commandVelocity.linear.x = behavior.getTransVel();
@@ -139,6 +138,8 @@ bool Cell::initNbrs(Cell *cell, int currentRobotsID)
 				rightNbrID = currentRobotsID + 2;
 				break;
 			case 2:
+			case 4:
+			case 6:
 				leftNbrID = currentRobotsID + 2;
 				rightNbrID = currentRobotsID - 2;
 				break;
@@ -563,19 +564,18 @@ bool Cell::setFormationFromService()
 }
 
 // Get a neighbor's state from the State service
-bool Cell::getNeighborState(bool leftOrRight)
+bool Cell::getNeighborState()
 {
-	//TODO: do this function
 	if(ID == 0)
 		return true;
-	if(ID%2 == 0)
+	if(ID % 2 == 1)
 	{
-		formation.formationID = this->leftNbr.formation.formationID;
+		formation.formationID = leftNbr.formation.formationID;
 		return true;
 	}
-	else if(ID%2 == 1)
+	else if(ID % 2 == 0)
 	{
-		formation.formationID = this->rightNbr.formation.formationID;
+		formation.formationID = rightNbr.formation.formationID;
 		return true;
 	}
 	else
