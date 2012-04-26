@@ -135,7 +135,6 @@ class Cell: public State, public Neighborhood
 		Simulator::CurrentFormation formationSrv;
 
 		// State service client
-		bool getNeighborState();
 		ros::ServiceClient stateClient;
 		Simulator::State stateSrv;
 
@@ -158,7 +157,7 @@ class Cell: public State, public Neighborhood
 		float cellX;
 		float cellTheta;
 		int ID;
-		bool stateChanged;
+		bool stateChanged, startMoving;
 
 		void settleAuction();
 
