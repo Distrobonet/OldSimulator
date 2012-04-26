@@ -32,6 +32,8 @@ Cell::Cell(const int cellID) : State(), Neighborhood()
 	ID  			   = cellID;
 	behavior           = DEFAULT_ROBOT_BEHAVIOR;
 	stateChanged 	   = false;
+	if(ID == 0)
+		inPosition = true;
 
 	initNbrs();
 }

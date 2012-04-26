@@ -8,3 +8,4 @@ int32 timestep
 int32 reference_id
 float64 temperature
 float64 heat
+bool in_position

@@ -31,6 +31,7 @@ struct State
 		int                  refID;         // the ID of the reference neighbor
 		float                temperature;   // the current temperature
 		float                heat;          // the current heat
+		bool 				 inPosition;
 
 		// Default constructor that initializes
 		// this state to the parameterized values.
@@ -45,7 +46,7 @@ struct State
 			  const float                h      = 0.0f)
 			  : formation(f),       frp(formationrelativepos),   rels(rel),
 				transError(tError), rotError(rError), tStep(ts), refID(rID),
-				temperature(temp),  heat(h)
+				temperature(temp),  heat(h), inPosition(false)
 		{
 		}   // State(const..{Formation, Vector, LL<Relationship>, Vector, int,int})
 };
