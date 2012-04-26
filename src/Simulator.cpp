@@ -61,10 +61,6 @@ bool setFormationMessage(Simulator::CurrentFormation::Request  &req,
 }
 
 
-
-
-
-
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "robot_driver");

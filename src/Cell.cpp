@@ -49,7 +49,6 @@ Cell::~Cell() {}
 
 void Cell::publishState()
 {
-    //cout << "Formation ID according to cell " << index << ": " << formation.formationID << endl;
     Simulator::StateMessage state;
     state.formation.radius = formation.radius;
     state.formation.heading = formation.heading;
@@ -59,13 +58,16 @@ void Cell::publishState()
     state.formation.formation_id = formation.formationID;
     state.frp.x = frp.x;
     state.frp.y = frp.y;
-    for(uint i = 0;i < rels.size();i++){
+
+    for(uint i = 0;i < rels.size();i++)
+    {
         state.actual_relationships[i].id = rels[i].ID;
         state.actual_relationships[i].actual.x = rels[i].relActual.x;
         state.actual_relationships[i].actual.y = rels[i].relActual.y;
         state.desired_relationships[i].desired.x = rels[i].relDesired.x;
         state.desired_relationships[i].desired.y = rels[i].relDesired.y;
     }
+
     state.linear_error.x = transError.x;
     state.linear_error.y = transError.y;
     state.angular_error = rotError;
@@ -73,8 +75,9 @@ void Cell::publishState()
     state.reference_id = refID;
     state.temperature = temperature;
     state.heat = heat;
+
     state_pub.publish(state);
-    this->stateChanged = false;
+    stateChanged = false;
 }
 
 // Updates the cell
@@ -90,13 +93,13 @@ void Cell::update(bool doSpin)
 //		cout<<"Z "<<desiredRels.at(0).relDesired.z<<endl;
 		//this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
 		//Vector vectorToNbr = Vector(heading.x, heading.y, rotError);
-
-
 		behavior = move(rels[1].relActual);
 
 		// publish state
-	    if(getNeighborState())
-	    	publishState();
+	    publishState();
+
+	    cout << "Cell ID: "<< ID << endl;
+	    cout << "formationID: " << formation.formationID << endl;
 
 		// publish cmd_vel
 		commandVelocity.linear.x = behavior.getTransVel();
@@ -107,7 +110,7 @@ void Cell::update(bool doSpin)
 			ros::spinOnce();
 
 		//Only updates formation if seed node, takes it from the nbr's state otherwise
-		//setFormationFromService();
+		setFormationFromService();
 
 
 		// Testing relationship service from environment
@@ -155,7 +158,7 @@ bool Cell::initNbrs()
 		}
 
 		if(leftNbrID > NUM_OF_CELLS)
-			leftNbr.ID = NULL;
+			leftNbr.ID = -1;
 		else
 		{
 			if(addNbr(leftNbrID))
@@ -167,7 +170,7 @@ bool Cell::initNbrs()
 		}
 
 		if(rightNbrID > NUM_OF_CELLS)
-			rightNbr.ID = NULL;
+			rightNbr.ID = -1;
 		else
 		{
 			if(addNbr(rightNbrID))
@@ -333,10 +336,9 @@ void Cell::setID(int cellID)
 
 void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 {
-
-	if(formation.formationID != incomingState.formation.formation_id){
+	if(ID > incomingState.reference_id && formation.formationID != incomingState.formation.formation_id)
+	{
 		stateChanged = true;
-		Cell::State currentState;
 		formation.radius = incomingState.formation.radius;
 		formation.heading = incomingState.formation.heading;
 		formation.seedFrp.x = incomingState.formation.seed_frp.x;
@@ -362,6 +364,8 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 		refID = incomingState.reference_id;
 		temperature = incomingState.temperature;
 		heat = incomingState.heat;
+
+		stateChanged = true;
 	}
 
 }
@@ -393,10 +397,10 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	vector<Vector> r = formation.getRelationships(frp);
 
 
-	if (leftNbr.ID != NULL)
+	if (leftNbr.ID != -1)
 		leftNbr.relDesired = r[LEFT_NBR_INDEX];
 
-	if (rightNbr.ID != NULL)
+	if (rightNbr.ID != -1)
 		rightNbr.relDesired = r[RIGHT_NBR_INDEX];
 
 	return true;
@@ -529,63 +533,40 @@ Cell& Cell::operator =(const Neighborhood &nh) {
 // Sets this cell's formation object from the response from the Formation service
 bool Cell::setFormationFromService()
 {
-	//ROS_INFO("Trying to access the formation message");
-	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
-	spinner.start();
+	if (ID == 0)
+	{
+		//ROS_INFO("Trying to access the formation message");
+		ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
+		spinner.start();
 
-	ros::NodeHandle clientNode;
-	formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
-//	cout << "Cell ID: "<< ID << endl;
-//	cout << "formationID: " << formation.formationID << endl;
+		ros::NodeHandle clientNode;
+		formationClient = clientNode.serviceClient<Simulator::CurrentFormation>("formation");
 
-	//if (formationSrv.response.formation.formation_id == 0 && formationClient.call(formationSrv))
-	if (ID == 0 && formationClient.call(formationSrv))
-	{
-		formation.formationID = formationSrv.response.formation.formation_id;
-		formation.heading = formationSrv.response.formation.heading;
-		formation.radius = formationSrv.response.formation.radius;
-		formation.seedFrp.x = formationSrv.response.formation.seed_frp.x;
-		formation.seedFrp.y = formationSrv.response.formation.seed_frp.y;
-		formation.seedID = formationSrv.response.formation.seed_id;
-		this->stateChanged = true;
-		//clientNode.shutdown();
-		spinner.stop();
-		return true;
-	}
-	else if(ID != 0)
-	{
-		//clientNode.shutdown();
-		spinner.stop();
-		return false;
-	}
-	else
-	{
-		ROS_ERROR("Failed to call service formation");
-		//clientNode.shutdown();
+		if (formationClient.call(formationSrv))
+		{
+
+			formation.formationID = formationSrv.response.formation.formation_id;
+			formation.heading = formationSrv.response.formation.heading;
+			formation.radius = formationSrv.response.formation.radius;
+			formation.seedFrp.x = formationSrv.response.formation.seed_frp.x;
+			formation.seedFrp.y = formationSrv.response.formation.seed_frp.y;
+			formation.seedID = formationSrv.response.formation.seed_id;
+			stateChanged = true;
+
+			clientNode.shutdown();
+			spinner.stop();
+			return true;
+		}
+
+		clientNode.shutdown();
 		spinner.stop();
 		return false;
 
-	}
-}
-
-// Get a neighbor's state from the State service
-bool Cell::getNeighborState()
-{
-	if(ID == 0)
-		return true;
-	if(ID % 2 == 1)
-	{
-		formation.formationID = leftNbr.formation.formationID;
-		return true;
-	}
-	else if(ID % 2 == 0)
-	{
-		formation.formationID = rightNbr.formation.formationID;
-		return true;
 	}
 	else
 		return false;
 }
+
 
 // Starts the cell's state service server
 void Cell::startStateServiceServer()

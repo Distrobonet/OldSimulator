@@ -135,7 +135,6 @@ class Cell: public State, public Neighborhood
 		Simulator::CurrentFormation formationSrv;
 
 		// State service client
-		bool getNeighborState();
 		ros::ServiceClient stateClient;
 		Simulator::State stateSrv;
 
