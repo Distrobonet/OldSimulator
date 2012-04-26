@@ -386,10 +386,16 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 //		temperature = incomingState.temperature;
 //		heat = incomingState.heat;
 
-		if((incomingState.in_position == true) && (inPosition == false))
+		if((incomingState.in_position == true) && (inPosition == false) && (startMoving != true))
 		{
-			formation.calculateDesiredRelationship(userFormations[formation.formationID], 0.0f, rels[0].relDesired, 0.0f);
+			changeFormation(userFormations[formation.formationID], rels[0].ID);
+			Vector *r = new Vector(formation.calculateDesiredRelationship(userFormations[formation.formationID], 1.0f, frp, 0.0f));
+			rels[0].relDesired.x = r->x;
+			rels[0].relDesired.y = r->y;
+			rels[0].relDesired.z = r->z;
+
 			startMoving = true;
+			delete r;
 		}
 
 		stateChanged = true;
@@ -418,6 +424,7 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 		frp = n.frp + nbrRelToMe->relDesired;
 		transError = Vector();
 		rotError = 0.0f;
+		delete nbrRelToMe;
 	}
 
 	vector<Vector> r = formation.getRelationships(frp);
@@ -727,21 +734,21 @@ bool Cell::getRelationship(int targetID)
 // Get a neighbor's state from the State service 
 bool Cell::getNeighborState() 
 { 
-	if(ID == 0) 
-		return true; 
-	if(ID % 2 == 1) 
-	{ 
-		formation.formationID = leftNbr.formation.formationID; 
-		return true; 
-	} 
-	else if(ID % 2 == 0) 
-	{ 
-		formation.formationID = rightNbr.formation.formationID; 
-		return true; 
-
-	} 
-	else 
-		return false; 
+//	if(ID == 0)
+//		return true;
+//	if(ID % 2 == 1)
+//	{
+//		formation.formationID = leftNbr.formation.formationID;
+//		return true;
+//	}
+//	else if(ID % 2 == 0)
+//	{
+//		formation.formationID = rightNbr.formation.formationID;
+//		return true;
+//
+//	}
+//	else
+//		return false;
 } 
 
 // Moves the robot using the parameterized movement vector,
