@@ -119,14 +119,13 @@ void Cell::update(bool doSpin)
 			cmd_velPub.publish(commandVelocity);
 		}
 
-//		behavior = move(rels[1].relDesired);
 		// publish state
 	    publishState();
 
-	    cout << "Cell ID: "<< ID << endl;
-	    cout << "formationID: " << formation.formationID << endl;
-	    cout << "inPosition state: " << inPosition << endl;
-	    cout << "startMoving state: " << startMoving << endl << endl;
+//	    cout << "Cell ID: "<< ID << endl;
+//	    cout << "formationID: " << formation.formationID << endl;
+//	    cout << "inPosition state: " << inPosition << endl;
+//	    cout << "startMoving state: " << startMoving << endl << endl;
 
 
 		if(doSpin)
@@ -388,11 +387,13 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 //		heat = incomingState.heat;
 
 		if((incomingState.in_position == true) && (inPosition == false))
+		{
+			formation.calculateDesiredRelationship(userFormations[formation.formationID], 0.0f, rels[0].relDesired, 0.0f);
 			startMoving = true;
+		}
 
 		stateChanged = true;
 	}
-
 }
 
 
@@ -475,7 +476,13 @@ Behavior Cell::move(const Vector &target)
 	float sinDelta 		= sin(delta);
 	float t       		= cosDelta * cosDelta * sign(cosDelta);
 	float r       		= sinDelta * sinDelta * sign(sinDelta);
-	//cout<<"theta "<<theta<<" phi "<<phi<<" delta "<<delta<<" cosdelta"<< cosDelta<<" sindelta "<<sinDelta<<" t "<<t<<" r "<<r<<endl;
+	cout << "theta : " << theta << endl
+		 <<	"phi : " << phi << endl
+		 << "delta: " << delta << endl
+		 << "cosdelta: " << cosDelta << endl
+		 << "sindelta: " << sinDelta << endl
+		 << "t: " << t << endl
+		 << "r: " << r << endl << endl;
 	Behavior behavior	= Behavior(t, r, maxSpeed());
 
 	if (abs(theta) < 90.0f)
@@ -683,6 +690,7 @@ bool Cell::getRelationship(int targetID)
 			rels[0].relDesired.x = relationshipSrv.response.theRelationship.desired.x;
 			rels[0].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
 			rels[0].relDesired.z = 0;
+
 
 //		}
 //		else if(targetID == rightNbr.ID)	// right neighbor relationship

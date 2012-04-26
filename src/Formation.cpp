@@ -247,11 +247,20 @@ vector<Vector> Formation::getRelationships(const Vector c)
 //
 //      x_(n + 1) = x_n - f(x_n) * (x_n - x_(n - 1)) / (f(x_n) - f(x_(n - 1))).
 //
+// Returns:     vector from the parameterized vector position c
+//              to the intersection of the function and appropriate circle
+// Parameters:
+//      f           in      the intersecting function
+//      r           in      the radius of the intersecting circle
+//      c           in      the position to be centered at
+//      theta       in      the rotation of the relationship (default 0)
+//
 Vector Formation::calculateDesiredRelationship(const Function f,
                                   const float  r,
                                   const Vector   c,
                                   const float  theta)
 {
+	// TODO: HERE IS THE GOOFY ONE
     if (f == NULL) return Vector();
     float   xn        = c.x + r + X_ROOT_THRESHOLD,
             xn_1      = c.x + r - X_ROOT_THRESHOLD,
