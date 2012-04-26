@@ -657,8 +657,8 @@ bool Cell::getRelationship(int targetID)
 			rels[1].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
 
 			// Test stuff
-			cout << "\nCell " << ID << " has ACTUAL relationship with cell " << targetID << " of: " << rels[1].relActual.x << ", " << rels[1].relActual.y << endl;
-			cout << "Cell " << ID << " has DESIRED relationship with cell " << targetID << " of: " << rels[1].relDesired.x << ", " << rels[1].relDesired.y << endl;
+//			cout << "\nCell " << ID << " has ACTUAL relationship with cell " << targetID << " of: " << rels[1].relActual.x << ", " << rels[1].relActual.y << endl;
+//			cout << "Cell " << ID << " has DESIRED relationship with cell " << targetID << " of: " << rels[1].relDesired.x << ", " << rels[1].relDesired.y << endl;
 		}
 
 		else
@@ -677,3 +677,23 @@ bool Cell::getRelationship(int targetID)
 		return false;
 	}
 }
+
+// Get a neighbor's state from the State service 
+bool Cell::getNeighborState() 
+{ 
+	if(ID == 0) 
+		return true; 
+	if(ID % 2 == 1) 
+	{ 
+		formation.formationID = leftNbr.formation.formationID; 
+		return true; 
+	} 
+	else if(ID % 2 == 0) 
+	{ 
+		formation.formationID = rightNbr.formation.formationID; 
+		return true; 
+
+	} 
+	else 
+		return false; 
+} 
