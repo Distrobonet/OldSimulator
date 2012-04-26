@@ -79,7 +79,7 @@ class Formation: public vector<Function>
 
         // <public utility functions>
         vector<Vector> getRelationships(const Vector c = Vector());
-        Vector getRelationship(const Function f = DEFAULT_FORMATION_FUNCTION,
+        Vector calculateRelationship(const Function f = DEFAULT_FORMATION_FUNCTION,
                                const float  r = DEFAULT_FORMATION_RADIUS,
                                const Vector   c = Vector(),
                                const float  theta = 0.0f);
