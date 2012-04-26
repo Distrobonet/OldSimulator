@@ -1,7 +1,6 @@
 FormationMessage formation
 VectorMessage frp
-RelationshipMessage[] actual_relationships
-RelationshipMessage[] desired_relationships
+RelationshipMessage[] relationships
 VectorMessage linear_error
 float64 angular_error
 int32 timestep
