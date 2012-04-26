@@ -26,8 +26,7 @@ int NUM_OF_CELLS = 7;
 
 // Default constructor that initializes
 // this cell to the parameterized values.
-Cell::Cell(const int cellID) :
-		State(), Neighborhood()
+Cell::Cell(const int cellID) : State(), Neighborhood()
 {
 	leftNbr = rightNbr = NULL;
 	ID  			   = cellID;
@@ -61,11 +60,11 @@ void Cell::publishState()
     state.frp.x = frp.x;
     state.frp.y = frp.y;
     for(uint i = 0;i < rels.size();i++){
-        state.relationships[i].id = rels[i].ID;
-        state.relationships[i].actual.x = rels[i].relActual.x;
-        state.relationships[i].actual.y = rels[i].relActual.y;
-        state.relationships[i].desired.x = rels[i].relDesired.x;
-        state.relationships[i].desired.y = rels[i].relDesired.y; 
+        state.actual_relationships[i].id = rels[i].ID;
+        state.actual_relationships[i].actual.x = rels[i].relActual.x;
+        state.actual_relationships[i].actual.y = rels[i].relActual.y;
+        state.desired_relationships[i].desired.x = rels[i].relDesired.x;
+        state.desired_relationships[i].desired.y = rels[i].relDesired.y;
     }
     state.linear_error.x = transError.x;
     state.linear_error.y = transError.y;
@@ -83,23 +82,17 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-
-	    // Testing relationship service from environment
-	    //getRelationship(rightNbr.ID);
-	    Formation temp = Formation();
-	    Vector currentCellPos = Vector(1,1,0);
-
-//		rels.at(0).relDesired = (formation.getRelationship(this->formation.getFunction(this->formation.formationID), 1, currentCellPos, 0.0));//positive
-//		rels.at(1).relDesired = (formation.getRelationship(this->formation.getFunction(this->formation.formationID), -1, currentCellPos, 0.0));//positive
+//	    rels.push_back(formation.getRelationship(formation.getFunction(formation.formationID), 1, currentCellPos, 0.0));//positive
+//	    rels.push_back(formation.getRelationship(formation.getFunction(formation.formationID), -1, currentCellPos, 0.0));//positive
 //		cout<<"Cell Id "<<ID<<endl;
-//		cout<<"X "<<rels.at(0).relDesired.x<<endl;
-//		cout<<"Y "<<rels.at(0).relDesired.y<<endl;
-//		cout<<"Z "<<rels.at(0).relDesired.z<<endl;
-//		//this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
-//		Vector vectorToNbr = Vector(rels.at(0).relDesired.x, rels.at(0).relDesired.y, rotError);
-//
-//
-//		behavior = move(vectorToNbr);
+//		cout<<"X "<<desiredRels.at(0).relDesired.x<<endl;
+//		cout<<"Y "<<desiredRels.at(0).relDesired.y<<endl;
+//		cout<<"Z "<<desiredRels.at(0).relDesired.z<<endl;
+		//this->rels.at(1).relDesired = temp.getRelationships(currentCellPos).at(0);//negitive
+		//Vector vectorToNbr = Vector(heading.x, heading.y, rotError);
+
+
+		behavior = move(rels[1].relActual);
 
 		// publish state
 	    if(getNeighborState())
@@ -124,39 +117,21 @@ void Cell::update(bool doSpin)
 }
 
 
-// Initializes the cell to the parameterized values,
-// returning true if successful, false otherwise.
-bool Cell::init(const int cellID)
-{
-	leftNbr = rightNbr = NULL;
-	ID  			   = cellID;
-	behavior           = DEFAULT_ROBOT_BEHAVIOR;
-	stateChanged 	   = false;
-	formation.addFunction(line);
-	formation.addFunction(x);
-	formation.addFunction(absX);
-	formation.addFunction(negHalfX);
-	formation.addFunction(negAbsHalfX);
-	formation.addFunction(negAbsX);
-	formation.addFunction(parabola);
-	formation.addFunction(cubic);
-	formation.addFunction(condSqrt);
-	formation.addFunction(sine);
-	formation.addFunction(xRoot3);
-	formation.addFunction(negXRoot3);
-
-	return true;
-}
-
 // Initializes the neighborhood of each cell,
 // returning true if successful, false otherwise.
 bool Cell::initNbrs()
 {
+	// Initializing the relationship vector in state to skeleton information.
+	// Needs size of two for a left and a right neighbor.  This gets populated with data in getNeighborState
+	rels.reserve(2);
+
+
 	string cellSubName;
 	std::stringstream converter;
 
 		int leftNbrID, rightNbrID;
 
+		// Sets what your neighbor's ID should be
 		switch (ID)
 		{
 			case 0:
@@ -187,7 +162,7 @@ bool Cell::initNbrs()
 			{
 				Neighbor *nbrWithId = nbrWithID(leftNbrID);
 				leftNbr = *nbrWithId;
-				leftNeighborState = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, this);
+				leftNeighborStateSubscriber = stateNode.subscribe(generateSubMessage(leftNbrID), 1000, &Cell::stateCallback, this);
 			}
 		}
 
@@ -199,7 +174,7 @@ bool Cell::initNbrs()
 			{
 				Neighbor *nbrWithId = nbrWithID(rightNbrID);
 		    	rightNbr = *nbrWithId;
-		    	rightNeighborState = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, this);
+		    	rightNeighborStateSubscriber = stateNode.subscribe(generateSubMessage(rightNbrID), 1000, &Cell::stateCallback, this);
 			}
 		}
 
@@ -359,35 +334,34 @@ void Cell::setID(int cellID)
 void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 {
 
-	if(this->formation.formationID != incomingState.formation.formation_id){
-		this->stateChanged = true;
+	if(formation.formationID != incomingState.formation.formation_id){
+		stateChanged = true;
 		Cell::State currentState;
-		currentState.formation.radius = incomingState.formation.radius;
-		currentState.formation.heading = incomingState.formation.heading;
-		currentState.formation.seedFrp.x = incomingState.formation.seed_frp.x;
-		currentState.formation.seedFrp.y = incomingState.formation.seed_frp.y;
-		currentState.formation.seedID = incomingState.formation.seed_id;
-		currentState.formation.formationID = incomingState.formation.formation_id;
-		currentState.frp.x = frp.x;
-		currentState.frp.y = frp.y;
+		formation.radius = incomingState.formation.radius;
+		formation.heading = incomingState.formation.heading;
+		formation.seedFrp.x = incomingState.formation.seed_frp.x;
+		formation.seedFrp.y = incomingState.formation.seed_frp.y;
+		formation.seedID = incomingState.formation.seed_id;
+		formation.formationID = incomingState.formation.formation_id;
+		frp.x = incomingState.frp.x;
+		frp.y = incomingState.frp.y;
 
 		for(uint i = 0; i < rels.size(); i++)
 		{
-			currentState.rels[i].ID = incomingState.relationships[i].id;
-			currentState.rels[i].relActual.x = incomingState.relationships[i].actual.x;
-			currentState.rels[i].relActual.y = incomingState.relationships[i].actual.y;
-			currentState.rels[i].relDesired.x = incomingState.relationships[i].desired.x;
-			currentState.rels[i].relDesired.y = incomingState.relationships[i].desired.y;
+			rels[i].ID = incomingState.actual_relationships[i].id;
+			rels[i].relActual.x = incomingState.actual_relationships[i].actual.x;
+			rels[i].relActual.y = incomingState.actual_relationships[i].actual.y;
+			rels[i].relDesired.x = incomingState.desired_relationships[i].desired.x;
+			rels[i].relDesired.y = incomingState.desired_relationships[i].desired.y;
 		}
 
-		currentState.transError.x = incomingState.linear_error.x;
-		currentState.transError.y= incomingState.linear_error.y;
-		currentState.rotError = incomingState.angular_error;
-		currentState.tStep = incomingState.timestep;
-		currentState.refID = incomingState.reference_id;
-		currentState.temperature = incomingState.temperature;
-		currentState.heat = incomingState.heat;
-		setState(currentState);
+		transError.x = incomingState.linear_error.x;
+		transError.y= incomingState.linear_error.y;
+		rotError = incomingState.angular_error;
+		tStep = incomingState.timestep;
+		refID = incomingState.reference_id;
+		temperature = incomingState.temperature;
+		heat = incomingState.heat;
 	}
 
 }
@@ -462,13 +436,13 @@ Behavior Cell::moveErrorBehavior(const Vector tError, const float rError)
 Behavior Cell::move(const Vector &target)
 {
 	float theta    		= target.angle();
-	float phi     		= this->heading.angle();
+	float phi     		= heading.angle();
 	float delta   		= degreesToRadians(theta);
 	float cosDelta 		= cos(delta);
 	float sinDelta 		= sin(delta);
 	float t       		= cosDelta * cosDelta * sign(cosDelta);
 	float r       		= sinDelta * sinDelta * sign(sinDelta);
-	cout<<"theta "<<theta<<" phi "<<phi<<" delta "<<delta<<" cosdelta"<< cosDelta<<" sindelta "<<sinDelta<<" t "<<t<<" r "<<r<<endl;
+	//cout<<"theta "<<theta<<" phi "<<phi<<" delta "<<delta<<" cosdelta"<< cosDelta<<" sindelta "<<sinDelta<<" t "<<t<<" r "<<r<<endl;
 	Behavior behavior	= Behavior(t, r, maxSpeed());
 
 	if (abs(theta) < 90.0f)
@@ -642,11 +616,11 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 
  	for(uint i = 0; i < rels.size(); i++)
  	{
- 		res.state.relationships[i].id = rels[i].ID;
- 		res.state.relationships[i].actual.x = rels[i].relActual.x;
- 		res.state.relationships[i].actual.y = rels[i].relActual.x;
- 		res.state.relationships[i].desired.x = rels[i].relDesired.x;
- 		res.state.relationships[i].desired.y = rels[i].relDesired.x;
+        res.state.actual_relationships[i].id = rels[i].ID;
+        res.state.actual_relationships[i].actual.x = rels[i].relActual.x;
+        res.state.actual_relationships[i].actual.y = rels[i].relActual.y;
+        res.state.desired_relationships[i].desired.x = rels[i].relDesired.x;
+        res.state.desired_relationships[i].desired.y = rels[i].relDesired.y;
  	}
 
 	res.state.linear_error.x = transError.x;
@@ -664,7 +638,7 @@ bool Cell::setStateMessage(Simulator::State::Request  &req, Simulator::State::Re
 // Relationship client, sends its ID and a target ID as requests and gets a relationship vector response
 bool Cell::getRelationship(int targetID)
 {
-    cout << "Relationship client called for cell " << ID << " targeting cell " << targetID <<  endl;
+    //cout << "Relationship client called for cell " << ID << " targeting cell " << targetID <<  endl;
 	ros::AsyncSpinner spinner(1);	// Uses an asynchronous spinner to account for the blocking service client call
 	spinner.start();
 
@@ -677,12 +651,37 @@ bool Cell::getRelationship(int targetID)
 	relationshipSrv.request.TargetID = targetID;
 
 
+	// Here is where neighbor states get set from the relationship service
 	if (relationshipClient.call(relationshipSrv))
 	{
-		// TODO: relationship stuff in cell is done here
-		cout << "The relationship call for cell " << ID << " targeting cell " << targetID << " was successful!\n";
+		//cout << "The relationship call for cell " << ID << " targeting cell " << targetID << " was successful!\n";
 
-//		formation.formationID = formationSrv.response.formation.formation_id;
+		// Set the returned relationship to the stored neighbor state in the relationship vector
+		if(targetID == leftNbr.ID)		// This is the cell's relationship to its left neighbor
+		{
+			rels[0].ID = targetID;
+			rels[0].relActual.x = relationshipSrv.response.theRelationship.actual.x;
+			rels[0].relActual.y = relationshipSrv.response.theRelationship.actual.y;
+
+			rels[0].relDesired.x = relationshipSrv.response.theRelationship.desired.x;
+			rels[0].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
+		}
+		else if(targetID == rightNbr.ID)	// right neighbor relationship
+		{
+			rels[0].ID = targetID;
+			rels[1].relActual.x = relationshipSrv.response.theRelationship.actual.x;
+			rels[1].relActual.y = relationshipSrv.response.theRelationship.actual.y;
+
+			rels[1].relDesired.x = relationshipSrv.response.theRelationship.desired.x;
+			rels[1].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
+
+			// Test stuff
+			cout << "\nCell " << ID << " has ACTUAL relationship with cell " << targetID << " of: " << rels[1].relActual.x << ", " << rels[1].relActual.y << endl;
+			cout << "Cell " << ID << " has DESIRED relationship with cell " << targetID << " of: " << rels[1].relDesired.x << ", " << rels[1].relDesired.y << endl;
+		}
+
+		else
+			cout << "\nSomething is wrong in getRelationship.  Neighbor is neither left nor right?\n";
 
 		//clientNode.shutdown();
 		spinner.stop();
