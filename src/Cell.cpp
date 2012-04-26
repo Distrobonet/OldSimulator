@@ -28,6 +28,18 @@ int NUM_OF_CELLS = 7;
 // this cell to the parameterized values.
 Cell::Cell(const int cellID) : State(), Neighborhood()
 {
+	userFormations[1] = line;
+	userFormations[2] = x;
+	userFormations[3] = absX;
+	userFormations[4] = negHalfX;
+	userFormations[5] = negAbsHalfX;
+	userFormations[6] = negAbsX;
+	userFormations[7] = parabola;
+	userFormations[8] = cubic;
+	userFormations[9] = condSqrt;
+	userFormations[1] = sine;
+
+
 	leftNbr = rightNbr = -1;
 	ID  			   = cellID;
 	behavior           = DEFAULT_ROBOT_BEHAVIOR;

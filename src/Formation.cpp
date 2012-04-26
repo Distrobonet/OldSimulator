@@ -232,8 +232,8 @@ vector<Vector> Formation::getRelationships(const Vector c)
     for (uint i = 0; i < size(); ++i)
     {
         curr = at(i);
-        rels.push_back(calculateRelationship(curr, -radius, c, heading));
-        rels.push_back(calculateRelationship(curr,  radius, c, heading));
+        rels.push_back(calculateDesiredRelationship(curr, -radius, c, heading));
+        rels.push_back(calculateDesiredRelationship(curr,  radius, c, heading));
     }
     return rels;
 }
@@ -247,7 +247,7 @@ vector<Vector> Formation::getRelationships(const Vector c)
 //
 //      x_(n + 1) = x_n - f(x_n) * (x_n - x_(n - 1)) / (f(x_n) - f(x_(n - 1))).
 //
-Vector Formation::calculateRelationship(const Function f,
+Vector Formation::calculateDesiredRelationship(const Function f,
                                   const float  r,
                                   const Vector   c,
                                   const float  theta)
@@ -279,7 +279,7 @@ Vector Formation::getRelationship(const int   pos,
                                   const Vector  c,
                                   const float theta)
 {
-    return calculateRelationship(getFunction(pos), r, c, theta);
+    return calculateDesiredRelationship(getFunction(pos), r, c, theta);
 }
 
 

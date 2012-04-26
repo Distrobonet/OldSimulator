@@ -58,6 +58,11 @@ enum MessageType
     FSEED_RESPONSE
 };  // MessageType
 
+//#include "UserFunctions.h"
+//Function formations[] = {line,        x,       absX,     negHalfX,
+//						negAbsHalfX, negAbsX, parabola, cubic,
+//						condSqrt,    sine,    xRoot3,   negXRoot3};
+
 
 
 // global constants

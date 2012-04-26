@@ -74,15 +74,15 @@ float sine(const float x)
 
 
 // Returns formation function definition f(x) = x sqrt(3).
-float xRoot3(const float x)
-{
-  return x * sqrt(3.0f);
-}
-
-
-// Returns formation function definition f(x) = -x sqrt(3).
-float negXRoot3(const float x)
-{
-  return -x * sqrt(3.0f);
-}
+//float xRoot3(const float x)
+//{
+//  return x * sqrt(3.0f);
+//}
+//
+//
+//// Returns formation function definition f(x) = -x sqrt(3).
+//float negXRoot3(const float x)
+//{
+//  return -x * sqrt(3.0f);
+//}
 
