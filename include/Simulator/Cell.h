@@ -111,6 +111,7 @@ class Cell: public State, public Neighborhood
 		int getNBids() const;
 		int getAuctionStepCount() const;
 		int getID() const;
+		float getHeading() const;
 		void setID(int cellID);
 		void stateCallback(const Simulator::StateMessage & state);
 		string generateSubMessage(int cellID);
@@ -129,6 +130,10 @@ class Cell: public State, public Neighborhood
 		float angThreshold() const;
 		bool setHeading(const float theta);
 		float maxAngSpeed() const;
+
+        virtual void translateRelative(Vector v);
+        virtual void translateRelative(const float dx = 0.0f, const float dy = 0.0f);
+        virtual void rotateRelative(float theta);
 
 		virtual Cell & operator =(const State & s);
 		virtual Cell & operator =(const Neighborhood & nh);

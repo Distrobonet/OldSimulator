@@ -112,6 +112,9 @@ void Cell::update(bool doSpin)
 				getRelationship(leftNbr.ID);
 
 			behavior = move(rels[0].relDesired);
+			
+			translateRelative(behavior.getTransVel());
+			rotateRelative(getAngVel());
 
 			// publish cmd_vel
 			commandVelocity.linear.x = behavior.getTransVel();
@@ -393,7 +396,7 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 			rels[0].relDesired.x = r->x;
 			rels[0].relDesired.y = r->y;
 			rels[0].relDesired.z = r->z;
-
+			
 			startMoving = true;
 			delete r;
 		}
@@ -554,6 +557,11 @@ Behavior Cell::move(const float t, const float r)
 float Cell::maxSpeed() const
 {
     return FACTOR_MAX_SPEED * RADIUS;
+}
+
+float Cell::getHeading() const
+{
+    return heading.angle();
 }
 
 // Attempts to set the heading to the parameterized heading,
@@ -789,3 +797,29 @@ Behavior Cell::moveArcBehavior(const Vector &target)
                                 r * velocityTheta / sin(theta), getDiameter() * theta);
 */
 }
+
+// Translates the robot relative to itself based
+// on the parameterized translation vector.
+void Cell::translateRelative(Vector v)
+{
+    v.rotateRelative(getHeading());
+    x += v.x;
+    y += v.y;
+}
+
+
+// Translates the robot relative to itself based
+// on the parameterized x-/y-coordinate translations.
+void Cell::translateRelative(const float dx, const float dy)
+{
+    translateRelative(Vector(dx, dy));
+}
+
+
+// Rotates the robot about itself (in 2-dimensions)
+// based on the parameterized rotation angle.
+void Cell::rotateRelative(float theta)
+{
+    heading.rotateRelative(theta);
+}
+
