@@ -24,22 +24,14 @@ using namespace std;
 
 int NUM_OF_CELLS = 7;
 
+Function formations[] = {line,        x,       absX,     negHalfX,
+  negAbsHalfX, negAbsX, parabola, cubic,
+  condSqrt,    sine};
+
 // Default constructor that initializes
 // this cell to the parameterized values.
 Cell::Cell(const int cellID) : State(), Neighborhood()
 {
-	userFormations[0] = line;
-	userFormations[1] = x;
-	userFormations[2] = absX;
-	userFormations[3] = negHalfX;
-	userFormations[4] = negAbsHalfX;
-	userFormations[5] = negAbsX;
-	userFormations[6] = parabola;
-	userFormations[7] = cubic;
-	userFormations[8] = condSqrt;
-	userFormations[9] = sine;
-
-
 	leftNbr = rightNbr = -1;
 	ID  			   = cellID;
 	behavior           = DEFAULT_ROBOT_BEHAVIOR;
@@ -111,10 +103,11 @@ void Cell::update(bool doSpin)
 			if (ID % 2 == 1)
 				getRelationship(leftNbr.ID);
 
-			behavior = move(rels[0].relDesired);
+			Vector movement = Vector(rels[0].relDesired.x - rels[0].relActual.x, rels[0].relDesired.y - rels[0].relActual.y, rels[0].relDesired.z - rels[0].relActual.z);
+			behavior = move(movement);
 			
 			translateRelative(behavior.getTransVel());
-			rotateRelative(getAngVel());
+			rotateRelative(behavior.getRotVel());
 
 			// publish cmd_vel
 			commandVelocity.linear.x = behavior.getTransVel();
@@ -278,89 +271,9 @@ void Cell::setID(int cellID)
 }
 
 
-//// Updates the state of the cell based upon the
-//// current states of the neighbors of the cell.
-//void Cell::updateState()
-//{
-//	if ((getNNbrs() == 0) || (nbrWithMinStep()->tStep < tStep)
-//			|| ((formation.getSeedID() != ID)
-//					&& (nbrWithMaxStep()->tStep == tStep)))
-//		return;
-//
-//	// update actual relationships to neighbors
-//	Neighbor *currNbr = NULL;
-//	for (unsigned int i = 0; i < size(); i++) {
-//		currNbr = getNbr(i);
-//		if (currNbr == NULL)
-//			break;
-//
-//		// change formation if a neighbor has changed formation
-//		if (currNbr->formation.getFormationID() > formation.getFormationID())
-//			changeFormation(currNbr->formation, *currNbr);
-//
-//		//currNbr->relActual = getRelationship(ID);
-//	}
-//	rels = getRelationships();
-//
-//	// update temperature
-//	float m = 1.0f; // mass
-//	//float C    = 2.11f;  // specific heat
-//	//float K    = 2.0f;  // thermal conductivity (of material)
-//	//float A    = PI * getRadius();  // area of contact
-//	float C = 1.0f; // specific heat
-//	float K = 1.0f; // thermal conductivity (of material)
-//	float A = 1.0f; // area of contact
-//	float dT = 0.0f; // difference in temperature
-//	float d = 0.0f; // distance
-//	float q = 0.0f; // heat
-//	float qSum = 0.0f; // accumulated heat
-//	for (unsigned int i = 0; i < size(); i++) {
-//		currNbr = getNbr(i);
-//		if (currNbr == NULL)
-//			break;
-//
-//		dT = currNbr->temperature - temperature;
-//		d = currNbr->relActual.magnitude();
-//		q = K * A * dT / d;
-//		qSum += q;
-//	}
-//	// FACTOR IN ROOM TEMPERATURE!!!
-//	//temperature = ((qSum - heat) + m * C * temperature) / (m * C);
-//	temperature = (qSum + m * C * temperature) / (m * C);
-//	heat = qSum;
-//	//printf("T[%d] = %.4f\n", ID, temperature);
-//
-//	// reference the neighbor with the minimum gradient
-//	// to establish the correct position in formation
-//	if (getNNbrs() > 0) {
-//		Neighbor *refNbr = nbrWithMinFrp(formation.getSeedFrp());
-//		Relationship *nbrRelToMe = relWithID(refNbr->rels, ID);
-//		if ((formation.getSeedID() != ID) && (refNbr != NULL)
-//				&& (nbrRelToMe != NULL)) {
-//
-//			// error (state) is based upon the
-//			// accumulated error in the formation
-//			Vector nbrRelToMeDesired = nbrRelToMe->relDesired;
-//			nbrRelToMeDesired.rotateRelative(-refNbr->rotError);
-//			float theta = scaleDegrees(
-//					nbrRelToMe->relActual.angle()
-//							- (-refNbr->relActual).angle());
-//			rotError = scaleDegrees(theta + refNbr->rotError);
-//			transError = nbrRelToMeDesired - nbrRelToMe->relActual
-//					+ refNbr->transError;
-//			transError.rotateRelative(-theta);
-//			//set the state variable of refID  = ID of the reference nbr.
-//			refID = refNbr->ID;
-//		}
-//	}
-//
-//	tStep = max(tStep + 1, nbrWithMaxStep()->tStep);
-//}
-
-
 void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 {
-	if(ID > incomingState.reference_id && formation.formationID != incomingState.formation.formation_id)
+	if(ID > incomingState.reference_id && formation.formationID != incomingState.formation.formation_id && incomingState.formation.formation_id != -1)
 	{
 		formation.radius = incomingState.formation.radius;
 		formation.heading = incomingState.formation.heading;
@@ -369,39 +282,16 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 		formation.seedID = incomingState.formation.seed_id;
 		formation.formationID = incomingState.formation.formation_id;
 
-//		frp.x = incomingState.frp.x;
-//		frp.y = incomingState.frp.y;
-//
-//		for(uint i = 0; i < rels.size(); i++)
-//		{
-//			rels[i].ID = incomingState.actual_relationships[i].id;
-//			rels[i].relActual.x = incomingState.actual_relationships[i].actual.x;
-//			rels[i].relActual.y = incomingState.actual_relationships[i].actual.y;
-//			rels[i].relDesired.x = incomingState.desired_relationships[i].desired.x;
-//			rels[i].relDesired.y = incomingState.desired_relationships[i].desired.y;
-//		}
-//
-//		transError.x = incomingState.linear_error.x;
-//		transError.y= incomingState.linear_error.y;
-//		rotError = incomingState.angular_error;
-//		tStep = incomingState.timestep;
-//		refID = incomingState.reference_id;
-//		temperature = incomingState.temperature;
-//		heat = incomingState.heat;
-
-		if((incomingState.in_position == true) && (inPosition == false) && (startMoving != true))
+		if((incomingState.in_position == true) && (inPosition == false) && (startMoving != true) && formation.formationID != -1)
 		{
-			changeFormation(userFormations[formation.formationID], rels[0].ID);
-			Vector *r = new Vector(formation.calculateDesiredRelationship(userFormations[formation.formationID], 1.0f, frp, 0.0f));
-			rels[0].relDesired.x = r->x;
-			rels[0].relDesired.y = r->y;
-			rels[0].relDesired.z = r->z;
-			
+			changeFormation(formations[formation.formationID], rels[0].ID);
+			Vector r = formation.calculateDesiredRelationship(formations[formation.formationID], 1.0f, frp, 0.0f);
+			rels[0].relDesired.x = r.x;
+			rels[0].relDesired.y = r.y;
+			rels[0].relDesired.z = r.z;
 			startMoving = true;
-			delete r;
+			stateChanged = true;
 		}
-
-		stateChanged = true;
 	}
 }
 
@@ -702,11 +592,6 @@ bool Cell::getRelationship(int targetID)
 			rels[0].relActual.y = relationshipSrv.response.theRelationship.actual.y;
 			rels[0].relActual.z = 0;
 
-			rels[0].relDesired.x = relationshipSrv.response.theRelationship.desired.x;
-			rels[0].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
-			rels[0].relDesired.z = 0;
-
-
 //		}
 //		else if(targetID == rightNbr.ID)	// right neighbor relationship
 //		{
@@ -803,8 +688,8 @@ Behavior Cell::moveArcBehavior(const Vector &target)
 void Cell::translateRelative(Vector v)
 {
     v.rotateRelative(getHeading());
-    x += v.x;
-    y += v.y;
+//    x += v.x;
+//    y += v.y;
 }
 
 

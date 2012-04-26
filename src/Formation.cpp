@@ -311,7 +311,8 @@ Formation& Formation::operator =(const Formation &f)
 float Formation::fIntersect(const Function f, const float r,
                               const Vector   c, const float x)
 {
-	float dx = x - c.x, dy = f(x) - c.y;
+	float dx = x - c.x;
+	float dy = f(x) - c.y;
 	return  dx * dx + dy * dy - r * r;
     //return pow(x - c.x, 2.0f) + pow(f(x) - c.y, 2.0f) - pow(r, 2.0f);
 }

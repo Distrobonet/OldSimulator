@@ -105,9 +105,6 @@ class Cell: public State, public Neighborhood
 		State getState() const;
 		Neighborhood getNbrs() const;
 
-
-		Function userFormations[12];
-
 		int getNBids() const;
 		int getAuctionStepCount() const;
 		int getID() const;
