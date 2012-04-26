@@ -68,7 +68,6 @@ class Vector
         bool setDiff(const Vector &dest, const Vector &source = Vector());
         bool setAngle(const float theta = 0.0f);
         bool setMagnitude(const float mag = 1.0f);
-        //bool setNorm(const float mag = 1.0f);
         bool setPerp();
         bool setAvg(const Vector v[], const int n = 1);
         bool normalize();
@@ -76,7 +75,6 @@ class Vector
            // <public utility functions>
         float angle() const;
         float magnitude() const;
-        //float norm()  const;
         Vector  perp();
         float perpDot(const Vector &v) const;
 
