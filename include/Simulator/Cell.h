@@ -90,8 +90,8 @@ class Cell: public State, public Neighborhood
 		ros::Publisher state_pub;
 		geometry_msgs::Twist commandVelocity;
 		ros::Publisher cmd_velPub;
-		ros::Subscriber leftNeighborState;
-		ros::Subscriber rightNeighborState;
+		ros::Subscriber leftNeighborStateSubscriber;
+		ros::Subscriber rightNeighborStateSubscriber;
 
 		bool setState(const State & s);
 		bool setNbrs(Neighborhood & nh);
