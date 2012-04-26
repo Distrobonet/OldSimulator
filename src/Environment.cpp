@@ -22,68 +22,37 @@ Environment::Environment(int numRobots)
 	startRelationshipServiceServer();
 
 	numOfRobots = numRobots;
-	initOverlordSubscribers(this);
+	initOverlordSubscribers();
 }
 
-void Environment::initOverlordSubscribers(Environment *e)
+void Environment::initOverlordSubscribers()
 {
-	ros::NodeHandle overLord;
+	ros::NodeHandle overLordNode;
 
-	vector<double> subRobot0Vel;
-	subRobot0Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot0Vel.push_back(0);
-	subRobot0Vel.push_back(0);
-	subRobotVels.push_back(subRobot0Vel);
+	// Create a dummy robot Velocity to fill the subRobotVels vector with
+	vector<double> tempSubRobotVel;
+	tempSubRobotVel.push_back(0);
+	tempSubRobotVel.push_back(0);
+	tempSubRobotVel.push_back(0);
 
-	vector<double> subRobot1Vel;
-	subRobot1Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot1Vel.push_back(0);
-	subRobot1Vel.push_back(0);
-	subRobotVels.push_back(subRobot1Vel);
+	// Push numOfRobots robot locations into the subRobotVels vector
+	for(int k = 0; k < numOfRobots; k++)
+		subRobotVels.push_back(tempSubRobotVel);
 
-	vector<double> subRobot2Vel;
-	subRobot2Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot2Vel.push_back(0);
-	subRobot2Vel.push_back(0);
-	subRobotVels.push_back(subRobot2Vel);
 
-	vector<double> subRobot3Vel;
-	subRobot3Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot3Vel.push_back(0);
-	subRobot3Vel.push_back(0);
-	subRobotVels.push_back(subRobot3Vel);
-
-	vector<double> subRobot4Vel;
-	subRobot4Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot4Vel.push_back(0);
-	subRobot4Vel.push_back(0);
-	subRobotVels.push_back(subRobot4Vel);
-
-	vector<double> subRobot5Vel;
-	subRobot5Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot5Vel.push_back(0);
-	subRobot5Vel.push_back(0);
-	subRobotVels.push_back(subRobot5Vel);
-
-	vector<double> subRobot6Vel;
-	subRobot6Vel.push_back(0); //Sets up 3 spots for the x,y,theta
-	subRobot6Vel.push_back(0);
-	subRobot6Vel.push_back(0);
-	subRobotVels.push_back(subRobot6Vel);
-
-	ros::Subscriber subRobot0 = overLord.subscribe("/robot_0/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot0 = overLordNode.subscribe("/robot_0/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot0);
-	ros::Subscriber subRobot1 = overLord.subscribe("/robot_1/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot1 = overLordNode.subscribe("/robot_1/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot1);
-	ros::Subscriber subRobot2 = overLord.subscribe("/robot_2/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot2 = overLordNode.subscribe("/robot_2/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot2);
-	ros::Subscriber subRobot3 = overLord.subscribe("/robot_3/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot3 = overLordNode.subscribe("/robot_3/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot3);
-	ros::Subscriber subRobot4 = overLord.subscribe("/robot_4/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot4 = overLordNode.subscribe("/robot_4/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot4);
-	ros::Subscriber subRobot5 = overLord.subscribe("/robot_5/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot5 = overLordNode.subscribe("/robot_5/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot5);
-	ros::Subscriber subRobot6 = overLord.subscribe("/robot_6/base_pose_ground_truth", 1000, &Environment::callBackRobot, e);
+	ros::Subscriber subRobot6 = overLordNode.subscribe("/robot_6/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot6);
 }
 
@@ -124,8 +93,17 @@ void Environment::update(bool doSpin)
 
 	while(ros::ok())
 	{
-		// TODO update base_pose_gnd_truth
-		//ROS handles this for us with the call back function
+		// Verify that the Environment has the cell absolute locations
+		for(int i = 0; i < numOfRobots; i++)
+		{
+			cout << "Robot " << i << " position: ";
+
+			for(uint j = 0; j < 3; j++)
+			{
+				cout << subRobotVels[i][j] << "  ";
+			}
+			cout << endl;
+		}
 
 		ros::spinOnce();
 	}
@@ -148,17 +126,16 @@ string Environment::generateSubMessage(int cellID)
 bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req, Simulator::Relationship::Response &res )
 {
 	//cout << "\nsetRelationshipMessage has been called\n";
-//	Vector temp   = *toCell - *fromCell;
 //	temp.rotateRelative(-fromCell->getHeading());
 
-	//target - original
+	//target - origin
 	Vector tempVector;
-	tempVector.x = subRobotVels[req.OriginID][0] - subRobotVels[req.TargetID][0];
-	tempVector.y = subRobotVels[req.OriginID][1] - subRobotVels[req.TargetID][1];
+	tempVector.x = subRobotVels[req.TargetID][0] - subRobotVels[req.OriginID][0];
+	tempVector.y = subRobotVels[req.TargetID][1] - subRobotVels[req.OriginID][1];
 
 	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
 
-	float theta = -subRobotVels[req.OriginID][3];
+	float theta = -subRobotVels[req.OriginID][2];
 	theta = degreesToRadians(theta);
 	//theta =
 	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);

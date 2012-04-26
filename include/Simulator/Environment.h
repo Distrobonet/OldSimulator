@@ -50,7 +50,7 @@ class Environment
         // <destructors>
         virtual ~Environment();
 
-        void initOverlordSubscribers(Environment *e);
+        void initOverlordSubscribers();
         void update(bool doSpin);
 
 
@@ -70,7 +70,6 @@ class Environment
     protected:
 
         // <protected data members>
-        vector<Cell *>     cells;
         Formation          formation;
         int                numOfRobots;
 
