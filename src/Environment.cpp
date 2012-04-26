@@ -86,25 +86,11 @@ Environment::~Environment()
 
 void Environment::update(bool doSpin)
 {
-	Cell *temp = NULL;
-//	ros::init(argc, argv, "message_listener");
 	ros::NodeHandle rosNode;
 	ros::Rate loop_rate(10);
 
 	while(ros::ok())
 	{
-		// Verify that the Environment has the cell absolute locations
-//		for(int i = 0; i < numOfRobots; i++)
-//		{
-//			cout << "Robot " << i << " position: ";
-//
-//			for(uint j = 0; j < 3; j++)
-//			{
-//				cout << subRobotVels[i][j] << "  ";
-//			}
-//			cout << endl;
-//		}
-
 		ros::spinOnce();
 	}
 }
