@@ -28,16 +28,16 @@ int NUM_OF_CELLS = 7;
 // this cell to the parameterized values.
 Cell::Cell(const int cellID) : State(), Neighborhood()
 {
-	userFormations[1] = line;
-	userFormations[2] = x;
-	userFormations[3] = absX;
-	userFormations[4] = negHalfX;
-	userFormations[5] = negAbsHalfX;
-	userFormations[6] = negAbsX;
-	userFormations[7] = parabola;
-	userFormations[8] = cubic;
-	userFormations[9] = condSqrt;
-	userFormations[1] = sine;
+	userFormations[0] = line;
+	userFormations[1] = x;
+	userFormations[2] = absX;
+	userFormations[3] = negHalfX;
+	userFormations[4] = negAbsHalfX;
+	userFormations[5] = negAbsX;
+	userFormations[6] = parabola;
+	userFormations[7] = cubic;
+	userFormations[8] = condSqrt;
+	userFormations[9] = sine;
 
 
 	leftNbr = rightNbr = -1;
