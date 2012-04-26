@@ -135,6 +135,7 @@ class Cell: public State, public Neighborhood
 		Simulator::CurrentFormation formationSrv;
 
 		// State service client
+		bool getNeighborState();
 		ros::ServiceClient stateClient;
 		Simulator::State stateSrv;
 
@@ -147,6 +148,9 @@ class Cell: public State, public Neighborhood
 		bool getRelationship(int targetID);
 		ros::ServiceClient relationshipClient;
 		Simulator::Relationship relationshipSrv;
+
+		Behavior moveArc(const Vector &target);
+		Behavior moveArcBehavior(const Vector &target);
 
 
     protected:
