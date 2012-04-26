@@ -40,7 +40,7 @@ class Environment
 		double robotTheta;
 		nav_msgs::Odometry odomMsg;
 		vector<ros::Subscriber> subRobots;
-		vector< vector<double> > subRobotVels;
+		vector< vector<double> > subRobotPoses;
 
         // <constructors>
 		Environment();

@@ -717,7 +717,7 @@ int Cell::RossMove()
 	// assume pub_cmd_vel already exists somewhere
 	cmd_velPub.publish(cmd_vel);
 
-	//return ++t_step;
+	return ++tStep;
 }    // end step() function
 
 // Translates the robot relative to itself based

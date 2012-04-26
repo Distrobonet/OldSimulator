@@ -29,17 +29,18 @@ void Environment::initOverlordSubscribers()
 {
 	ros::NodeHandle overLordNode;
 
-	// Create a dummy robot Velocity to fill the subRobotVels vector with
+	// Create a dummy robot Velocity to fill the subRobotPoses vector with
 	vector<double> tempSubRobotVel;
-	tempSubRobotVel.push_back(0);
-	tempSubRobotVel.push_back(0);
-	tempSubRobotVel.push_back(0);
+	tempSubRobotVel.push_back(0);//x
+	tempSubRobotVel.push_back(0);//y
+	tempSubRobotVel.push_back(0);//orientation
 
-	// Push numOfRobots robot locations into the subRobotVels vector
+	// Push numOfRobots robot locations into the subRobotPoses vector
 	for(int k = 0; k < numOfRobots; k++)
-		subRobotVels.push_back(tempSubRobotVel);
+		subRobotPoses.push_back(tempSubRobotVel);
 
 
+	// Sets all the robot subscribers to base_pose_ground_truth
 	ros::Subscriber subRobot0 = overLordNode.subscribe("/robot_0/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
 	subRobots.push_back(subRobot0);
 	ros::Subscriber subRobot1 = overLordNode.subscribe("/robot_1/base_pose_ground_truth", 1000, &Environment::callBackRobot, this);
@@ -66,9 +67,9 @@ void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 	string ID = odom->header.frame_id.substr(7,1);
 	int IDNumber = atoi(ID.c_str());
 
-	subRobotVels.at(IDNumber).at(0) = currentX;
-	subRobotVels.at(IDNumber).at(1) = currentY;
-	subRobotVels.at(IDNumber).at(2) = currentTheta;
+	subRobotPoses.at(IDNumber).at(0) = currentX;
+	subRobotPoses.at(IDNumber).at(1) = currentY;
+	subRobotPoses.at(IDNumber).at(2) = currentTheta;
 
 	ros::spinOnce();
 }
@@ -116,17 +117,22 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 
 	//target - origin
 	Vector tempVector;
-	tempVector.x = subRobotVels[req.TargetID][0] - subRobotVels[req.OriginID][0];
-	tempVector.y = subRobotVels[req.TargetID][1] - subRobotVels[req.OriginID][1];
+	tempVector.x = subRobotPoses[req.TargetID][0] - subRobotPoses[req.OriginID][0];
+	tempVector.y = subRobotPoses[req.TargetID][1] - subRobotPoses[req.OriginID][1];
+
+
 
 	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
 
-	float theta = -subRobotVels[req.OriginID][2];
-	theta = degreesToRadians(theta);
-	//theta =
-	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
-	tempVector.x = tempVector.x * cos(theta) - tempVector.y * sin(theta);
-	tempVector.y = tempVector.x * sin(theta) + tempVector.y * cos(theta);
+
+
+	//tempVector.z = degreesToRadians(tempVector.z);
+
+	tempVector.rotateRelative(subRobotPoses[req.TargetID][2]);
+
+//	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
+//	tempVector.x = tempVector.x * cos(tempVector.z) - tempVector.y * sin(tempVector.z);
+//	tempVector.y = tempVector.x * sin(tempVector.z) + tempVector.y * cos(tempVector.z);
 
 	res.theRelationship.actual.x = tempVector.x;
 	res.theRelationship.actual.y = tempVector.y;

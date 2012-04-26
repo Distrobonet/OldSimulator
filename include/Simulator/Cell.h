@@ -156,10 +156,6 @@ class Cell: public State, public Neighborhood
 		ros::ServiceClient relationshipClient;
 		Simulator::Relationship relationshipSrv;
 
-		Behavior moveArc(const Vector &target);
-		Behavior moveArcBehavior(const Vector &target);
-
-
     protected:
 		//Formation currentFormation;
 		Neighbor leftNbr, rightNbr;
