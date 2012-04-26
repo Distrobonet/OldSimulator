@@ -703,3 +703,62 @@ bool Cell::getRelationship(int targetID)
 		return false;
 	}
 }
+
+// Get a neighbor's state from the State service 
+bool Cell::getNeighborState() 
+{ 
+	if(ID == 0) 
+		return true; 
+	if(ID % 2 == 1) 
+	{ 
+		formation.formationID = leftNbr.formation.formationID; 
+		return true; 
+	} 
+	else if(ID % 2 == 0) 
+	{ 
+		formation.formationID = rightNbr.formation.formationID; 
+		return true; 
+
+	} 
+	else 
+		return false; 
+} 
+
+// Moves the robot using the parameterized movement vector,
+// activating and returning the appropriate robot behavior.
+Behavior Cell::moveArc(const Vector &target)
+{
+    return behavior = moveArcBehavior(target);
+}
+
+
+// Moves the robot using the parameterized movement vector,
+// returning the appropriate robot behavior.
+Behavior Cell::moveArcBehavior(const Vector &target)
+{
+    float theta    = target.angle();
+	float phi      = this->heading.angle();
+	float delta    = degreesToRadians(theta);
+    float cosDelta = cos(delta);
+    float sinDelta = sin(delta);
+    float t        = cosDelta * cosDelta * sign(cosDelta);
+	float r        = sinDelta * sinDelta * sign(sinDelta);
+	behavior         = Behavior(t, r, maxSpeed());
+
+	if (abs(theta) < 90.0f)
+	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
+    else
+        behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));
+
+	return behavior;
+/*
+    float r     = target.magnitude();
+    if (r <= threshold()) return moveStop();
+    float theta = degreesToRadians(target.angle());
+    if (theta == 0.0f)    return moveForwardBehavior(r);
+    else return moveArcBehavior((abs(theta) >
+                                degreesToRadians(angThreshold())) ?
+                                0.0f :
+                                r * velocityTheta / sin(theta), getDiameter() * theta);
+*/
+}
