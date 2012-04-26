@@ -32,7 +32,7 @@ using namespace std;
 // simulation environment function prototypes
 void terminate(int retVal);
 void displayMenu();
-void keyboardInput();
+bool keyboardInput();
 void clearScreen();
 
 //bool changeFormation(const int index, const Vector gradient = Vector());
@@ -80,18 +80,14 @@ int main(int argc, char **argv)
 	//cout << "Now serving the formation: " << CURRENT_SELECTION << endl;
 	ros::spinOnce();
 
-
-	// create handler for interrupts (i.e., ^C)
-	if (signal(SIGINT, SIG_IGN) != SIG_IGN) signal(SIGINT, terminate);
-	signal(SIGPIPE, SIG_IGN);
-
 	// Simulator infinite loop.
-	while(ros::ok)
+	while(ros::ok && keyboardInput())
 	{
 		ros::spinOnce();
 
-		keyboardInput();
+		//keyboardInput();
 	}
+	cout << "\nNow exiting program\n";
 
   return 0;
 }
@@ -127,7 +123,7 @@ int kbhit(void)
 
 
 // Catches keyboard input and sets CURRENT_SELECTION based on user input, redisplays the menu
-void keyboardInput()
+bool keyboardInput()
 {
 	char keyPressed;
 
@@ -143,11 +139,14 @@ void keyboardInput()
 			CURRENT_SELECTION = keyPressed-48;	// convert from ascii char to int
 			cout << " - Setting CURRENT_SELECTION to " << CURRENT_SELECTION <<endl;
 		}
+		else if(keyPressed == 'q')
+			return false;
 		else
 			cout << " - Not a valid input.";
 
 		displayMenu();
 	}
+	return true;
 
 }
 
@@ -157,6 +156,8 @@ void displayMenu()
 {
 	clearScreen();
 
+	if(CURRENT_SELECTION != -1)
+		cout << "Current selection: " << CURRENT_SELECTION;
 	cout << endl << endl << "Use the '0-9' keys to "
 		<< "change to a formation seeded at the selected robot."
 		<< endl << endl
@@ -172,7 +173,7 @@ void displayMenu()
 		<< "8) f(x) = {sqrt(x),  x >= 0 | -sqrt|x|, x < 0}"  << endl
 		<< "9) f(x) = 0.05 sin(10 x)"                        << endl << endl
 		<< "Use the mouse to select a robot."                << endl
-		<< "Use ctrl+C to exit."                                << endl << endl
+		<< "press 'q' to quit"                                << endl << endl
 		<< "Please enter your selection: ";
 }
 

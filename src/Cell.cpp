@@ -95,40 +95,41 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-		if(startMoving)
-		{
-			// Testing relationship service from environment
-			if(ID % 2 == 0)
-				getRelationship(rightNbr.ID);
-			if (ID % 2 == 1)
-				getRelationship(leftNbr.ID);
-
-			Vector movement = Vector(rels[0].relDesired.x - rels[0].relActual.x, rels[0].relDesired.y - rels[0].relActual.y, rels[0].relDesired.z - rels[0].relActual.z);
-			behavior = move(movement);
-			
-			translateRelative(behavior.getTransVel());
-			rotateRelative(behavior.getRotVel());
-
-			// publish cmd_vel
-			commandVelocity.linear.x = behavior.getTransVel();
-			commandVelocity.angular.z = behavior.getRotVel();
-			cmd_velPub.publish(commandVelocity);
-		}
-
-		// publish state
-	    publishState();
-
-//	    cout << "Cell ID: "<< ID << endl;
-//	    cout << "formationID: " << formation.formationID << endl;
-//	    cout << "inPosition state: " << inPosition << endl;
-//	    cout << "startMoving state: " << startMoving << endl << endl;
-
-
-		if(doSpin)
-			ros::spinOnce();
-
-		//Only updates formation if seed node, takes it from the nbr's state otherwise
-		setFormationFromService();
+		RossMove();
+//		if(startMoving)
+//		{
+//			// Testing relationship service from environment
+//			if(ID % 2 == 0)
+//				getRelationship(rightNbr.ID);
+//			if (ID % 2 == 1)
+//				getRelationship(leftNbr.ID);
+//
+//			Vector movement = Vector(rels[0].relDesired.x - rels[0].relActual.x, rels[0].relDesired.y - rels[0].relActual.y, rels[0].relDesired.z - rels[0].relActual.z);
+//			behavior = move(movement);
+//
+//			translateRelative(behavior.getTransVel());
+//			rotateRelative(behavior.getRotVel());
+//
+//			// publish cmd_vel
+//			commandVelocity.linear.x = behavior.getTransVel();
+//			commandVelocity.angular.z = behavior.getRotVel();
+//			cmd_velPub.publish(commandVelocity);
+//		}
+//
+//		// publish state
+//	    publishState();
+//
+////	    cout << "Cell ID: "<< ID << endl;
+////	    cout << "formationID: " << formation.formationID << endl;
+////	    cout << "inPosition state: " << inPosition << endl;
+////	    cout << "startMoving state: " << startMoving << endl << endl;
+//
+//
+//		if(doSpin)
+//			ros::spinOnce();
+//
+//		//Only updates formation if seed node, takes it from the nbr's state otherwise
+//		setFormationFromService();
 	}
 }
 
@@ -376,13 +377,13 @@ Behavior Cell::move(const Vector &target)
 	float sinDelta 		= sin(delta);
 	float t       		= cosDelta * cosDelta * sign(cosDelta);
 	float r       		= sinDelta * sinDelta * sign(sinDelta);
-	cout << "theta : " << theta << endl
-		 <<	"phi : " << phi << endl
-		 << "delta: " << delta << endl
-		 << "cosdelta: " << cosDelta << endl
-		 << "sindelta: " << sinDelta << endl
-		 << "t: " << t << endl
-		 << "r: " << r << endl << endl;
+//	cout << "theta : " << theta << endl
+//		 <<	"phi : " << phi << endl
+//		 << "delta: " << delta << endl
+//		 << "cosdelta: " << cosDelta << endl
+//		 << "sindelta: " << sinDelta << endl
+//		 << "t: " << t << endl
+//		 << "r: " << r << endl << endl;
 	Behavior behavior	= Behavior(t, r, maxSpeed());
 
 	if (abs(theta) < 90.0f)
@@ -644,44 +645,80 @@ bool Cell::getNeighborState()
 //		return false;
 } 
 
-// Moves the robot using the parameterized movement vector,
-// activating and returning the appropriate robot behavior.
-Behavior Cell::moveArc(const Vector &target)
+int Cell::RossMove()
 {
-    return behavior = moveArcBehavior(target);
-}
+	// determine actual relationships
+	if(ID == 1 || ID == 0)
+	{
+		getRelationship(rightNbr.ID);
+		getRelationship(leftNbr.ID);
+	}
 
 
-// Moves the robot using the parameterized movement vector,
-// returning the appropriate robot behavior.
-Behavior Cell::moveArcBehavior(const Vector &target)
-{
-    float theta    = target.angle();
-	float phi      = this->heading.angle();
-	float delta    = degreesToRadians(theta);
-    float cosDelta = cos(delta);
-    float sinDelta = sin(delta);
-    float t        = cosDelta * cosDelta * sign(cosDelta);
-	float r        = sinDelta * sinDelta * sign(sinDelta);
-	behavior         = Behavior(t, r, maxSpeed());
+	// calculate translational/rotational error
+//	trans_error = ...;
+//	rot_error = ...;
 
-	if (abs(theta) < 90.0f)
-	      behavior.setDiffVel(maxSpeed() * (t + r), maxSpeed() * (t - r));
-    else
-        behavior.setDiffVel(maxSpeed() * (t - r), maxSpeed() * (t + r));
+	// "gains" for proportional motor control
+	// - I made these values up, so they need to be tuned
+	// - often small positive values (likely between 0.0 and 2.0)
+	// - should be set somewhere else, not in this function
+	double gain_x = 0.4;
+	double gain_y = 0.4;
+	double gain_th = 1.0;
 
-	return behavior;
-/*
-    float r     = target.magnitude();
-    if (r <= threshold()) return moveStop();
-    float theta = degreesToRadians(target.angle());
-    if (theta == 0.0f)    return moveForwardBehavior(r);
-    else return moveArcBehavior((abs(theta) >
-                                degreesToRadians(angThreshold())) ?
-                                0.0f :
-                                r * velocityTheta / sin(theta), getDiameter() * theta);
-*/
-}
+	// minimum speed limits
+	// - in meters (or radians) per second
+	// - should be positive values
+	// - should be set somewhere else, not in this function
+	double speed_min_x = 0.0;
+	double speed_min_y = 0.0;
+	double speed_min_th = 0.0;
+
+	// maximum speed limits
+	// - in meters (or radians) per second
+	// - should be positive values
+	// - should be set somewhere else, not in this function
+	double speed_max_x = 1.0;
+	double speed_max_y = 1.0;
+	double speed_max_th = 0.5 * M_PI;
+
+	// calculate motor command velocities based on
+	// translational and rotational error
+	double v_x = gain_x * transError.x;
+	double v_y = gain_y * transError.y;
+	double v_th = gain_th * rotError;
+
+	// scale linear x speed to [speed_min_x, speed_max_x]
+	if (abs(v_x) < speed_min_x)
+	v_x = speed_min_x * sign(v_x);
+	else if (abs(v_x) > speed_max_x)
+	v_x = speed_max_x * sign(v_x);
+
+	// scale linear y speed to [speed_min_y, speed_max_y]
+	if (abs(v_y) < speed_min_y)
+	v_y = speed_min_y * sign(v_y);
+	else if (abs(v_y) > speed_max_y)
+	v_y = speed_max_y * sign(v_y);
+
+
+	// scale linear theta speed to [speed_min_th, speed_max_th]
+	if (abs(v_th) < speed_min_th)
+	v_th = speed_min_th * sign(v_th);
+	else if (abs(v_th) > speed_max_th)
+	v_th = speed_max_th * sign(v_th);
+
+	// create cmd_vel (a Twist message)
+	geometry_msgs::Twist cmd_vel;
+	cmd_vel.linear.x = v_x;
+	cmd_vel.linear.y = v_y;
+	cmd_vel.angular.z = v_th;
+
+	// assume pub_cmd_vel already exists somewhere
+	cmd_velPub.publish(cmd_vel);
+
+	//return ++t_step;
+}    // end step() function
 
 // Translates the robot relative to itself based
 // on the parameterized translation vector.

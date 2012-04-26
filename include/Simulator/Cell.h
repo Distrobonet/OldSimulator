@@ -171,6 +171,7 @@ class Cell: public State, public Neighborhood
 		bool stateChanged, startMoving;
 
 		void settleAuction();
+		int RossMove();
 
     private:
 		void publishState();
