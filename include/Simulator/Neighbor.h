@@ -74,7 +74,7 @@ struct Neighbor: Relationship, State
     {
         formation  = s.formation;
         frp   = s.frp;
-		rels       = s.rels;
+        rels  = s.rels;
         transError = s.transError;
         rotError   = s.rotError;
         tStep      = s.tStep;
