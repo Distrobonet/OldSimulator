@@ -405,7 +405,7 @@ void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 
 // Attempts to change the formation of the cell,
 // returning true if successful, false otherwise.
-bool Cell::changeFormation(const Formation &f, Neighbor n)
+bool Cell::changeFormation(const Formation &f, Neighbor seedingNbr)
 {
 	formation = f;
 
@@ -416,25 +416,25 @@ bool Cell::changeFormation(const Formation &f, Neighbor n)
 	}
 
 	else {
-		Relationship *nbrRelToMe = relWithID(n.rels, ID);
+		Relationship *nbrRelToMe = relWithID(seedingNbr.rels, ID);
 		if (nbrRelToMe == NULL)
 			return false;
 
-		nbrRelToMe->relDesired.rotateRelative(n.formation.getHeading());
-		frp = n.frp + nbrRelToMe->relDesired;
+		nbrRelToMe->relDesired.rotateRelative(seedingNbr.formation.getHeading());
+		frp = seedingNbr.frp + nbrRelToMe->relDesired;
 		transError = Vector();
 		rotError = 0.0f;
 		delete nbrRelToMe;
 	}
 
-	vector<Vector> r = formation.getRelationships(frp);
+	vector<Vector> desiredRelBasedOffFrp = formation.getRelationships(frp);
 
 
 	if (leftNbr.ID != -1)
-		leftNbr.relDesired = r[LEFT_NBR_INDEX];
+		leftNbr.relDesired = desiredRelBasedOffFrp[LEFT_NBR_INDEX];
 
 	if (rightNbr.ID != -1)
-		rightNbr.relDesired = r[RIGHT_NBR_INDEX];
+		rightNbr.relDesired = desiredRelBasedOffFrp[RIGHT_NBR_INDEX];
 
 	return true;
 }
