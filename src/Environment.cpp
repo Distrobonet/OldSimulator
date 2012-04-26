@@ -125,10 +125,7 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
 
 
-
-	//tempVector.z = degreesToRadians(tempVector.z);
-
-	tempVector.rotateRelative(subRobotPoses[req.TargetID][2]);
+	tempVector.rotateRelative(subRobotPoses[req.OriginID][2]);
 
 //	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
 //	tempVector.x = tempVector.x * cos(tempVector.z) - tempVector.y * sin(tempVector.z);

@@ -95,7 +95,10 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-		RossMove();
+		if(ID == 1 || ID == 0)
+		{
+			RossMove();
+		}
 //		if(startMoving)
 //		{
 //			// Testing relationship service from environment
@@ -648,16 +651,24 @@ bool Cell::getNeighborState()
 int Cell::RossMove()
 {
 	// determine actual relationships
-	if(ID == 1 || ID == 0)
-	{
-		getRelationship(rightNbr.ID);
-		getRelationship(leftNbr.ID);
-	}
+
+	getRelationship(rightNbr.ID);
+	getRelationship(leftNbr.ID);
+
+
+
+	//The difference in desired and actual relationship will generate translational (a vector with x and y components)
+	//and rotational (an angle in radians) error values, which can be translated to linear (x, y) and angular (yaw) command velocities.
+
+	// Desired relationship must be calculated somewhere
 
 
 	// calculate translational/rotational error
-//	trans_error = ...;
-//	rot_error = ...;
+	//transError = rels[leftNbr.ID].getError();
+	//rotError = rels[leftNbr.ID].relActual.z;
+
+
+
 
 	// "gains" for proportional motor control
 	// - I made these values up, so they need to be tuned
