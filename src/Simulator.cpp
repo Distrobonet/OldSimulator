@@ -80,6 +80,8 @@ int main(int argc, char **argv)
 	//cout << "Now serving the formation: " << CURRENT_SELECTION << endl;
 	ros::spinOnce();
 
+	ros::Rate loop_rate(10);
+
 	// Simulator infinite loop.
 	while(ros::ok && keyboardInput())
 	{

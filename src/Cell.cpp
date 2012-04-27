@@ -93,6 +93,8 @@ void Cell::publishState()
 // Updates the cell
 void Cell::update(bool doSpin)
 {
+	ros::Rate loop_rate(10);
+
 	while(ros::ok())
 	{
 
@@ -127,7 +129,7 @@ void Cell::update(bool doSpin)
 //
 //
 
-	    if(ID == 1 || ID == 0)
+	    if(ID == 1 || ID == 2)
 		{
 			RossMove();
 		}
@@ -656,7 +658,6 @@ bool Cell::getNeighborState()
 int Cell::RossMove()
 {
 	// determine actual relationships
-
 	getRelationship(rightNbr.ID);
 	getRelationship(leftNbr.ID);
 
@@ -671,11 +672,21 @@ int Cell::RossMove()
 
 
 	// calculate translational/rotational error
-	transError.x = rels[0].relDesired.x - rels[0].relActual.x;
-	transError.y = rels[0].relDesired.y - rels[0].relActual.y;
+	if(ID == 1)
+	{
+		transError.x = rels[0].relDesired.x - rels[0].relActual.x;
+		transError.y = rels[0].relDesired.y - rels[0].relActual.y;
+		rotError = rels[0].relDesired.z - rels[0].relActual.z;
+	}
+	else if(ID == 2)
+	{
+		transError.x = rels[1].relDesired.x - rels[1].relActual.x;
+		transError.y = rels[1].relDesired.y - rels[1].relActual.y;
+		rotError = rels[1].relDesired.z - rels[1].relActual.z;
+	}
 
 
-	rotError = rels[0].relDesired.z - rels[0].relActual.z;
+
 
 
 	// "gains" for proportional motor control
