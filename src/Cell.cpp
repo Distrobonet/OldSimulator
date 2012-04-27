@@ -664,10 +664,8 @@ int Cell::RossMove()
 
 
 	// calculate translational/rotational error
-	//transError = rels[leftNbr.ID].getError();
-	//rotError = rels[leftNbr.ID].relActual.z;
-
-
+//	transError = rels[0].getError();
+//	rotError = rels[0].relActual.z;
 
 
 	// "gains" for proportional motor control
