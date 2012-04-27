@@ -95,10 +95,7 @@ void Cell::update(bool doSpin)
 {
 	while(ros::ok())
 	{
-		if(ID == 1 || ID == 0)
-		{
-			RossMove();
-		}
+
 //		if(startMoving)
 //		{
 //			// Testing relationship service from environment
@@ -120,7 +117,7 @@ void Cell::update(bool doSpin)
 //		}
 //
 //		// publish state
-//	    publishState();
+	    publishState();
 //
 ////	    cout << "Cell ID: "<< ID << endl;
 ////	    cout << "formationID: " << formation.formationID << endl;
@@ -128,8 +125,16 @@ void Cell::update(bool doSpin)
 ////	    cout << "startMoving state: " << startMoving << endl << endl;
 //
 //
-//		if(doSpin)
-//			ros::spinOnce();
+//
+
+	    if(ID == 1 || ID == 0)
+		{
+			RossMove();
+		}
+
+
+		//if(doSpin)
+			ros::spinOnce();
 //
 //		//Only updates formation if seed node, takes it from the nbr's state otherwise
 //		setFormationFromService();
@@ -663,9 +668,14 @@ int Cell::RossMove()
 	// Desired relationship must be calculated somewhere
 
 
+
+
 	// calculate translational/rotational error
-//	transError = rels[0].getError();
-//	rotError = rels[0].relActual.z;
+	transError.x = rels[0].relDesired.x - rels[0].relActual.x;
+	transError.y = rels[0].relDesired.y - rels[0].relActual.y;
+
+
+	rotError = rels[0].relDesired.z - rels[0].relActual.z;
 
 
 	// "gains" for proportional motor control
