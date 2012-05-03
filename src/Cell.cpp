@@ -97,7 +97,7 @@ void Cell::update(bool doSpin)
 
 	while(ros::ok())
 	{
-
+		setFormationFromService();
 //		if(startMoving)
 //		{
 //			// Testing relationship service from environment
@@ -113,13 +113,16 @@ void Cell::update(bool doSpin)
 //			rotateRelative(behavior.getRotVel());
 //
 //			// publish cmd_vel
-//			commandVelocity.linear.x = behavior.getTransVel();
-//			commandVelocity.angular.z = behavior.getRotVel();
-//			cmd_velPub.publish(commandVelocity);
+
 //		}
 //
 //		// publish state
+		updateState();
 	    publishState();
+
+		commandVelocity.linear.x = transError.x;
+		commandVelocity.angular.z = rotError;
+		cmd_velPub.publish(commandVelocity);
 //
 ////	    cout << "Cell ID: "<< ID << endl;
 ////	    cout << "formationID: " << formation.formationID << endl;
@@ -129,14 +132,21 @@ void Cell::update(bool doSpin)
 //
 //
 
+<<<<<<< .mine
+//	    if(ID == 1 || ID == 0)
+//		{
+//			RossMove();
+//		}
+=======
 	    if(ID == 1 || ID == 2)
 		{
 			RossMove();
 		}
+>>>>>>> .r393
 
 
 		//if(doSpin)
-			ros::spinOnce();
+//			ros::spinOnce();
 //
 //		//Only updates formation if seed node, takes it from the nbr's state otherwise
 //		setFormationFromService();
@@ -284,26 +294,54 @@ void Cell::setID(int cellID)
 
 void Cell::stateCallback(const Simulator::StateMessage &incomingState)
 {
-	if(ID > incomingState.reference_id && formation.formationID != incomingState.formation.formation_id && incomingState.formation.formation_id != -1)
+//	if(ID > incomingState.reference_id && formation.formationID != incomingState.formation.formation_id && incomingState.formation.formation_id != -1)
+//	{
+	if(ID % 2 == 1 && formation.formationID != incomingState.formation.formation_id)
 	{
-		formation.radius = incomingState.formation.radius;
-		formation.heading = incomingState.formation.heading;
-		formation.seedFrp.x = incomingState.formation.seed_frp.x;
-		formation.seedFrp.y = incomingState.formation.seed_frp.y;
-		formation.seedID = incomingState.formation.seed_id;
-		formation.formationID = incomingState.formation.formation_id;
-
-		if((incomingState.in_position == true) && (inPosition == false) && (startMoving != true) && formation.formationID != -1)
-		{
-			changeFormation(formations[formation.formationID], rels[0].ID);
-			Vector r = formation.calculateDesiredRelationship(formations[formation.formationID], 1.0f, frp, 0.0f);
-			rels[0].relDesired.x = r.x;
-			rels[0].relDesired.y = r.y;
-			rels[0].relDesired.z = r.z;
-			startMoving = true;
-			stateChanged = true;
-		}
+		leftNbr.formation.radius = incomingState.formation.radius;
+		leftNbr.formation.heading = incomingState.formation.heading;
+		leftNbr.formation.seedFrp.x = incomingState.formation.seed_frp.x;
+		leftNbr.formation.seedFrp.y = incomingState.formation.seed_frp.y;
+		leftNbr.formation.seedID = incomingState.formation.seed_id;
+		leftNbr.formation.formationID = incomingState.formation.formation_id;
+	}else if(ID % 2 == 0 && formation.formationID != incomingState.formation.formation_id)
+	{
+		rightNbr.formation.radius = incomingState.formation.radius;
+		rightNbr.formation.heading = incomingState.formation.heading;
+		rightNbr.formation.seedFrp.x = incomingState.formation.seed_frp.x;
+		rightNbr.formation.seedFrp.y = incomingState.formation.seed_frp.y;
+		rightNbr.formation.seedID = incomingState.formation.seed_id;
+		rightNbr.formation.formationID = incomingState.formation.formation_id;
+	}else{
+		leftNbr.formation.radius = incomingState.formation.radius;
+		leftNbr.formation.heading = incomingState.formation.heading;
+		leftNbr.formation.seedFrp.x = incomingState.formation.seed_frp.x;
+		leftNbr.formation.seedFrp.y = incomingState.formation.seed_frp.y;
+		leftNbr.formation.seedID = incomingState.formation.seed_id;
+		leftNbr.formation.formationID = incomingState.formation.formation_id;
+		rightNbr.formation.radius = incomingState.formation.radius;
+		rightNbr.formation.heading = incomingState.formation.heading;
+		rightNbr.formation.seedFrp.x = incomingState.formation.seed_frp.x;
+		rightNbr.formation.seedFrp.y = incomingState.formation.seed_frp.y;
+		rightNbr.formation.seedID = incomingState.formation.seed_id;
+		rightNbr.formation.formationID = incomingState.formation.formation_id;
 	}
+
+//
+//			changeFormation(formations[formation.formationID], rels[0].ID);
+			Vector r = formation.calculateDesiredRelationship(formations[formation.formationID], 1.0f, frp, 0.0f);
+//			rels[0].relDesired.x = r.x;
+//			rels[0].relDesired.y = r.y;
+//			rels[0].relDesired.z = r.z;
+//			cout<<r.x<<endl;
+//			cout<<r.y<<endl;
+//		if((incomingState.in_position == true) && (inPosition == false) && (startMoving != true) && formation.formationID != -1)
+//		{
+//			startMoving = true;
+//			stateChanged = true;
+//		}
+//	}
+	updateState();
 }
 
 
@@ -374,6 +412,106 @@ Behavior Cell::moveErrorBehavior(const Vector tError, const float rError)
 
 	return moveStop();
 }
+
+void Cell::updateState()
+{
+//  if ((getNNbrs()               == 0)     ||
+//      (nbrWithMinStep()->tStep  <  tStep) ||
+//      ((formation.getSeedID()   != ID)    &&
+//       (nbrWithMaxStep()->tStep == tStep))) return;
+
+  // update actual relationships to neighbors
+//  Neighbor *currNbr = NULL;
+//  for int i = 0; i < size(); ++i)
+//  {
+//    currNbr = getNbr(i);
+//    if (currNbr == NULL) break;
+//
+//    // change formation if a neighbor has changed formation
+  cout<<ID<<endl;
+  cout<<"form this"<<formation.formationID<<endl;
+  cout<<"left form"<<leftNbr.formation.formationID<<endl;
+	if (ID % 2 == 1)
+	{
+		if (leftNbr.formation.formationID != formation.formationID){
+			changeFormation(leftNbr.formation, leftNbr);
+			cout<<"fuck"<<endl;
+		}
+		getRelationship(leftNbr.ID);
+	}
+
+	if(ID % 2 == 0)
+	{
+		if (rightNbr.formation.formationID != formation.formationID){
+			changeFormation(rightNbr.formation, rightNbr);
+			cout<<"hell yeah"<<endl;
+		}
+		getRelationship(rightNbr.ID);
+	}
+//  }
+//  rels = getRelationships();
+
+  // reference the neighbor with the minimum gradient
+  // to establish the correct position in formation
+    if (ID == 0)
+    {
+    	rotError = 0;
+    	transError = Vector();
+    }
+
+
+	if(ID % 2 == 0)
+	{
+		Neighbor     refNbr     = rightNbr;
+		Relationship *nbrRelToMe = relWithID(refNbr.rels, ID);
+		if ((formation.getSeedID() != ID)   &&
+				(nbrRelToMe            != NULL))
+		{
+
+			// error (state) is based upon the
+			// accumulated error in the formation
+			cout<<"here left"<<endl;
+			Vector  nbrRelToMeDesired = nbrRelToMe->relDesired;
+			nbrRelToMeDesired.rotateRelative(-refNbr.rotError);
+			float theta = scaleDegrees(nbrRelToMe->relActual.angle() -
+			  (-refNbr.relActual).angle());
+			rotError      = scaleDegrees(theta + refNbr.rotError);
+			transError    = nbrRelToMeDesired - nbrRelToMe->relActual +
+			refNbr.transError;
+			transError.rotateRelative(-theta);
+			//set the state variable of refID  = ID of the reference nbr.
+			refID = refNbr.ID;
+			cout<<"out left"<<endl;
+		}
+	}
+	if (ID % 2 == 1)
+	{
+		getRelationship(leftNbr.ID);
+		Neighbor     refNbr     = leftNbr;
+		Relationship *nbrRelToMe = relWithID(refNbr.rels, ID);
+		if ((formation.getSeedID() != ID)   &&
+				(nbrRelToMe            != NULL))
+		{
+
+			// error (state) is based upon the
+			// accumulated error in the formation
+			cout<<"here right"<<endl;
+			Vector  nbrRelToMeDesired = nbrRelToMe->relDesired;
+			nbrRelToMeDesired.rotateRelative(-refNbr.rotError);
+			float theta = scaleDegrees(nbrRelToMe->relActual.angle() -
+			  (-refNbr.relActual).angle());
+			rotError      = scaleDegrees(theta + refNbr.rotError);
+			transError    = nbrRelToMeDesired - nbrRelToMe->relActual +
+			refNbr.transError;
+			transError.rotateRelative(-theta);
+			//set the state variable of refID  = ID of the reference nbr.
+			refID = refNbr.ID;
+			cout<<"out right"<<endl;
+		}
+	}
+
+	tStep = max(tStep + 1, nbrWithMaxStep()->tStep);
+}   // updateState()
 
 
 // Moves the robot using the parameterized movement vector,
@@ -500,12 +638,12 @@ bool Cell::setFormationFromService()
 		{
 
 			formation.formationID = formationSrv.response.formation.formation_id;
-			formation.heading = formationSrv.response.formation.heading;
-			formation.radius = formationSrv.response.formation.radius;
-			formation.seedFrp.x = formationSrv.response.formation.seed_frp.x;
-			formation.seedFrp.y = formationSrv.response.formation.seed_frp.y;
-			formation.seedID = formationSrv.response.formation.seed_id;
-			stateChanged = true;
+//			formation.heading = formationSrv.response.formation.heading;
+//			formation.radius = formationSrv.response.formation.radius;
+//			formation.seedFrp.x = formationSrv.response.formation.seed_frp.x;
+//			formation.seedFrp.y = formationSrv.response.formation.seed_frp.y;
+//			formation.seedID = formationSrv.response.formation.seed_id;
+//			stateChanged = true;
 
 			clientNode.shutdown();
 			spinner.stop();
@@ -596,27 +734,27 @@ bool Cell::getRelationship(int targetID)
 		//cout << "The relationship call for cell " << ID << " targeting cell " << targetID << " was successful!\n";
 
 		// Set the returned relationship to the stored neighbor state in the relationship vector
-//		if(targetID == leftNbr.ID)		// This is the cell's relationship to its left neighbor
-//		{
+		if(targetID == leftNbr.ID)		// This is the cell's relationship to its left neighbor
+		{
 			rels[0].ID = targetID;
 			rels[0].relActual.x = relationshipSrv.response.theRelationship.actual.x;
 			rels[0].relActual.y = relationshipSrv.response.theRelationship.actual.y;
 			rels[0].relActual.z = 0;
 
-//		}
-//		else if(targetID == rightNbr.ID)	// right neighbor relationship
-//		{
-//			rels[0].ID = targetID;
-//			rels[1].relActual.x = relationshipSrv.response.theRelationship.actual.x;
-//			rels[1].relActual.y = relationshipSrv.response.theRelationship.actual.y;
-//
-//			rels[1].relDesired.x = relationshipSrv.response.theRelationship.desired.x;
-//			rels[1].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
-//
-//			// Test stuff
-////			cout << "\nCell " << ID << " has ACTUAL relationship with cell " << targetID << " of: " << rels[1].relActual.x << ", " << rels[1].relActual.y << endl;
-////			cout << "Cell " << ID << " has DESIRED relationship with cell " << targetID << " of: " << rels[1].relDesired.x << ", " << rels[1].relDesired.y << endl;
-//		}
+		}
+		else if(targetID == rightNbr.ID)	// right neighbor relationship
+		{
+			rels[0].ID = targetID;
+			rels[1].relActual.x = relationshipSrv.response.theRelationship.actual.x;
+			rels[1].relActual.y = relationshipSrv.response.theRelationship.actual.y;
+
+			rels[1].relDesired.x = relationshipSrv.response.theRelationship.desired.x;
+			rels[1].relDesired.y = relationshipSrv.response.theRelationship.desired.y;
+
+			// Test stuff
+//			cout << "\nCell " << ID << " has ACTUAL relationship with cell " << targetID << " of: " << rels[1].relActual.x << ", " << rels[1].relActual.y << endl;
+//			cout << "Cell " << ID << " has DESIRED relationship with cell " << targetID << " of: " << rels[1].relDesired.x << ", " << rels[1].relDesired.y << endl;
+		}
 //
 //		else
 //			cout << "\nSomething is wrong in getRelationship.  Neighbor is neither left nor right?\n";

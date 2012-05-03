@@ -105,6 +105,7 @@ class Cell: public State, public Neighborhood
 		State getState() const;
 		Neighborhood getNbrs() const;
 
+		void updateState();
 		int getNBids() const;
 		int getAuctionStepCount() const;
 		int getID() const;

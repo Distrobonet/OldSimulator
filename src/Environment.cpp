@@ -60,9 +60,17 @@ void Environment::initOverlordSubscribers()
 void Environment::callBackRobot(const nav_msgs::Odometry::ConstPtr& odom)
 {
 	btScalar yaw = 0.0l;
+	btScalar roll = 0.0l;
+	btScalar pitch = 0.0l;
 
 	double currentY = odom-> pose.pose.position.x;
 	double currentX = -odom-> pose.pose.position.y;
+
+	btQuaternion q(odom->pose.pose.orientation.x,
+				 odom->pose.pose.orientation.y,
+				 odom->pose.pose.orientation.z,
+				 odom->pose.pose.orientation.w);
+	btMatrix3x3(q).getRPY(roll, pitch, yaw);
 	double currentTheta = angles::normalize_angle(yaw + M_PI / 2.0l);
 	string ID = odom->header.frame_id.substr(7,1);
 	int IDNumber = atoi(ID.c_str());
@@ -120,12 +128,8 @@ bool Environment::setRelationshipMessage(Simulator::Relationship::Request  &req,
 	tempVector.x = subRobotPoses[req.TargetID][0] - subRobotPoses[req.OriginID][0];
 	tempVector.y = subRobotPoses[req.TargetID][1] - subRobotPoses[req.OriginID][1];
 
-
-
-	//tempVector.rotateRelative(-subRobotVels[req.OriginID][0].getHeading());
-
-
-	tempVector.rotateRelative(subRobotPoses[req.OriginID][2]);
+//	tempVector.rotateRelative(-(subRobotPoses[req.OriginID][2]));
+	tempVector.rotateRelative(angles::to_degrees(-(subRobotPoses[req.OriginID][2])));
 
 //	//set(x * cos(theta) - y * sin(theta), x * sin(theta) + y * cos(theta), z);
 //	tempVector.x = tempVector.x * cos(tempVector.z) - tempVector.y * sin(tempVector.z);
