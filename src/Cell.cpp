@@ -129,21 +129,10 @@ void Cell::update(bool doSpin)
 ////	    cout << "inPosition state: " << inPosition << endl;
 ////	    cout << "startMoving state: " << startMoving << endl << endl;
 //
-//
-//
-
-<<<<<<< .mine
 //	    if(ID == 1 || ID == 0)
 //		{
 //			RossMove();
 //		}
-=======
-	    if(ID == 1 || ID == 2)
-		{
-			RossMove();
-		}
->>>>>>> .r393
-
 
 		//if(doSpin)
 //			ros::spinOnce();
