@@ -33,6 +33,10 @@ Vector::Vector(const Vector &v)
 
 }   // Vector(const Vector &)
 
+Formation::operator=(Formation const&temp) {
+
+}
+
 
 Vector::~Vector(){}   // ~Vector()
 
